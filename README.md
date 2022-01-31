@@ -1,4 +1,19 @@
 # Steuerlotse Erica service
+🇬🇧
+Erica is a service to send tax declarations to ELSTER. 
+It is a wrapper around the functionality of EriC, ELSTER's own client to access their APIs.
+It provides functionality to send tax declarations, as well as request, activate and revoke unlock codes.
+
+It was originally [developed as part of the Tech4Germany Fellowship 2020](https://github.com/tech4germany/steuerlotse). 
+The fellowship is organized by [DigitalService4Germany GmbH](https://digitalservice4germany.com).
+
+🇩🇪
+Erica ist ein Service um Steuererklärungen an ELSTER zu senden.
+Es dient als Wrapper um die Funktionalität von EriC, ELSTERs eigener Client um die APIs zu verwenden.
+Es stellt Funktionalität zum Absenden von Steuererklärungen sowie dem Beantragen, Freischalten und Stornieren von Freischaltcodes bereit.
+
+Ursprünglich wurde es [als Teil des Tech4Germany Fellowships 2020 entwickelt](https://github.com/tech4germany/steuerlotse), 
+das von der [DigitalService4Germany GmbH](https://digitalservice4germany.com) organisiert wird.
 
 # Contributing
 
@@ -34,7 +49,6 @@ Bitte stelle sicher, dass deine Änderungen getestet wurden, bevor du einen Pull
 ### Install Python dependencies
 
 ```bash
-cd erica_app/
 pipenv install
 ```
 
@@ -69,7 +83,6 @@ You also need to obtain a test certificate from ELSTER and place it under `erica
 ## Developing 👩‍💻 👨‍💻
 
 ```bash
-cd erica_app/
 export ERICA_ENV=development
 python -m erica 
 ```
@@ -78,7 +91,6 @@ python -m erica
 
 You can run tests as follows:
 ```bash
-cd erica_app/
 pipenv run pytest
 ```
 
