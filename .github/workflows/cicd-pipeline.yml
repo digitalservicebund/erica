@@ -138,7 +138,6 @@ jobs:
 
     - name: Run deployment
       env:
-        NAMESPACE: staging
         IMAGE_TAG: ${{ github.run_number }}
       run: |
         docker run \
