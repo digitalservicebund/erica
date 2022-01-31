@@ -62,7 +62,7 @@ jobs:
 
     - name: Test
       run: |
-        pipenv run invoke --echo test | tee ../erica-test-report.log
+        pipenv run invoke --echo test | tee erica-test-report.log
       shell: bash
 
     - name: Archive test logs
