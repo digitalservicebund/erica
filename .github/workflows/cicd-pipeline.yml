@@ -72,7 +72,7 @@ jobs:
         path: erica-test-report.log
 
   build-staging:
-    needs: [test-erica]
+    needs: [test]
 
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
