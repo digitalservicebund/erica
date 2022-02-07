@@ -67,7 +67,7 @@ venv.bak/
 logs/
 abruf_code_log.txt
 
-# Eric binaries and cer
+# Eric binaries and certificates
 erica/lib/*.dylib
 erica/lib/*.so
 erica/lib/plugins2/*.dylib
