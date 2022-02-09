@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
 
+from erica.api.api import api_router
 from erica.pyeric.eric import verify_using_stick
 
 app = FastAPI()
@@ -34,7 +35,10 @@ up_metric = Gauge('up', 'Is the job available', ['job'])
 up_metric.labels(job='erica').set(1.0)  # Always 1 when the erica_app is running.
 up_metric.labels(job='dongle').set_function(DongleStatus.get)
 
+# Add router
+app.include_router(api_router)
+
 # Add default metrics and expose endpoint.
 Instrumentator().instrument(app).expose(app)
 
-from erica import routes
+
