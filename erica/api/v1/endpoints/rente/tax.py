@@ -8,7 +8,7 @@ from erica.request_processing.requests_controller import CheckTaxNumberRequestCo
 router = APIRouter()
 
 
-@router.get('number_validity/{state_abbreviation}/{tax_number}', status_code=status.HTTP_200_OK)
+@router.get('/tax_number_validity/{state_abbreviation}/{tax_number}', status_code=status.HTTP_200_OK)
 def is_valid_tax_number(state_abbreviation: str, tax_number: str):
     """
     Validates a tax number and returns the result
@@ -23,7 +23,7 @@ def is_valid_tax_number(state_abbreviation: str, tax_number: str):
         raise HTTPException(status_code=422, detail=e.generate_error_response(include_responses=False))
 
 
-@router.get('offices/', status_code=status.HTTP_200_OK)
+@router.get('/tax_offices/', status_code=status.HTTP_200_OK)
 def get_tax_offices():
     """
     The list of tax offices for all states is requested and returned.
