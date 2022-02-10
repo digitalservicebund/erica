@@ -13,6 +13,6 @@ def pretty_xml_string(xml_string):
 
 def generate_dummy_error_response():
     error_response = {"errorCode": -1,
-                      "errorMessage": "may the force be with you"
+                      "errorMessage": "API resource not yet implemented."
                       }
     return error_response

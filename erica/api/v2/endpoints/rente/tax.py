@@ -21,6 +21,19 @@ def is_valid_tax_number(tax_validity_ttl: TaxValidityWithTtl):
         return JSONResponse(status_code=422, content=generate_dummy_error_response())
 
 
+@router.get('/tax_number_validity/{request_id}', status_code=status.HTTP_200_OK)
+def get_valid_tax_number_job(request_id: str):
+    """
+    Route for retrieving job status of a tax number validity from the queue.
+    :param request_id: the id of the job.
+    """
+    try:
+        raise NotImplementedError()
+    except NotImplementedError:
+        logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
+        return JSONResponse(status_code=500, content=generate_dummy_error_response())
+
+
 @router.get('/tax_offices/', status_code=status.HTTP_200_OK)
 def get_tax_offices():
     """
