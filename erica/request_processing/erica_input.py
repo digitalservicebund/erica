@@ -3,7 +3,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import Optional, List
 
-from pydantic import BaseModel, validator, root_validator
+from pydantic import BaseModel, validator
 
 from erica.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
 from erica.elster_xml.est_validation import is_valid_bufa
@@ -237,3 +237,62 @@ class UnlockCodeRevocationData(BaseModel):
 
 class GetAddressData(BaseModel):
     idnr: str
+
+
+# v2
+class EstDataWithElsterResponse(EstData):
+    include_elster_responses: bool = False
+
+
+class EstDataWithElsterResponseAndTtl(BaseModel):
+    ttlInMinutes: int
+    payload: EstDataWithElsterResponse
+
+
+class TaxValidity(BaseModel):
+    state_abbreviation: str
+    tax_number: str
+
+
+class TaxValidityWithTtl(BaseModel):
+    ttlInMinutes: int
+    payload: TaxValidity
+
+
+class Address(BaseModel):
+    get_address: GetAddressData
+    include_elster_responses: bool = False
+
+
+class AddressWithTtl(BaseModel):
+    ttlInMinutes: int
+    payload: TaxValidity
+
+
+class UnlockCodeRequestDataWithElsterResponse(UnlockCodeRequestData):
+    include_elster_responses: bool = False
+
+
+class UnlockCodeRequestDataWithElsterResponseAndTtl(BaseModel):
+    ttlInMinutes: int
+    payload: UnlockCodeRequestDataWithElsterResponse
+
+
+class UnlockCodeActivationDataWithElsterResponse(UnlockCodeActivationData):
+    include_elster_responses: bool = False
+
+
+class UnlockCodeActivationDataWithElsterResponseAndTtl(BaseModel):
+    ttlInMinutes: int
+    payload: UnlockCodeActivationDataWithElsterResponse
+
+
+class UnlockCodeRevocationDataWithElsterResponse(UnlockCodeRevocationData):
+    include_elster_responses: bool = False
+
+
+class UnlockCodeRevocationDataWithElsterResponseAndTtl(BaseModel):
+    ttlInMinutes: int
+    payload: UnlockCodeRevocationDataWithElsterResponse
+
+
