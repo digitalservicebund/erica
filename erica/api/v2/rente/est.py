@@ -10,10 +10,10 @@ router = APIRouter()
 
 
 @router.post('/est_validations', status_code=status.HTTP_201_CREATED)
-def validate_est(estDataWithElsterResponseTtl: EstDataWithElsterResponseAndTtl):
+def validate_est(est_elsterresponse_ttl: EstDataWithElsterResponseAndTtl):
     """
     Route for validation of a tax declaration using the job queue.
-    :param estDataWithElsterResponseTtl: payload with TTL, JSON input data for the ESt and declaration year.
+    :param est_elsterresponse_ttl: payload with TTL, JSON input data for the ESt and declaration year.
     """
     try:
         raise NotImplementedError()
@@ -23,10 +23,10 @@ def validate_est(estDataWithElsterResponseTtl: EstDataWithElsterResponseAndTtl):
 
 
 @router.post('/ests', status_code=status.HTTP_201_CREATED)
-def send_est(estDataWithElsterResponseTtl: EstDataWithElsterResponseAndTtl):
+def send_est(est_elsterresponse_ttl: EstDataWithElsterResponseAndTtl):
     """
     Route for sending a tax declaration using the job queue.
-    :param estDataWithElsterResponseTtl: payload with TTL, JSON input data for the ESt, declaration year and option
+    :param est_elsterresponse_ttl: payload with TTL, JSON input data for the ESt, declaration year and option
     whether return the ERiC/Server response.
     """
     try:

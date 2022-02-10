@@ -9,10 +9,10 @@ router = APIRouter()
 
 
 @router.post('/tax_number_validity', status_code=status.HTTP_201_CREATED)
-def is_valid_tax_number(taxValidityWithTtl : TaxValidityWithTtl):
+def is_valid_tax_number(tax_validity_ttl: TaxValidityWithTtl):
     """
     Route for validation of a tax number using the job queue.
-    :param taxValidityWithTtl: payload with abbreviation of the state of the tax office and tax number in the standard schema.
+    :param tax_validity_ttl: payload with abbreviation of the state of the tax office and tax number in the standard schema.
     """
     try:
         raise NotImplementedError()

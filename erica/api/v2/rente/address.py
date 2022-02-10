@@ -10,13 +10,13 @@ router = APIRouter()
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
-def get_address(addressWithTtl: AddressWithTtl):
+def get_address(address_ttl: AddressWithTtl):
     """
-    Route for requesting the address data of a given idrn using the job queue.
-    :param addressWithTtl: payload with the JSON input data for the request and the option whether return the ERiC/Server response.
+    Route for requesting the address data of a given id_rn using the job queue.
+    :param address_ttl: payload with the JSON input data for the request and the option whether return the ERiC/Server
+    response.
     """
     try:
-        # For now, we do not allow data requests as we cannot guarantee that Elster already has the relevant data gathered
         raise NotImplementedError()
     except NotImplementedError:
         logging.getLogger().info("Could not retrieve address data", exc_info=True)

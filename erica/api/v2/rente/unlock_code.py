@@ -11,10 +11,10 @@ router = APIRouter()
 
 
 @router.post('/unlock_code_requests', status_code=status.HTTP_201_CREATED)
-def request_unlock_code(unlockCodeRequestDataWithElsterResponseAndTtl: UnlockCodeRequestDataWithElsterResponseAndTtl):
+def request_unlock_code(unlockcode_request_elsterresponse_ttl: UnlockCodeRequestDataWithElsterResponseAndTtl):
     """
     Route for requesting a new unlock code for the sent id_nr using the job queue.
-    :param unlockCodeRequestDataWithElsterResponseAndTtl: payload with TTL, the JSON input data for the request and option
+    :param unlockcode_request_elsterresponse_ttl: payload with TTL, the JSON input data for the request and option
     whether return the ERiC/Server response.
     """
     try:
@@ -26,10 +26,10 @@ def request_unlock_code(unlockCodeRequestDataWithElsterResponseAndTtl: UnlockCod
 
 @router.post('/unlock_code_activations', status_code=status.HTTP_201_CREATED)
 def activate_unlock_code(
-        unlockCodeActivationDataWithElsterResponseAndTtl: UnlockCodeActivationDataWithElsterResponseAndTtl):
+        unlockcode_activation_elsterresponse_ttl: UnlockCodeActivationDataWithElsterResponseAndTtl):
     """
     Route for requesting activation of an unlock code for the sent id_nr using the job queue.
-    :param unlockCodeActivationDataWithElsterResponseAndTtl: payload with TTL, the JSON input data for the activation and option
+    :param unlockcode_activation_elsterresponse_ttl: payload with TTL, the JSON input data for the activation and option
     whether return the ERiC/Server response.
     """
     try:
@@ -41,10 +41,10 @@ def activate_unlock_code(
 
 @router.post('/unlock_code_revocations', status_code=status.HTTP_201_CREATED)
 def revoke_unlock_code(
-        unlockCodeRevocationDataWithElsterResponseAndTtl: UnlockCodeRevocationDataWithElsterResponseAndTtl):
+        unlockcode_revocation_elsterresponse_ttl: UnlockCodeRevocationDataWithElsterResponseAndTtl):
     """
     Route for requesting revocation of an unlock code for the sent id_nr using the job queue.
-    :param unlockCodeRevocationDataWithElsterResponseAndTtl: payload with TTL, the JSON input data for the revocation and option
+    :param unlockcode_revocation_elsterresponse_ttl: payload with TTL, the JSON input data for the revocation and option
     whether return the ERiC/Server response.
     """
     try:
