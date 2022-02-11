@@ -3,12 +3,12 @@ import logging
 from fastapi import status, APIRouter
 from starlette.responses import FileResponse, JSONResponse
 from erica.pyeric.utils import generate_dummy_error_response
-from erica.request_processing.erica_input import TaxValidityWithTtl
+from erica.request_processing.erica_input import TaxValidityWithTtl, ErrorRequestQueue, ResponseGetFromQueue
 
 router = APIRouter()
 
 
-@router.post('/tax_number_validity', status_code=status.HTTP_201_CREATED)
+@router.post('/tax_number_validity', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
 def is_valid_tax_number(tax_validity_ttl: TaxValidityWithTtl):
     """
     Route for validation of a tax number using the job queue.
@@ -21,7 +21,8 @@ def is_valid_tax_number(tax_validity_ttl: TaxValidityWithTtl):
         return JSONResponse(status_code=422, content=generate_dummy_error_response())
 
 
-@router.get('/tax_number_validity/{request_id}', status_code=status.HTTP_200_OK)
+@router.get('/tax_number_validity/{request_id}', status_code=status.HTTP_200_OK, response_model=ResponseGetFromQueue,
+            responses={500: {"model": ErrorRequestQueue}})
 def get_valid_tax_number_job(request_id: str):
     """
     Route for retrieving job status of a tax number validity from the queue.

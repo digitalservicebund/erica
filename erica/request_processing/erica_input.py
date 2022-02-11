@@ -240,13 +240,9 @@ class GetAddressData(BaseModel):
 
 
 # v2
-class EstDataWithElsterResponse(EstData):
-    include_elster_responses: bool = False
-
-
-class EstDataWithElsterResponseAndTtl(BaseModel):
+class EstDataWithTtl(BaseModel):
     ttlInMinutes: int
-    payload: EstDataWithElsterResponse
+    payload: EstData
 
 
 class TaxValidity(BaseModel):
@@ -259,40 +255,30 @@ class TaxValidityWithTtl(BaseModel):
     payload: TaxValidity
 
 
-class Address(BaseModel):
-    get_address: GetAddressData
-    include_elster_responses: bool = False
-
-
-class AddressWithTtl(BaseModel):
+class UnlockCodeRequestDataWithTtl(BaseModel):
     ttlInMinutes: int
-    payload: TaxValidity
+    payload: UnlockCodeRequestData
 
 
-class UnlockCodeRequestDataWithElsterResponse(UnlockCodeRequestData):
-    include_elster_responses: bool = False
-
-
-class UnlockCodeRequestDataWithElsterResponseAndTtl(BaseModel):
+class UnlockCodeActivationDataWithTtl(BaseModel):
     ttlInMinutes: int
-    payload: UnlockCodeRequestDataWithElsterResponse
+    payload: UnlockCodeActivationData
 
 
-class UnlockCodeActivationDataWithElsterResponse(UnlockCodeActivationData):
-    include_elster_responses: bool = False
-
-
-class UnlockCodeActivationDataWithElsterResponseAndTtl(BaseModel):
+class UnlockCodeRevocationDataWithTtl(BaseModel):
     ttlInMinutes: int
-    payload: UnlockCodeActivationDataWithElsterResponse
+    payload: UnlockCodeRevocationData
 
 
-class UnlockCodeRevocationDataWithElsterResponse(UnlockCodeRevocationData):
-    include_elster_responses: bool = False
+class ErrorRequestQueue(BaseModel):
+    errorCode: str
+    errorMessage: str
 
 
-class UnlockCodeRevocationDataWithElsterResponseAndTtl(BaseModel):
-    ttlInMinutes: int
-    payload: UnlockCodeRevocationDataWithElsterResponse
+class ResponseGetFromQueue(BaseModel):
+    processStatus: str
+    payload: Optional[str] = None
+    errorCode: Optional[str] = None
+    errorMessage: Optional[str] = None
 
 
