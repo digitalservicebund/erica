@@ -33,7 +33,7 @@ def get_unlock_code_request_job(request_id: str):
     try:
         raise NotImplementedError()
     except NotImplementedError:
-        logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
+        logging.getLogger().info("Could not retrieve status of job " + request_id + " (unlock code request)", exc_info=True)
         return JSONResponse(status_code=500, content=generate_dummy_error_response())
 
 
@@ -61,7 +61,7 @@ def get_unlock_code_activation_job(request_id: str):
     try:
         raise NotImplementedError()
     except NotImplementedError:
-        logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
+        logging.getLogger().info("Could not retrieve status of job " + request_id + " (unlock code activation)", exc_info=True)
         return JSONResponse(status_code=500, content=generate_dummy_error_response())
 
 
@@ -89,5 +89,5 @@ def get_unlock_code_revocation_job(request_id: str):
     try:
         raise NotImplementedError()
     except NotImplementedError:
-        logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
+        logging.getLogger().info("Could not retrieve status of job " + request_id + " (unlock code revocation)", exc_info=True)
         return JSONResponse(status_code=500, content=generate_dummy_error_response())
