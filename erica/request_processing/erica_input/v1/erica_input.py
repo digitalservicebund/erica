@@ -239,46 +239,4 @@ class GetAddressData(BaseModel):
     idnr: str
 
 
-# v2
-class EstDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: EstData
-
-
-class TaxValidity(BaseModel):
-    state_abbreviation: str
-    tax_number: str
-
-
-class TaxValidityWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: TaxValidity
-
-
-class UnlockCodeRequestDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: UnlockCodeRequestData
-
-
-class UnlockCodeActivationDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: UnlockCodeActivationData
-
-
-class UnlockCodeRevocationDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: UnlockCodeRevocationData
-
-
-class ErrorRequestQueue(BaseModel):
-    errorCode: str
-    errorMessage: str
-
-
-class ResponseGetFromQueue(BaseModel):
-    processStatus: str
-    payload: Optional[str] = None
-    errorCode: Optional[str] = None
-    errorMessage: Optional[str] = None
-
 

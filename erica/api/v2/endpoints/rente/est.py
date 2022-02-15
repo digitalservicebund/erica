@@ -5,12 +5,14 @@ from starlette.responses import JSONResponse
 
 from erica.api.v2.responses.model import response_model_post_to_queue, response_model_get_from_queue
 from erica.pyeric.utils import generate_dummy_error_response
-from erica.request_processing.erica_input import EstDataWithTtl
+from erica.request_processing.erica_input.v2.erica_input import EstDataWithTtl
+from fastapi_versioning import version
 
 router = APIRouter()
 
 
 @router.post('/est_validations', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
+@version(2)
 def validate_est(est_data_ttl: EstDataWithTtl):
     """
     Route for validation of a tax declaration using the job queue.
@@ -24,6 +26,7 @@ def validate_est(est_data_ttl: EstDataWithTtl):
 
 
 @router.get('/est_validations/{request_id}', status_code=status.HTTP_200_OK, responses=response_model_get_from_queue)
+@version(2)
 def get_validate_est_job(request_id: str):
     """
     Route for retrieving job status of a tax declaration validation from the queue.
@@ -37,6 +40,7 @@ def get_validate_est_job(request_id: str):
 
 
 @router.post('/ests', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
+@version(2)
 def send_est(est_data_ttl: EstDataWithTtl):
     """
     Route for sending a tax declaration using the job queue.
@@ -50,6 +54,7 @@ def send_est(est_data_ttl: EstDataWithTtl):
 
 
 @router.get('/ests/{request_id}', status_code=status.HTTP_200_OK, responses=response_model_get_from_queue)
+@version(2)
 def get_send_est_job(request_id: str):
     """
     Route for retrieving job status of a sent tax declaration from the queue.

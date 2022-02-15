@@ -11,7 +11,7 @@ from erica.api.v1.endpoints.rente.tax import is_valid_tax_number, get_tax_office
 from erica.api.v1.endpoints.rente.unlock_code import request_unlock_code, activate_unlock_code, revoke_unlock_code
 from erica.pyeric.eric import EricResponse
 from erica.pyeric.pyeric_controller import GetTaxOfficesPyericController
-from erica.request_processing.erica_input import GrundsteuerData
+from erica.request_processing.erica_input.v1.erica_input import GrundsteuerData
 
 from tests.utils import create_unlock_request, create_unlock_activation, create_est, create_unlock_revocation, \
     missing_cert, missing_pyeric_lib

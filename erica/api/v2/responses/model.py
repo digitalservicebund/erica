@@ -1,4 +1,4 @@
-from erica.request_processing.erica_input import ErrorRequestQueue, ResponseGetFromQueue
+from erica.request_processing.erica_input.v2.erica_input import ErrorRequestQueue, ResponseGetFromQueue
 
 response_model_post_to_queue = {
     201: {"description": "Job was successfully submitted to the queue and the job id was returned."},

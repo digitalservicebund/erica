@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel, root_validator, validator
 
-from erica.request_processing.erica_input import AccountHolder, MetaDataEst
+from erica.request_processing.erica_input.v1.erica_input import AccountHolder
 
 STANDARD_DATE_FORMAT = '%d.%m.%Y'
 
