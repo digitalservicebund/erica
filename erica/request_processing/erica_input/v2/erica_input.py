@@ -1,4 +1,3 @@
-
 from typing import Optional
 
 from pydantic import BaseModel
@@ -44,8 +43,39 @@ class ErrorRequestQueue(BaseModel):
 
 class ResponseGetFromQueue(BaseModel):
     processStatus: str
-    payload: Optional[str] = None
     errorCode: Optional[str] = None
     errorMessage: Optional[str] = None
 
 
+class PayloadGetSendEstFromQueue(BaseModel):
+    transfer_ticket: str
+    pdf: str
+
+
+class ResponseGetSendEstFromQueue(ResponseGetFromQueue):
+    payload: PayloadGetSendEstFromQueue
+
+
+class PayloadGetTaxNumberValidityFromQueue(BaseModel):
+    is_valid: bool
+
+
+class ResponseGetTaxNumberValidityFromQueue(ResponseGetFromQueue):
+    payload: PayloadGetTaxNumberValidityFromQueue
+
+
+class PayloadTransferTicketAndIdnr(BaseModel):
+    transfer_ticket: str
+    idnr: str
+
+
+class PayloadGetUnlockCodeRequestAndActivationFromQueue(PayloadTransferTicketAndIdnr):
+    elster_request_id: str
+
+
+class ResponseGetUnlockCodeRequestAndActivationFromQueue(ResponseGetFromQueue):
+    payload: PayloadGetUnlockCodeRequestAndActivationFromQueue
+
+
+class ResponseGetUnlockCodeRevocationFromQueue(ResponseGetFromQueue):
+    payload: PayloadTransferTicketAndIdnr

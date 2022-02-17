@@ -6,13 +6,11 @@ from erica.request_processing.erica_input.v1.erica_input import UnlockCodeReques
 from erica.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController
-from fastapi_versioning import version
 
 router = APIRouter()
 
 
 @router.post('/unlock_code_requests', status_code=status.HTTP_201_CREATED)
-@version(1)
 def request_unlock_code(unlock_code_request: UnlockCodeRequestData, include_elster_responses: bool = False):
     """
     A new unlock code for the sent id_nr is requested. If everything is successful, return a 200 HTTP response
@@ -31,7 +29,6 @@ def request_unlock_code(unlock_code_request: UnlockCodeRequestData, include_elst
 
 
 @router.post('/unlock_code_activations', status_code=status.HTTP_201_CREATED)
-@version(1)
 def activate_unlock_code(unlock_code_activation: UnlockCodeActivationData, include_elster_responses: bool = False):
     """
     An unlock code is used activated for the sent id_nr. If everything is successful, return a 200 HTTP response
@@ -50,7 +47,6 @@ def activate_unlock_code(unlock_code_activation: UnlockCodeActivationData, inclu
 
 
 @router.post('/unlock_code_revocations', status_code=status.HTTP_200_OK)
-@version(1)
 def revoke_unlock_code(unlock_code_revocation: UnlockCodeRevocationData, include_elster_responses: bool = False):
     """
     The permission at Elster is revoked. If everything is successful, return a 200 HTTP response

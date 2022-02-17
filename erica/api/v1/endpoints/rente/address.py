@@ -1,12 +1,10 @@
 from fastapi import status, APIRouter
 from erica.request_processing.erica_input.v1.erica_input import GetAddressData
-from fastapi_versioning import version
 
 router = APIRouter()
 
 
 @router.post('/', status_code=status.HTTP_200_OK)
-@version(1)
 def get_address(get_address: GetAddressData, include_elster_responses: bool = False):
     """
     The address data of the given idnr is requested at Elster and returned. Be aware, that you need a permission

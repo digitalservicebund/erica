@@ -1,12 +1,9 @@
 from fastapi import status, APIRouter
 from erica.request_processing.erica_input.v1.erica_input import GrundsteuerData
-from fastapi_versioning import version
-
 router = APIRouter()
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
-@version(1)
 def send_grundsteuer(grundsteuer_data: GrundsteuerData, include_elster_responses: bool = False):
     """
     The Grundsteuer data is validated and then send to ELSTER using ERiC. If it is successful, this should return a 201

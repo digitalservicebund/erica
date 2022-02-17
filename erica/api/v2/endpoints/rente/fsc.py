@@ -3,16 +3,16 @@ import logging
 from fastapi import status, APIRouter
 from starlette.responses import JSONResponse
 
+from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
+    response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue
 from erica.pyeric.utils import generate_dummy_error_response
-from erica.request_processing.erica_input.v2.erica_input import ErrorRequestQueue, ResponseGetFromQueue, \
-    FscRequestDataWithTtl, FscActivationDataWithTtl, FscRevocationDataWithTtl
-from fastapi_versioning import version
+from erica.request_processing.erica_input.v2.erica_input import ErrorRequestQueue, FscRequestDataWithTtl, \
+    FscActivationDataWithTtl, FscRevocationDataWithTtl
 
 router = APIRouter()
 
 
 @router.post('/request', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
-@version(2)
 def request_fsc(request_fsc_ttl: FscRequestDataWithTtl):
     """
     Route for requesting a new fsc for the sent id_nr using the job queue.
@@ -25,9 +25,8 @@ def request_fsc(request_fsc_ttl: FscRequestDataWithTtl):
         return JSONResponse(status_code=422, content=generate_dummy_error_response())
 
 
-@router.get('/request/{request_id}', status_code=status.HTTP_200_OK, response_model=ResponseGetFromQueue,
-            responses={500: {"model": ErrorRequestQueue}})
-@version(2)
+@router.get('/request/{request_id}', status_code=status.HTTP_200_OK,
+            responses=response_model_get_unlock_code_request_from_queue)
 def get_request_fsc_job(request_id: str):
     """
     Route for retrieving job status from an fsc request from the queue.
@@ -41,7 +40,6 @@ def get_request_fsc_job(request_id: str):
 
 
 @router.post('/activation', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
-@version(2)
 def activation_fsc(
         activation_fsc_ttl: FscActivationDataWithTtl):
     """
@@ -55,9 +53,8 @@ def activation_fsc(
         return JSONResponse(status_code=422, content=generate_dummy_error_response())
 
 
-@router.get('/activation/{request_id}', status_code=status.HTTP_200_OK, response_model=ResponseGetFromQueue,
-            responses={500: {"model": ErrorRequestQueue}})
-@version(2)
+@router.get('/activation/{request_id}', status_code=status.HTTP_200_OK,
+            responses=response_model_get_unlock_code_activation_from_queue)
 def get_fsc_activation_job(request_id: str):
     """
     Route for retrieving job status from an fsc activation from the queue.
@@ -72,7 +69,6 @@ def get_fsc_activation_job(request_id: str):
 
 
 @router.post('/revocation', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
-@version(2)
 def fsc_revocation(
         fsc_revocation_ttl: FscRevocationDataWithTtl):
     """
@@ -86,9 +82,8 @@ def fsc_revocation(
         return JSONResponse(status_code=422, content=generate_dummy_error_response())
 
 
-@router.get('/revocation/{request_id}', status_code=status.HTTP_200_OK, response_model=ResponseGetFromQueue,
-            responses={500: {"model": ErrorRequestQueue}})
-@version(2)
+@router.get('/revocation/{request_id}', status_code=status.HTTP_200_OK,
+            responses=response_model_get_unlock_code_revocation_from_queue)
 def get_fsc_revocation_job(request_id: str):
     """
     Route for retrieving job status from an fsc revocation from the queue.

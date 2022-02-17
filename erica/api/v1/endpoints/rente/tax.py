@@ -4,13 +4,11 @@ from fastapi import HTTPException, status, APIRouter
 from starlette.responses import FileResponse
 from erica.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.request_processing.requests_controller import CheckTaxNumberRequestController
-from fastapi_versioning import version
 
 router = APIRouter()
 
 
 @router.get('/tax_number_validity/{state_abbreviation}/{tax_number}', status_code=status.HTTP_200_OK)
-@version(1)
 def is_valid_tax_number(state_abbreviation: str, tax_number: str):
     """
     Validates a tax number and returns the result
@@ -26,7 +24,6 @@ def is_valid_tax_number(state_abbreviation: str, tax_number: str):
 
 
 @router.get('/tax_offices/', status_code=status.HTTP_200_OK)
-@version(1)
 def get_tax_offices():
     """
     The list of tax offices for all states is requested and returned.

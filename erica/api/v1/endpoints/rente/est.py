@@ -4,13 +4,11 @@ from fastapi import HTTPException, status, APIRouter
 from erica.request_processing.erica_input.v1.erica_input import EstData
 from erica.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.request_processing.requests_controller import EstValidationRequestController, EstRequestController
-from fastapi_versioning import version
 
 router = APIRouter()
 
 
 @router.get('/est_validations')
-@version(1)
 def validate_est(est: EstData, include_elster_responses: bool = False):
     """
     Data for a Est is validated using ERiC. If the validation is successful then this should return
@@ -31,7 +29,6 @@ def validate_est(est: EstData, include_elster_responses: bool = False):
 
 
 @router.post('/ests', status_code=status.HTTP_201_CREATED)
-@version(1)
 def send_est(est: EstData, include_elster_responses: bool = False):
     """
     An Est is validated and then send to ELSTER using ERiC. If it is successful, this should return a 200 HTTP

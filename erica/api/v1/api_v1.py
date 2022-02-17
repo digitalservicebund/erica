@@ -5,6 +5,7 @@ from erica.api.v1.endpoints.rente import tax, est, address, unlock_code
 from erica.api.v1.endpoints.grundsteuer import grundsteuer
 
 api_router_01 = APIRouter()
+api_router_01.prefix = '/01'
 
 api_router_01.include_router(ping.router, prefix="/ping", tags=["Ping"])
 api_router_01.include_router(address.router, prefix="/address", tags=["Adresse"])

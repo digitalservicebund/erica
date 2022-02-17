@@ -1,7 +1,6 @@
 import time
 
 from fastapi import FastAPI
-from fastapi_versioning import VersionedFastAPI
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
 
@@ -38,9 +37,6 @@ up_metric.labels(job='dongle').set_function(DongleStatus.get)
 
 # Add router
 app.include_router(api_router)
-app = VersionedFastAPI(app,
-                       version_format='{major}',
-                       prefix_format='/0{major}')
 
 # Add default metrics and expose endpoint.
 Instrumentator().instrument(app).expose(app)
