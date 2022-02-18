@@ -1,9 +1,8 @@
-from typing import Optional
-
+from typing import  Union
 from pydantic import BaseModel
-
 from erica.request_processing.erica_input.v1.erica_input import EstData, UnlockCodeRequestData, \
     UnlockCodeActivationData, UnlockCodeRevocationData
+from enum import Enum
 
 
 class EstDataWithTtl(BaseModel):
@@ -41,10 +40,18 @@ class ErrorRequestQueue(BaseModel):
     errorMessage: str
 
 
+class Status(Enum):
+    PENDING = "Pending"
+    PROCESSING = "Processing"
+    FAILED = "Failed"
+    COMPLETED = "COMPLETED"
+
+
 class ResponseGetFromQueue(BaseModel):
-    processStatus: str
-    errorCode: Optional[str] = None
-    errorMessage: Optional[str] = None
+    processStatus: Status
+    payload: Union[BaseModel, None]
+    errorCode: Union[str, None]
+    errorMessage: Union[str, None]
 
 
 class PayloadGetSendEstFromQueue(BaseModel):
