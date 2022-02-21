@@ -18,7 +18,16 @@ from erica.pyeric.pyeric_controller import EstPyericProcessController, EstValida
 from erica.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, EstData
 
-SPECIAL_TESTMERKER_IDNR = ['04452397687', '02259674819']
+SPECIAL_TESTMERKER_IDNR = ['04452397687',
+                           '02259674819',
+                           '04452317681',
+                           '09952417688',
+                           '03352417692',
+                           '03352419681',
+                           '03352417981',
+                           '03392417683',
+                           '03352917681',
+                           '03359417681']
 
 
 class EricaRequestController(object):
