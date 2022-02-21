@@ -3,7 +3,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import Optional, List
 
-from pydantic import BaseModel, validator, root_validator
+from pydantic import BaseModel, validator
 
 from erica.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
 from erica.elster_xml.est_validation import is_valid_bufa
@@ -15,7 +15,36 @@ class AccountHolder(str, Enum):
     person_b = 'person_b'
 
 
-class FormDataEst(BaseModel):
+class Stmind(BaseModel):
+
+    stmind_haushaltsnahe_entries: Optional[List[str]]
+    stmind_haushaltsnahe_summe: Optional[Decimal]
+    stmind_handwerker_entries: Optional[List[str]]
+    stmind_handwerker_summe: Optional[Decimal]
+    stmind_handwerker_lohn_etc_summe: Optional[Decimal]
+
+    stmind_vorsorge_summe: Optional[Decimal]
+    stmind_spenden_inland: Optional[Decimal]
+    stmind_spenden_inland_parteien: Optional[Decimal]
+    stmind_religion_paid_summe: Optional[Decimal]
+    stmind_religion_reimbursed_summe: Optional[Decimal]
+
+    stmind_krankheitskosten_summe: Optional[Decimal]
+    stmind_krankheitskosten_anspruch: Optional[Decimal]
+    stmind_pflegekosten_summe: Optional[Decimal]
+    stmind_pflegekosten_anspruch: Optional[Decimal]
+    stmind_beh_aufw_summe: Optional[Decimal]
+    stmind_beh_aufw_anspruch: Optional[Decimal]
+    stmind_bestattung_summe: Optional[Decimal]
+    stmind_bestattung_anspruch: Optional[Decimal]
+    stmind_aussergbela_sonst_summe: Optional[Decimal]
+    stmind_aussergbela_sonst_anspruch: Optional[Decimal]
+
+    stmind_gem_haushalt_count: Optional[int]
+    stmind_gem_haushalt_entries: Optional[List[str]]
+
+
+class FormDataEst(Stmind):
     steuernummer: Optional[str]
     submission_without_tax_nr: Optional[bool]
     bufa_nr: Optional[str]
@@ -74,32 +103,6 @@ class FormDataEst(BaseModel):
     person_b_has_merkzeichen_ag: Optional[bool]
     person_b_requests_pauschbetrag: Optional[bool]
     person_b_requests_fahrtkostenpauschale: Optional[bool]
-
-    stmind_haushaltsnahe_entries: Optional[List[str]]
-    stmind_haushaltsnahe_summe: Optional[Decimal]
-    stmind_handwerker_entries: Optional[List[str]]
-    stmind_handwerker_summe: Optional[Decimal]
-    stmind_handwerker_lohn_etc_summe: Optional[Decimal]
-
-    stmind_vorsorge_summe: Optional[Decimal]
-    stmind_spenden_inland: Optional[Decimal]
-    stmind_spenden_inland_parteien: Optional[Decimal]
-    stmind_religion_paid_summe: Optional[Decimal]
-    stmind_religion_reimbursed_summe: Optional[Decimal]
-
-    stmind_krankheitskosten_summe: Optional[Decimal]
-    stmind_krankheitskosten_anspruch: Optional[Decimal]
-    stmind_pflegekosten_summe: Optional[Decimal]
-    stmind_pflegekosten_anspruch: Optional[Decimal]
-    stmind_beh_aufw_summe: Optional[Decimal]
-    stmind_beh_aufw_anspruch: Optional[Decimal]
-    stmind_bestattung_summe: Optional[Decimal]
-    stmind_bestattung_anspruch: Optional[Decimal]
-    stmind_aussergbela_sonst_summe: Optional[Decimal]
-    stmind_aussergbela_sonst_anspruch: Optional[Decimal]
-
-    stmind_gem_haushalt_count: Optional[int]
-    stmind_gem_haushalt_entries: Optional[List[str]]
 
     @validator('submission_without_tax_nr', always=True)
     def if_no_tax_number_must_be_submission_without_tax_nr(cls, v, values):
@@ -237,3 +240,6 @@ class UnlockCodeRevocationData(BaseModel):
 
 class GetAddressData(BaseModel):
     idnr: str
+
+
+

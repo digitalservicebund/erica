@@ -1,12 +1,9 @@
 from datetime import date
-from decimal import Decimal
-from typing import Optional
 
 import pytest
-from pydantic.main import BaseModel
 
 from erica.request_processing.eric_mapper import EstEricMapping
-from erica.request_processing.erica_input import FormDataEst
+from erica.request_processing.erica_input.v1.erica_input import FormDataEst
 
 
 @pytest.fixture

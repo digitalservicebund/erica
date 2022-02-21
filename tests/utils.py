@@ -6,7 +6,7 @@ from decimal import Decimal
 from xml.etree import ElementTree as ET
 
 from erica.config import get_settings
-from erica.request_processing.erica_input import EstData, FormDataEst, MetaDataEst, UnlockCodeRequestData, \
+from erica.request_processing.erica_input.v1.erica_input import EstData, FormDataEst, MetaDataEst, UnlockCodeRequestData, \
     UnlockCodeActivationData, UnlockCodeRevocationData
     
 from erica.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR

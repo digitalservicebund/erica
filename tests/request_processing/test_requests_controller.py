@@ -7,7 +7,7 @@ import pytest
 from erica.pyeric.eric_errors import InvalidBufaNumberError
 from erica.pyeric.pyeric_response import PyericResponse
 from erica.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
-from erica.request_processing.erica_input import UnlockCodeRequestData, UnlockCodeActivationData, \
+from erica.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, UnlockCodeActivationData, \
     UnlockCodeRevocationData, GetAddressData
 from erica.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, EstRequestController, EstValidationRequestController, \

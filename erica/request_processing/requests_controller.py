@@ -16,7 +16,7 @@ from erica.pyeric.pyeric_controller import EstPyericProcessController, EstValida
     DecryptBelegePyericController, BelegIdRequestPyericProcessController, \
     BelegRequestPyericProcessController, CheckTaxNumberPyericController
 from erica.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
-from erica.request_processing.erica_input import UnlockCodeRequestData, EstData
+from erica.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, EstData
 
 SPECIAL_TESTMERKER_IDNR = '04452397687'
 

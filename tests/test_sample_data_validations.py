@@ -4,7 +4,7 @@ import unittest
 
 import pytest
 
-from erica.routes import validate_est
+from erica.api.v1.endpoints.rente.est import validate_est
 from tests.utils import create_est, create_est_single, missing_cert, missing_pyeric_lib
 
 

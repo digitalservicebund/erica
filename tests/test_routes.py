@@ -5,11 +5,14 @@ from unittest.mock import patch, MagicMock
 import pytest
 from fastapi.exceptions import HTTPException
 
+from erica.api.v1.endpoints.grundsteuer.grundsteuer import send_grundsteuer
+from erica.api.v1.endpoints.rente.est import validate_est, send_est
+from erica.api.v1.endpoints.rente.tax import is_valid_tax_number, get_tax_offices
+from erica.api.v1.endpoints.rente.unlock_code import request_unlock_code, activate_unlock_code, revoke_unlock_code
 from erica.pyeric.eric import EricResponse
 from erica.pyeric.pyeric_controller import GetTaxOfficesPyericController
-from erica.request_processing.erica_input import GrundsteuerData
-from erica.routes import request_unlock_code, activate_unlock_code, send_est, validate_est, revoke_unlock_code, \
-    get_tax_offices, is_valid_tax_number, send_grundsteuer
+from erica.request_processing.erica_input.v1.erica_input import GrundsteuerData
+
 from tests.utils import create_unlock_request, create_unlock_activation, create_est, create_unlock_revocation, \
     missing_cert, missing_pyeric_lib
 
@@ -159,7 +162,8 @@ class TestActivateUnlockCode(unittest.TestCase):
 
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
-    def test_if_request_correct_and_elster_request_id_incorrect_then_raise_httpexception_with_elster_transfer_error(self):
+    def test_if_request_correct_and_elster_request_id_incorrect_then_raise_httpexception_with_elster_transfer_error(
+            self):
         correct_activation_no_include = create_unlock_activation(correct=True)
 
         try:
@@ -275,7 +279,7 @@ class TestGetTaxOffices(unittest.TestCase):
         response = get_tax_offices()
         with open(response.path, "r") as response_file:
             response_content = json.load(response_file)
-            
+
         erica_response = GetTaxOfficesPyericController().get_eric_response()
-        
+
         self.assertEqual(erica_response, response_content)

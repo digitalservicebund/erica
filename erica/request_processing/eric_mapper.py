@@ -1,16 +1,14 @@
 from datetime import date
-from decimal import Decimal
-from typing import Optional, List
+from typing import Optional
 
 from pydantic import BaseModel, root_validator, validator
 
-from erica.request_processing.erica_input import AccountHolder, MetaDataEst
+from erica.request_processing.erica_input.v1.erica_input import AccountHolder, Stmind
 
 STANDARD_DATE_FORMAT = '%d.%m.%Y'
 
 
-class EstEricMapping(BaseModel):
-
+class EstEricMapping(Stmind):
     steuernummer: Optional[str]
     submission_without_tax_nr: Optional[bool]
     bufa_nr: Optional[str]
@@ -64,32 +62,6 @@ class EstEricMapping(BaseModel):
     person_b_fahrtkostenpauschale_has_merkzeichen_bl_tbl_h_ag_pflegegrad: Optional[bool]
     person_b_fahrtkostenpauschale_has_merkzeichen_g_and_degree_70_degree_80: Optional[bool]
 
-    stmind_haushaltsnahe_entries: Optional[List[str]]
-    stmind_haushaltsnahe_summe: Optional[Decimal]
-    stmind_handwerker_entries: Optional[List[str]]
-    stmind_handwerker_summe: Optional[Decimal]
-    stmind_handwerker_lohn_etc_summe: Optional[Decimal]
-
-    stmind_vorsorge_summe: Optional[Decimal]
-    stmind_spenden_inland: Optional[Decimal]
-    stmind_spenden_inland_parteien: Optional[Decimal]
-    stmind_religion_paid_summe: Optional[Decimal]
-    stmind_religion_reimbursed_summe: Optional[Decimal]
-
-    stmind_krankheitskosten_summe: Optional[Decimal]
-    stmind_krankheitskosten_anspruch: Optional[Decimal]
-    stmind_pflegekosten_summe: Optional[Decimal]
-    stmind_pflegekosten_anspruch: Optional[Decimal]
-    stmind_beh_aufw_summe: Optional[Decimal]
-    stmind_beh_aufw_anspruch: Optional[Decimal]
-    stmind_bestattung_summe: Optional[Decimal]
-    stmind_bestattung_anspruch: Optional[Decimal]
-    stmind_aussergbela_sonst_summe: Optional[Decimal]
-    stmind_aussergbela_sonst_anspruch: Optional[Decimal]
-
-    stmind_gem_haushalt_count: Optional[int]
-    stmind_gem_haushalt_entries: Optional[List[str]]
-
     @root_validator(pre=True)
     def set_pauschbetrag_disability_degrees(cls, values):
         if values.get('person_a_requests_pauschbetrag'):
@@ -103,10 +75,10 @@ class EstEricMapping(BaseModel):
     @root_validator(pre=True)
     def set_person_a_merkzeichen_bl_tbl_h_pflegegrad(cls, values):
         merkzeichen_values = [
-           values.get('person_a_has_pflegegrad'),
-           values.get('person_a_has_merkzeichen_bl'),
-           values.get('person_a_has_merkzeichen_tbl'),
-           values.get('person_a_has_merkzeichen_h')
+            values.get('person_a_has_pflegegrad'),
+            values.get('person_a_has_merkzeichen_bl'),
+            values.get('person_a_has_merkzeichen_tbl'),
+            values.get('person_a_has_merkzeichen_h')
         ]
         if any(merkzeichen_values) and values.get('person_a_requests_pauschbetrag'):
             values['person_a_pauschbetrag_has_merkzeichen_bl_tbl_h_pflegegrad'] = True
@@ -115,8 +87,8 @@ class EstEricMapping(BaseModel):
     @root_validator(pre=True)
     def set_person_a_merkzeichen_g_ag(cls, values):
         merkzeichen_values = [
-           values.get('person_a_has_merkzeichen_g'),
-           values.get('person_a_has_merkzeichen_ag')
+            values.get('person_a_has_merkzeichen_g'),
+            values.get('person_a_has_merkzeichen_ag')
         ]
         if any(merkzeichen_values) and values.get('person_a_requests_pauschbetrag'):
             values['person_a_pauschbetrag_has_merkzeichen_g_ag'] = True
@@ -135,17 +107,18 @@ class EstEricMapping(BaseModel):
         if values.get('person_a_requests_fahrtkostenpauschale'):
             if any(merkzeichen_for_higher_fahrtkostenpauschale):
                 values['person_a_fahrtkostenpauschale_has_merkzeichen_bl_tbl_h_ag_pflegegrad'] = True
-            elif values.get('person_a_disability_degree') >= 80 or (values.get('person_a_has_merkzeichen_g') and values.get('person_a_disability_degree') >= 70):
+            elif values.get('person_a_disability_degree') >= 80 or (
+                    values.get('person_a_has_merkzeichen_g') and values.get('person_a_disability_degree') >= 70):
                 values['person_a_fahrtkostenpauschale_has_merkzeichen_g_and_degree_70_degree_80'] = True
         return values
 
     @root_validator(pre=True)
-    def set_person_b_merkzeichen_bl_tbl_h_pflegegrad(cls,values):
+    def set_person_b_merkzeichen_bl_tbl_h_pflegegrad(cls, values):
         merkzeichen_values = [
-           values.get('person_b_has_pflegegrad'),
-           values.get('person_b_has_merkzeichen_bl'),
-           values.get('person_b_has_merkzeichen_tbl'),
-           values.get('person_b_has_merkzeichen_h')
+            values.get('person_b_has_pflegegrad'),
+            values.get('person_b_has_merkzeichen_bl'),
+            values.get('person_b_has_merkzeichen_tbl'),
+            values.get('person_b_has_merkzeichen_h')
         ]
         if any(merkzeichen_values) and values.get('person_b_requests_pauschbetrag'):
             values['person_b_pauschbetrag_has_merkzeichen_bl_tbl_h_pflegegrad'] = True
@@ -154,8 +127,8 @@ class EstEricMapping(BaseModel):
     @root_validator(pre=True)
     def set_person_b_merkzeichen_g_ag(cls, values):
         merkzeichen_values = [
-           values.get('person_b_has_merkzeichen_g'),
-           values.get('person_b_has_merkzeichen_ag')
+            values.get('person_b_has_merkzeichen_g'),
+            values.get('person_b_has_merkzeichen_ag')
         ]
         if any(merkzeichen_values) and values.get('person_b_requests_pauschbetrag'):
             values['person_b_pauschbetrag_has_merkzeichen_g_ag'] = True
@@ -174,7 +147,8 @@ class EstEricMapping(BaseModel):
         if values.get('person_b_requests_fahrtkostenpauschale'):
             if any(merkzeichen_for_higher_fahrtkostenpauschale):
                 values['person_b_fahrtkostenpauschale_has_merkzeichen_bl_tbl_h_ag_pflegegrad'] = True
-            elif values.get('person_b_disability_degree') >= 80 or (values.get('person_b_has_merkzeichen_g') and values.get('person_b_disability_degree') >= 70):
+            elif values.get('person_b_disability_degree') >= 80 or (
+                    values.get('person_b_has_merkzeichen_g') and values.get('person_b_disability_degree') >= 70):
                 values['person_b_fahrtkostenpauschale_has_merkzeichen_g_and_degree_70_degree_80'] = True
         return values
 
