@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 click = "==8.0.3"
-fastapi = "~=0.74.0"
+fastapi = "~=0.74.1"
 freezegun = "*"
 pydantic = "~=1.9.0"
 pytest = "==7.0.1"
