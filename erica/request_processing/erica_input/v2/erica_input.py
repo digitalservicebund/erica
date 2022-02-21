@@ -41,48 +41,47 @@ class ErrorRequestQueue(BaseModel):
 
 
 class Status(Enum):
-    PENDING = "Pending"
     PROCESSING = "Processing"
-    FAILED = "Failed"
-    COMPLETED = "COMPLETED"
+    FAILURE = "Failure"
+    SUCCESS = "Success"
 
 
-class ResponseGetFromQueue(BaseModel):
+class SuccessResponseGetFromQueue(BaseModel):
     processStatus: Status
-    payload: Union[BaseModel, None]
+    result: Union[BaseModel, None]
     errorCode: Union[str, None]
     errorMessage: Union[str, None]
 
 
-class PayloadGetSendEstFromQueue(BaseModel):
+class ResultGetSendEstFromQueue(BaseModel):
     transfer_ticket: str
     pdf: str
 
 
-class ResponseGetSendEstFromQueue(ResponseGetFromQueue):
-    payload: PayloadGetSendEstFromQueue
+class SuccessResponseGetSendEstFromQueue(SuccessResponseGetFromQueue):
+    result: ResultGetSendEstFromQueue
 
 
-class PayloadGetTaxNumberValidityFromQueue(BaseModel):
+class ResultGetTaxNumberValidityFromQueue(BaseModel):
     is_valid: bool
 
 
-class ResponseGetTaxNumberValidityFromQueue(ResponseGetFromQueue):
-    payload: PayloadGetTaxNumberValidityFromQueue
+class SuccessResponseGetTaxNumberValidityFromQueue(SuccessResponseGetFromQueue):
+    result: ResultGetTaxNumberValidityFromQueue
 
 
-class PayloadTransferTicketAndIdnr(BaseModel):
+class TransferTicketAndIdnr(BaseModel):
     transfer_ticket: str
     idnr: str
 
 
-class PayloadGetUnlockCodeRequestAndActivationFromQueue(PayloadTransferTicketAndIdnr):
+class ResultGetUnlockCodeRequestAndActivationFromQueue(TransferTicketAndIdnr):
     elster_request_id: str
 
 
-class ResponseGetUnlockCodeRequestAndActivationFromQueue(ResponseGetFromQueue):
-    payload: PayloadGetUnlockCodeRequestAndActivationFromQueue
+class SuccessResponseGetUnlockCodeRequestAndActivationFromQueue(SuccessResponseGetFromQueue):
+    result: ResultGetUnlockCodeRequestAndActivationFromQueue
 
 
-class ResponseGetUnlockCodeRevocationFromQueue(ResponseGetFromQueue):
-    payload: PayloadTransferTicketAndIdnr
+class SuccessResponseGetUnlockCodeRevocationFromQueue(SuccessResponseGetFromQueue):
+    result: TransferTicketAndIdnr
