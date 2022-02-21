@@ -18,7 +18,16 @@ from erica.pyeric.pyeric_controller import EstPyericProcessController, EstValida
 from erica.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, EstData
 
-SPECIAL_TESTMERKER_IDNR = '04452397687'
+SPECIAL_TESTMERKER_IDNR = ['04452397687',
+                           '02259674819',
+                           '04452317681',
+                           '09952417688',
+                           '03352417692',
+                           '03352419681',
+                           '03352417981',
+                           '03392417683',
+                           '03352917681',
+                           '03359417681']
 
 
 class EricaRequestController(object):
@@ -49,7 +58,7 @@ class EricaRequestController(object):
         raise NotImplementedError
 
     def _is_testmerker_used(self):
-        return self.input_data.idnr == SPECIAL_TESTMERKER_IDNR
+        return self.input_data.idnr in SPECIAL_TESTMERKER_IDNR
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = {}
@@ -75,7 +84,7 @@ class EstValidationRequestController(TransferTicketRequestController):
         super().__init__(input_data, include_elster_responses)
 
     def _is_testmerker_used(self):
-        return self.input_data.est_data.person_a_idnr == SPECIAL_TESTMERKER_IDNR
+        return self.input_data.est_data.person_a_idnr in SPECIAL_TESTMERKER_IDNR
 
     def process(self):
         # Translate our form data structure into the fields from

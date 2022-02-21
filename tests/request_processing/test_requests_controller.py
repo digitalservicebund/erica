@@ -110,7 +110,7 @@ class TestEstRequestProcess(unittest.TestCase):
 
     def test_if_use_testmerker_env_false_and_special_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
         correct_est = create_est(correct_form_data=True)
-        correct_est.est_data.person_a_idnr = SPECIAL_TESTMERKER_IDNR
+        correct_est.est_data.person_a_idnr = SPECIAL_TESTMERKER_IDNR[0]
 
         with patch('erica.elster_xml.elster_xml_generator.generate_full_est_xml') as generate_xml_fun, \
                 patch('erica.pyeric.pyeric_controller.EstPyericProcessController.get_eric_response'), \
@@ -261,7 +261,7 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
             dob=date(1985, 1, 1)))
 
         self.unlock_request_with_valid_input_with_special_idnr = UnlockCodeRequestController(UnlockCodeRequestData(
-            idnr=SPECIAL_TESTMERKER_IDNR,
+            idnr=SPECIAL_TESTMERKER_IDNR[0],
             dob=date(1985, 1, 1)))
 
     def test_pyeric_controller_is_initialised_with_correct_arguments(self):
@@ -410,7 +410,7 @@ class TestUnlockCodeActivationProcess(unittest.TestCase):
 
         self.unlock_activation_with_valid_input_with_special_idnr = UnlockCodeActivationRequestController(
             UnlockCodeActivationData(
-                idnr=SPECIAL_TESTMERKER_IDNR,
+                idnr=SPECIAL_TESTMERKER_IDNR[0],
                 unlock_code='1985-T67D-K89O',
                 elster_request_id='42'))
 
@@ -543,7 +543,7 @@ class TestUnlockCodeRevocationProcess(unittest.TestCase):
 
         self.unlock_revocation_with_valid_input_and_special_idnr = UnlockCodeRevocationRequestController(
             UnlockCodeRevocationData(
-                idnr=SPECIAL_TESTMERKER_IDNR,
+                idnr=SPECIAL_TESTMERKER_IDNR[0],
                 elster_request_id='lookanotherrequestid'))
 
         self.unlock_revocation_with_unknown_idnr = UnlockCodeRevocationRequestController(UnlockCodeRevocationData(
