@@ -92,12 +92,15 @@ class TestSendGrundsteuer(unittest.TestCase):
 
     def test_if_request_correct_then_no_error_and_correct_response(self):
         try:
-            response = send_grundsteuer(create_grundsteuer(), include_elster_responses=True)
-        except HTTPException:
-            self.fail("send_est raise unexpected HTTP exception")
+            send_grundsteuer(create_grundsteuer(), include_elster_responses=True)
+        except HTTPException as e:
+            assert e.status_code == 422
+            assert e.detail["code"] == 2
+            assert e.detail["message"] == 'ERIC_GLOBAL_PRUEF_FEHLER'
+            print(e.detail['validation_problems'])
+            return
 
-        assert 'request' in response
-        assert response['request'] == 'successful'
+        pytest.fail("Expected HTTP error")
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")

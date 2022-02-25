@@ -1,5 +1,7 @@
 import base64
 
+from erica.elster_xml.grundsteuer.elster_data_representation import get_elster_grundsteuer_data
+from erica.elster_xml.grundsteuer.xml_converter import convert_to_grundsteuer_xml
 from erica.pyeric.pyeric_controller import GrundsteuerPyericProcessController
 from erica.pyeric.pyeric_response import PyericResponse
 from erica.request_processing.requests_controller import TransferTicketRequestController
@@ -12,7 +14,8 @@ class GrundsteuerRequestController(TransferTicketRequestController):
         return True
 
     def generate_full_xml(self, use_testmerker):
-        return ""  # TODO
+        elster_data_representation = get_elster_grundsteuer_data(self.input_data)
+        return convert_to_grundsteuer_xml(elster_data_representation)
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
