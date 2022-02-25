@@ -1,6 +1,5 @@
-from dataclasses import asdict, fields
+from dataclasses import asdict
 
-import xmlschema
 import xmltodict as xmltodict
 
 from erica.elster_xml.grundsteuer.elster_data_representation import EGrundsteuerData
