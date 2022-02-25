@@ -29,11 +29,23 @@ class EEigentuemerData:
 
 
 @dataclass
-class EGrundsteuerData:
+class EE88:
     GW1: EEigentuemerData
+    xml_attr_version: str
+    xml_attr_xmlns: str
 
     def __init__(self, input_data: GrundsteuerData):
         self.GW1 = EEigentuemerData(input_data.eigentuemer)
+        self.xml_attr_version = "2"
+        self.xml_attr_xmlns = "http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2"
+
+
+@dataclass
+class EGrundsteuerData:
+    E88: EE88
+
+    def __init__(self, input_data: GrundsteuerData):
+        self.E88 = EE88(input_data)
 
 
 def get_elster_grundsteuer_data(input_data):
