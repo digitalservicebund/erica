@@ -1,5 +1,5 @@
 from fastapi import status, APIRouter
-from erica.request_processing.erica_input.v1.erica_input import GrundsteuerData
+from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 router = APIRouter()
 
 
