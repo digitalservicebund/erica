@@ -58,3 +58,8 @@ class Eigentuemer(BaseModel):
 
 class GrundsteuerData(BaseModel):
     eigentuemer: Eigentuemer
+
+
+class GrundsteuerWithTtl(BaseModel):
+    ttlInMinutes: int
+    payload: GrundsteuerData
