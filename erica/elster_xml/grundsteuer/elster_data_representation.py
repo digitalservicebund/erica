@@ -3,7 +3,7 @@ from typing import List
 
 from erica.elster_xml.common.basic_xml import ENutzdaten, construct_basic_xml_object_representation
 from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
-    Eigentuemer as EigentuemerInput
+    Eigentuemer as EigentuemerInput, Anrede
 
 
 @dataclass
@@ -14,8 +14,17 @@ class EPersonData:
 
     def __init__(self, input_data: Person, person_index: int):
         self.Beteiligter = person_index + 1
-        self.E7404510 = input_data.name.anrede
+        self.E7404510 = self.elsterify_anrede(input_data.name.anrede)
         self.E7404511 = input_data.name.name
+
+    def elsterify_anrede(self, anrede_input):
+        anrede_mapping = {
+            Anrede.no_anrede: '01',
+            Anrede.herr: '02',
+            Anrede.frau: '03',
+        }
+        return anrede_mapping.get(anrede_input)
+
 
 
 @dataclass

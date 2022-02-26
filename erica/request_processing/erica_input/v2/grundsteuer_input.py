@@ -1,10 +1,17 @@
+from enum import Enum
 from typing import List, Optional
 
 from pydantic import BaseModel
 
 
+class Anrede(str, Enum):
+    no_anrede = 'no_anrede'
+    herr = 'herr'
+    frau = 'frau'
+
+
 class Name(BaseModel):
-    anrede: str
+    anrede: Anrede
     titel: str
     name: str
     vorname: str

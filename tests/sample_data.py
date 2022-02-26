@@ -7,7 +7,7 @@ def create_grundsteuer():
             "person": [
                 {
                     "name": {
-                        "anrede": "Frau",
+                        "anrede": "frau",
                         "titel": "Dr",
                         "name": "Granger",
                         "vorname": "Hermine",
@@ -28,7 +28,7 @@ def create_grundsteuer():
                     },
                     "vertreter": {
                         "name": {
-                            "anrede": "",
+                            "anrede": "no_anrede",
                             "titel": "",
                             "name": "",
                             "vorname": "",
