@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
+from erica.elster_xml.common.basic_xml import ENutzdaten, construct_basic_xml_object_representation
 from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
     Eigentuemer as EigentuemerInput
 
@@ -41,7 +42,7 @@ class EE88:
 
 
 @dataclass
-class EGrundsteuerData:
+class EGrundsteuerData(ENutzdaten):
     E88: EE88
 
     def __init__(self, input_data: GrundsteuerData):
@@ -50,3 +51,8 @@ class EGrundsteuerData:
 
 def get_elster_grundsteuer_data(input_data):
     return EGrundsteuerData(input_data)
+
+
+def get_full_grundsteuer_data_representation(input_data):
+    elster_data_representation = get_elster_grundsteuer_data(input_data)
+    return construct_basic_xml_object_representation('F', "1121", elster_data_representation, "11")
