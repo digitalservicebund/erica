@@ -1,5 +1,6 @@
 import os
-from sys import platform
+import sys
+import platform
 from functools import lru_cache
 
 from pydantic import Field
@@ -32,14 +33,14 @@ class Settings(BaseSettings):
 
     @staticmethod
     def get_eric_dll_path():
-        if platform == "darwin":
+        if sys.platform == "darwin" or platform.machine() == "aarch64":
             return "erica/lib/libericapi.dylib"
         else:
             return "erica/lib/libericapi.so"
 
     def get_cert_path(self):
         if self.using_stick:
-            if platform == 'darwin':
+            if sys.platform == 'darwin' or platform.machine() == "aarch64":
                 return 'libaetpkss.dylib'
             else:
                 return 'libaetpkss.so'
