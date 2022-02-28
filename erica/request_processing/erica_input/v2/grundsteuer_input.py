@@ -12,18 +12,19 @@ class Anrede(str, Enum):
 
 class Name(BaseModel):
     anrede: Anrede
-    titel: str
+    titel: Optional[str]
     name: str
     vorname: str
 
 
 class Adresse(BaseModel):
-    strasse: str
-    hausnummer: str
-    zusatzangaben: str
+    strasse: Optional[str]
+    hausnummer: Optional[str]
+    zusatzangaben: Optional[str]
     postfach: Optional[str]
     plz: str
     ort: str
+    # TODO add postfach + hausnummer validation?
 
 
 class Telefonnummer(BaseModel):

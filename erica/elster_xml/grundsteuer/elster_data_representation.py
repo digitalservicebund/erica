@@ -31,11 +31,11 @@ class EGesetzlicherVertreter:
     E7415201: str
     E7415301: str
     E7415401: str
-    E7415501: str
-    # TODO Hausnummerzusatz
     E7415601: str
     E7415603: str
     E7415102: Optional[str] = None
+    E7415501: Optional[str] = None
+    # TODO Hausnummerzusatz
     E7415602: Optional[str] = None
     E7415604: Optional[str] = None
 
@@ -44,13 +44,13 @@ class EGesetzlicherVertreter:
         self.E7415201 = input_data.name.vorname
         self.E7415301 = input_data.name.name
         self.E7415401 = input_data.adresse.strasse
-        self.E7415501 = input_data.adresse.hausnummer
         self.E7415601 = input_data.adresse.plz
         self.E7415603 = input_data.adresse.ort
 
         # Set optional attributes
         try:
             self.E7415102 = input_data.name.titel
+            self.E7415501 = input_data.adresse.hausnummer
             self.E7415602 = input_data.adresse.postfach
             self.E7415604 = input_data.telefonnummer.telefonnummer
         except AttributeError:
@@ -70,7 +70,7 @@ class EPersonData:
     E7404522: str
     E7404519: str
     Anteil: EAnteil
-    Ges_Vertreter: EGesetzlicherVertreter
+    Ges_Vertreter: Optional[EGesetzlicherVertreter]
     # TODO: Eval: Order isn't important at elster anymore?
     E7404514: Optional[str] = None
     E7404527: Optional[str] = None
@@ -88,9 +88,13 @@ class EPersonData:
         self.E7404522 = input_data.adresse.ort
         self.E7404519 = input_data.steuer_id.steuer_id
         self.Anteil = EAnteil(input_data.anteil)
-        self.Ges_Vertreter = EGesetzlicherVertreter(input_data.vertreter)
 
         # Set optional attributes
+        if hasattr(input_data, "vertreter") and input_data.vertreter:
+            self.Ges_Vertreter = EGesetzlicherVertreter(input_data.vertreter)
+        else:
+            self.Ges_Vertreter = None
+
         try:
             self.E7404514 = input_data.name.titel
             self.E7404527 = input_data.adresse.postfach

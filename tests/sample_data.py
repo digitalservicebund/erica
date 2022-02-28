@@ -2,7 +2,7 @@ from erica.request_processing.erica_input.v2.grundsteuer_input import Grundsteue
 
 
 def create_grundsteuer():
-    valid_sample_data_single = {
+    valid_sample_data_single_with_vertreter = {
         "eigentuemer": {
             "person": [
                 {
@@ -28,20 +28,13 @@ def create_grundsteuer():
                     "vertreter": {
                         "name": {
                             "anrede": "no_anrede",
-                            "titel": "",
-                            "name": "",
-                            "vorname": "",
+                            "name": "Shacklebolt",
+                            "vorname": "Kingsley",
                         },
                         "adresse": {
-                            "strasse": "",
-                            "hausnummer": "",
-                            "zusatzangaben": "",
-                            "postfach": "",
-                            "plz": "",
-                            "ort": "",
-                        },
-                        "telefonnummer": {
-                            "telefonnummer": "",
+                            "postfach": "32263",
+                            "plz": "98765",
+                            "ort": "Godric's Hollow",
                         },
                     },
                     "anteil": {
@@ -51,4 +44,4 @@ def create_grundsteuer():
                 },
             ],
         }}
-    return GrundsteuerData.parse_obj(valid_sample_data_single)
+    return GrundsteuerData.parse_obj(valid_sample_data_single_with_vertreter)
