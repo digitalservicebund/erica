@@ -116,13 +116,53 @@ class EEigentuemerData:
 
 
 @dataclass
+class ERueckuebermittlung:
+    Bescheid: str
+
+    def __init__(self):
+        self.Bescheid = '2'  # No "Bescheiddatenabholung"
+
+
+@dataclass
+class EVorsatz:
+    Unterfallart: str
+    Vorgang: str
+    StNr: str
+    Zeitraum: str
+    AbsName: str
+    AbsStr: str
+    AbsPlz: str
+    AbsOrt: str
+    Copyright: str
+    OrdNrArt: str
+    Rueckuebermittlung: ERueckuebermittlung
+
+    def __init__(self, input_data: GrundsteuerData):
+        self.Unterfallart = "88"  # Grundsteuer
+        self.Vorgang = "01"  # Veranlagung
+        # TODO
+        self.StNr = "1121081508150"
+        self.Zeitraum = "2022"  # TODO require on input?
+        self.AbsName = input_data.eigentuemer.person[0].name.vorname + " " + input_data.eigentuemer.person[0].name.name
+        self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
+        self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
+        self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
+        self.Copyright = "(C) 2022 DigitalService4Germany"
+        # TODO Steuernummer or Aktenzeichen?
+        self.OrdNrArt = "S"
+        self.Rueckuebermittlung = ERueckuebermittlung()
+
+
+@dataclass
 class EE88:
     GW1: EEigentuemerData
+    Vorsatz: EVorsatz
     xml_attr_version: str
     xml_attr_xmlns: str
 
     def __init__(self, input_data: GrundsteuerData):
         self.GW1 = EEigentuemerData(input_data.eigentuemer)
+        self.Vorsatz = EVorsatz(input_data)
         self.xml_attr_version = "2"
         self.xml_attr_xmlns = "http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2"
 
@@ -141,4 +181,5 @@ def get_elster_grundsteuer_data(input_data):
 
 def get_full_grundsteuer_data_representation(input_data):
     elster_data_representation = get_elster_grundsteuer_data(input_data)
+    # TODO set BuFa correctly
     return construct_basic_xml_object_representation('F', "1121", elster_data_representation, "11")
