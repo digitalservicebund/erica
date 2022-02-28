@@ -69,6 +69,17 @@ class EXml:
                               nutzdaten_ticket)
 
 
-def construct_basic_xml_object_representation(empfaenger_id, empfaenger_text, nutzdaten_object,
-                                              nutzdaten_header_version, nutzdaten_ticket="1"):
+def construct_basic_xml_data_representation(empfaenger_id: str, empfaenger_text: str, nutzdaten_object: ENutzdaten,
+                                            nutzdaten_header_version: str, nutzdaten_ticket: str = "1"):
+    """
+    Returns the complete data representation of a valid Elster XML.
+
+    :param empfaenger_id: ID of the Empfaenger - "F" in most cases
+    :param empfaenger_text: specifics of the Empfaenger - the bufa_nr in most cases
+    :param nutzdaten_object: a subclass of ENutzdaten including the use case specific
+    Nutzdaten part of the xml data representation
+    :param nutzdaten_header_version: The version of the NutzdatenHeader to use
+    :param nutzdaten_ticket: The ID of the Nutzdatenticket. Irrelevant in cases
+    with only one data item within the complete XML
+    """
     return EXml(empfaenger_id, empfaenger_text, nutzdaten_object, nutzdaten_header_version, nutzdaten_ticket)

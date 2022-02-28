@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
-from erica.elster_xml.common.basic_xml import ENutzdaten, construct_basic_xml_object_representation
+from erica.elster_xml.common.basic_xml_data_representation import ENutzdaten, construct_basic_xml_data_representation
 from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
     Eigentuemer as EigentuemerInput, Anrede, Anteil, Vertreter
 
 
-def elsterify_anrede(anrede_input):
+def elsterify_anrede(anrede_input: Anrede):
+    """ Converts input Anrede enum to Elster's Anrede enum """
     anrede_mapping = {
         Anrede.no_anrede: '01',
         Anrede.herr: '02',
@@ -61,7 +62,6 @@ class EGesetzlicherVertreter:
 class EPersonData:
     Beteiligter: int
     E7404510: str
-    # E7404518: str
     E7404513: str
     E7404511: str
     E7404524: str
@@ -79,7 +79,7 @@ class EPersonData:
     def __init__(self, input_data: Person, person_index: int):
         self.Beteiligter = person_index + 1
         self.E7404510 = elsterify_anrede(input_data.name.anrede)
-        # TODO: Geburtsdatum
+        # TODO: Geburtsdatum E7404518: str
         self.E7404513 = input_data.name.vorname
         self.E7404511 = input_data.name.name
         self.E7404524 = input_data.adresse.strasse
@@ -175,11 +175,8 @@ class EGrundsteuerData(ENutzdaten):
         self.E88 = EE88(input_data)
 
 
-def get_elster_grundsteuer_data(input_data):
-    return EGrundsteuerData(input_data)
-
-
 def get_full_grundsteuer_data_representation(input_data):
-    elster_data_representation = get_elster_grundsteuer_data(input_data)
+    """ Returns the full data representation of an elster XML for the Grundsteuer use case. """
+    elster_data_representation = EGrundsteuerData(input_data)
     # TODO set BuFa correctly
-    return construct_basic_xml_object_representation('F', "1121", elster_data_representation, "11")
+    return construct_basic_xml_data_representation('F', "1121", elster_data_representation, "11")

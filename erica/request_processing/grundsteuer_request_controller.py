@@ -13,9 +13,11 @@ class GrundsteuerRequestController(TransferTicketRequestController):
     _PYERIC_CONTROLLER = GrundsteuerPyericProcessController
 
     def _is_testmerker_used(self):
+        # TODO revisit this
         return True
 
     def generate_full_xml(self, use_testmerker):
+        """ Constructs the complete XML for the grundsteuer use case. """
         grundsteuer_data_representation = get_full_grundsteuer_data_representation(self.input_data)
         grundsteuer_xml_without_th = convert_object_to_xml(grundsteuer_data_representation)
         complete_xml = add_transfer_header(grundsteuer_xml_without_th,

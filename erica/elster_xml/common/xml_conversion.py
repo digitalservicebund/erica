@@ -3,10 +3,16 @@ from dataclasses import asdict
 
 import xmltodict as xmltodict
 
-from erica.elster_xml.common.basic_xml import EXml
+from erica.elster_xml.common.basic_xml_data_representation import EXml
 
 
 class CustomDictParser(dict):
+    """
+    Parse the given object to a dict structure that xmltodict will interpret correctly.
+    Attributes starting with "xml_attr_" will be interpreted as XML attributes.
+    Attributes starting with "xml_only_text" will be treated as single text children of the XML element.
+    If an attribute has the value "None" it will be not included in the resulting dict.
+    """
     def __init__(self, data):
         new_data = copy.deepcopy(data)
         for index, item in enumerate(data):
@@ -21,5 +27,6 @@ class CustomDictParser(dict):
 
 
 def convert_object_to_xml(grundsteuer_object: EXml):
+    """ Parses the given object to its XML representation. """
     grundsteuer_dict = asdict(grundsteuer_object, dict_factory=CustomDictParser)
     return xmltodict.unparse(grundsteuer_dict, pretty=True)
