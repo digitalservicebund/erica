@@ -22,6 +22,8 @@ class CustomDictParser(dict):
                 new_data[index] = ('#text', item[1])
             if item[1] is None:
                 new_data.remove(item)
+            if item[1] == {}:
+                new_data.remove(item)
 
         super().__init__(new_data)
 
