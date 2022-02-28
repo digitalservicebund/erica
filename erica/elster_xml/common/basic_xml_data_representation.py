@@ -12,7 +12,7 @@ class EEmpfaenger:
     xml_only_text: str
     xml_attr_id: str
 
-    def __init__(self, empfaenger_text, empfaenger_id):
+    def __init__(self, empfaenger_id, empfaenger_text):
         self.xml_only_text = empfaenger_text
         self.xml_attr_id = empfaenger_id
 
@@ -25,7 +25,7 @@ class ENutzdatenHeader:
 
     def __init__(self, empfaenger_id, empfaenger_text, nutzdaten_header_version, nutzdaten_ticket):
         self.NutzdatenTicket = nutzdaten_ticket
-        self.Empfaenger = EEmpfaenger(empfaenger_text, empfaenger_id=empfaenger_id)
+        self.Empfaenger = EEmpfaenger(empfaenger_id, empfaenger_text)
         self.xml_attr_version = nutzdaten_header_version
 
 
