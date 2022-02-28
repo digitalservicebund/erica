@@ -22,6 +22,7 @@ class TestEEmpfaenger:
         resulting_empfaenger = EEmpfaenger("ID", "TEXT")
         assert resulting_empfaenger.xml_attr_id == "ID"
         assert resulting_empfaenger.xml_only_text == "TEXT"
+        assert len(vars(resulting_empfaenger)) == 2
 
 
 class TestENutzdatenHeader:
@@ -30,6 +31,7 @@ class TestENutzdatenHeader:
         assert resulting_nutzdaten_header.Empfaenger == EEmpfaenger("ID", "TEXT")
         assert resulting_nutzdaten_header.xml_attr_version == "VERSION"
         assert resulting_nutzdaten_header.NutzdatenTicket == "TICKET"
+        assert len(vars(resulting_nutzdaten_header)) == 3
 
 
 class TestENutzdatenblock:
@@ -37,12 +39,14 @@ class TestENutzdatenblock:
         resulting_nutzdaten_block = ENutzdatenblock(*default_function_args)
         assert resulting_nutzdaten_block.NutzdatenHeader == ENutzdatenHeader("ID", "TEXT", "VERSION", "TICKET")
         assert resulting_nutzdaten_block.Nutzdaten == nutzdaten
+        assert len(vars(resulting_nutzdaten_block)) == 2
 
 
 class TestEDatenTeil:
     def test_attributes_set_correctly(self, default_function_args):
         resulting_daten_teil = EDatenTeil(*default_function_args)
         assert resulting_daten_teil.Nutzdatenblock == ENutzdatenblock(*default_function_args)
+        assert len(vars(resulting_daten_teil)) == 1
 
 
 class TestEElster:
@@ -50,12 +54,14 @@ class TestEElster:
         resulting_elster_object = EElster(*default_function_args)
         assert resulting_elster_object.DatenTeil == EDatenTeil(*default_function_args)
         assert resulting_elster_object.xml_attr_xmlns == "http://www.elster.de/elsterxml/schema/v11"
+        assert len(vars(resulting_elster_object)) == 2
 
 
 class TestEXml:
     def test_attributes_set_correctly(self, default_function_args):
         resulting_xml_object = EXml(*default_function_args)
         assert resulting_xml_object.Elster == EElster(*default_function_args)
+        assert len(vars(resulting_xml_object)) == 1
 
 
 class TestConstructBasicXmlDataRepresentation:
