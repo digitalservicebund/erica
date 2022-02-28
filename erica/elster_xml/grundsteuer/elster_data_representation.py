@@ -3,7 +3,16 @@ from typing import List, Optional
 
 from erica.elster_xml.common.basic_xml import ENutzdaten, construct_basic_xml_object_representation
 from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
-    Eigentuemer as EigentuemerInput, Anrede, Anteil
+    Eigentuemer as EigentuemerInput, Anrede, Anteil, Vertreter
+
+
+def elsterify_anrede(anrede_input):
+    anrede_mapping = {
+        Anrede.no_anrede: '01',
+        Anrede.herr: '02',
+        Anrede.frau: '03',
+    }
+    return anrede_mapping.get(anrede_input)
 
 
 @dataclass
@@ -14,6 +23,38 @@ class EAnteil:
     def __init__(self, input_data: Anteil):
         self.E7404570 = input_data.zaehler
         self.E7404571 = input_data.nenner
+
+
+@dataclass
+class EGesetzlicherVertreter:
+    E7415101: str
+    E7415201: str
+    E7415301: str
+    E7415401: str
+    E7415501: str
+    # TODO Hausnummerzusatz
+    E7415601: str
+    E7415603: str
+    E7415102: Optional[str] = None
+    E7415602: Optional[str] = None
+    E7415604: Optional[str] = None
+
+    def __init__(self, input_data: Vertreter):
+        self.E7415101 = elsterify_anrede(input_data.name.anrede)
+        self.E7415201 = input_data.name.vorname
+        self.E7415301 = input_data.name.name
+        self.E7415401 = input_data.adresse.strasse
+        self.E7415501 = input_data.adresse.hausnummer
+        self.E7415601 = input_data.adresse.plz
+        self.E7415603 = input_data.adresse.ort
+
+        # Set optional attributes
+        try:
+            self.E7415102 = input_data.name.titel
+            self.E7415602 = input_data.adresse.postfach
+            self.E7415604 = input_data.telefonnummer.telefonnummer
+        except AttributeError:
+            pass
 
 
 @dataclass
@@ -29,6 +70,7 @@ class EPersonData:
     E7404522: str
     E7404519: str
     Anteil: EAnteil
+    Ges_Vertreter: EGesetzlicherVertreter
     # TODO: Eval: Order isn't important at elster anymore?
     E7404514: Optional[str] = None
     E7404527: Optional[str] = None
@@ -36,7 +78,7 @@ class EPersonData:
 
     def __init__(self, input_data: Person, person_index: int):
         self.Beteiligter = person_index + 1
-        self.E7404510 = self.elsterify_anrede(input_data.name.anrede)
+        self.E7404510 = elsterify_anrede(input_data.name.anrede)
         # TODO: Geburtsdatum
         self.E7404513 = input_data.name.vorname
         self.E7404511 = input_data.name.name
@@ -46,6 +88,7 @@ class EPersonData:
         self.E7404522 = input_data.adresse.ort
         self.E7404519 = input_data.steuer_id.steuer_id
         self.Anteil = EAnteil(input_data.anteil)
+        self.Ges_Vertreter = EGesetzlicherVertreter(input_data.vertreter)
 
         # Set optional attributes
         try:
@@ -55,14 +98,6 @@ class EPersonData:
             self.E7414601 = input_data.telefonnummer.telefonnummer
         except AttributeError:
             pass
-
-    def elsterify_anrede(self, anrede_input):
-        anrede_mapping = {
-            Anrede.no_anrede: '01',
-            Anrede.herr: '02',
-            Anrede.frau: '03',
-        }
-        return anrede_mapping.get(anrede_input)
 
 
 @dataclass
