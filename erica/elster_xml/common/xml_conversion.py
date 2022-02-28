@@ -12,6 +12,8 @@ class CustomDictParser(dict):
                 data[index] = (item[0].replace('xml_attr_', '@'), item[1])
             if item[0].startswith('xml_only_text'):
                 data[index] = ('#text', item[1])
+            if item[1] is None:
+                data.remove(item)
 
         super().__init__(data)
 

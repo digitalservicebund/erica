@@ -16,12 +16,11 @@ def create_grundsteuer():
                         "strasse": "Grimmauld place",
                         "hausnummer": "12",
                         "zusatzangaben": "Secret House",
-                        "postfach": "",
                         "plz": "77777",
                         "ort": "London",
                     },
                     "telefonnummer": {
-                        "telefonnummer": "",
+                        "telefonnummer": "123",
                     },
                     "steuer_id": {
                         "steuer_id": "04452317681",

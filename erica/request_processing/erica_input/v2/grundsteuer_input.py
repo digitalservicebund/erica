@@ -21,7 +21,7 @@ class Adresse(BaseModel):
     strasse: str
     hausnummer: str
     zusatzangaben: str
-    postfach: str
+    postfach: Optional[str]
     plz: str
     ort: str
 
