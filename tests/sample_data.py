@@ -1,6 +1,72 @@
 import copy
 
-from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData, Vertreter
+from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+
+
+def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_strasse=False):
+    if only_strasse:
+        return {
+            "strasse": "Grimmauld place",
+            "hausnummer": 12,
+            "hausnummerzusatz": "a",
+            "zusatzangaben": "Secret House",
+            "plz": "77777",
+            "ort": "London",
+        }
+    if only_postfach:
+        return {
+            "postfach": "11111",
+            "plz": "77777",
+            "ort": "London",
+        }
+    if complete:
+        return {
+            "strasse": "Grimmauld place",
+            "hausnummer": 12,
+            "hausnummerzusatz": "a",
+            "zusatzangaben": "Secret House",
+            "postfach": "11111",
+            "plz": "77777",
+            "ort": "London",
+        }
+
+    return {
+        "plz": "77777",
+        "ort": "London",
+    }
+
+
+def get_sample_adresse_vertreter(complete=True, only_postfach=False, only_strasse=False):
+    if only_strasse:
+        return {
+            "plz": "98765",
+            "ort": "Godric's Hollow",
+            "strasse": "Diagon Alley",
+            "hausnummer": 4,
+            "hausnummerzusatz": "b",
+            "zusatzangaben": "Secret"
+        }
+
+    if only_postfach:
+        return {
+            "postfach": "32263",
+            "plz": "98765",
+            "ort": "Godric's Hollow"
+        }
+    if complete:
+        return {
+            "postfach": "32263",
+            "plz": "98765",
+            "ort": "Godric's Hollow",
+            "strasse": "Diagon Alley",
+            "hausnummer": 4,
+            "hausnummerzusatz": "b",
+            "zusatzangaben": "Secret"
+        }
+    return {
+        "plz": "98765",
+        "ort": "Godric's Hollow"
+    }
 
 
 def get_sample_vertreter_dict(complete=True, only_postfach=False, only_strasse=False):
@@ -14,29 +80,7 @@ def get_sample_vertreter_dict(complete=True, only_postfach=False, only_strasse=F
         "name": "Shacklebolt",
         "vorname": "Kingsley",
     }
-    adresse = {
-        "plz": "98765",
-        "ort": "Godric's Hollow",
-        "strasse": "Diagon Alley",
-        "hausnummer": 4,
-        "hausnummerzusatz": "b",
-        "zusatzangaben": "Secret"
-    } if only_strasse else {
-        "postfach": "32263",
-        "plz": "98765",
-        "ort": "Godric's Hollow"
-    } if only_postfach else {
-        "postfach": "32263",
-        "plz": "98765",
-        "ort": "Godric's Hollow",
-        "strasse": "Diagon Alley",
-        "hausnummer": 4,
-        "hausnummerzusatz": "b",
-        "zusatzangaben": "Secret"
-    } if complete else {
-        "plz": "98765",
-        "ort": "Godric's Hollow"
-    }
+    adresse = get_sample_adresse_vertreter(complete, only_postfach, only_strasse)
     telefonnummer = {
         "telefonnummer": {
             "telefonnummer": "32168"
@@ -50,7 +94,8 @@ def get_sample_vertreter_dict(complete=True, only_postfach=False, only_strasse=F
 
 
 def get_single_person_dict(complete=True, with_vertreter=True, only_postfach=False, only_strasse=False):
-    vertreter = {"vertreter": get_sample_vertreter_dict(complete, only_postfach, only_strasse)} if with_vertreter else {}
+    vertreter = {
+        "vertreter": get_sample_vertreter_dict(complete, only_postfach, only_strasse)} if with_vertreter else {}
     name = {
         "name": {
             "anrede": "frau",
@@ -64,34 +109,7 @@ def get_single_person_dict(complete=True, with_vertreter=True, only_postfach=Fal
             "vorname": "Hermine",
         }
     }
-    adresse = {
-        "adresse": {
-            "postfach": "11111",
-            "plz": "77777",
-            "ort": "London",
-        }} if only_postfach else {
-        "adresse": {
-            "strasse": "Grimmauld place",
-            "hausnummer": 12,
-            "hausnummerzusatz": "a",
-            "zusatzangaben": "Secret House",
-            "plz": "77777",
-            "ort": "London",
-        }} if only_strasse else {
-        "adresse": {
-            "strasse": "Grimmauld place",
-            "hausnummer": 12,
-            "hausnummerzusatz": "a",
-            "zusatzangaben": "Secret House",
-            "postfach": "11111",
-            "plz": "77777",
-            "ort": "London",
-        }} if complete else {
-        "adresse": {
-            "plz": "77777",
-            "ort": "London",
-        },
-    }
+    adresse = {"adresse": get_sample_adresse_eigentuemer(complete, only_postfach, only_strasse)}
     telefonnummer = {
         "telefonnummer": {
             "telefonnummer": "123",
