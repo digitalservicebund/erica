@@ -5,7 +5,8 @@ import pytest
 from erica.elster_xml.common.basic_xml_data_representation import EXml
 from erica.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_anrede, EAnteil, EGesetzlicherVertreter, \
-    EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation
+    EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation, \
+    EEigentumsverh
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
 from tests.sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
 
@@ -168,6 +169,46 @@ class TestEPersonData:
         assert len(vars(result)) == 15
 
 
+class TestEEigentumsverh:
+    def test_if_one_person_then_attributes_set_correctly(self):
+        person = get_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
+
+        result = EEigentumsverh(eigentuemer_obj)
+
+        assert result.E7401340 == "0"
+
+    def test_if_two_married_persons_then_attributes_set_correctly(self):
+        person1 = get_single_person_dict()
+        person2 = get_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}})
+
+        result = EEigentumsverh(eigentuemer_obj)
+
+        assert result.E7401340 == "4"
+
+    def test_if_two_not_married_persons_then_attributes_set_correctly(self):
+        person1 = get_single_person_dict()
+        person2 = get_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
+
+        result = EEigentumsverh(eigentuemer_obj)
+
+        assert result.E7401340 == "6"
+
+    def test_if_three_persons_then_attributes_set_correctly(self):
+        person1 = get_single_person_dict()
+        person2 = get_single_person_dict()
+        person3 = get_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person1, person2, person3]})
+
+        result = EEigentumsverh(eigentuemer_obj)
+
+        assert result.E7401340 == "6"
+
+
 class TestEGW1:
     def test_if_one_person_then_attributes_set_correctly(self):
         person = get_single_person_dict()
@@ -177,21 +218,24 @@ class TestEGW1:
 
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
-        assert len(vars(result)) == 1
+        assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
+        assert len(vars(result)) == 2
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = get_single_person_dict()
         person1["name"]["vorname"] = "Albus"
         person2 = get_single_person_dict()
         person2["name"]["vorname"] = "Rubeus"
-        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person1, person2]})
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
 
         result = EGW1(eigentuemer_obj)
 
         assert len(result.Eigentuemer) == 2
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
-        assert len(vars(result)) == 1
+        assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
+        assert len(vars(result)) == 2
 
 
 class TestERueckuebermittlung:

@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class Anrede(str, Enum):
@@ -60,8 +60,14 @@ class Person(BaseModel):
 
 
 class Eigentuemer(BaseModel):
-    verheiratet: Optional[Verheiratet]
     person: List[Person]
+    verheiratet: Optional[Verheiratet]
+
+    @validator("verheiratet", always=True)
+    def must_be_set_if_two_persons(cls, v, values):
+        if values.get('person') and len(values.get('person')) == 2 and not v:
+            raise ValueError('has to be set if two persons')
+        return v
 
 
 class GrundsteuerData(BaseModel):

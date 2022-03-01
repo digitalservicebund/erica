@@ -105,14 +105,29 @@ class EPersonData:
 
 
 @dataclass
+class EEigentumsverh:
+    E7401340: str
+
+    def __init__(self, input_data: EigentuemerInput):
+        if len(input_data.person) == 1:
+            self.E7401340 = "0"  # Alleineigentum
+        elif len(input_data.person) == 2 and input_data.verheiratet.are_verheiratet:
+            self.E7401340 = "4"  # Ehegatten / Lebenspartner
+        else:
+            self.E7401340 = "6"  # Bruchteilsgemeinschaft
+
+
+@dataclass
 class EGW1:
     Eigentuemer: List[EPersonData]
+    Eigentumsverh: EEigentumsverh
 
     def __init__(self, input_data: EigentuemerInput):
         self.Eigentuemer = []
         for index, input_eigentuemer in enumerate(input_data.person):
             new_eigentuemer = EPersonData(input_eigentuemer, index)
             self.Eigentuemer.append(new_eigentuemer)
+        self.Eigentumsverh = EEigentumsverh(input_data)
 
 
 @dataclass
