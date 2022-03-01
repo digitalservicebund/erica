@@ -292,7 +292,7 @@ class TestEE88:
 
 
 class TestEGrundsteuerData:
-    def test_attributes_Set_correctly(self):
+    def test_attributes_set_correctly(self):
         grundsteuer_obj = create_grundsteuer()
 
         result = EGrundsteuerData(grundsteuer_obj)

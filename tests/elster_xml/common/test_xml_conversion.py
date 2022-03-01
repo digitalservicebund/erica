@@ -67,7 +67,7 @@ class TestCustomDictParser:
         @dataclass
         class SimpleObject:
             attr1: str
-            attr2: str = None
+            attr2 = None
 
         input_object = SimpleObject("attrValue1")
         resulting_dict = asdict(input_object, dict_factory=CustomDictParser)
@@ -129,7 +129,7 @@ class TestCustomDictParser:
     def test_leaves_out_nested_objects_with_all_attributes_set_to_none(self):
         @dataclass
         class SimpleNestedObject:
-            attr2: str = None
+            attr2 = None
 
         @dataclass
         class SimpleObject:
@@ -189,7 +189,7 @@ class TestConvertObjectToXml:
         @dataclass
         class SimpleObject:
             attr1: str
-            attr2: str = None
+            attr2 = None
 
         input_object = SimpleObject("attrValue1")
         resulting_xml = convert_object_to_xml(input_object)
@@ -214,8 +214,8 @@ class TestConvertObjectToXml:
     def test_leaves_out_empty_nested_objects(self, encoding_element):
         @dataclass
         class SimpleNestedObject:
-            attr1: str = None
-            attr2: str = None
+            attr1 = None
+            attr2 = None
 
         @dataclass
         class SimpleObject:
