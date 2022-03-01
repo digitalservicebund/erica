@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.post('/grundsteuer', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-def send_est(grundsteuer_ttl: GrundsteuerWithTtl):
+def send_grundsteuer(grundsteuer_ttl: GrundsteuerWithTtl):
     """
     Route for sending a tax declaration using the job queue.
     :param grundsteuer_ttl: payload with TTL, JSON input data for the grundsteuer declaration.

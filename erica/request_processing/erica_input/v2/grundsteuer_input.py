@@ -20,11 +20,11 @@ class Name(BaseModel):
 class Adresse(BaseModel):
     strasse: Optional[str]
     hausnummer: Optional[str]
+    # TODO add hausnummerzusatz
     zusatzangaben: Optional[str]
     postfach: Optional[str]
     plz: str
     ort: str
-    # TODO add postfach + hausnummer validation?
 
 
 class Telefonnummer(BaseModel):

@@ -1,6 +1,9 @@
+from xml.etree import ElementTree
+
 import pytest
 
 from erica.elster_xml.common.basic_xml_data_representation import EXml
+from erica.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_anrede, EAnteil, EGesetzlicherVertreter, \
     EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
@@ -270,3 +273,12 @@ class TestGetFullGrundsteuerDataRepresentation:
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         assert result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.xml_attr_version == "11"
+
+    def test_returns_an_object_convertable_to_valid_xml(self):
+        grundsteuer_obj = create_grundsteuer()
+        resulting_object = get_full_grundsteuer_data_representation(grundsteuer_obj)
+        resulting_xml = convert_object_to_xml(resulting_object)
+        try:
+            ElementTree.fromstring(resulting_xml)
+        except ElementTree.ParseError as e:
+            return pytest.fail("Did not result in a valid xml: \n" + e.msg)

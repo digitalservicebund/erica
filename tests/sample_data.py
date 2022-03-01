@@ -90,11 +90,11 @@ def get_single_person_dict(complete=True, with_vertreter=True):
     })
 
 
-def create_grundsteuer():
+def create_grundsteuer(complete=True):
     valid_sample_data_single_with_vertreter = {
         "eigentuemer": {
             "person": [
-                get_single_person_dict()
+                get_single_person_dict(complete=complete)
             ],
         }}
     return GrundsteuerData.parse_obj(valid_sample_data_single_with_vertreter)
