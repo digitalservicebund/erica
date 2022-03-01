@@ -92,7 +92,7 @@ class TestSendGrundsteuer(unittest.TestCase):
 
     def test_if_request_correct_then_no_error_and_correct_response(self):
         try:
-            send_grundsteuer(create_grundsteuer(), include_elster_responses=True)
+            send_grundsteuer(create_grundsteuer(only_strasse=True), include_elster_responses=True)
         except HTTPException as e:
             assert e.status_code == 422
             assert e.detail["code"] == 2
