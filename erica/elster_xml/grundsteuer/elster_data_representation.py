@@ -35,8 +35,8 @@ class EGesetzlicherVertreter:
     E7415601: str
     E7415603: str
     E7415102: Optional[str] = None
-    E7415501: Optional[str] = None
-    # TODO Hausnummerzusatz
+    E7415501: Optional[int] = None
+    E7415502: Optional[str] = None
     E7415602: Optional[str] = None
     E7415604: Optional[str] = None
 
@@ -52,6 +52,7 @@ class EGesetzlicherVertreter:
         try:
             self.E7415102 = input_data.name.titel
             self.E7415501 = input_data.adresse.hausnummer
+            self.E7415502 = input_data.adresse.hausnummerzusatz
             self.E7415602 = input_data.adresse.postfach
             self.E7415604 = input_data.telefonnummer.telefonnummer
         except AttributeError:
@@ -65,13 +66,13 @@ class EPersonData:
     E7404513: str
     E7404511: str
     E7404524: str
-    E7404525: str
     E7404540: str
     E7404522: str
     E7404519: str
     Anteil: EAnteil
     Ges_Vertreter: Optional[EGesetzlicherVertreter]
-    # TODO: Eval: Order isn't important at elster anymore?
+    E7404525: Optional[int] = None
+    E7404526: Optional[str] = None
     E7404514: Optional[str] = None
     E7404527: Optional[str] = None
     E7414601: Optional[str] = None
@@ -79,11 +80,9 @@ class EPersonData:
     def __init__(self, input_data: Person, person_index: int):
         self.Beteiligter = person_index + 1
         self.E7404510 = elsterify_anrede(input_data.name.anrede)
-        # TODO: Geburtsdatum E7404518: str
         self.E7404513 = input_data.name.vorname
         self.E7404511 = input_data.name.name
         self.E7404524 = input_data.adresse.strasse
-        self.E7404525 = input_data.adresse.hausnummer
         self.E7404540 = input_data.adresse.plz
         self.E7404522 = input_data.adresse.ort
         self.E7404519 = input_data.steuer_id.steuer_id
@@ -98,7 +97,8 @@ class EPersonData:
         try:
             self.E7404514 = input_data.name.titel
             self.E7404527 = input_data.adresse.postfach
-            # TODO: hausnummerzusatz
+            self.E7404525 = input_data.adresse.hausnummer
+            self.E7404526 = input_data.adresse.hausnummerzusatz
             self.E7414601 = input_data.telefonnummer.telefonnummer
         except AttributeError:
             pass

@@ -19,7 +19,8 @@ def get_sample_vertreter_dict(complete=True):
         "plz": "98765",
         "ort": "Godric's Hollow",
         "strasse": "Diagon Alley",
-        "hausnummer": "4",
+        "hausnummer": 4,
+        "hausnummerzusatz": "b",
         "zusatzangaben": "Secret"
     } if complete else {
         "plz": "98765",
@@ -55,13 +56,11 @@ def get_single_person_dict(complete=True, with_vertreter=True):
     adresse = {
         "adresse": {
             "strasse": "Grimmauld place",
-            "hausnummer": "12",
+            "hausnummer": 12,
+            "hausnummerzusatz": "a",
             "zusatzangaben": "Secret House",
             "plz": "77777",
             "ort": "London",
-        },
-        "telefonnummer": {
-            "telefonnummer": "123",
         }} if complete else {
         "adresse": {
             "plz": "77777",

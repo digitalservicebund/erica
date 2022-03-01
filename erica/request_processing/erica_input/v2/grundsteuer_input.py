@@ -19,8 +19,8 @@ class Name(BaseModel):
 
 class Adresse(BaseModel):
     strasse: Optional[str]
-    hausnummer: Optional[str]
-    # TODO add hausnummerzusatz
+    hausnummer: Optional[int]
+    hausnummerzusatz: Optional[str]
     zusatzangaben: Optional[str]
     postfach: Optional[str]
     plz: str

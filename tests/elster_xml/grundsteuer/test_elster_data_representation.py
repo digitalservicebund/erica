@@ -50,12 +50,12 @@ class TestEGesetzlicherVertreter:
         assert result.E7415301 == full_vertreter_obj.name.name
         assert result.E7415401 == full_vertreter_obj.adresse.strasse
         assert result.E7415501 == full_vertreter_obj.adresse.hausnummer
-        # TODO assert result.E7415502 == full_vertreter_obj.adresse.hausnummerzusatz
+        assert result.E7415502 == full_vertreter_obj.adresse.hausnummerzusatz
         assert result.E7415601 == full_vertreter_obj.adresse.plz
         assert result.E7415602 == full_vertreter_obj.adresse.postfach
         assert result.E7415603 == full_vertreter_obj.adresse.ort
         assert result.E7415604 == full_vertreter_obj.telefonnummer.telefonnummer
-        assert len(vars(result)) == 10
+        assert len(vars(result)) == 11
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
         vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=False))
@@ -68,12 +68,12 @@ class TestEGesetzlicherVertreter:
         assert result.E7415301 == vertreter_obj.name.name
         assert result.E7415401 is None
         assert result.E7415501 is None
-        # TODO assert result.E7415502 is None
+        assert result.E7415502 is None
         assert result.E7415601 == vertreter_obj.adresse.plz
         assert result.E7415602 is None
         assert result.E7415603 == vertreter_obj.adresse.ort
         assert result.E7415604 is None
-        assert len(vars(result)) <= 10
+        assert len(vars(result)) <= 11
 
     def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=True))
@@ -88,12 +88,12 @@ class TestEGesetzlicherVertreter:
         assert result.E7415301 == vertreter_obj.name.name
         assert result.E7415401 is None
         assert result.E7415501 == vertreter_obj.adresse.hausnummer
-        # TODO assert result.E7415502 is None
+        assert result.E7415502 == vertreter_obj.adresse.hausnummerzusatz
         assert result.E7415601 == vertreter_obj.adresse.plz
         assert result.E7415602 == vertreter_obj.adresse.postfach
         assert result.E7415603 == vertreter_obj.adresse.ort
         assert result.E7415604 == vertreter_obj.telefonnummer.telefonnummer
-        assert len(vars(result)) <= 10
+        assert len(vars(result)) <= 11
 
 
 class TestEPersonData:
@@ -106,12 +106,11 @@ class TestEPersonData:
         assert result.Beteiligter == person_index + 1
         assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
         assert result.E7404514 == person_obj.name.titel
-        # TODO assert result.E7404518 == person_obj.name.geburtsdatum
         assert result.E7404513 == person_obj.name.vorname
         assert result.E7404511 == person_obj.name.name
         assert result.E7404524 == person_obj.adresse.strasse
         assert result.E7404525 == person_obj.adresse.hausnummer
-        # TODO assert result.E7404526 == person_obj.adresse.hausnummerzusatz
+        assert result.E7404526 == person_obj.adresse.hausnummerzusatz
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 == person_obj.adresse.postfach
         assert result.E7404522 == person_obj.adresse.ort
@@ -119,7 +118,7 @@ class TestEPersonData:
         assert result.E7404519 == person_obj.steuer_id.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
-        assert len(vars(result)) == 14
+        assert len(vars(result)) == 15
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = Person.parse_obj(get_single_person_dict(complete=False, with_vertreter=False))
@@ -130,12 +129,11 @@ class TestEPersonData:
         assert result.Beteiligter == person_index + 1
         assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
         assert result.E7404514 is None
-        # TODO assert result.E7404518 == person_obj.name.geburtsdatum
         assert result.E7404513 == person_obj.name.vorname
         assert result.E7404511 == person_obj.name.name
         assert result.E7404524 is None
         assert result.E7404525 is None
-        # TODO assert result.E7404526 == None
+        assert result.E7404526 == None
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 is None
         assert result.E7404522 == person_obj.adresse.ort
@@ -143,7 +141,7 @@ class TestEPersonData:
         assert result.E7404519 == person_obj.steuer_id.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter is None
-        assert len(vars(result)) <= 14
+        assert len(vars(result)) <= 15
 
     def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = Person.parse_obj(get_single_person_dict())
@@ -155,12 +153,11 @@ class TestEPersonData:
         assert result.Beteiligter == person_index + 1
         assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
         assert result.E7404514 is None
-        # TODO assert result.E7404518 == person_obj.name.geburtsdatum
         assert result.E7404513 == person_obj.name.vorname
         assert result.E7404511 == person_obj.name.name
         assert result.E7404524 == person_obj.adresse.strasse
         assert result.E7404525 == person_obj.adresse.hausnummer
-        # TODO assert result.E7404526 == person_obj.adresse.hausnummerzusatz
+        assert result.E7404526 == person_obj.adresse.hausnummerzusatz
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 == person_obj.adresse.postfach
         assert result.E7404522 == person_obj.adresse.ort
@@ -168,7 +165,7 @@ class TestEPersonData:
         assert result.E7404519 == person_obj.steuer_id.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
-        assert len(vars(result)) == 14
+        assert len(vars(result)) == 15
 
 
 class TestEGW1:
