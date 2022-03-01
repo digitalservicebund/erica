@@ -13,7 +13,8 @@ from erica.pyeric.pyeric_controller import PyericProcessController, EstPyericPro
     UnlockCodeRequestPyericProcessController, UnlockCodeActivationPyericProcessController, \
     AbrufcodeRequestPyericProcessController, \
     UnlockCodeRevocationPyericProcessController, BelegIdRequestPyericProcessController, DecryptBelegePyericController, \
-    BelegRequestPyericProcessController, GetTaxOfficesPyericController, CheckTaxNumberPyericController
+    BelegRequestPyericProcessController, GetTaxOfficesPyericController, CheckTaxNumberPyericController, \
+    GrundsteuerPyericProcessController
 from tests.utils import missing_cert, missing_pyeric_lib, TEST_EST_VERANLAGUNGSJAHR
 
 
@@ -122,6 +123,18 @@ class TestEstValidationPyericControllerRunPyEric(unittest.TestCase):
         mock_eric_wrapper.process_verfahren.validate(
             xml,
             "EST_" + str(year))
+
+
+class TestGrundsteuerPyericProcessControllerRunPyEric(unittest.TestCase):
+
+    def test_if_pyeric_initialised_then_call_process_verfahren_with_correct_verfahren(self):
+        xml = "<xml></xml>"
+        pyeric_controller = GrundsteuerPyericProcessController(xml)
+        mock_eric_wrapper = MagicMock()
+
+        pyeric_controller.run_eric(mock_eric_wrapper)
+
+        mock_eric_wrapper.process_verfahren.assert_called_once_with(xml, "Grundsteuerwert_2")
 
 
 class TestUnlockCodeRequestPyericControllerRunPyEric(unittest.TestCase):
