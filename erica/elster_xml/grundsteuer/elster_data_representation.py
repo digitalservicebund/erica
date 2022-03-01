@@ -118,11 +118,21 @@ class EEigentumsverh:
 
 
 @dataclass
+class EAngFeststellung:
+    E7401311: str
+
+    def __init__(self):
+        self.E7401311 = "1"  # Hauptfeststellung
+
+
+@dataclass
 class EGW1:
+    Ang_Feststellung: EAngFeststellung
     Eigentuemer: List[EPersonData]
     Eigentumsverh: EEigentumsverh
 
     def __init__(self, input_data: EigentuemerInput):
+        self.Ang_Feststellung = EAngFeststellung()
         self.Eigentuemer = []
         for index, input_eigentuemer in enumerate(input_data.person):
             new_eigentuemer = EPersonData(input_eigentuemer, index)

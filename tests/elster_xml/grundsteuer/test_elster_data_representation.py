@@ -6,7 +6,7 @@ from erica.elster_xml.common.basic_xml_data_representation import EXml
 from erica.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_anrede, EAnteil, EGesetzlicherVertreter, \
     EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation, \
-    EEigentumsverh
+    EEigentumsverh, EAngFeststellung
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
 from tests.sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
 
@@ -209,6 +209,14 @@ class TestEEigentumsverh:
         assert result.E7401340 == "6"
 
 
+class TestEAngFeststellung:
+    def test_sets_attributes_correctly(self):
+        result = EAngFeststellung()
+
+        assert result.E7401311 == "1"
+        assert len(vars(result)) == 1
+
+
 class TestEGW1:
     def test_if_one_person_then_attributes_set_correctly(self):
         person = get_single_person_dict()
@@ -216,10 +224,11 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj)
 
+        assert result.Ang_Feststellung == EAngFeststellung()
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
-        assert len(vars(result)) == 2
+        assert len(vars(result)) == 3
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = get_single_person_dict()
@@ -231,11 +240,12 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj)
 
+        assert result.Ang_Feststellung == EAngFeststellung()
         assert len(result.Eigentuemer) == 2
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
-        assert len(vars(result)) == 2
+        assert len(vars(result)) == 3
 
 
 class TestERueckuebermittlung:
