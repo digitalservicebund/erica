@@ -133,7 +133,7 @@ class TestEPersonData:
         assert result.E7404511 == person_obj.name.name
         assert result.E7404524 is None
         assert result.E7404525 is None
-        assert result.E7404526 == None
+        assert result.E7404526 is None
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 is None
         assert result.E7404522 == person_obj.adresse.ort
