@@ -1,0 +1,272 @@
+import pytest
+
+from erica.elster_xml.common.basic_xml_data_representation import EXml
+from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_anrede, EAnteil, EGesetzlicherVertreter, \
+    EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation
+from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
+from tests.sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
+
+
+class TestElsterifyAnrede:
+    def test_no_anrede_is_correctly_translated(self):
+        result = elsterify_anrede(Anrede.no_anrede)
+        assert result == '01'
+
+    def test_herr_is_correctly_translated(self):
+        result = elsterify_anrede(Anrede.herr)
+        assert result == '02'
+
+    def test_frau_is_correctly_translated(self):
+        result = elsterify_anrede(Anrede.frau)
+        assert result == '03'
+
+    def test_invalid_value_raises_key_error(self):
+        with pytest.raises(KeyError):
+            elsterify_anrede("INVALID")
+
+
+class TestEAnteil:
+    def test_attributes_set_correctly(self):
+        anteil_obj = Anteil.parse_obj({'zaehler': '1', 'nenner': '2'})
+
+        result = EAnteil(anteil_obj)
+
+        assert result.E7404570 == anteil_obj.zaehler
+        assert result.E7404571 == anteil_obj.nenner
+
+
+class TestEGesetzlicherVertreter:
+    def test_attributes_set_correctly(self):
+        full_vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict())
+
+        result = EGesetzlicherVertreter(full_vertreter_obj)
+
+        assert result.E7415101 == elsterify_anrede(full_vertreter_obj.name.anrede)
+        assert result.E7415102 == full_vertreter_obj.name.titel
+        assert result.E7415201 == full_vertreter_obj.name.vorname
+        assert result.E7415301 == full_vertreter_obj.name.name
+        assert result.E7415401 == full_vertreter_obj.adresse.strasse
+        assert result.E7415501 == full_vertreter_obj.adresse.hausnummer
+        # TODO assert result.E7415502 == full_vertreter_obj.adresse.hausnummerzusatz
+        assert result.E7415601 == full_vertreter_obj.adresse.plz
+        assert result.E7415602 == full_vertreter_obj.adresse.postfach
+        assert result.E7415603 == full_vertreter_obj.adresse.ort
+        assert result.E7415604 == full_vertreter_obj.telefonnummer.telefonnummer
+        assert len(vars(result)) == 10
+
+    def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
+        vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=False))
+
+        result = EGesetzlicherVertreter(vertreter_obj)
+
+        assert result.E7415101 == elsterify_anrede(vertreter_obj.name.anrede)
+        assert result.E7415102 is None
+        assert result.E7415201 == vertreter_obj.name.vorname
+        assert result.E7415301 == vertreter_obj.name.name
+        assert result.E7415401 is None
+        assert result.E7415501 is None
+        # TODO assert result.E7415502 is None
+        assert result.E7415601 == vertreter_obj.adresse.plz
+        assert result.E7415602 is None
+        assert result.E7415603 == vertreter_obj.adresse.ort
+        assert result.E7415604 is None
+        assert len(vars(result)) <= 10
+
+    def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
+        vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=True))
+        vertreter_obj.name.titel = None
+        vertreter_obj.adresse.strasse = None
+
+        result = EGesetzlicherVertreter(vertreter_obj)
+
+        assert result.E7415101 == elsterify_anrede(vertreter_obj.name.anrede)
+        assert result.E7415102 is None
+        assert result.E7415201 == vertreter_obj.name.vorname
+        assert result.E7415301 == vertreter_obj.name.name
+        assert result.E7415401 is None
+        assert result.E7415501 == vertreter_obj.adresse.hausnummer
+        # TODO assert result.E7415502 is None
+        assert result.E7415601 == vertreter_obj.adresse.plz
+        assert result.E7415602 == vertreter_obj.adresse.postfach
+        assert result.E7415603 == vertreter_obj.adresse.ort
+        assert result.E7415604 == vertreter_obj.telefonnummer.telefonnummer
+        assert len(vars(result)) <= 10
+
+
+class TestEPersonData:
+    def test_attributes_set_correctly(self):
+        person_obj = Person.parse_obj(get_single_person_dict())
+        person_index = 2
+
+        result = EPersonData(person_obj, person_index)
+
+        assert result.Beteiligter == person_index + 1
+        assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
+        assert result.E7404514 == person_obj.name.titel
+        # TODO assert result.E7404518 == person_obj.name.geburtsdatum
+        assert result.E7404513 == person_obj.name.vorname
+        assert result.E7404511 == person_obj.name.name
+        assert result.E7404524 == person_obj.adresse.strasse
+        assert result.E7404525 == person_obj.adresse.hausnummer
+        # TODO assert result.E7404526 == person_obj.adresse.hausnummerzusatz
+        assert result.E7404540 == person_obj.adresse.plz
+        assert result.E7404527 == person_obj.adresse.postfach
+        assert result.E7404522 == person_obj.adresse.ort
+        assert result.E7414601 == person_obj.telefonnummer.telefonnummer
+        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.Anteil == EAnteil(person_obj.anteil)
+        assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
+        assert len(vars(result)) == 14
+
+    def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
+        person_obj = Person.parse_obj(get_single_person_dict(complete=False, with_vertreter=False))
+        person_index = 2
+
+        result = EPersonData(person_obj, person_index)
+
+        assert result.Beteiligter == person_index + 1
+        assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
+        assert result.E7404514 is None
+        # TODO assert result.E7404518 == person_obj.name.geburtsdatum
+        assert result.E7404513 == person_obj.name.vorname
+        assert result.E7404511 == person_obj.name.name
+        assert result.E7404524 is None
+        assert result.E7404525 is None
+        # TODO assert result.E7404526 == None
+        assert result.E7404540 == person_obj.adresse.plz
+        assert result.E7404527 is None
+        assert result.E7404522 == person_obj.adresse.ort
+        assert result.E7414601 is None
+        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.Anteil == EAnteil(person_obj.anteil)
+        assert result.Ges_Vertreter is None
+        assert len(vars(result)) <= 14
+
+    def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
+        person_obj = Person.parse_obj(get_single_person_dict())
+        person_obj.name.titel = None
+        person_index = 2
+
+        result = EPersonData(person_obj, person_index)
+
+        assert result.Beteiligter == person_index + 1
+        assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
+        assert result.E7404514 is None
+        # TODO assert result.E7404518 == person_obj.name.geburtsdatum
+        assert result.E7404513 == person_obj.name.vorname
+        assert result.E7404511 == person_obj.name.name
+        assert result.E7404524 == person_obj.adresse.strasse
+        assert result.E7404525 == person_obj.adresse.hausnummer
+        # TODO assert result.E7404526 == person_obj.adresse.hausnummerzusatz
+        assert result.E7404540 == person_obj.adresse.plz
+        assert result.E7404527 == person_obj.adresse.postfach
+        assert result.E7404522 == person_obj.adresse.ort
+        assert result.E7414601 == person_obj.telefonnummer.telefonnummer
+        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.Anteil == EAnteil(person_obj.anteil)
+        assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
+        assert len(vars(result)) == 14
+
+
+class TestEGW1:
+    def test_if_one_person_then_attributes_set_correctly(self):
+        person = get_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
+
+        result = EGW1(eigentuemer_obj)
+
+        assert len(result.Eigentuemer) == 1
+        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
+        assert len(vars(result)) == 1
+
+    def test_if_two_persons_then_attributes_set_correctly(self):
+        person1 = get_single_person_dict()
+        person1["name"]["vorname"] = "Albus"
+        person2 = get_single_person_dict()
+        person2["name"]["vorname"] = "Rubeus"
+        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person1, person2]})
+
+        result = EGW1(eigentuemer_obj)
+
+        assert len(result.Eigentuemer) == 2
+        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
+        assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
+        assert len(vars(result)) == 1
+
+
+class TestERueckuebermittlung:
+    def test_attributes_set_correctly(self):
+        result = ERueckuebermittlung()
+
+        assert result.Bescheid == "2"
+        assert len(vars(result)) == 1
+
+
+class TestEVorsatz:
+    def test_attributes_set_correctly(self):
+        grundsteuer_obj = create_grundsteuer()
+
+        result = EVorsatz(grundsteuer_obj)
+
+        assert result.Unterfallart == "88"
+        assert result.Vorgang == "01"
+        # TODO assert result.StNr == grundsteuer_obj.grundstueck.stnr.stnr
+        assert result.Zeitraum == "2022"
+        assert result.AbsName == grundsteuer_obj.eigentuemer.person[0].name.vorname + \
+               " " + \
+               grundsteuer_obj.eigentuemer.person[0].name.name
+        assert result.AbsStr == grundsteuer_obj.eigentuemer.person[0].adresse.strasse
+        assert result.AbsPlz == grundsteuer_obj.eigentuemer.person[0].adresse.plz
+        assert result.AbsOrt == grundsteuer_obj.eigentuemer.person[0].adresse.ort
+        assert result.Copyright == "(C) 2022 DigitalService4Germany"
+        assert result.OrdNrArt == "S"
+        assert result.Rueckuebermittlung == ERueckuebermittlung()
+        assert len(vars(result)) == 11
+
+
+class TestEE88:
+    def test_attributes_set_correctly(self):
+        grundsteuer_obj = create_grundsteuer()
+
+        result = EE88(grundsteuer_obj)
+
+        assert result.Vorsatz == EVorsatz(grundsteuer_obj)
+        assert result.GW1 == EGW1(grundsteuer_obj.eigentuemer)
+        assert result.xml_attr_version == "2"
+        assert result.xml_attr_xmlns == "http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2"
+        assert len(vars(result)) == 4
+
+
+class TestEGrundsteuerData:
+    def test_attributes_Set_correctly(self):
+        grundsteuer_obj = create_grundsteuer()
+
+        result = EGrundsteuerData(grundsteuer_obj)
+
+        assert result.E88 == EE88(grundsteuer_obj)
+        assert len(vars(result)) == 1
+
+
+class TestGetFullGrundsteuerDataRepresentation:
+    def test_returns_full_xml_including_grundsteuer_object(self):
+        grundsteuer_obj = create_grundsteuer()
+
+        result = get_full_grundsteuer_data_representation(grundsteuer_obj)
+
+        assert len(vars(result)) == 1
+        assert isinstance(result, EXml)
+        assert result.Elster.DatenTeil.Nutzdatenblock.Nutzdaten == EGrundsteuerData(grundsteuer_obj)
+
+    def test_sets_empfaenger_data_correctly(self):
+        grundsteuer_obj = create_grundsteuer()
+
+        result = get_full_grundsteuer_data_representation(grundsteuer_obj)
+        empfaenger_result = result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.Empfaenger
+        assert empfaenger_result.xml_attr_id == "F"
+        # TODO assert empfaenger_result.xml_only_text == get_bufa_nr(...)
+
+    def test_sets_nutzdaten_header_version_correctly(self):
+        grundsteuer_obj = create_grundsteuer()
+
+        result = get_full_grundsteuer_data_representation(grundsteuer_obj)
+        assert result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.xml_attr_version == "11"

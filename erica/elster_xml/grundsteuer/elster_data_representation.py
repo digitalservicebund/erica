@@ -13,7 +13,7 @@ def elsterify_anrede(anrede_input: Anrede):
         Anrede.herr: '02',
         Anrede.frau: '03',
     }
-    return anrede_mapping.get(anrede_input)
+    return anrede_mapping[anrede_input]
 
 
 @dataclass
@@ -105,7 +105,7 @@ class EPersonData:
 
 
 @dataclass
-class EEigentuemerData:
+class EGW1:
     Eigentuemer: List[EPersonData]
 
     def __init__(self, input_data: EigentuemerInput):
@@ -155,13 +155,13 @@ class EVorsatz:
 
 @dataclass
 class EE88:
-    GW1: EEigentuemerData
+    GW1: EGW1
     Vorsatz: EVorsatz
     xml_attr_version: str
     xml_attr_xmlns: str
 
     def __init__(self, input_data: GrundsteuerData):
-        self.GW1 = EEigentuemerData(input_data.eigentuemer)
+        self.GW1 = EGW1(input_data.eigentuemer)
         self.Vorsatz = EVorsatz(input_data)
         self.xml_attr_version = "2"
         self.xml_attr_xmlns = "http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2"
@@ -175,7 +175,7 @@ class EGrundsteuerData(ENutzdaten):
         self.E88 = EE88(input_data)
 
 
-def get_full_grundsteuer_data_representation(input_data):
+def get_full_grundsteuer_data_representation(input_data: GrundsteuerData):
     """ Returns the full data representation of an elster XML for the Grundsteuer use case. """
     elster_data_representation = EGrundsteuerData(input_data)
     # TODO set BuFa correctly
