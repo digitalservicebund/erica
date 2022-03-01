@@ -18,6 +18,8 @@ boto3 = "*"
 aiofiles = "*"
 xmltodict = "*"
 requests = "*"
+sqlalchemy = "*"
+fastapi-versioning = "*"
 
 [dev-packages]
 pytest = "*"
