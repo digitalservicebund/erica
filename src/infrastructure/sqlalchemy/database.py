@@ -1,6 +1,7 @@
 import os
+import sqlalchemy
 from sqlalchemy_utils import database_exists, create_database
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, String
 from sqlalchemy.orm import sessionmaker
 
 from src.infrastructure.sqlalchemy.tax_declaration import TaxDeclarationEntity
@@ -30,3 +31,6 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+
