@@ -19,6 +19,11 @@ response_model_get_send_est_from_queue = {
           "description": "Job status of a sent est was successfully retrieved from the queue."},
     500: model_error_request_queue}
 
+response_model_get_send_grundsteuer_from_queue = {
+    200: {"model": SuccessResponseGetSendEstFromQueue,
+          "description": "Job status of a sent est was successfully retrieved from the queue."},
+    500: model_error_request_queue}
+
 response_model_get_tax_number_validity_from_queue = {
     200: {"model": SuccessResponseGetTaxNumberValidityFromQueue,
           "description": "Job status of a tax number validity was successfully retrieved from the queue."},

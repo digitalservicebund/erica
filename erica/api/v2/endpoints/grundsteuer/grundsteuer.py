@@ -22,3 +22,16 @@ def send_grundsteuer(grundsteuer_ttl: GrundsteuerWithTtl):
     except NotImplementedError:
         logging.getLogger().info("Could not send est", exc_info=True)
         return JSONResponse(status_code=422, content=generate_dummy_error_response())
+
+
+@router.get('/grundsteuer/{request_id}', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
+def get_grundsteuer(request_id: str):
+    """
+    Route for retrieving job status of a grundsteuer tax declaration validation from the queue.
+    :param request_id: the id of the job.
+    """
+    try:
+        raise NotImplementedError()
+    except NotImplementedError:
+        logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
+        return JSONResponse(status_code=500, content=generate_dummy_error_response())
