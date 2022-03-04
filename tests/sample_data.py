@@ -1,4 +1,5 @@
 import copy
+import datetime
 
 from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 
@@ -102,6 +103,7 @@ def get_single_person_dict(complete=True, with_vertreter=True, only_postfach=Fal
             "titel": "Dr",
             "name": "Granger",
             "vorname": "Hermine",
+            "geburtsdatum": datetime.date(1979, 9, 19)
         }} if complete else {
         "persoenlicheAngaben": {
             "anrede": "frau",

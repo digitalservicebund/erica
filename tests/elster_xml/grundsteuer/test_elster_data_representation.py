@@ -1,3 +1,4 @@
+import datetime
 from xml.etree import ElementTree
 
 import pytest
@@ -6,7 +7,7 @@ from erica.elster_xml.common.basic_xml_data_representation import EXml
 from erica.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_anrede, EAnteil, EGesetzlicherVertreter, \
     EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation, \
-    EEigentumsverh, EAngFeststellung
+    EEigentumsverh, EAngFeststellung, elsterify_date
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
 from tests.sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
 
@@ -27,6 +28,16 @@ class TestElsterifyAnrede:
     def test_invalid_value_raises_key_error(self):
         with pytest.raises(KeyError):
             elsterify_anrede("INVALID")
+
+
+class TestElsterifyDate:
+    def test_if_valid_date_then_return_correct_format(self):
+        result = elsterify_date(datetime.date(1987, 2, 1))
+        assert result == "01.02.1987"
+
+    def test_if_invalid_date_then_raise_attribute_error(self):
+        with pytest.raises(AttributeError):
+            elsterify_date("INVALID")
 
 
 class TestEAnteil:
@@ -107,6 +118,7 @@ class TestEPersonData:
         assert result.Beteiligter == person_index + 1
         assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
         assert result.E7404514 == person_obj.persoenlicheAngaben.titel
+        assert result.E7404518 == elsterify_date(person_obj.persoenlicheAngaben.geburtsdatum)
         assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
         assert result.E7404511 == person_obj.persoenlicheAngaben.name
         assert result.E7404524 == person_obj.adresse.strasse
@@ -119,7 +131,7 @@ class TestEPersonData:
         assert result.E7404519 == person_obj.steuer_id.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
-        assert len(vars(result)) == 15
+        assert len(vars(result)) == 16
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = Person.parse_obj(get_single_person_dict(complete=False, with_vertreter=False))
@@ -130,6 +142,7 @@ class TestEPersonData:
         assert result.Beteiligter == person_index + 1
         assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
         assert result.E7404514 is None
+        assert result.E7404518 is None
         assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
         assert result.E7404511 == person_obj.persoenlicheAngaben.name
         assert result.E7404524 is None
@@ -142,7 +155,7 @@ class TestEPersonData:
         assert result.E7404519 == person_obj.steuer_id.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter is None
-        assert len(vars(result)) <= 15
+        assert len(vars(result)) <= 16
 
     def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = Person.parse_obj(get_single_person_dict())
@@ -154,6 +167,7 @@ class TestEPersonData:
         assert result.Beteiligter == person_index + 1
         assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
         assert result.E7404514 is None
+        assert result.E7404518 == elsterify_date(person_obj.persoenlicheAngaben.geburtsdatum)
         assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
         assert result.E7404511 == person_obj.persoenlicheAngaben.name
         assert result.E7404524 == person_obj.adresse.strasse
@@ -166,7 +180,7 @@ class TestEPersonData:
         assert result.E7404519 == person_obj.steuer_id.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
-        assert len(vars(result)) == 15
+        assert len(vars(result)) == 16
 
 
 class TestEEigentumsverh:

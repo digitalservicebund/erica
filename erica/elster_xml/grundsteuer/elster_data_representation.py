@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import date
 from typing import List, Optional
 
 from erica.elster_xml.common.basic_xml_data_representation import ENutzdaten, construct_basic_xml_data_representation
@@ -14,6 +15,10 @@ def elsterify_anrede(anrede_input: Anrede):
         Anrede.frau: '03',
     }
     return anrede_mapping[anrede_input]
+
+
+def elsterify_date(date_input: date):
+    return date_input.strftime("%d.%m.%Y")
 
 
 @dataclass
@@ -74,6 +79,7 @@ class EPersonData:
     E7404525: Optional[int] = None
     E7404526: Optional[str] = None
     E7404514: Optional[str] = None
+    E7404518: Optional[str] = None
     E7404527: Optional[str] = None
     E7414601: Optional[str] = None
 
@@ -96,6 +102,7 @@ class EPersonData:
 
         try:
             self.E7404514 = input_data.persoenlicheAngaben.titel
+            self.E7404518 = elsterify_date(input_data.persoenlicheAngaben.geburtsdatum)
             self.E7404527 = input_data.adresse.postfach
             self.E7404525 = input_data.adresse.hausnummer
             self.E7404526 = input_data.adresse.hausnummerzusatz

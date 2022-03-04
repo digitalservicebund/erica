@@ -2,6 +2,7 @@ from enum import Enum
 from typing import List, Optional
 
 from pydantic import BaseModel, validator
+from pydantic.types import date
 
 
 class Anrede(str, Enum):
@@ -18,7 +19,7 @@ class Name(BaseModel):
 
 
 class PersoenlicheAngaben(Name):
-    geburtsdatum: Optional[str]
+    geburtsdatum: Optional[date]
 
 
 class Adresse(BaseModel):
