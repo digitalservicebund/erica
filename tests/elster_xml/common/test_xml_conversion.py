@@ -7,7 +7,7 @@ from erica.elster_xml.common.xml_conversion import CustomDictParser, convert_obj
 
 
 class TestCustomDictParser:
-    def test_leaves_simple_object_unchanged(self):
+    def test_if_simple_object_then_leave_object_unchanged(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -18,7 +18,7 @@ class TestCustomDictParser:
             "attr1": "attrValue1"
         }
 
-    def test_leaves_simple_nested_object_unchanged(self):
+    def test_if_simple_nested_object_then_leave_object_unchanged(self):
         @dataclass
         class SimpleNestedObject:
             attr1: str
@@ -37,7 +37,7 @@ class TestCustomDictParser:
             }
         }
 
-    def test_prepends_at_symbol_to_special_attributes(self):
+    def test_if_special_attributes_set_then_prepend_at_symbol(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -50,7 +50,7 @@ class TestCustomDictParser:
             "@attr2": "attrValue2"
         }
 
-    def test_sets_special_attributes_to_hashtag_text(self):
+    def test_if_special_attributes_set_then_set_attributes_to_hashtag_text(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -63,7 +63,7 @@ class TestCustomDictParser:
             "#text": "attrValue2"
         }
 
-    def test_leaves_out_attributes_set_to_none(self):
+    def test_attributes_set_to_none_then_leave_them_out_of_result(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -75,7 +75,7 @@ class TestCustomDictParser:
             "attr1": "attrValue1"
         }
 
-    def test_leaves_out_attributes_set_to_empty_dict(self):
+    def test_attributes_set_to_empty_dict_then_leave_them_out_of_result(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -87,7 +87,7 @@ class TestCustomDictParser:
             "attr1": "attrValue1"
         }
 
-    def test_includes_attributes_set_to_empty_string(self):
+    def test_attributes_set_to_empty_string_then_include_them_in_result(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -100,7 +100,7 @@ class TestCustomDictParser:
             "attr2": ""
         }
 
-    def test_includes_attributes_set_to_empty_array(self):
+    def test_attributes_set_to_empty_array_then_include_them_in_result(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -113,7 +113,7 @@ class TestCustomDictParser:
             "attr2": []
         }
 
-    def test_includes_attributes_set_to_false(self):
+    def test_attributes_set_to_false_then_include_them_in_result(self):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -126,7 +126,7 @@ class TestCustomDictParser:
             "attr2": False
         }
 
-    def test_leaves_out_nested_objects_with_all_attributes_set_to_none(self):
+    def test_if_nested_object_with_all_attributes_set_to_none_then_leave_out_in_result(self):
         @dataclass
         class SimpleNestedObject:
             attr2 = None
@@ -142,7 +142,7 @@ class TestCustomDictParser:
             "attr1": "attrValue1"
         }
 
-    def test_converts_arrays_correctly(self):
+    def test_if_array_given_then_convert_correctly(self):
         @dataclass
         class SimpleNestedObject:
             attr1: str
@@ -175,7 +175,7 @@ class TestConvertObjectToXml:
         resulting_xml = convert_object_to_xml(input_object)
         assert resulting_xml.startswith(encoding_element)
 
-    def test_returns_expected_xml_on_simple_object(self, encoding_element):
+    def test_if_simple_object_then_returns_expected_xml(self, encoding_element):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -184,7 +184,7 @@ class TestConvertObjectToXml:
         resulting_xml = convert_object_to_xml(input_object)
         assert resulting_xml.replace(encoding_element, "") == "<attr1>attrValue1</attr1>"
 
-    def test_leaves_out_empty_object_attributes(self, encoding_element):
+    def test_if_empty_object_attributes_then_not_included_in_result(self, encoding_element):
         @dataclass
         class SimpleObject:
             attr1: str
@@ -194,7 +194,7 @@ class TestConvertObjectToXml:
         resulting_xml = convert_object_to_xml(input_object)
         assert resulting_xml.replace(encoding_element, "") == "<attr1>attrValue1</attr1>"
 
-    def test_returns_expected_xml_on_nested_object(self, encoding_element):
+    def test_if_nested_object_then_returns_expected_xml(self, encoding_element):
         @dataclass
         class SimpleNestedObject:
             attr1: str
@@ -209,7 +209,7 @@ class TestConvertObjectToXml:
         assert resulting_xml.replace(encoding_element, "").replace("\n",
                                                                    "") == "<nested><attr1>attrValue1</attr1><attr2>attrValue2</attr2></nested>"
 
-    def test_leaves_out_empty_nested_objects(self, encoding_element):
+    def test_if_nested_empty_object_then_leave_out_in_result(self, encoding_element):
         @dataclass
         class SimpleNestedObject:
             attr1 = None
@@ -224,7 +224,7 @@ class TestConvertObjectToXml:
         resulting_xml = convert_object_to_xml(input_object)
         assert resulting_xml.replace(encoding_element, "") == "<attr3>attrValue3</attr3>"
 
-    def test_converts_arrays_correctly(self, encoding_element):
+    def test_if_array_then_returns_expected_xml(self, encoding_element):
         @dataclass
         class SimpleNestedObject:
             attr1: str
@@ -242,7 +242,7 @@ class TestConvertObjectToXml:
         assert resulting_xml.replace(encoding_element, "").replace("\n",
                                                                    "") == "<root><nested><attr1>1</attr1></nested><nested><attr1>2</attr1></nested></root>"
 
-    def test_leaves_out_empty_arrays(self, encoding_element):
+    def test_if_empty_array_then_leave_out_in_result(self, encoding_element):
         @dataclass
         class SimpleNestedObject:
             attr1: str
@@ -259,7 +259,7 @@ class TestConvertObjectToXml:
         resulting_xml = convert_object_to_xml(input_object)
         assert resulting_xml.replace(encoding_element, "") == "<root></root>"
 
-    def test_sets_xml_attributes_correctly(self, encoding_element):
+    def test_if_xml_attributes_then_sets_correctly_in_result(self, encoding_element):
         @dataclass
         class SimpleObject:
             xml_attr_id: str
@@ -274,7 +274,7 @@ class TestConvertObjectToXml:
         assert resulting_xml.replace(encoding_element, "").replace("\n",
                                                                    "") == '<root id="ID"><attr1>attrValue1</attr1></root>'
 
-    def test_sets_direct_text_correctly(self, encoding_element):
+    def test_if_direct_text_then_sets_correctly_in_result(self, encoding_element):
         @dataclass
         class SimpleObject:
             xml_text: str
