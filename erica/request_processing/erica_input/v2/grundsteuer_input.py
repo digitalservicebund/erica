@@ -1,8 +1,13 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, Field
 from pydantic.types import date
+
+
+class PossiblyAliasedInput(BaseModel):
+    class Config:
+        allow_population_by_field_name = True
 
 
 class Anrede(str, Enum):
@@ -11,7 +16,7 @@ class Anrede(str, Enum):
     frau = 'frau'
 
 
-class Name(BaseModel):
+class Name(PossiblyAliasedInput):
     anrede: Anrede
     titel: Optional[str]
     name: str
@@ -22,7 +27,7 @@ class PersoenlicheAngaben(Name):
     geburtsdatum: Optional[date]
 
 
-class Adresse(BaseModel):
+class Adresse(PossiblyAliasedInput):
     strasse: Optional[str]
     hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
@@ -31,39 +36,39 @@ class Adresse(BaseModel):
     ort: str
 
 
-class Telefonnummer(BaseModel):
+class Telefonnummer(PossiblyAliasedInput):
     telefonnummer: str
 
 
-class SteuerId(BaseModel):
-    steuer_id: str
+class SteuerId(PossiblyAliasedInput):
+    steuer_id: str = Field(..., alias="steuerId")
 
 
-class Vertreter(BaseModel):
+class Vertreter(PossiblyAliasedInput):
     name: Name
     adresse: Adresse
     telefonnummer: Optional[Telefonnummer]
 
 
-class Anteil(BaseModel):
+class Anteil(PossiblyAliasedInput):
     zaehler: str
     nenner: str
 
 
-class Verheiratet(BaseModel):
-    are_verheiratet: bool
+class Verheiratet(PossiblyAliasedInput):
+    are_verheiratet: bool = Field(..., alias="areVerheiratet")
 
 
-class Person(BaseModel):
+class Person(PossiblyAliasedInput):
     persoenlicheAngaben: PersoenlicheAngaben
     adresse: Adresse
     telefonnummer: Optional[Telefonnummer]
-    steuer_id: Optional[SteuerId]
+    steuer_id: Optional[SteuerId] = Field(..., alias="steuerId")
     vertreter: Optional[Vertreter]
     anteil: Anteil
 
 
-class Eigentuemer(BaseModel):
+class Eigentuemer(PossiblyAliasedInput):
     person: List[Person]
     verheiratet: Optional[Verheiratet]
 
@@ -76,10 +81,10 @@ class Eigentuemer(BaseModel):
         return v
 
 
-class GrundsteuerData(BaseModel):
+class GrundsteuerData(PossiblyAliasedInput):
     eigentuemer: Eigentuemer
 
 
-class GrundsteuerWithTtl(BaseModel):
+class GrundsteuerWithTtl(PossiblyAliasedInput):
     ttlInMinutes: int
     payload: GrundsteuerData
