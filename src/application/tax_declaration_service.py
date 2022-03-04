@@ -1,5 +1,4 @@
 import datetime
-import uuid
 from uuid import UUID
 
 from fastapi import Depends

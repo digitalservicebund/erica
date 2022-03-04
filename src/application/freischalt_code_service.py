@@ -1,3 +1,4 @@
+import datetime
 from uuid import UUID
 
 from fastapi import Depends
@@ -15,11 +16,16 @@ class FreischaltCodeService:
         self.freischalt_code_repository = repository
 
     def create(self, freischalt_code_dto: FreischaltCodeCreateDto):
-        tax_declaration = FreischaltCode(user_id=freischalt_code_dto.user_id, payload=freischalt_code_dto.payload)
-        return self.freischalt_code_repository.create(tax_declaration)
+        freischalt_code = FreischaltCode(tax_ident=freischalt_code_dto.tax_ident,
+                                         date_of_birth=freischalt_code_dto.date_of_birth,
+                                         created_at=datetime.datetime.now().__str__(),
+                                         updated_at=datetime.datetime.now().__str__(),
+                                         creator_id="api"
+                                         )
+        return self.freischalt_code_repository.create(freischalt_code)
 
     def send_to_elster(self):
         pass
 
-    def get_status(self, tax_id: UUID):
-        return self.freischalt_code_repository.get_by_id(tax_id)
+    def get_status(self, tax_ident: UUID):
+        return self.freischalt_code_repository.get_by_id(tax_ident)

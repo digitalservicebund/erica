@@ -1,7 +1,7 @@
-import pydantic.types
+from enum import Enum
 
 
-class Status(pydantic.types.Enum):
+class Status(int, Enum):
     new = 0
     scheduled = 1
     processing = 2

@@ -1,10 +1,12 @@
 import os
-import sqlalchemy
 from sqlalchemy_utils import database_exists, create_database
-from sqlalchemy import create_engine, Column, String
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from src.infrastructure.sqlalchemy.tax_declaration import TaxDeclarationEntity
+from src.infrastructure.sqlalchemy.freischalt_code import FreischaltCodeEntity
+from src.infrastructure.sqlalchemy.freischalt_code_activate import FreischaltCodeActivateEntity
+from src.infrastructure.sqlalchemy.freischalt_code_revocate import FreischaltCodeRevocateEntity
 
 DATABASE_URL = 'postgresql://postgres:postgres@localhost/db'
 
@@ -23,6 +25,9 @@ def run_migrations():
 def __create_tables_if_not_exists():
     # NOTE:  use Alembic for migrations (https://alembic.sqlalchemy.org/en/latest/)
     TaxDeclarationEntity.metadata.create_all(bind=engine)
+    FreischaltCodeEntity.metadata.create_all(bind=engine)
+    FreischaltCodeActivateEntity.metadata.create_all(bind=engine)
+    FreischaltCodeRevocateEntity.metadata.create_all(bind=engine)
 
 
 def get_db():

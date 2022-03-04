@@ -1,7 +1,10 @@
 from uuid import UUID
 from fastapi import FastAPI, Depends
 
-from src.application.freischalt_code import FreischaltCodeDto, FreischaltCodeCreateDto
+from src.application.freischalt_code import FreischaltCodeDto, FreischaltCodeCreateDto, FreischaltCodeActivateDto, \
+    FreischaltCodeRevocateDto, FreischaltCodeCreateActivateDto, FreischaltCodeCreateRevocateDto
+from src.application.freischalt_code_activation_service import FreischaltCodeActivationService
+from src.application.freischalt_code_revocation_service import FreischaltCodeRevocationService
 from src.application.freischalt_code_service import FreischaltCodeService
 from src.application.tax_declaration_service import TaxDeclarationService
 from src.application.tax_declaration import TaxDeclarationDto, TaxDeclarationCreateDto, TaxDeclarationValidateDto
@@ -83,6 +86,42 @@ async def create_freischalt_code(
         freischalt_code_service: FreischaltCodeService = Depends(FreischaltCodeService)
 ):
     result = freischalt_code_service.create(freischalt_code_create_dto)
+    return result
+
+
+@app.get("/freischalt_code_activate/{id}")
+@version(1, 0)
+async def get_freischalt_code_activate(entity_id: UUID,
+                                       freischalt_code_activation_service: FreischaltCodeActivationService =
+                                       Depends(FreischaltCodeActivationService)):
+    return freischalt_code_activation_service.get_status(entity_id)
+
+
+@app.post("/freischalt_code_activate", response_model=FreischaltCodeActivateDto)
+@version(1, 0)
+async def create_freischalt_code_activate(
+        freischalt_code_create_activate_dto: FreischaltCodeCreateActivateDto,
+        freischalt_code_activation_service: FreischaltCodeActivationService = Depends(FreischaltCodeActivationService)
+):
+    result = freischalt_code_activation_service.create(freischalt_code_create_activate_dto)
+    return result
+
+
+@app.get("/freischalt_code_revocate/{id}")
+@version(1, 0)
+async def get_freischalt_code_revocate(entity_id: UUID,
+                                       freischalt_code_service: FreischaltCodeRevocationService =
+                                       Depends(FreischaltCodeRevocationService)):
+    return freischalt_code_service.get_status(entity_id)
+
+
+@app.post("/freischalt_code_revocate", response_model=FreischaltCodeRevocateDto)
+@version(1, 0)
+async def create_freischalt_code_revocate(
+        freischalt_code_create_revocate_dto: FreischaltCodeCreateRevocateDto,
+        freischalt_code_revocation_service: FreischaltCodeRevocationService = Depends(FreischaltCodeRevocationService)
+):
+    result = freischalt_code_revocation_service.create(freischalt_code_create_revocate_dto)
     return result
 
 
