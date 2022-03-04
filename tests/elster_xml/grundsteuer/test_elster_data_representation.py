@@ -9,7 +9,7 @@ from erica.elster_xml.grundsteuer.elster_data_representation import EAnteil, EGe
     EEigentumsverh, EAngFeststellung
 from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anteil, Vertreter, Person, Eigentuemer
-from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
+from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, get_grundsteuer_sample_data
 
 
 class TestEAnteil:
@@ -82,7 +82,7 @@ class TestEGesetzlicherVertreter:
 
 class TestEPersonData:
     def test_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_single_person_dict())
+        person_obj = Person.parse_obj(get_sample_single_person_dict())
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
@@ -106,7 +106,7 @@ class TestEPersonData:
         assert len(vars(result)) == 16
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_single_person_dict(complete=False, with_vertreter=False))
+        person_obj = Person.parse_obj(get_sample_single_person_dict(complete=False, with_vertreter=False))
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
@@ -130,7 +130,7 @@ class TestEPersonData:
         assert len(vars(result)) <= 16
 
     def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_single_person_dict())
+        person_obj = Person.parse_obj(get_sample_single_person_dict())
         person_obj.persoenlicheAngaben.titel = None
         person_index = 2
 
@@ -157,7 +157,7 @@ class TestEPersonData:
 
 class TestEEigentumsverh:
     def test_if_one_person_then_attributes_set_correctly(self):
-        person = get_single_person_dict()
+        person = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
 
         result = EEigentumsverh(eigentuemer_obj)
@@ -165,8 +165,8 @@ class TestEEigentumsverh:
         assert result.E7401340 == "0"
 
     def test_if_two_married_persons_then_attributes_set_correctly(self):
-        person1 = get_single_person_dict()
-        person2 = get_single_person_dict()
+        person1 = get_sample_single_person_dict()
+        person2 = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}})
 
@@ -175,8 +175,8 @@ class TestEEigentumsverh:
         assert result.E7401340 == "4"
 
     def test_if_two_not_married_persons_then_attributes_set_correctly(self):
-        person1 = get_single_person_dict()
-        person2 = get_single_person_dict()
+        person1 = get_sample_single_person_dict()
+        person2 = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
 
@@ -185,9 +185,9 @@ class TestEEigentumsverh:
         assert result.E7401340 == "6"
 
     def test_if_three_persons_then_attributes_set_correctly(self):
-        person1 = get_single_person_dict()
-        person2 = get_single_person_dict()
-        person3 = get_single_person_dict()
+        person1 = get_sample_single_person_dict()
+        person2 = get_sample_single_person_dict()
+        person3 = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj({"person": [person1, person2, person3]})
 
         result = EEigentumsverh(eigentuemer_obj)
@@ -205,7 +205,7 @@ class TestEAngFeststellung:
 
 class TestEGW1:
     def test_if_one_person_then_attributes_set_correctly(self):
-        person = get_single_person_dict()
+        person = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
 
         result = EGW1(eigentuemer_obj)
@@ -217,9 +217,9 @@ class TestEGW1:
         assert len(vars(result)) == 3
 
     def test_if_two_persons_then_attributes_set_correctly(self):
-        person1 = get_single_person_dict()
+        person1 = get_sample_single_person_dict()
         person1["persoenlicheAngaben"]["vorname"] = "Albus"
-        person2 = get_single_person_dict()
+        person2 = get_sample_single_person_dict()
         person2["persoenlicheAngaben"]["vorname"] = "Rubeus"
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
@@ -244,7 +244,7 @@ class TestERueckuebermittlung:
 
 class TestEVorsatz:
     def test_attributes_set_correctly(self):
-        grundsteuer_obj = create_grundsteuer()
+        grundsteuer_obj = get_grundsteuer_sample_data()
 
         result = EVorsatz(grundsteuer_obj)
 
@@ -266,7 +266,7 @@ class TestEVorsatz:
 
 class TestEGrundsteuerSpecifics:
     def test_attributes_set_correctly(self):
-        grundsteuer_obj = create_grundsteuer()
+        grundsteuer_obj = get_grundsteuer_sample_data()
 
         result = EGrundsteuerSpecifics(grundsteuer_obj)
 
@@ -279,7 +279,7 @@ class TestEGrundsteuerSpecifics:
 
 class TestEGrundsteuerData:
     def test_attributes_set_correctly(self):
-        grundsteuer_obj = create_grundsteuer()
+        grundsteuer_obj = get_grundsteuer_sample_data()
 
         result = EGrundsteuerData(grundsteuer_obj)
 
@@ -289,7 +289,7 @@ class TestEGrundsteuerData:
 
 class TestGetFullGrundsteuerDataRepresentation:
     def test_returns_full_xml_including_grundsteuer_object(self):
-        grundsteuer_obj = create_grundsteuer()
+        grundsteuer_obj = get_grundsteuer_sample_data()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
 
@@ -298,7 +298,7 @@ class TestGetFullGrundsteuerDataRepresentation:
         assert result.Elster.DatenTeil.Nutzdatenblock.Nutzdaten == EGrundsteuerData(grundsteuer_obj)
 
     def test_sets_empfaenger_data_correctly(self):
-        grundsteuer_obj = create_grundsteuer()
+        grundsteuer_obj = get_grundsteuer_sample_data()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         empfaenger_result = result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.Empfaenger
@@ -306,13 +306,13 @@ class TestGetFullGrundsteuerDataRepresentation:
         # TODO assert empfaenger_result.xml_text == get_bufa_nr(...)
 
     def test_sets_nutzdaten_header_version_correctly(self):
-        grundsteuer_obj = create_grundsteuer()
+        grundsteuer_obj = get_grundsteuer_sample_data()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         assert result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.xml_attr_version == "11"
 
     def test_returns_an_object_convertable_to_valid_xml(self):
-        grundsteuer_obj = create_grundsteuer()
+        grundsteuer_obj = get_grundsteuer_sample_data()
         resulting_object = get_full_grundsteuer_data_representation(grundsteuer_obj)
         resulting_xml = convert_object_to_xml(resulting_object)
         try:

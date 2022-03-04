@@ -90,7 +90,7 @@ def get_sample_vertreter_dict(complete=True, only_postfach=False, only_strasse=F
     }, **telefonnummer})
 
 
-def get_single_person_dict(complete=True, with_vertreter=True, only_postfach=False, only_strasse=False):
+def get_sample_single_person_dict(complete=True, with_vertreter=True, only_postfach=False, only_strasse=False):
     vertreter = {
         "vertreter": get_sample_vertreter_dict(complete, only_postfach, only_strasse)} if with_vertreter else {}
     name = {
@@ -130,11 +130,11 @@ def get_single_person_dict(complete=True, with_vertreter=True, only_postfach=Fal
     })
 
 
-def create_grundsteuer(complete=True, only_postfach=False, only_strasse=False):
+def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse=False):
     valid_sample_data_single_with_vertreter = {
         "eigentuemer": {
             "person": [
-                get_single_person_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
+                get_sample_single_person_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
             ],
         }}
     return GrundsteuerData.parse_obj(valid_sample_data_single_with_vertreter)

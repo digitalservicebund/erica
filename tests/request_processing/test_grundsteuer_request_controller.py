@@ -6,13 +6,13 @@ import pytest
 
 from erica.pyeric.pyeric_response import PyericResponse
 from erica.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
-from tests.samples.grundsteuer_sample_data import create_grundsteuer
+from tests.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
 from tests.utils import missing_cert, missing_pyeric_lib
 
 
 @pytest.fixture
 def valid_grundsteuer_request_controller():
-    grundsteuer_input = create_grundsteuer()
+    grundsteuer_input = get_grundsteuer_sample_data()
     return GrundsteuerRequestController(grundsteuer_input)
 
 
