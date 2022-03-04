@@ -11,7 +11,7 @@ class TestEigentuemer:
         input_data = {"person": [person]}
         Eigentuemer.parse_obj(input_data)
 
-    def test_if_one_person_and_verheiratet_true_then_do_not_raise_error(self):
+    def test_if_two_persons_and_verheiratet_true_then_do_not_raise_error(self):
         person1 = get_single_person_dict()
         person2 = get_single_person_dict()
         input_data = {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}}
