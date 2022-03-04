@@ -2,7 +2,7 @@ import pytest
 from pydantic import ValidationError
 
 from erica.request_processing.erica_input.v2.grundsteuer_input import Eigentuemer
-from tests.sample_data import get_single_person_dict
+from tests.samples.grundsteuer_sample_data import get_single_person_dict
 
 
 class TestEigentuemer:

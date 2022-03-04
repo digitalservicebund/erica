@@ -6,7 +6,7 @@ import pytest
 
 from erica.pyeric.pyeric_response import PyericResponse
 from erica.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
-from tests.sample_data import create_grundsteuer
+from tests.samples.grundsteuer_sample_data import create_grundsteuer
 from tests.utils import missing_cert, missing_pyeric_lib
 
 

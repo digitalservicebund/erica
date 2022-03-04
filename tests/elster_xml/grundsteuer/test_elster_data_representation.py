@@ -9,7 +9,7 @@ from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_an
     EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation, \
     EEigentumsverh, EAngFeststellung, elsterify_date
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
-from tests.sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
+from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
 
 
 class TestElsterifyAnrede:
