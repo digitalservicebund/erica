@@ -11,6 +11,18 @@ class TestEigentuemer:
         input_data = {"person": [person]}
         Eigentuemer.parse_obj(input_data)
 
+    def test_if_one_person_and_verheiratet_true_then_raise_error(self):
+        person = get_single_person_dict()
+        input_data = {"person": [person], "verheiratet": {"are_verheiratet": True}}
+        with pytest.raises(ValidationError):
+            Eigentuemer.parse_obj(input_data)
+
+    def test_if_one_person_and_verheiratet_false_then_raise_error(self):
+        person = get_single_person_dict()
+        input_data = {"person": [person], "verheiratet": {"are_verheiratet": False}}
+        with pytest.raises(ValidationError):
+            Eigentuemer.parse_obj(input_data)
+
     def test_if_two_persons_and_verheiratet_true_then_do_not_raise_error(self):
         person1 = get_single_person_dict()
         person2 = get_single_person_dict()
@@ -34,5 +46,21 @@ class TestEigentuemer:
         person1 = get_single_person_dict()
         person2 = get_single_person_dict()
         input_data = {"person": [person1, person2], "verheiratet": {}}
+        with pytest.raises(ValidationError):
+            Eigentuemer.parse_obj(input_data)
+
+    def test_if_three_persons_and_verheiratet_true_then_raise_error(self):
+        person1 = get_single_person_dict()
+        person2 = get_single_person_dict()
+        person3 = get_single_person_dict()
+        input_data = {"person": [person1, person2, person3], "verheiratet": {"are_verheiratet": True}}
+        with pytest.raises(ValidationError):
+            Eigentuemer.parse_obj(input_data)
+
+    def test_if_three_persons_and_verheiratet_false_then_raise_error(self):
+        person1 = get_single_person_dict()
+        person2 = get_single_person_dict()
+        person3 = get_single_person_dict()
+        input_data = {"person": [person1, person2, person3], "verheiratet": {"are_verheiratet": False}}
         with pytest.raises(ValidationError):
             Eigentuemer.parse_obj(input_data)

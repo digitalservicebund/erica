@@ -68,9 +68,11 @@ class Eigentuemer(BaseModel):
     verheiratet: Optional[Verheiratet]
 
     @validator("verheiratet", always=True)
-    def must_be_set_if_two_persons(cls, v, values):
+    def must_be_set_only_if_two_persons(cls, v, values):
         if values.get('person') and len(values.get('person')) == 2 and not v:
             raise ValueError('has to be set if two persons')
+        if values.get('person') and len(values.get('person')) != 2 and v:
+            raise ValueError('must not be set if other than two persons')
         return v
 
 
