@@ -16,14 +16,12 @@ class CustomDictParser(dict):
     def __init__(self, data):
         new_data = copy.deepcopy(data)
         for index, item in enumerate(data):
-            if item[0].startswith('xml_attr_'):
+            if item[1] is None or item[1] == {}:
+                new_data.remove(item)
+            elif item[0].startswith('xml_attr_'):
                 new_data[index] = (item[0].replace('xml_attr_', '@'), item[1])
-            if item[0].startswith('xml_text'):
+            elif item[0].startswith('xml_text'):
                 new_data[index] = ('#text', item[1])
-            if item[1] is None:
-                new_data.remove(item)
-            if item[1] == {}:
-                new_data.remove(item)
 
         super().__init__(new_data)
 
