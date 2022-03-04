@@ -331,7 +331,7 @@ class TestGetFullGrundsteuerDataRepresentation:
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         empfaenger_result = result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.Empfaenger
         assert empfaenger_result.xml_attr_id == "F"
-        # TODO assert empfaenger_result.xml_only_text == get_bufa_nr(...)
+        # TODO assert empfaenger_result.xml_text == get_bufa_nr(...)
 
     def test_sets_nutzdaten_header_version_correctly(self):
         grundsteuer_obj = create_grundsteuer()

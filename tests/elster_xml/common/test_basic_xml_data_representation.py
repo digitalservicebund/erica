@@ -21,7 +21,7 @@ class TestEEmpfaenger:
     def test_attributes_set_correctly(self):
         resulting_empfaenger = EEmpfaenger("ID", "TEXT")
         assert resulting_empfaenger.xml_attr_id == "ID"
-        assert resulting_empfaenger.xml_only_text == "TEXT"
+        assert resulting_empfaenger.xml_text == "TEXT"
         assert len(vars(resulting_empfaenger)) == 2
 
 

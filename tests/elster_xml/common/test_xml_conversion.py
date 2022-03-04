@@ -54,7 +54,7 @@ class TestCustomDictParser:
         @dataclass
         class SimpleObject:
             attr1: str
-            xml_only_text: str
+            xml_text: str
 
         input_object = SimpleObject("attrValue1", "attrValue2")
         resulting_dict = asdict(input_object, dict_factory=CustomDictParser)
@@ -277,7 +277,7 @@ class TestConvertObjectToXml:
     def test_sets_direct_text_correctly(self, encoding_element):
         @dataclass
         class SimpleObject:
-            xml_only_text: str
+            xml_text: str
 
         @dataclass
         class RootObject:

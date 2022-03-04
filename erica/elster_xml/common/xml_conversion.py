@@ -10,7 +10,7 @@ class CustomDictParser(dict):
     """
     Parse the given object to a dict structure that xmltodict will interpret correctly.
     Attributes starting with "xml_attr_" will be interpreted as XML attributes.
-    Attributes starting with "xml_only_text" will be treated as single text children of the XML element.
+    Attributes starting with "xml_text" will be treated as single text children of the XML element.
     If an attribute has the value "None" it will be not included in the resulting dict.
     """
     def __init__(self, data):
@@ -18,7 +18,7 @@ class CustomDictParser(dict):
         for index, item in enumerate(data):
             if item[0].startswith('xml_attr_'):
                 new_data[index] = (item[0].replace('xml_attr_', '@'), item[1])
-            if item[0].startswith('xml_only_text'):
+            if item[0].startswith('xml_text'):
                 new_data[index] = ('#text', item[1])
             if item[1] is None:
                 new_data.remove(item)

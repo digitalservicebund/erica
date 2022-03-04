@@ -9,11 +9,11 @@ class ENutzdaten:
 
 @dataclass
 class EEmpfaenger:
-    xml_only_text: str
+    xml_text: str
     xml_attr_id: str
 
     def __init__(self, empfaenger_id, empfaenger_text):
-        self.xml_only_text = empfaenger_text
+        self.xml_text = empfaenger_text
         self.xml_attr_id = empfaenger_id
 
 
