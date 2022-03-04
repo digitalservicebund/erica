@@ -10,7 +10,6 @@ def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_stra
             "strasse": "Grimmauld place",
             "hausnummer": "12",
             "hausnummerzusatz": "a",
-            "zusatzangaben": "Secret House",
             "plz": "77777",
             "ort": "London",
         }
@@ -25,7 +24,6 @@ def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_stra
             "strasse": "Grimmauld place",
             "hausnummer": "12",
             "hausnummerzusatz": "a",
-            "zusatzangaben": "Secret House",
             "postfach": "11111",
             "plz": "77777",
             "ort": "London",
@@ -45,7 +43,6 @@ def get_sample_adresse_vertreter(complete=True, only_postfach=False, only_strass
             "strasse": "Diagon Alley",
             "hausnummer": "04",
             "hausnummerzusatz": "b",
-            "zusatzangaben": "Secret"
         }
 
     if only_postfach:
@@ -62,7 +59,6 @@ def get_sample_adresse_vertreter(complete=True, only_postfach=False, only_strass
             "strasse": "Diagon Alley",
             "hausnummer": "04",
             "hausnummerzusatz": "b",
-            "zusatzangaben": "Secret"
         }
     return {
         "plz": "98765",

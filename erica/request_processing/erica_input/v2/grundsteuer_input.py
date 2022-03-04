@@ -26,7 +26,6 @@ class Adresse(BaseModel):
     strasse: Optional[str]
     hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
-    zusatzangaben: Optional[str]
     postfach: Optional[str]
     plz: str
     ort: str
