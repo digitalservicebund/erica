@@ -24,7 +24,7 @@ class PersoenlicheAngaben(Name):
 
 class Adresse(BaseModel):
     strasse: Optional[str]
-    hausnummer: Optional[int]
+    hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
     zusatzangaben: Optional[str]
     postfach: Optional[str]

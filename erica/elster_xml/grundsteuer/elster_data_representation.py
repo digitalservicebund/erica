@@ -76,7 +76,7 @@ class EPersonData:
     E7404519: str
     Anteil: EAnteil
     Ges_Vertreter: Optional[EGesetzlicherVertreter]
-    E7404525: Optional[int] = None
+    E7404525: Optional[str] = None
     E7404526: Optional[str] = None
     E7404514: Optional[str] = None
     E7404518: Optional[str] = None

@@ -8,7 +8,7 @@ def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_stra
     if only_strasse:
         return {
             "strasse": "Grimmauld place",
-            "hausnummer": 12,
+            "hausnummer": "12",
             "hausnummerzusatz": "a",
             "zusatzangaben": "Secret House",
             "plz": "77777",
@@ -23,7 +23,7 @@ def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_stra
     if complete:
         return {
             "strasse": "Grimmauld place",
-            "hausnummer": 12,
+            "hausnummer": "12",
             "hausnummerzusatz": "a",
             "zusatzangaben": "Secret House",
             "postfach": "11111",
@@ -43,7 +43,7 @@ def get_sample_adresse_vertreter(complete=True, only_postfach=False, only_strass
             "plz": "98765",
             "ort": "Godric's Hollow",
             "strasse": "Diagon Alley",
-            "hausnummer": 4,
+            "hausnummer": "04",
             "hausnummerzusatz": "b",
             "zusatzangaben": "Secret"
         }
@@ -60,7 +60,7 @@ def get_sample_adresse_vertreter(complete=True, only_postfach=False, only_strass
             "plz": "98765",
             "ort": "Godric's Hollow",
             "strasse": "Diagon Alley",
-            "hausnummer": 4,
+            "hausnummer": "04",
             "hausnummerzusatz": "b",
             "zusatzangaben": "Secret"
         }
