@@ -164,7 +164,7 @@ class TestCustomDictParser:
 class TestConvertObjectToXml:
     @pytest.fixture
     def encoding_element(self):
-        return '<?xml version="1.0" encoding="utf-8"?>'
+        return '<?xml version="1.0" encoding="utf-8"?>\n'
 
     def test_prepends_correct_encoding_element(self, encoding_element):
         @dataclass
@@ -182,8 +182,7 @@ class TestConvertObjectToXml:
 
         input_object = SimpleObject("attrValue1")
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == "<attr1>attrValue1</attr1>"
+        assert resulting_xml.replace(encoding_element, "") == "<attr1>attrValue1</attr1>"
 
     def test_leaves_out_empty_object_attributes(self, encoding_element):
         @dataclass
@@ -193,8 +192,7 @@ class TestConvertObjectToXml:
 
         input_object = SimpleObject("attrValue1")
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == "<attr1>attrValue1</attr1>"
+        assert resulting_xml.replace(encoding_element, "") == "<attr1>attrValue1</attr1>"
 
     def test_returns_expected_xml_on_nested_object(self, encoding_element):
         @dataclass
@@ -208,8 +206,8 @@ class TestConvertObjectToXml:
 
         input_object = SimpleObject(SimpleNestedObject("attrValue1", "attrValue2"))
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == "<nested><attr1>attrValue1</attr1><attr2>attrValue2</attr2></nested>"
+        assert resulting_xml.replace(encoding_element, "").replace("\n",
+                                                                   "") == "<nested><attr1>attrValue1</attr1><attr2>attrValue2</attr2></nested>"
 
     def test_leaves_out_empty_nested_objects(self, encoding_element):
         @dataclass
@@ -224,8 +222,7 @@ class TestConvertObjectToXml:
 
         input_object = SimpleObject("attrValue3", SimpleNestedObject())
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == "<attr3>attrValue3</attr3>"
+        assert resulting_xml.replace(encoding_element, "") == "<attr3>attrValue3</attr3>"
 
     def test_converts_arrays_correctly(self, encoding_element):
         @dataclass
@@ -242,8 +239,8 @@ class TestConvertObjectToXml:
 
         input_object = RootObject(SimpleObject([SimpleNestedObject("1"), SimpleNestedObject("2")]))
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == "<root><nested><attr1>1</attr1></nested><nested><attr1>2</attr1></nested></root>"
+        assert resulting_xml.replace(encoding_element, "").replace("\n",
+                                                                   "") == "<root><nested><attr1>1</attr1></nested><nested><attr1>2</attr1></nested></root>"
 
     def test_leaves_out_empty_arrays(self, encoding_element):
         @dataclass
@@ -260,8 +257,7 @@ class TestConvertObjectToXml:
 
         input_object = RootObject(SimpleObject([]))
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == "<root></root>"
+        assert resulting_xml.replace(encoding_element, "") == "<root></root>"
 
     def test_sets_xml_attributes_correctly(self, encoding_element):
         @dataclass
@@ -275,8 +271,8 @@ class TestConvertObjectToXml:
 
         input_object = RootObject(SimpleObject("ID", "attrValue1"))
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == '<root id="ID"><attr1>attrValue1</attr1></root>'
+        assert resulting_xml.replace(encoding_element, "").replace("\n",
+                                                                   "") == '<root id="ID"><attr1>attrValue1</attr1></root>'
 
     def test_sets_direct_text_correctly(self, encoding_element):
         @dataclass
@@ -289,5 +285,4 @@ class TestConvertObjectToXml:
 
         input_object = RootObject(SimpleObject("TEXT"))
         resulting_xml = convert_object_to_xml(input_object)
-        assert resulting_xml.replace(encoding_element, "").replace("\n", "").replace("\t",
-                                                                                     "") == '<root>TEXT</root>'
+        assert resulting_xml.replace(encoding_element, "") == '<root>TEXT</root>'

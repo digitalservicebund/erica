@@ -31,4 +31,4 @@ class CustomDictParser(dict):
 def convert_object_to_xml(grundsteuer_object: EXml):
     """ Parses the given object to its XML representation. """
     grundsteuer_dict = asdict(grundsteuer_object, dict_factory=CustomDictParser)
-    return xmltodict.unparse(grundsteuer_dict, pretty=True)
+    return xmltodict.unparse(grundsteuer_dict)
