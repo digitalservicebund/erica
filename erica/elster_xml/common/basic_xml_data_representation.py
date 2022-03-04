@@ -1,9 +1,24 @@
 from dataclasses import dataclass
 
+""" 
+    The data representation of an Elster XML. The XML is always structured similarly:
+    You have a TransferHeader (which is added by ERiC later) and a DatenTeil.
+    The DatenTeil consists of header information called NutzdatenHeader and the actual specific data called Nutzdaten.
+    Every use case (ESt/Grundsteuer/UnlockCodeRequest) has specific fields set that should be set via 
+    a subclass of ENutzdaten.
+    
+    The following classes model the Elster XML structure 1:1 as objects, including the exact XML tag names as object 
+    attribute names. Thus, do not change an attribute name if you're not intending to change the resulting XML.
+"""
+
 
 @dataclass
 class ENutzdaten:
-    """ Subclass this for each Use Case """
+    """
+    Subclass this for each Use Case where you need specific Nutzdaten. E.g. Grundsteuer / ESt.
+    The concrete structure you can find in the ERiC documentation under
+    /common/Schnittstellenbeschreibungen/<use case path>/Schema/<use case name>.xsd
+    """
     pass
 
 
