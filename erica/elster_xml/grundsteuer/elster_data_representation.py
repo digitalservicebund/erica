@@ -79,9 +79,9 @@ class EPersonData:
 
     def __init__(self, input_data: Person, person_index: int):
         self.Beteiligter = person_index + 1
-        self.E7404510 = elsterify_anrede(input_data.name.anrede)
-        self.E7404513 = input_data.name.vorname
-        self.E7404511 = input_data.name.name
+        self.E7404510 = elsterify_anrede(input_data.persoenlicheAngaben.anrede)
+        self.E7404513 = input_data.persoenlicheAngaben.vorname
+        self.E7404511 = input_data.persoenlicheAngaben.name
         self.E7404524 = input_data.adresse.strasse
         self.E7404540 = input_data.adresse.plz
         self.E7404522 = input_data.adresse.ort
@@ -95,7 +95,7 @@ class EPersonData:
             self.Ges_Vertreter = None
 
         try:
-            self.E7404514 = input_data.name.titel
+            self.E7404514 = input_data.persoenlicheAngaben.titel
             self.E7404527 = input_data.adresse.postfach
             self.E7404525 = input_data.adresse.hausnummer
             self.E7404526 = input_data.adresse.hausnummerzusatz
@@ -168,7 +168,7 @@ class EVorsatz:
         # TODO
         self.StNr = "1121081508150"
         self.Zeitraum = "2022"  # TODO require on input?
-        self.AbsName = input_data.eigentuemer.person[0].name.vorname + " " + input_data.eigentuemer.person[0].name.name
+        self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + input_data.eigentuemer.person[0].persoenlicheAngaben.name
         self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort

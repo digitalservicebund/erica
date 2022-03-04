@@ -105,10 +105,10 @@ class TestEPersonData:
         result = EPersonData(person_obj, person_index)
 
         assert result.Beteiligter == person_index + 1
-        assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
-        assert result.E7404514 == person_obj.name.titel
-        assert result.E7404513 == person_obj.name.vorname
-        assert result.E7404511 == person_obj.name.name
+        assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
+        assert result.E7404514 == person_obj.persoenlicheAngaben.titel
+        assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
+        assert result.E7404511 == person_obj.persoenlicheAngaben.name
         assert result.E7404524 == person_obj.adresse.strasse
         assert result.E7404525 == person_obj.adresse.hausnummer
         assert result.E7404526 == person_obj.adresse.hausnummerzusatz
@@ -128,10 +128,10 @@ class TestEPersonData:
         result = EPersonData(person_obj, person_index)
 
         assert result.Beteiligter == person_index + 1
-        assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
+        assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
         assert result.E7404514 is None
-        assert result.E7404513 == person_obj.name.vorname
-        assert result.E7404511 == person_obj.name.name
+        assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
+        assert result.E7404511 == person_obj.persoenlicheAngaben.name
         assert result.E7404524 is None
         assert result.E7404525 is None
         assert result.E7404526 is None
@@ -146,16 +146,16 @@ class TestEPersonData:
 
     def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = Person.parse_obj(get_single_person_dict())
-        person_obj.name.titel = None
+        person_obj.persoenlicheAngaben.titel = None
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
 
         assert result.Beteiligter == person_index + 1
-        assert result.E7404510 == elsterify_anrede(person_obj.name.anrede)
+        assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
         assert result.E7404514 is None
-        assert result.E7404513 == person_obj.name.vorname
-        assert result.E7404511 == person_obj.name.name
+        assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
+        assert result.E7404511 == person_obj.persoenlicheAngaben.name
         assert result.E7404524 == person_obj.adresse.strasse
         assert result.E7404525 == person_obj.adresse.hausnummer
         assert result.E7404526 == person_obj.adresse.hausnummerzusatz
@@ -232,9 +232,9 @@ class TestEGW1:
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = get_single_person_dict()
-        person1["name"]["vorname"] = "Albus"
+        person1["persoenlicheAngaben"]["vorname"] = "Albus"
         person2 = get_single_person_dict()
-        person2["name"]["vorname"] = "Rubeus"
+        person2["persoenlicheAngaben"]["vorname"] = "Rubeus"
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
 
@@ -266,9 +266,9 @@ class TestEVorsatz:
         assert result.Vorgang == "01"
         # TODO assert result.StNr == grundsteuer_obj.grundstueck.stnr.stnr
         assert result.Zeitraum == "2022"
-        assert result.AbsName == grundsteuer_obj.eigentuemer.person[0].name.vorname + \
+        assert result.AbsName == grundsteuer_obj.eigentuemer.person[0].persoenlicheAngaben.vorname + \
                " " + \
-               grundsteuer_obj.eigentuemer.person[0].name.name
+               grundsteuer_obj.eigentuemer.person[0].persoenlicheAngaben.name
         assert result.AbsStr == grundsteuer_obj.eigentuemer.person[0].adresse.strasse
         assert result.AbsPlz == grundsteuer_obj.eigentuemer.person[0].adresse.plz
         assert result.AbsOrt == grundsteuer_obj.eigentuemer.person[0].adresse.ort

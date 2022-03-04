@@ -17,6 +17,10 @@ class Name(BaseModel):
     vorname: str
 
 
+class PersoenlicheAngaben(Name):
+    geburtsdatum: Optional[str]
+
+
 class Adresse(BaseModel):
     strasse: Optional[str]
     hausnummer: Optional[int]
@@ -51,7 +55,7 @@ class Verheiratet(BaseModel):
 
 
 class Person(BaseModel):
-    name: Name
+    persoenlicheAngaben: PersoenlicheAngaben
     adresse: Adresse
     telefonnummer: Optional[Telefonnummer]
     steuer_id: Optional[SteuerId]

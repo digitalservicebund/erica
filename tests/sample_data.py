@@ -97,13 +97,13 @@ def get_single_person_dict(complete=True, with_vertreter=True, only_postfach=Fal
     vertreter = {
         "vertreter": get_sample_vertreter_dict(complete, only_postfach, only_strasse)} if with_vertreter else {}
     name = {
-        "name": {
+        "persoenlicheAngaben": {
             "anrede": "frau",
             "titel": "Dr",
             "name": "Granger",
             "vorname": "Hermine",
         }} if complete else {
-        "name": {
+        "persoenlicheAngaben": {
             "anrede": "frau",
             "name": "Granger",
             "vorname": "Hermine",
