@@ -1,43 +1,15 @@
-import datetime
 from xml.etree import ElementTree
 
 import pytest
 
 from erica.elster_xml.common.basic_xml_data_representation import EXml
 from erica.elster_xml.common.xml_conversion import convert_object_to_xml
-from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_anrede, EAnteil, EGesetzlicherVertreter, \
+from erica.elster_xml.grundsteuer.elster_data_representation import EAnteil, EGesetzlicherVertreter, \
     EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EGrundsteuerSpecifics, EGrundsteuerData, get_full_grundsteuer_data_representation, \
-    EEigentumsverh, EAngFeststellung, elsterify_date
-from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
+    EEigentumsverh, EAngFeststellung
+from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
+from erica.request_processing.erica_input.v2.grundsteuer_input import Anteil, Vertreter, Person, Eigentuemer
 from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
-
-
-class TestElsterifyAnrede:
-    def test_no_anrede_is_correctly_translated(self):
-        result = elsterify_anrede(Anrede.no_anrede)
-        assert result == '01'
-
-    def test_herr_is_correctly_translated(self):
-        result = elsterify_anrede(Anrede.herr)
-        assert result == '02'
-
-    def test_frau_is_correctly_translated(self):
-        result = elsterify_anrede(Anrede.frau)
-        assert result == '03'
-
-    def test_invalid_value_raises_key_error(self):
-        with pytest.raises(KeyError):
-            elsterify_anrede("INVALID")
-
-
-class TestElsterifyDate:
-    def test_if_valid_date_then_return_correct_format(self):
-        result = elsterify_date(datetime.date(1987, 2, 1))
-        assert result == "01.02.1987"
-
-    def test_if_invalid_date_then_raise_attribute_error(self):
-        with pytest.raises(AttributeError):
-            elsterify_date("INVALID")
 
 
 class TestEAnteil:

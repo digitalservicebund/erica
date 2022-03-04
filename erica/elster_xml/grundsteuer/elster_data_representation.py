@@ -1,24 +1,10 @@
 from dataclasses import dataclass
-from datetime import date
 from typing import List, Optional
 
 from erica.elster_xml.common.basic_xml_data_representation import ENutzdaten, construct_basic_xml_data_representation
+from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
-    Eigentuemer as EigentuemerInput, Anrede, Anteil, Vertreter
-
-
-def elsterify_anrede(anrede_input: Anrede):
-    """ Converts input Anrede enum to Elster's Anrede enum """
-    anrede_mapping = {
-        Anrede.no_anrede: '01',
-        Anrede.herr: '02',
-        Anrede.frau: '03',
-    }
-    return anrede_mapping[anrede_input]
-
-
-def elsterify_date(date_input: date):
-    return date_input.strftime("%d.%m.%Y")
+    Eigentuemer as EigentuemerInput, Anteil, Vertreter
 
 
 @dataclass
