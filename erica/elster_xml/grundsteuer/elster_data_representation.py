@@ -186,7 +186,7 @@ class EVorsatz:
 
 
 @dataclass
-class EE88:
+class EGrundsteuerSpecifics:
     GW1: EGW1
     Vorsatz: EVorsatz
     xml_attr_version: str
@@ -201,10 +201,10 @@ class EE88:
 
 @dataclass
 class EGrundsteuerData(ENutzdaten):
-    E88: EE88
+    E88: EGrundsteuerSpecifics
 
     def __init__(self, input_data: GrundsteuerData):
-        self.E88 = EE88(input_data)
+        self.E88 = EGrundsteuerSpecifics(input_data)
 
 
 def get_full_grundsteuer_data_representation(input_data: GrundsteuerData):

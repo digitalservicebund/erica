@@ -6,7 +6,7 @@ import pytest
 from erica.elster_xml.common.basic_xml_data_representation import EXml
 from erica.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.elster_xml.grundsteuer.elster_data_representation import elsterify_anrede, EAnteil, EGesetzlicherVertreter, \
-    EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EE88, EGrundsteuerData, get_full_grundsteuer_data_representation, \
+    EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EGrundsteuerSpecifics, EGrundsteuerData, get_full_grundsteuer_data_representation, \
     EEigentumsverh, EAngFeststellung, elsterify_date
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede, Anteil, Vertreter, Person, Eigentuemer
 from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_single_person_dict, create_grundsteuer
@@ -292,11 +292,11 @@ class TestEVorsatz:
         assert len(vars(result)) == 11
 
 
-class TestEE88:
+class TestEGrundsteuerSpecifics:
     def test_attributes_set_correctly(self):
         grundsteuer_obj = create_grundsteuer()
 
-        result = EE88(grundsteuer_obj)
+        result = EGrundsteuerSpecifics(grundsteuer_obj)
 
         assert result.Vorsatz == EVorsatz(grundsteuer_obj)
         assert result.GW1 == EGW1(grundsteuer_obj.eigentuemer)
@@ -311,7 +311,7 @@ class TestEGrundsteuerData:
 
         result = EGrundsteuerData(grundsteuer_obj)
 
-        assert result.E88 == EE88(grundsteuer_obj)
+        assert result.E88 == EGrundsteuerSpecifics(grundsteuer_obj)
         assert len(vars(result)) == 1
 
 
