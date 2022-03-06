@@ -5,10 +5,10 @@ from sqlalchemy.orm import Session
 
 from src.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
 from src.domain.Shared.base_domain_model import BaseDomainModel
-from src.infrastructure.sqlalchemy.freischalt_code import BaseDbEntity
+from src.infrastructure.sqlalchemy.FreischaltCodeSchema import BaseDbSchema
 
 T = TypeVar('T', bound=BaseDomainModel)
-D = TypeVar('D', bound=BaseDbEntity)
+D = TypeVar('D', bound=BaseDbSchema)
 
 
 class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):

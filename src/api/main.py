@@ -7,12 +7,12 @@ from src.application.FreischaltCode.freischalt_code import FreischaltCodeDto, Fr
     FreischaltCodeRevocateDto, FreischaltCodeCreateActivateDto, FreischaltCodeCreateRevocateDto
 from src.application.FreischaltCode.freischalt_code_activation_service import FreischaltCodeActivationService
 from src.application.FreischaltCode.freischalt_code_revocation_service import FreischaltCodeRevocationService
-from src.application.FreischaltCode.freischalt_code_service import FreischaltCodeService
+from src.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService, FreischaltCodeServiceInterface
 from src.application.TaxDeclaration.tax_declaration_service import TaxDeclarationService
 from src.application.TaxDeclaration.tax_declaration import TaxDeclarationDto, TaxDeclarationCreateDto, \
     TaxDeclarationValidateDto
 from src.infrastructure.sqlalchemy.database import run_migrations
-from src.infrastructure.sqlalchemy.repositories.freischalt_code_repository import FreischaltCodeRepository
+from src.infrastructure.sqlalchemy.repositories.FreischaltCodeRepository import FreischaltCodeRepository
 from src.infrastructure.sqlalchemy.repositories.tax_declaration_repository import TaxDeclarationRepository
 from fastapi_versioning import VersionedFastAPI, version
 
@@ -75,21 +75,17 @@ async def get_freischalt_codes(skip: int, limit: int):
     return repo.get(skip, limit)
 
 
-test = injector.inject(FreischaltCodeService)
-assert isinstance(test, FreischaltCodeService)
-
-
 @app.get("/freischalt_codes/{id}")
 @version(1, 0)
 async def get_freischalt_code(entity_id: UUID):
-    freischalt_code_service: FreischaltCodeService = injector.inject(FreischaltCodeService)
+    freischalt_code_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
     return freischalt_code_service.get_status(entity_id)
 
 
 @app.post("/freischalt_codes", response_model=FreischaltCodeDto)
 @version(1, 0)
 async def create_freischalt_code(freischalt_code_create_dto: FreischaltCodeCreateDto):
-    freischalt_code_service: FreischaltCodeService = injector.inject(FreischaltCodeService)
+    freischalt_code_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
     result = await freischalt_code_service.send_scheduled_to_elster(freischalt_code_create_dto)
     return result
 

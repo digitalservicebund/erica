@@ -6,9 +6,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
 from src.infrastructure.sqlalchemy.tax_declaration import TaxDeclarationEntity
-from src.infrastructure.sqlalchemy.freischalt_code import FreischaltCodeEntity
-from src.infrastructure.sqlalchemy.freischalt_code_activate import FreischaltCodeActivateEntity
-from src.infrastructure.sqlalchemy.freischalt_code_revocate import FreischaltCodeRevocateEntity
+from src.infrastructure.sqlalchemy.FreischaltCodeSchema import FreischaltCodeSchema
+from src.infrastructure.sqlalchemy.FreischaltCodeActivateSchema import FreischaltCodeActivateSchema
+from src.infrastructure.sqlalchemy.FreischaltCodeRevocateSchema import FreischaltCodeRevocateSchema
 
 DATABASE_URL = 'postgresql://postgres:postgres@localhost/db'
 
@@ -27,9 +27,9 @@ def run_migrations():
 def __create_tables_if_not_exists():
     # NOTE:  use Alembic for migrations (https://alembic.sqlalchemy.org/en/latest/)
     TaxDeclarationEntity.metadata.create_all(bind=engine)
-    FreischaltCodeEntity.metadata.create_all(bind=engine)
-    FreischaltCodeActivateEntity.metadata.create_all(bind=engine)
-    FreischaltCodeRevocateEntity.metadata.create_all(bind=engine)
+    FreischaltCodeSchema.metadata.create_all(bind=engine)
+    FreischaltCodeActivateSchema.metadata.create_all(bind=engine)
+    FreischaltCodeRevocateSchema.metadata.create_all(bind=engine)
 
 
 class DbSession(Session):

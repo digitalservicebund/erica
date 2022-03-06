@@ -1,13 +1,12 @@
-from opyoid import Module, Injector
+from opyoid import Module
 
 from src.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
-from src.infrastructure.sqlalchemy.freischalt_code import FreischaltCodeEntity
-from src.infrastructure.sqlalchemy.repositories.freischalt_code_activate_repository import \
-    FreischaltCodeActivateRepository
-from src.infrastructure.sqlalchemy.repositories.freischalt_code_repository import FreischaltCodeRepository
+from src.domain.Repositories.FreischaltCodeRepositoryInterface import FreischaltCodeRepositoryInterface
+from src.infrastructure.sqlalchemy.FreischaltCodeSchema import FreischaltCodeSchema
+from src.infrastructure.sqlalchemy.repositories.FreischaltCodeRepository import FreischaltCodeRepository
 
 
 class RepositoriesModule(Module):
     def configure(self) -> None:
-        self.bind(FreischaltCodeRepository)
-        self.bind(BaseRepositoryInterface[FreischaltCodeEntity], to_class=FreischaltCodeActivateRepository)
+        self.bind(FreischaltCodeRepositoryInterface, to_class=FreischaltCodeRepository)
+        self.bind(BaseRepositoryInterface[FreischaltCodeSchema], to_class=FreischaltCodeRepository)

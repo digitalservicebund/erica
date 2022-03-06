@@ -4,13 +4,13 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 
 from src.domain.TaxDeclaration.tax_declaration import Status
-from src.infrastructure.sqlalchemy.base_entity import AuditedEntityMixin
+from src.infrastructure.sqlalchemy.base_entity import AuditedSchemaMixin
 
 metadata = MetaData()
-BaseDbEntity = declarative_base()
+BaseDbSchema = declarative_base()
 
 
-class TaxDeclarationEntity(AuditedEntityMixin, BaseDbEntity):
+class TaxDeclarationEntity(AuditedSchemaMixin, BaseDbSchema):
     __tablename__ = 'tax_declarations'
     id = Column(UUID(as_uuid=True),
                 primary_key=True,

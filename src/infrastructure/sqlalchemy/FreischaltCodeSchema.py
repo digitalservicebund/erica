@@ -3,13 +3,13 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 
 from src.domain.FreischaltCode.freischalt_code import Status
-from src.infrastructure.sqlalchemy.base_entity import AuditedEntityMixin
+from src.infrastructure.sqlalchemy.base_entity import AuditedSchemaMixin
 
 metadata = MetaData()
-BaseDbEntity = declarative_base()
+BaseDbSchema = declarative_base()
 
 
-class FreischaltCodeEntity(AuditedEntityMixin, BaseDbEntity):
+class FreischaltCodeSchema(AuditedSchemaMixin, BaseDbSchema):
     __tablename__ = 'freischalt_code'
     id = Column(UUID(as_uuid=True),
                 primary_key=True,
