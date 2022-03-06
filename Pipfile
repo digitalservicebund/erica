@@ -23,6 +23,9 @@ psycopg2-binary = "*"
 sqlalchemy-utils = "*"
 fastapi-versioning = "*"
 psycopg2 = "*"
+rq = "*"
+redis = "*"
+opyoid = "*"
 
 [dev-packages]
 pytest = "*"

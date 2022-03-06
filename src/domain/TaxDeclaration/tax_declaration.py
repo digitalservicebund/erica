@@ -3,8 +3,9 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.domain.base_domain_model import BaseDomainModel, BaseRepositoryInterface
-from src.domain.status import Status
+from src.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
+from src.domain.Shared.base_domain_model import BaseDomainModel
+from src.domain.Shared.status import Status
 
 
 class TaxDeclarationPayload(BaseModel):

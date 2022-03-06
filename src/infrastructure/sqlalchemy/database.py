@@ -1,7 +1,9 @@
 import os
+
+from opyoid import Provider
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 
 from src.infrastructure.sqlalchemy.tax_declaration import TaxDeclarationEntity
 from src.infrastructure.sqlalchemy.freischalt_code import FreischaltCodeEntity
@@ -30,12 +32,10 @@ def __create_tables_if_not_exists():
     FreischaltCodeRevocateEntity.metadata.create_all(bind=engine)
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+class DbSession(Session):
+    pass
 
 
-
+class DatabaseSessionProvider(Provider[DbSession]):
+    def get(self) -> DbSession:
+        return SessionLocal()

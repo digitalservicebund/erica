@@ -1,14 +1,15 @@
 from datetime import date
 from uuid import UUID
 
-from src.domain.base_domain_model import BaseDomainModel
-from src.domain.status import Status
+from src.domain.Shared.base_domain_model import BaseDomainModel
+from src.domain.Shared.status import Status
 
 
 class FreischaltCode(BaseDomainModel[UUID]):
     status: Status = Status.new
     tax_ident: str
     date_of_birth: date
+    job_id: UUID
     elster_request_id: str = None
 
 

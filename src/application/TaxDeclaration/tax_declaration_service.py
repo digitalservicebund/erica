@@ -3,8 +3,8 @@ from uuid import UUID
 
 from fastapi import Depends
 
-from src.application.tax_declaration import TaxDeclarationCreateDto
-from src.domain.tax_declaration import TaxDeclaration
+from src.application.TaxDeclaration.tax_declaration import TaxDeclarationCreateDto
+from src.domain.TaxDeclaration.tax_declaration import TaxDeclaration
 from src.infrastructure.sqlalchemy.repositories.tax_declaration_repository import TaxDeclarationRepository
 
 

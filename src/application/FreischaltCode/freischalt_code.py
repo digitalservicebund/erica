@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.domain.status import Status
+from src.domain.Shared.status import Status
 
 
 class FreischaltCodeCreateDto(BaseModel):
@@ -14,11 +14,10 @@ class FreischaltCodeCreateDto(BaseModel):
         orm_mode = True
 
 
-class FreischaltCodeDto(BaseModel):
+class FreischaltCodeDto(FreischaltCodeCreateDto):
     id: UUID
     status: Status
-    tax_ident: str
-    date_of_birth: date
+    job_id: UUID
 
     class Config:
         orm_mode = True

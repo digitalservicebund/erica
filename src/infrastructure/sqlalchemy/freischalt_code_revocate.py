@@ -2,7 +2,7 @@ from sqlalchemy import MetaData, Column, String, Enum, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 
-from src.domain.freischalt_code import Status
+from src.domain.FreischaltCode.freischalt_code import Status
 from src.infrastructure.sqlalchemy.base_entity import AuditedEntityMixin
 
 metadata = MetaData()

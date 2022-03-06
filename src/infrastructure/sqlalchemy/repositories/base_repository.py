@@ -1,42 +1,48 @@
-from abc import ABC
-from typing import Generic, TypeVar, List
+from typing import Generic, TypeVar, List, Type, NewType
 from uuid import UUID
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from src.domain.base_domain_model import BaseRepositoryInterface
 
-T = TypeVar('T')
+from src.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
+from src.domain.Shared.base_domain_model import BaseDomainModel
+from src.infrastructure.sqlalchemy.freischalt_code import BaseDbEntity
+
+T = TypeVar('T', bound=BaseDomainModel)
+D = TypeVar('D', bound=BaseDbEntity)
 
 
-class BaseRepository(BaseRepositoryInterface[T], Generic[T], ABC):
-    entity: [T]
+class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
+    DatabaseEntity: D
+    DomainModel: T
     db_connection: Session
 
     def __init__(self, db_connection: Session):
         self.db_connection = db_connection
 
-    def create(self, model: BaseModel) -> [T]:
-        new_entity = self.entity(**model.dict())
+    def create(self, model: BaseModel) -> T:
+        new_entity = self.DatabaseEntity(**model.dict())
         self.db_connection.add(new_entity)
         self.db_connection.commit()
         self.db_connection.refresh(new_entity)
-        return new_entity
+        return self.DomainModel.from_orm(new_entity)
 
     def get(self, skip: int = 0, limit: int = 100) -> List[T]:
-        return self.db_connection.query(self.entity).offset(skip).limit(limit).all()
+        result = self.db_connection.query(self.DatabaseEntity).offset(skip).limit(limit).all()
+        return result
 
-    def get_by_id(self, entity_id: UUID) -> [T]:
-        return self.db_connection.query(self.entity).filter(self.entity.id == entity_id).first()
+    def get_by_id(self, entity_id: UUID) -> T:
+        result = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
+        return self.DomainModel.from_orm(result)
 
-    def update(self, entity_id: UUID, model_update_dto: BaseModel) -> [T]:
-        current = self.db_connection.query(self.entity).filter(self.entity.id == entity_id).first()
-        current.copy(model_update_dto)
+    def update(self, entity_id: UUID, model: BaseModel) -> T:
+        current = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
+        current.update(model.dict())
         self.db_connection.commit()
-        self.db_connection.refresh(current)
-        return current
+        updated = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
+        return self.DomainModel.from_orm(updated)
 
     def delete(self, entity_id: UUID) -> bool:
-        entity = self.db_connection.query(self.entity).filter(self.entity.id == entity_id).first()
+        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
         self.db_connection.delete(entity)
         self.db_connection.commit()
         return True
