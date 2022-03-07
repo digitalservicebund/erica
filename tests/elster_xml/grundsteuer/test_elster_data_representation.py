@@ -59,7 +59,7 @@ class TestEGesetzlicherVertreter:
         assert result.E7415604 is None
         assert len(vars(result)) <= 11
 
-    def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
+    def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=True))
         vertreter_obj.name.titel = None
         vertreter_obj.adresse.strasse = None
@@ -129,7 +129,7 @@ class TestEPersonData:
         assert result.Ges_Vertreter is None
         assert len(vars(result)) <= 16
 
-    def test_if_first_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
+    def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = Person.parse_obj(get_sample_single_person_dict())
         person_obj.persoenlicheAngaben.titel = None
         person_index = 2

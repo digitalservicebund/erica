@@ -12,6 +12,7 @@ class CustomDictParser(dict):
     Attributes starting with "xml_attr_" will be interpreted as XML attributes.
     Attributes starting with "xml_text" will be treated as single text children of the XML element.
     If an attribute has the value "None" it will be not included in the resulting dict.
+    The naming of the special parameters (e.g. #text) is derived form the package xmltodict.
     """
     def __init__(self, data):
         new_data = copy.deepcopy(data)

@@ -100,7 +100,7 @@ class TestSendGrundsteuer(unittest.TestCase):
             print(e.detail['validation_problems'])
             return
 
-        pytest.fail("Expected HTTP error")
+        pytest.fail("Did expect HTTP error")
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")

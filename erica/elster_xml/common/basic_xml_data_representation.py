@@ -9,6 +9,7 @@ from dataclasses import dataclass
     
     The following classes model the Elster XML structure 1:1 as objects, including the exact XML tag names as object 
     attribute names. Thus, do not change an attribute name if you're not intending to change the resulting XML.
+    The classes are prefixed with "E" for "Elster".
 """
 
 

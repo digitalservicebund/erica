@@ -6,6 +6,11 @@ from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify
 from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
     Eigentuemer as EigentuemerInput, Anteil, Vertreter
 
+"""
+    The content of the Grundsteuer Nutzdaten XML as its data prepresentation.
+    The classes are prefixed with "E" for "Elster".
+"""
+
 
 @dataclass
 class EAnteil:
@@ -161,7 +166,8 @@ class EVorsatz:
         # TODO
         self.StNr = "1121081508150"
         self.Zeitraum = "2022"  # TODO require on input?
-        self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + input_data.eigentuemer.person[0].persoenlicheAngaben.name
+        self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + \
+                       input_data.eigentuemer.person[0].persoenlicheAngaben.name
         self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
@@ -195,6 +201,8 @@ class EGrundsteuerData(ENutzdaten):
 
 def get_full_grundsteuer_data_representation(input_data: GrundsteuerData):
     """ Returns the full data representation of an elster XML for the Grundsteuer use case. """
-    elster_data_representation = EGrundsteuerData(input_data)
+    grundsteuer_elster_data_representation = EGrundsteuerData(input_data)
     # TODO set BuFa correctly
-    return construct_basic_xml_data_representation('F', "1121", elster_data_representation, "11")
+    return construct_basic_xml_data_representation(empfaenger_id='F', empfaenger_text="1121",
+                                                   nutzdaten_object=grundsteuer_elster_data_representation,
+                                                   nutzdaten_header_version="11")
