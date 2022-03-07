@@ -3,8 +3,8 @@ from uuid import UUID
 
 from fastapi import Depends
 
-from src.application.FreischaltCode.freischalt_code import FreischaltCodeCreateActivateDto
-from src.domain.FreischaltCode.freischalt_code import FreischaltCodeActivate
+from src.application.FreischaltCode.FreischaltCode import FreischaltCodeCreateActivateDto
+from src.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivate
 from src.infrastructure.sqlalchemy.repositories.freischalt_code_activate_repository import \
     FreischaltCodeActivateRepository
 

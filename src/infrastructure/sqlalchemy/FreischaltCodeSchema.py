@@ -2,8 +2,8 @@ from sqlalchemy import MetaData, Column, String, text, Enum, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 
-from src.domain.FreischaltCode.freischalt_code import Status
-from src.infrastructure.sqlalchemy.base_entity import AuditedSchemaMixin
+from src.domain.FreischaltCode.FreischaltCode import Status
+from src.infrastructure.sqlalchemy.BaseSchema import AuditedSchemaMixin
 
 metadata = MetaData()
 BaseDbSchema = declarative_base()

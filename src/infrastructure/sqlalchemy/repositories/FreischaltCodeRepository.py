@@ -3,7 +3,7 @@ from abc import ABC
 from opyoid import Injector
 from sqlalchemy.orm import Session
 
-from src.domain.FreischaltCode.freischalt_code import FreischaltCode
+from src.domain.FreischaltCode.FreischaltCode import FreischaltCode
 from src.domain.Repositories.FreischaltCodeRepositoryInterface import FreischaltCodeRepositoryInterface
 from src.infrastructure.InfrastructureModule import InfrastructureModule
 from src.infrastructure.sqlalchemy.database import DbSession

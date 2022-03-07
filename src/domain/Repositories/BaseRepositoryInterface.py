@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Generic, List, TypeVar
 
-from src.domain.Shared.base_domain_model import BaseDomainModel
+from src.domain.Shared.BaseDomainModel import BaseDomainModel
 
 ClassT = TypeVar('ClassT', bound=BaseDomainModel)
 

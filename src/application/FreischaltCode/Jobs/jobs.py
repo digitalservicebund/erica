@@ -1,7 +1,9 @@
+import time
+
 from opyoid import Injector
 from pydantic import parse_obj_as
 
-from src.domain.FreischaltCode.freischalt_code import FreischaltCode
+from src.domain.FreischaltCode.FreischaltCode import FreischaltCode
 from src.domain.Repositories.FreischaltCodeRepositoryInterface import FreischaltCodeRepositoryInterface
 from src.domain.Shared.status import Status
 from src.infrastructure.sqlalchemy.repositories.RepositoriesModule import RepositoriesModule

@@ -1,7 +1,7 @@
 from datetime import date
 from uuid import UUID
 
-from src.domain.Shared.base_domain_model import BaseDomainModel
+from src.domain.Shared.BaseDomainModel import BaseDomainModel
 from src.domain.Shared.status import Status
 
 

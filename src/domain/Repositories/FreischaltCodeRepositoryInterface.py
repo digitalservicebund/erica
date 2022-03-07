@@ -1,6 +1,6 @@
 from abc import ABC
 
-from src.domain.FreischaltCode.freischalt_code import FreischaltCode
+from src.domain.FreischaltCode.FreischaltCode import FreischaltCode
 from src.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
 
 

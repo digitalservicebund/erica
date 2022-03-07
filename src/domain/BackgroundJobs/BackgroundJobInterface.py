@@ -1,7 +1,5 @@
 from abc import ABCMeta, abstractmethod
 
-from rq import Retry
-
 
 class BackgroundJobInterface:
     __metaclass__ = ABCMeta

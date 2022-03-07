@@ -5,7 +5,7 @@ from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
-from src.infrastructure.sqlalchemy.tax_declaration import TaxDeclarationEntity
+from src.infrastructure.sqlalchemy.TaxDeclaration import TaxDeclarationEntity
 from src.infrastructure.sqlalchemy.FreischaltCodeSchema import FreischaltCodeSchema
 from src.infrastructure.sqlalchemy.FreischaltCodeActivateSchema import FreischaltCodeActivateSchema
 from src.infrastructure.sqlalchemy.FreischaltCodeRevocateSchema import FreischaltCodeRevocateSchema

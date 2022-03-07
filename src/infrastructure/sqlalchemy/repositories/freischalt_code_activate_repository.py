@@ -1,7 +1,7 @@
 from opyoid import Injector
 from sqlalchemy.orm import Session
 
-from src.domain.FreischaltCode.freischalt_code import FreischaltCode
+from src.domain.FreischaltCode.FreischaltCode import FreischaltCode
 from src.infrastructure.InfrastructureModule import InfrastructureModule
 from src.infrastructure.sqlalchemy.database import DbSession
 from src.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository

@@ -2,14 +2,14 @@ from uuid import UUID
 from fastapi import FastAPI, Depends
 
 from src.api.injector import injector
-from src.application.FreischaltCode.freischalt_code import FreischaltCodeDto, FreischaltCodeCreateDto, \
+from src.application.FreischaltCode.FreischaltCode import FreischaltCodeDto, FreischaltCodeCreateDto, \
     FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto, FreischaltCodeCreateActivateDto, FreischaltCodeCreateRevocateDto
-from src.application.FreischaltCode.freischalt_code_activation_service import FreischaltCodeActivationService
-from src.application.FreischaltCode.freischalt_code_revocation_service import FreischaltCodeRevocationService
+from src.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationService
+from src.application.FreischaltCode.FreischaltCodeRevocationService import FreischaltCodeRevocationService
 from src.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService, FreischaltCodeServiceInterface
-from src.application.TaxDeclaration.tax_declaration_service import TaxDeclarationService
-from src.application.TaxDeclaration.tax_declaration import TaxDeclarationDto, TaxDeclarationCreateDto, \
+from src.application.TaxDeclaration.TaxDeclarationService import TaxDeclarationService
+from src.application.TaxDeclaration.TaxDeclaration import TaxDeclarationDto, TaxDeclarationCreateDto, \
     TaxDeclarationValidateDto
 from src.infrastructure.sqlalchemy.database import run_migrations
 from src.infrastructure.sqlalchemy.repositories.FreischaltCodeRepository import FreischaltCodeRepository

@@ -3,11 +3,11 @@ from abc import ABC
 from opyoid import Injector
 from sqlalchemy.orm import Session
 
-from src.domain.TaxDeclaration.tax_declaration import TaxDeclaration
+from src.domain.TaxDeclaration.TaxDeclaration import TaxDeclaration
 from src.infrastructure.InfrastructureModule import InfrastructureModule
 from src.infrastructure.sqlalchemy.database import DbSession
 from src.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository
-from src.infrastructure.sqlalchemy.tax_declaration import TaxDeclarationEntity
+from src.infrastructure.sqlalchemy.TaxDeclaration import TaxDeclarationEntity
 
 injector = Injector([InfrastructureModule()])
 

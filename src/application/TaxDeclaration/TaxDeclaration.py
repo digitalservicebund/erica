@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.domain.TaxDeclaration.tax_declaration import TaxDeclarationPayload
+from src.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from src.domain.Shared.status import Status
 
 
