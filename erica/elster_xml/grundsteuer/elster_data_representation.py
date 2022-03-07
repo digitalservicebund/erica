@@ -4,7 +4,7 @@ from typing import List, Optional
 from erica.elster_xml.common.basic_xml_data_representation import ENutzdaten, construct_basic_xml_data_representation
 from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
-    Eigentuemer as EigentuemerInput, Anteil, Vertreter
+    Eigentuemer as EigentuemerInput, Anteil, Vertreter, Empfangsbevollmaechtigter
 
 """
     The content of the Grundsteuer Nutzdaten XML as its data prepresentation.
@@ -127,10 +127,45 @@ class EAngFeststellung:
 
 
 @dataclass
+class EEmpfangsbevollmaechtigter:
+    E7404610: str
+    E7404614: Optional[str]
+    E7404613: str
+    E7404611: str
+    E7404624: Optional[str]
+    E7404625: Optional[str]
+    E7404626: Optional[str]
+    E7404640: str
+    E7404627: Optional[str]
+    E7404622: str
+    E7412201: Optional[str]
+    # TODO E7412901
+
+    def __init__(self, input_data: Empfangsbevollmaechtigter):
+        self.E7404610 = elsterify_anrede(input_data.name.anrede)
+        self.E7404614 = input_data.name.titel
+        self.E7404613 = input_data.name.vorname
+        self.E7404611 = input_data.name.name
+        self.E7404624 = input_data.adresse.strasse
+        self.E7404625 = input_data.adresse.hausnummer
+        self.E7404626 = input_data.adresse.hausnummerzusatz
+        self.E7404640 = input_data.adresse.plz
+        self.E7404627 = input_data.adresse.postfach
+        self.E7404622 = input_data.adresse.ort
+
+        # input_data.telefonnummer might not be set -> handle specifically
+        if hasattr(input_data, "telefonnummer") and input_data.telefonnummer:
+            self.E7412201 = input_data.telefonnummer.telefonnummer
+        else:
+            self.E7412201 = None
+
+
+@dataclass
 class EGW1:
     Ang_Feststellung: EAngFeststellung
     Eigentuemer: List[EPersonData]
     Eigentumsverh: EEigentumsverh
+    Empfangsv: Optional[EEmpfangsbevollmaechtigter]
 
     def __init__(self, input_data: EigentuemerInput):
         self.Ang_Feststellung = EAngFeststellung()
@@ -139,6 +174,11 @@ class EGW1:
             new_eigentuemer = EPersonData(input_eigentuemer, index)
             self.Eigentuemer.append(new_eigentuemer)
         self.Eigentumsverh = EEigentumsverh(input_data)
+
+        if hasattr(input_data, "empfangsbevollmaechtigter") and input_data.empfangsbevollmaechtigter:
+            self.Empfangsv = EEmpfangsbevollmaechtigter(input_data.empfangsbevollmaechtigter)
+        else:
+            self.Empfangsv = None
 
 
 @dataclass

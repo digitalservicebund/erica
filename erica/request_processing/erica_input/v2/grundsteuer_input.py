@@ -68,9 +68,16 @@ class Person(PossiblyAliasedInput):
     anteil: Anteil
 
 
+class Empfangsbevollmaechtigter(PossiblyAliasedInput):
+    name: Name
+    adresse: Adresse
+    telefonnummer: Optional[Telefonnummer]
+
+
 class Eigentuemer(PossiblyAliasedInput):
     person: List[Person]
     verheiratet: Optional[Verheiratet]
+    empfangsbevollmaechtigter: Optional[Empfangsbevollmaechtigter]
 
     @validator("verheiratet", always=True)
     def must_be_set_only_if_two_persons(cls, v, values):
