@@ -29,6 +29,10 @@ class TestElsterifyDate:
         result = elsterify_date(datetime.date(1987, 2, 1))
         assert result == "01.02.1987"
 
+    def test_if_none_given_then_return_none(self):
+        result = elsterify_date(None)
+        assert result is None
+
     def test_if_invalid_date_then_raise_attribute_error(self):
         with pytest.raises(AttributeError):
             elsterify_date("INVALID")

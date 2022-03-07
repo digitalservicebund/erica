@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Union
 
 from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede
 
@@ -13,6 +14,8 @@ def elsterify_anrede(anrede_input: Anrede):
     return anrede_mapping[anrede_input]
 
 
-def elsterify_date(date_input: date):
+def elsterify_date(date_input: Union[date, None]):
     """ Converts input date to Elster's date format """
+    if not date_input:
+        return None
     return date_input.strftime("%d.%m.%Y")

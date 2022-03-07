@@ -57,7 +57,7 @@ class TestEGesetzlicherVertreter:
         assert result.E7415602 is None
         assert result.E7415603 == vertreter_obj.adresse.ort
         assert result.E7415604 is None
-        assert len(vars(result)) <= 11
+        assert len(vars(result)) == 11
 
     def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=True))
@@ -77,7 +77,7 @@ class TestEGesetzlicherVertreter:
         assert result.E7415602 == vertreter_obj.adresse.postfach
         assert result.E7415603 == vertreter_obj.adresse.ort
         assert result.E7415604 == vertreter_obj.telefonnummer.telefonnummer
-        assert len(vars(result)) <= 11
+        assert len(vars(result)) == 11
 
 
 class TestEPersonData:
@@ -127,7 +127,7 @@ class TestEPersonData:
         assert result.E7404519 == person_obj.steuer_id.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter is None
-        assert len(vars(result)) <= 16
+        assert len(vars(result)) == 16
 
     def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = Person.parse_obj(get_sample_single_person_dict())
