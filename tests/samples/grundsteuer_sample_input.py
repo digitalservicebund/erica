@@ -1,4 +1,3 @@
-import datetime
 
 grundsteuer_sample_input = {
     "eigentuemer": {
@@ -8,7 +7,7 @@ grundsteuer_sample_input = {
                 "titel": "Dr",
                 "name": "Granger",
                 "vorname": "Hermine",
-                "geburtsdatum": datetime.date(1979, 9, 19)},
+                "geburtsdatum": "1979-09-19"},
                 "adresse": {
                     "strasse": "Grimmauld Place",
                     "hausnummer": "12",
