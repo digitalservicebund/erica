@@ -51,6 +51,10 @@ class EstValidationPyericProcessController(EstPyericProcessController):
         return response
 
 
+class GrundsteuerPyericProcessController(PyericProcessController):
+    _VERFAHREN = "Grundsteuerwert_2"
+
+
 class UnlockCodeRequestPyericProcessController(PyericProcessController):
     _VERFAHREN = "SpezRechtAntrag"
 

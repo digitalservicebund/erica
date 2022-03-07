@@ -21,6 +21,16 @@ def get_est_th_fields(use_testmerker):
     )
 
 
+def get_grundsteuer_th_fields(use_testmerker):
+    return TransferHeaderFields(
+        datenart='Grundsteuerwert',
+        testmerker=_get_testmerker('ElsterErklaerung', use_testmerker),
+        herstellerId=_HERSTELLER_ID,
+        verfahren='ElsterErklaerung',
+        datenLieferant=_DATENLIEFERANT,
+    )
+
+
 def get_vast_request_th_fields(use_testmerker):
     return TransferHeaderFields(
         datenart='SpezRechtAntrag',
