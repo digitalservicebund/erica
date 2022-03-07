@@ -1,12 +1,15 @@
 import base64
+import string
 from unittest.mock import patch, MagicMock
 from xml.etree import ElementTree
 
 import pytest
 
 from erica.pyeric.pyeric_response import PyericResponse
+from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from tests.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
+from tests.samples.grundsteuer_sample_input import grundsteuer_sample_input
 from tests.utils import missing_cert, missing_pyeric_lib
 
 
@@ -43,6 +46,14 @@ class TestGenerateFullXml:
     def test_returned_xml_includes_nutzdaten_header(self, valid_grundsteuer_request_controller):
         resulting_xml = valid_grundsteuer_request_controller.generate_full_xml(use_testmerker=True)
         assert "<NutzdatenHeader" in resulting_xml
+
+    def test_returns_full_expected_xml_for_given_input(self):
+        valid_input = GrundsteuerData.parse_obj(grundsteuer_sample_input)
+        request_controller = GrundsteuerRequestController(valid_input)
+        resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
+        with open('tests/samples/grundsteuer_sample_xml.xml') as f:
+            expected_xml = f.read()
+            assert resulting_xml.translate(str.maketrans('', '', string.whitespace)) == expected_xml.translate(str.maketrans('', '', string.whitespace))
 
 
 class TestGenerateJson:
