@@ -49,6 +49,7 @@ class EGesetzlicherVertreter:
         self.E7415502 = input_data.adresse.hausnummerzusatz
         self.E7415602 = input_data.adresse.postfach
 
+        # input_data.telefonnummer might not be set -> handle specifically
         if hasattr(input_data, "telefonnummer") and input_data.telefonnummer:
             self.E7415604 = input_data.telefonnummer.telefonnummer
         else:
@@ -85,7 +86,7 @@ class EPersonData:
         self.E7404519 = input_data.steuer_id.steuer_id
         self.Anteil = EAnteil(input_data.anteil)
 
-        # Set optional vertreter
+        # input_data.vertreter might not be set -> handle specifically
         if hasattr(input_data, "vertreter") and input_data.vertreter:
             self.Ges_Vertreter = EGesetzlicherVertreter(input_data.vertreter)
         else:
@@ -97,6 +98,7 @@ class EPersonData:
         self.E7404525 = input_data.adresse.hausnummer
         self.E7404526 = input_data.adresse.hausnummerzusatz
 
+        # input_data.telefonnummer might not be set -> handle specifically
         if hasattr(input_data, "telefonnummer") and input_data.telefonnummer:
             self.E7414601 = input_data.telefonnummer.telefonnummer
         else:
