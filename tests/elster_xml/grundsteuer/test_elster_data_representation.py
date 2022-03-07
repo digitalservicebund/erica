@@ -5,11 +5,14 @@ import pytest
 from erica.elster_xml.common.basic_xml_data_representation import EXml
 from erica.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.elster_xml.grundsteuer.elster_data_representation import EAnteil, EGesetzlicherVertreter, \
-    EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EGrundsteuerSpecifics, EGrundsteuerData, get_full_grundsteuer_data_representation, \
-    EEigentumsverh, EAngFeststellung
+    EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EGrundsteuerSpecifics, EGrundsteuerData, \
+    get_full_grundsteuer_data_representation, \
+    EEigentumsverh, EAngFeststellung, EEmpfangsbevollmaechtigter
 from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
-from erica.request_processing.erica_input.v2.grundsteuer_input import Anteil, Vertreter, Person, Eigentuemer
-from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, get_grundsteuer_sample_data
+from erica.request_processing.erica_input.v2.grundsteuer_input import Anteil, Vertreter, Person, Eigentuemer, \
+    Empfangsbevollmaechtigter
+from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
+    get_grundsteuer_sample_data, get_sample_empfangsbevollmaechtigter_dict
 
 
 class TestEAnteil:
@@ -203,8 +206,80 @@ class TestEAngFeststellung:
         assert len(vars(result)) == 1
 
 
+class TestEEmpfangsbevollmaechtigter:
+    def test_attributes_set_correctly(self):
+        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict())
+
+        result = EEmpfangsbevollmaechtigter(input_data)
+
+        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
+        assert result.E7404614 == input_data.name.titel
+        assert result.E7404613 == input_data.name.vorname
+        assert result.E7404611 == input_data.name.name
+        assert result.E7404624 == input_data.adresse.strasse
+        assert result.E7404625 == input_data.adresse.hausnummer
+        assert result.E7404626 == input_data.adresse.hausnummerzusatz
+        assert result.E7404640 == input_data.adresse.plz
+        assert result.E7404627 == input_data.adresse.postfach
+        assert result.E7404622 == input_data.adresse.ort
+        assert result.E7412201 == input_data.telefonnummer.telefonnummer
+        assert len(vars(result)) == 11
+
+    def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
+        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict(complete=False))
+
+        result = EEmpfangsbevollmaechtigter(input_data)
+
+        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
+        assert result.E7404614 is None
+        assert result.E7404613 == input_data.name.vorname
+        assert result.E7404611 == input_data.name.name
+        assert result.E7404624 is None
+        assert result.E7404625 is None
+        assert result.E7404626 is None
+        assert result.E7404640 == input_data.adresse.plz
+        assert result.E7404627 is None
+        assert result.E7404622 == input_data.adresse.ort
+        assert result.E7412201 is None
+        assert len(vars(result)) == 11
+
+    def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
+        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict())
+        input_data.name.titel = None
+
+        result = EEmpfangsbevollmaechtigter(input_data)
+
+        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
+        assert result.E7404614 is None
+        assert result.E7404613 == input_data.name.vorname
+        assert result.E7404611 == input_data.name.name
+        assert result.E7404624 == input_data.adresse.strasse
+        assert result.E7404625 == input_data.adresse.hausnummer
+        assert result.E7404626 == input_data.adresse.hausnummerzusatz
+        assert result.E7404640 == input_data.adresse.plz
+        assert result.E7404627 == input_data.adresse.postfach
+        assert result.E7404622 == input_data.adresse.ort
+        assert result.E7412201 == input_data.telefonnummer.telefonnummer
+        assert len(vars(result)) == 11
+
+
 class TestEGW1:
+
     def test_if_one_person_then_attributes_set_correctly(self):
+        person = get_sample_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [person], "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict()})
+
+        result = EGW1(eigentuemer_obj)
+
+        assert result.Ang_Feststellung == EAngFeststellung()
+        assert len(result.Eigentuemer) == 1
+        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
+        assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
+        assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
+        assert len(vars(result)) == 4
+
+    def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
         person = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
 
@@ -214,7 +289,8 @@ class TestEGW1:
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
-        assert len(vars(result)) == 3
+        assert result.Empfangsv is None
+        assert len(vars(result)) == 4
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = get_sample_single_person_dict()
@@ -231,7 +307,8 @@ class TestEGW1:
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
-        assert len(vars(result)) == 3
+        assert result.Empfangsv is None
+        assert len(vars(result)) == 4
 
 
 class TestERueckuebermittlung:

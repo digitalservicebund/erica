@@ -39,6 +39,24 @@ grundsteuer_sample_input = {
                     "nenner": 1,
                 },
             }
-        ]
+        ],
+        "empfangsbevollmaechtigter": {
+            "name": {
+                "anrede": "frau",
+                "titel": "Prof.",
+                "name": "McGonagall",
+                "vorname": "Minerva"
+            },
+            "adresse": {
+                "plz": "08642",
+                "ort": "Hogsmeade",
+                "strasse": "Three Brooms",
+                "hausnummer": "3",
+                "hausnummerzusatz": "c",
+            },
+            "telefonnummer": {
+                "telefonnummer": "123-456"
+            }
+        },
     }
 }
