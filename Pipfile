@@ -26,6 +26,7 @@ psycopg2 = "*"
 rq = "*"
 redis = "*"
 opyoid = "*"
+injector = "*"
 
 [dev-packages]
 pytest = "*"

@@ -1,16 +1,13 @@
 from abc import ABC
 
-from opyoid import Injector
+import injector as injector
 from sqlalchemy.orm import Session
 
 from src.domain.FreischaltCode.FreischaltCode import FreischaltCode
 from src.domain.Repositories.FreischaltCodeRepositoryInterface import FreischaltCodeRepositoryInterface
-from src.infrastructure.InfrastructureModule import InfrastructureModule
 from src.infrastructure.sqlalchemy.database import DbSession
 from src.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository
 from src.infrastructure.sqlalchemy.FreischaltCodeSchema import FreischaltCodeSchema
-
-injector = Injector([InfrastructureModule()])
 
 
 class FreischaltCodeRepository(

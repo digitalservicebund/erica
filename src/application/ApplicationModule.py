@@ -1,8 +1,10 @@
 from opyoid import Module
 
 from src.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService, FreischaltCodeServiceInterface
+from src.infrastructure.InfrastructureModule import InfrastructureModule
 
 
-class FreischaltCodeApplicationModule(Module):
+class ApplicationModule(Module):
     def configure(self) -> None:
+        self.install(InfrastructureModule())
         self.bind(FreischaltCodeServiceInterface, to_class=FreischaltCodeService)

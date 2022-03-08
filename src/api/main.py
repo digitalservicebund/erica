@@ -1,7 +1,8 @@
 from uuid import UUID
 from fastapi import FastAPI, Depends
+from opyoid import Injector
 
-from src.api.injector import injector
+from src.api.ApiModule import ApiModule
 from src.application.FreischaltCode.FreischaltCode import FreischaltCodeDto, FreischaltCodeCreateDto, \
     FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto, FreischaltCodeCreateActivateDto, FreischaltCodeCreateRevocateDto
@@ -25,6 +26,9 @@ app = FastAPI(
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
     })
 
+injector = Injector([
+    ApiModule(),
+])
 
 # @app.get("/tax_declarations")
 # @version(1, 0)
@@ -86,7 +90,7 @@ async def get_freischalt_code(entity_id: UUID):
 @version(1, 0)
 async def create_freischalt_code(freischalt_code_create_dto: FreischaltCodeCreateDto):
     freischalt_code_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
-    result = await freischalt_code_service.send_scheduled_to_elster(freischalt_code_create_dto)
+    result = await freischalt_code_service.send_queued_to_elster(freischalt_code_create_dto)
     return result
 
 
