@@ -28,14 +28,14 @@ class Settings(BaseSettings):
 
     class Config:
         dir = os.path.dirname(__file__)
-        env_file = os.path.join(dir, '.env')
+        env_file = os.path.join(dir, '../../.env')
 
     @staticmethod
     def get_eric_dll_path():
         if platform == "darwin":
-            return "erica/lib/libericapi.dylib"
+            return os.path.join(os.path.dirname(__file__), 'lib/libericapi.dylib')
         else:
-            return "erica/lib/libericapi.so"
+            return os.path.join(os.path.dirname(__file__), 'lib/libericapi.so')
 
     def get_cert_path(self):
         if self.using_stick:

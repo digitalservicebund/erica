@@ -27,7 +27,7 @@ async def request_freischalt_code(entity_id):
         repository.update(entity.id, entity)
     except EricProcessNotSuccessful as e:
         logging.getLogger().info(
-            "Could not request unlock code. Got Error Message: " + e.generate_error_response(True),
+            "Could not request unlock code. Got Error Message: " + e.generate_error_response(True).__str__(),
             exc_info=True
         )
         raise
