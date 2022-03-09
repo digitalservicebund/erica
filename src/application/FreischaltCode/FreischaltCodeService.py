@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 from opyoid import Injector, Module
 from rq import Retry
 
+from src.application.EricRequestProcessing.erica_input.v1.erica_input import UnlockCodeRequestData
 from src.application.EricRequestProcessing.requests_controller import UnlockCodeRequestController
 from src.application.FreischaltCode.FreischaltCode import FreischaltCodeCreateDto, FreischaltCodeDto
 from src.application.FreischaltCode.Jobs.jobs import request_freischalt_code
@@ -62,7 +63,8 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         return FreischaltCodeDto.parse_obj(created)
 
     async def send_to_elster(self, freischaltcode_dto: FreischaltCodeCreateDto, include_elster_responses: bool = False):
-        request = UnlockCodeRequestController(freischaltcode_dto, include_elster_responses)
+        request = UnlockCodeRequestController(UnlockCodeRequestData.parse_obj(
+            {"idnr": freischaltcode_dto.tax_ident, "dob": freischaltcode_dto.date_of_birth}), include_elster_responses)
         return request.process()
 
     def get_status(self, tax_ident: UUID):

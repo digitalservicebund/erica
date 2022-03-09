@@ -7,7 +7,7 @@ from lib.pyeric.pyeric_controller import EstValidationPyericProcessController, E
     BelegRequestPyericProcessController, DecryptBelegePyericController
 from lib.pyeric.pyeric_response import PyericResponse
 from src.application.EricRequestProcessing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
-from src.application.EricRequestProcessing.erica_input.v1.erica_input import EstData
+from src.application.EricRequestProcessing.erica_input.v1.erica_input import EstData, UnlockCodeRequestData
 from src.application.FreischaltCode.FreischaltCode import FreischaltCodeCreateDto
 from src.domain.ElsterXml import est_mapping, elster_xml_generator
 from src.domain.ElsterXml.elster_xml_generator import generate_vorsatz_without_tax_number, \
@@ -133,13 +133,12 @@ class EstRequestController(EstValidationRequestController):
 class UnlockCodeRequestController(TransferTicketRequestController):
     _PYERIC_CONTROLLER = UnlockCodeRequestPyericProcessController
 
-    def __init__(self, input_data: FreischaltCodeCreateDto, include_elster_responses: bool = False):
+    def __init__(self, input_data: UnlockCodeRequestData, include_elster_responses: bool = False):
         super().__init__(input_data, include_elster_responses)
 
     def generate_full_xml(self, use_testmerker):
         return elster_xml_generator.generate_full_vast_request_xml(
-            UnlockCodeRequestEricMapper.parse_obj(
-                {'idnr': self.input_data.tax_ident, 'dob': self.input_data.date_of_birth}).__dict__,
+            UnlockCodeRequestEricMapper.parse_obj(self.input_data).__dict__,
             use_testmerker=use_testmerker)
 
     def generate_json(self, pyeric_response: PyericResponse):

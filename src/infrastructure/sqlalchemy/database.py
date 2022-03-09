@@ -32,10 +32,6 @@ def __create_tables_if_not_exists():
     FreischaltCodeRevocateSchema.metadata.create_all(bind=engine)
 
 
-class DbSession(Session):
-    pass
-
-
-class DatabaseSessionProvider(Provider[DbSession]):
-    def get(self) -> DbSession:
+class DatabaseSessionProvider(Provider[Session]):
+    def get(self) -> Session:
         return SessionLocal()
