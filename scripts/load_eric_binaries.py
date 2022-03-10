@@ -9,7 +9,7 @@ BUCKET_NAME = environ.get("ERICA_BUCKET_NAME")
 ERIC_BINARIES_NAME = "lib.zip"
 ERIC_TARGET_FOLDER = "src/erica_legacy/lib"
 ERICA_CERT_NAME = "cert.pfx"
-ERICA_CERT_TARGET_DEST = "erica/instances/blueprint"
+ERICA_CERT_TARGET_DEST = "src/erica_legacy/instances/blueprint"
 ENDPOINT_URL = environ.get("ENDPOINT_URL")
 
 
