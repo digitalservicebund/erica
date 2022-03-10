@@ -37,4 +37,4 @@ EXPOSE 8000
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
-CMD [ "python", "-m", "erica" ]
+CMD [ "python", "-m", "src.erica_legacy" ]

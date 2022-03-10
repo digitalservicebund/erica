@@ -4,9 +4,9 @@ import click
 import sys
 sys.path.append(os.getcwd())
 
-from erica.elster_xml import elster_xml_generator
-from erica.pyeric.pyeric_controller import AbrufcodeRequestPyericProcessController
-from tests.utils import remove_declaration_and_namespace
+from src.erica_legacy.elster_xml import elster_xml_generator
+from src.erica_legacy.pyeric.pyeric_controller import AbrufcodeRequestPyericProcessController
+from tests.erica_legacy.utils import remove_declaration_and_namespace
 
 
 # ATTENTION
@@ -24,6 +24,7 @@ def get_new_abruf_code():
     xml = remove_declaration_and_namespace(result.server_response)
     datenteil_xml = xml.find('.//abrufcode')
     print('Your new Abrufcode is: ' + datenteil_xml.text)
+
 
 if __name__ == "__main__":
     os.chdir('../../')  # Change the working directory to be able to find the eric binaries

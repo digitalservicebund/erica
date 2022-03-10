@@ -4,9 +4,9 @@ import click as click
 import sys
 sys.path.append(os.getcwd())
 
-from erica.pyeric.pyeric_controller import GetTaxOfficesPyericController
+from src.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
 
-_STATIC_FOLDER = "erica/static"
+_STATIC_FOLDER = "src/erica_legacy/static"
 _TAX_OFFICES_JSON_FILE_NAME = _STATIC_FOLDER + "/tax_offices.json"
 
 
