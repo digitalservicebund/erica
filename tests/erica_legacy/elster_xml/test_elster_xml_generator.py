@@ -259,9 +259,9 @@ class TestGenerateTransferHeader(unittest.TestCase):
 
             fun_create_th.assert_called_with('<xml/>\n',
                                              datenart=self.th_fields.datenart, testmerker=self.th_fields.testmerker,
-                                             herstellerId=self.th_fields.herstellerId,
+                                             hersteller_id=self.th_fields.herstellerId,
                                              verfahren=self.th_fields.verfahren,
-                                             datenLieferant=self.th_fields.datenLieferant)
+                                             daten_lieferant=self.th_fields.datenLieferant)
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_generate_transfer_header_returns_xml_with_transfer_header(self):

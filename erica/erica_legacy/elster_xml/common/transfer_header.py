@@ -12,7 +12,7 @@ def add_transfer_header(base_xml: str, th_fields: TransferHeaderFields):
         xml_string_with_th = eric_wrapper.create_th(
             base_xml,
             datenart=th_fields.datenart, testmerker=th_fields.testmerker,
-            herstellerId=th_fields.herstellerId, verfahren=th_fields.verfahren,
-            datenLieferant=th_fields.datenLieferant)
+            hersteller_id=th_fields.herstellerId, verfahren=th_fields.verfahren,
+            daten_lieferant=th_fields.datenLieferant)
 
         return xml_string_with_th.decode()

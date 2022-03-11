@@ -63,9 +63,9 @@ class TestGenerateTransferHeader:
 
             fun_create_th.assert_called_with(xml,
                                              datenart=th_fields.datenart, testmerker=th_fields.testmerker,
-                                             herstellerId=th_fields.herstellerId,
+                                             hersteller_id=th_fields.herstellerId,
                                              verfahren=th_fields.verfahren,
-                                             datenLieferant=th_fields.datenLieferant)
+                                             daten_lieferant=th_fields.datenLieferant)
 
     def test_returns_decoded_result_of_eric_th_function(self, th_fields):
         xml = "<xml/>"

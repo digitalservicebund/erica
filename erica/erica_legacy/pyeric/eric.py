@@ -154,12 +154,12 @@ class EricWrapper(object):
         )
 
     @staticmethod
-    def alloc_eric_verschluesselungs_parameter_t(zertifikatHandle, abrufCode=None):
+    def alloc_eric_verschluesselungs_parameter_t(zertifikat_handle, abruf_code=None):
         return EricVerschluesselungsParameterT(
             version=2,
-            zertifikatHandle=zertifikatHandle,
+            zertifikatHandle=zertifikat_handle,
             pin=EricWrapper.cert_pin.encode(),
-            abrufCode=abrufCode.encode() if abrufCode else None,
+            abrufCode=abruf_code.encode() if abruf_code else None,
         )
 
     def get_cert_handle(self):
@@ -271,9 +271,9 @@ class EricWrapper(object):
 
     def create_th(self,
                   xml, datenart='ESt', verfahren='ElsterErklaerung', vorgang='send-Auth',
-                  testmerker='700000004', herstellerId=get_settings().hersteller_id,
-                  datenLieferant='Softwaretester ERiC',
-                  versionClient='1'):
+                  testmerker='700000004', hersteller_id=get_settings().hersteller_id,
+                  daten_lieferant='Softwaretester ERiC',
+                  version_client='1'):
         fun_create_th = self.eric.EricMtCreateTH
         fun_create_th.argtypes = [c_void_p, c_char_p, c_char_p, c_char_p, c_char_p,
                                   c_char_p, c_char_p, c_char_p, c_char_p,
@@ -282,14 +282,14 @@ class EricWrapper(object):
 
         return self._call_and_return_buffer_contents(
             fun_create_th, xml.encode(), verfahren.encode(), datenart.encode(),
-            vorgang.encode(), testmerker.encode(), herstellerId.encode(), datenLieferant.encode(),
-            versionClient.encode(), None)
+            vorgang.encode(), testmerker.encode(), hersteller_id.encode(), daten_lieferant.encode(),
+            version_client.encode(), None)
 
     def process_verfahren(self, xml_string, verfahren, abruf_code=None, transfer_handle=None) \
             -> EricResponse:
         """ Send the xml_string to Elster with given verfahren and certificate parameters. """
         cert_handle = self.get_cert_handle()
-        cert_params = self.alloc_eric_verschluesselungs_parameter_t(cert_handle, abrufCode=abruf_code)
+        cert_params = self.alloc_eric_verschluesselungs_parameter_t(cert_handle, abruf_code=abruf_code)
 
         try:
             return self.process(xml_string, verfahren, EricWrapper.ERIC_SENDE | EricWrapper.ERIC_VALIDIERE,

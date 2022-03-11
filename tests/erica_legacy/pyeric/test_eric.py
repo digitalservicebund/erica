@@ -21,6 +21,7 @@ class TestGetEricWrapper(unittest.TestCase):
                 patch('erica.erica_legacy.pyeric.eric.EricWrapper.shutdown'), \
                 patch('builtins.open', mock_open()):
             with get_eric_wrapper():
+                # Test the context manager
                 pass
 
             init_fun.assert_called_once()
@@ -30,6 +31,7 @@ class TestGetEricWrapper(unittest.TestCase):
              patch('erica.erica_legacy.pyeric.eric.EricWrapper.shutdown') as shutdown_fun, \
                 patch('builtins.open', mock_open()):
             with get_eric_wrapper():
+                # Test the context manager
                 pass
 
             shutdown_fun.assert_called_once()
@@ -927,7 +929,7 @@ class TestCheckTaxNumber:
         # Raise ERIC_GLOBAL_UNKNOWN error
         eric_wrapper.eric.EricMtPruefeSteuernummer = MagicMock(__name__="EricMtPruefeSteuernummer", return_value=610001001)
 
-        with pytest.raises(EricGlobalError) as e:
+        with pytest.raises(EricGlobalError):
             eric_wrapper.check_tax_number(tax_number)
 
 
