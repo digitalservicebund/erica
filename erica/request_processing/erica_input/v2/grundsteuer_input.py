@@ -1,12 +1,14 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, validator, Field
+from humps import camelize
+from pydantic import BaseModel, validator
 from pydantic.types import date
 
 
 class PossiblyAliasedInput(BaseModel):
     class Config:
+        alias_generator = camelize
         allow_population_by_field_name = True
 
 
@@ -41,7 +43,7 @@ class Telefonnummer(PossiblyAliasedInput):
 
 
 class SteuerId(PossiblyAliasedInput):
-    steuer_id: str = Field(..., alias="steuerId")
+    steuer_id: str
 
 
 class Vertreter(PossiblyAliasedInput):
@@ -56,14 +58,14 @@ class Anteil(PossiblyAliasedInput):
 
 
 class Verheiratet(PossiblyAliasedInput):
-    are_verheiratet: bool = Field(..., alias="areVerheiratet")
+    are_verheiratet: bool
 
 
 class Person(PossiblyAliasedInput):
     persoenlicheAngaben: PersoenlicheAngaben
     adresse: Adresse
     telefonnummer: Optional[Telefonnummer]
-    steuer_id: Optional[SteuerId] = Field(..., alias="steuerId")
+    steuer_id: Optional[SteuerId]
     vertreter: Optional[Vertreter]
     anteil: Anteil
 

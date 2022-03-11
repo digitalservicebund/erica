@@ -17,6 +17,7 @@ python-json-logger = "*"
 boto3 = "*"
 aiofiles = "*"
 xmltodict = "*"
+pyhumps = "*"
 
 [dev-packages]
 pytest = "*"

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d0a50956a6c424afbfb491fb119cd5506eb3c2bf46ca6f405eeb3c44ee6e6fbe"
+            "sha256": "857302f80015bdbc3a7ec4224deddc402abf5351dfbaaf8ce8b44401cefd6458"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -208,6 +208,14 @@
             "index": "pypi",
             "version": "==1.9.0"
         },
+        "pyhumps": {
+            "hashes": [
+                "sha256:0ecf7fee84503b45afdd3841ec769b529d32dfaed855e07046ff8babcc0ab831",
+                "sha256:8d7e9865d6ddb6e64a2e97d951b78b5cc827d3d66cda1297310fc83b2ddf51dc"
+            ],
+            "index": "pypi",
+            "version": "==3.5.3"
+        },
         "pyparsing": {
             "hashes": [
                 "sha256:18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea",
@@ -308,7 +316,7 @@
                 "sha256:000ca7f471a233c2251c6c7023ee85305721bfdf18621ebff4fd17a8653427ed",
                 "sha256:0e7c33d9a63e7ddfcb86780aac87befc2fbddf46c58dbb487e0855f7ceec283c"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_full_version < '4.0.0'",
             "version": "==1.26.8"
         },
         "uvicorn": {
