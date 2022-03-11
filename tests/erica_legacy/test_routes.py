@@ -5,10 +5,10 @@ from unittest.mock import patch, MagicMock
 import pytest
 from fastapi.exceptions import HTTPException
 
-from erica.erica_legacy.api.v1.endpoints.grundsteuer.grundsteuer import send_grundsteuer
-from erica.erica_legacy.api.v1.endpoints.rente.est import validate_est, send_est
-from erica.erica_legacy.api.v1.endpoints.rente.tax import is_valid_tax_number, get_tax_offices
-from erica.erica_legacy.api.v1.endpoints.rente.unlock_code import request_unlock_code, activate_unlock_code, revoke_unlock_code
+from erica.erica_legacy.api.v1.endpoints.grundsteuer import send_grundsteuer
+from erica.erica_legacy.api.v1.endpoints.est import validate_est, send_est
+from erica.erica_legacy.api.v1.endpoints.tax import is_valid_tax_number, get_tax_offices
+from erica.erica_legacy.api.v1.endpoints.unlock_code import request_unlock_code, activate_unlock_code, revoke_unlock_code
 from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import StateAbbreviation

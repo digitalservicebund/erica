@@ -1,9 +1,6 @@
 from fastapi import APIRouter
 
-from erica.erica_legacy.api.v2.endpoints import ping
-from erica.erica_legacy.api.v2.endpoints.rente import fsc, est, tax
-from erica.erica_legacy.api.v2.endpoints.grundsteuer import grundsteuer
-
+from erica.erica_legacy.api.v2.endpoints import ping, est, fsc, tax, grundsteuer
 
 api_router_02 = APIRouter()
 api_router_02.prefix = '/v2'

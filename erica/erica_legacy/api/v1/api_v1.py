@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 
-from erica.erica_legacy.api.v1.endpoints import ping
-from erica.erica_legacy.api.v1.endpoints.rente import tax, est, address, unlock_code
-from erica.erica_legacy.api.v1.endpoints.grundsteuer import grundsteuer
+from erica.erica_legacy.api.v1.endpoints import ping, unlock_code, grundsteuer, address, tax, est
 
 api_router_01 = APIRouter()
 api_router_01.prefix = '/01'
