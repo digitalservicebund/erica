@@ -1,12 +1,11 @@
-
-grundsteuer_sample_input = {
+{
     "eigentuemer": {
         "person": [
             {"persoenlicheAngaben": {
                 "anrede": "frau",
                 "titel": "Dr",
                 "name": "Granger",
-                "vorname": "Hermine",
+                "vorname": "Hermione",
                 "geburtsdatum": "1979-09-19"},
                 "adresse": {
                     "strasse": "Grimmauld Place",
@@ -32,12 +31,12 @@ grundsteuer_sample_input = {
                     }
                 },
                 "steuer_id": {
-                    "steuer_id": "04452317681",
+                    "steuer_id": "04452317681"
                 },
                 "anteil": {
                     "zaehler": 1,
-                    "nenner": 1,
-                },
+                    "nenner": 1
+                }
             }
         ],
         "empfangsbevollmaechtigter": {
@@ -52,11 +51,11 @@ grundsteuer_sample_input = {
                 "ort": "Hogsmeade",
                 "strasse": "Three Brooms",
                 "hausnummer": "3",
-                "hausnummerzusatz": "c",
+                "hausnummerzusatz": "c"
             },
             "telefonnummer": {
                 "telefonnummer": "123-456"
             }
-        },
+        }
     }
 }
