@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import tostring, ParseError, Element, SubElement
 
-from src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace, \
+from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace, \
     get_elements_from_xml_element, get_elements_from_xml, get_elements_text_from_xml, \
     get_elements_text_from_xml_element, get_elements_key_value_from_xml
 
@@ -75,35 +75,35 @@ class TestGetElementsFromXml(unittest.TestCase):
     def test_direct_element_text_is_returned_correctly(self):
         xml = '<element>' + self.xml_text_1 + '</element>'
         xml_tree = ET.fromstring(xml)
-        with patch('src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
+        with patch('erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
             returned_elements = get_elements_from_xml(xml, 'element')
         self.assertEqual([xml_tree], returned_elements)
 
     def test_nested_element_is_returned_correctly(self):
         xml = '<parent><element2>' + self.xml_text_1 + '</element2></parent>'
         xml_tree = ET.fromstring(xml)
-        with patch('src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
+        with patch('erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
             returned_elements = get_elements_from_xml(xml, 'element2')
         self.assertEqual([xml_tree.find('element2')], returned_elements)
 
     def test_multiple_different_element_texts_are_returned_correctly(self):
         xml = '<parent><element>' + self.xml_text_1 + '</element><element>' + self.xml_text_2 + '</element></parent>'
         xml_tree = ET.fromstring(xml)
-        with patch('src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
+        with patch('erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
             returned_elements = get_elements_from_xml(xml, 'element')
         self.assertEqual([xml_tree.findall('element')[0], xml_tree.findall('element')[1]], returned_elements)
 
     def test_multiple_equal_elements_are_returned_correctly(self):
         xml = '<parent><element>' + self.xml_text_1 + '</element><element>' + self.xml_text_1 + '</element></parent>'
         xml_tree = ET.fromstring(xml)
-        with patch('src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
+        with patch('erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
             returned_elements = get_elements_from_xml(xml, 'element')
         self.assertEqual([xml_tree.findall('element')[0], xml_tree.findall('element')[1]], returned_elements)
 
     def test_if_element_not_existent_return_empty_list(self):
         xml = '<parent><element>' + self.xml_text_1 + '</element><element>' + self.xml_text_1 + '</element></parent>'
         xml_tree = ET.fromstring(xml)
-        with patch('src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
+        with patch('erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing.ET.fromstring', MagicMock(return_value=xml_tree)):
             returned_elements = get_elements_from_xml(xml, 'non_existent_element')
         self.assertEqual([], returned_elements)
 

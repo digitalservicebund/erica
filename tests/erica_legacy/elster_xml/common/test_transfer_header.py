@@ -3,9 +3,9 @@ from unittest.mock import patch, MagicMock
 
 import pytest as pytest
 
-from src.erica_legacy.elster_xml.common.transfer_header import add_transfer_header
-from src.erica_legacy.elster_xml.transfer_header_fields import TransferHeaderFields
-from src.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_legacy.elster_xml.common.transfer_header import add_transfer_header
+from erica.erica_legacy.elster_xml.transfer_header_fields import TransferHeaderFields
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib, remove_declaration_and_namespace
 
 
@@ -57,7 +57,7 @@ class TestGenerateTransferHeader:
     def test_calls_run_pyeric_with_correct_arguments(self, th_fields):
         xml = "<xml/>"
         xml_with_th_binary = '<xml>This includes the transfer header.</xml>'.encode()
-        with patch('src.erica_legacy.pyeric.eric.EricWrapper.create_th',
+        with patch('erica.erica_legacy.pyeric.eric.EricWrapper.create_th',
                    MagicMock(return_value=xml_with_th_binary)) as fun_create_th:
             add_transfer_header(xml, th_fields)
 
@@ -71,7 +71,7 @@ class TestGenerateTransferHeader:
         xml = "<xml/>"
         xml_with_th_binary = '<xml>This includes the transfer header.</xml>'
 
-        with patch('src.erica_legacy.pyeric.eric.EricWrapper.create_th',
+        with patch('erica.erica_legacy.pyeric.eric.EricWrapper.create_th',
                    MagicMock(return_value=xml_with_th_binary.encode())):
             res = add_transfer_header(xml, th_fields)
 

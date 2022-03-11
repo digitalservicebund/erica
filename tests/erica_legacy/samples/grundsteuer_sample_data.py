@@ -1,7 +1,7 @@
 import copy
 import datetime
 
-from src.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 
 
 def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_strasse=False):

@@ -7,8 +7,8 @@ from xml.etree.ElementTree import XML, ParseError, Element, SubElement, tostring
 import pytest
 from freezegun import freeze_time
 
-from src.erica_legacy.config import get_settings
-from src.erica_legacy.elster_xml.elster_xml_generator import _pretty, _add_xml_nutzdaten_header, get_belege_xml, \
+from erica.erica_legacy.config import get_settings
+from erica.erica_legacy.elster_xml.elster_xml_generator import _pretty, _add_xml_nutzdaten_header, get_belege_xml, \
     _generate_transfer_header, _add_if_not_empty, _add_sterkl_fields, \
     _add_person_specific_sterkl_fields, Vorsatz, _add_xml_vorsatz, _add_xml_fields, _add_est_xml_nutzdaten, \
     generate_full_est_xml, generate_full_vast_request_xml, _add_vast_xml_nutzdaten_header, \
@@ -17,12 +17,12 @@ from src.erica_legacy.elster_xml.elster_xml_generator import _pretty, _add_xml_n
     _add_abrufcode_request_nutzdaten, generate_full_abrufcode_request_xml, _add_vast_beleg_request_xml_nutzdaten, \
     generate_full_vast_beleg_request_xml, _add_vast_revocation_xml_nutzdaten, generate_full_vast_revocation_xml, \
     generate_vorsatz_with_tax_number, _compute_valid_until_date, generate_vorsatz_without_tax_number
-from src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
-from src.erica_legacy.elster_xml.elster_xml_tree import ElsterXmlTreeNode
-from src.erica_legacy.elster_xml.est_mapping import PersonSpecificFieldId
-from src.erica_legacy.pyeric.eric import get_eric_wrapper
-from src.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
-from src.erica_legacy.elster_xml.transfer_header_fields import TransferHeaderFields
+from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
+from erica.erica_legacy.elster_xml.elster_xml_tree import ElsterXmlTreeNode
+from erica.erica_legacy.elster_xml.est_mapping import PersonSpecificFieldId
+from erica.erica_legacy.pyeric.eric import get_eric_wrapper
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_legacy.elster_xml.transfer_header_fields import TransferHeaderFields
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib, use_testmerker_env_set_false, TEST_EST_VERANLAGUNGSJAHR
 
 _BEANTRAGUNGSJAHR = TEST_EST_VERANLAGUNGSJAHR + 1
@@ -252,7 +252,7 @@ class TestGenerateTransferHeader(unittest.TestCase):
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_generate_transfer_header_calls_run_pyeric(self):
-        with patch('src.erica_legacy.pyeric.eric.EricWrapper.create_th',
+        with patch('erica.erica_legacy.pyeric.eric.EricWrapper.create_th',
                    MagicMock(return_value=self.xml_with_th_binary)) as fun_create_th, \
              get_eric_wrapper() as eric_wrapper:
             _generate_transfer_header(self.xml, self.th_fields, eric_wrapper)
@@ -265,7 +265,7 @@ class TestGenerateTransferHeader(unittest.TestCase):
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_generate_transfer_header_returns_xml_with_transfer_header(self):
-        with patch('src.erica_legacy.pyeric.eric.EricWrapper.create_th',
+        with patch('erica.erica_legacy.pyeric.eric.EricWrapper.create_th',
                    MagicMock(return_value=self.xml_with_th_binary)), \
              get_eric_wrapper() as eric_wrapper:
             res = _generate_transfer_header(self.xml, self.th_fields, eric_wrapper)
@@ -399,8 +399,8 @@ class TestAddSterklFields(unittest.TestCase):
         self.assertEqual(0, len(xml_top.findall('parent1')))
 
     def test_calls_person_specific_method_if_person_specific_tree_node(self):
-        with patch('src.erica_legacy.elster_xml.elster_xml_generator._add_person_specific_sterkl_fields') as fun_pers_spec:
-            with patch('src.erica_legacy.elster_xml.elster_xml_generator.Element') as fun_element:
+        with patch('erica.erica_legacy.elster_xml.elster_xml_generator._add_person_specific_sterkl_fields') as fun_pers_spec:
+            with patch('erica.erica_legacy.elster_xml.elster_xml_generator.Element') as fun_element:
                 sterkl_xml = Element('parent1')
                 self.mock_function = MagicMock()
                 self.mock_function.side_effect = lambda arg, *args: sterkl_xml
@@ -979,7 +979,7 @@ class TestVastRequest(unittest.TestCase):
     @freeze_time("2021-06-24")
     def test_add_vast_antrag_nutzdaten(self):
         xml_top = Element('top')
-        with patch('src.erica_legacy.elster_xml.elster_xml_generator.dt.date.today', MagicMock(return_value=datetime.date(_BEANTRAGUNGSJAHR, 1, 1))):
+        with patch('erica.erica_legacy.elster_xml.elster_xml_generator.dt.date.today', MagicMock(return_value=datetime.date(_BEANTRAGUNGSJAHR, 1, 1))):
             _add_vast_request_xml_nutzdaten(xml_top, self.valid_user_data)
         xml_string = _pretty(xml_top)
 

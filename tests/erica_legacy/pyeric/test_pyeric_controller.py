@@ -4,11 +4,11 @@ from unittest.mock import MagicMock, patch, call
 
 import pytest
 
-from src.erica_legacy.config import get_settings
-from src.erica_legacy.elster_xml.bufa_numbers import VALID_BUFA_NUMBERS
-from src.erica_legacy.pyeric.eric import EricResponse
-from src.erica_legacy.pyeric.eric_errors import EricGlobalValidationError, EricIOError
-from src.erica_legacy.pyeric.pyeric_controller import PyericProcessController, EstPyericProcessController, \
+from erica.erica_legacy.config import get_settings
+from erica.erica_legacy.elster_xml.bufa_numbers import VALID_BUFA_NUMBERS
+from erica.erica_legacy.pyeric.eric import EricResponse
+from erica.erica_legacy.pyeric.eric_errors import EricGlobalValidationError, EricIOError
+from erica.erica_legacy.pyeric.pyeric_controller import PyericProcessController, EstPyericProcessController, \
     EstValidationPyericProcessController, \
     UnlockCodeRequestPyericProcessController, UnlockCodeActivationPyericProcessController, \
     AbrufcodeRequestPyericProcessController, \
@@ -35,8 +35,8 @@ class TestPyericControllerGetEricResponse(unittest.TestCase):
 
     def test_run_pyeric_called_with_eric_wrapper(self):
         mock_eric_wrapper = MagicMock()
-        with patch("src.erica_legacy.pyeric.pyeric_controller.PyericProcessController.run_eric") as mock_run_eric, \
-                patch("src.erica_legacy.pyeric.pyeric_controller.get_eric_wrapper") as mock_get_eric_wrapper:
+        with patch("erica.erica_legacy.pyeric.pyeric_controller.PyericProcessController.run_eric") as mock_run_eric, \
+                patch("erica.erica_legacy.pyeric.pyeric_controller.get_eric_wrapper") as mock_get_eric_wrapper:
             mock_get_eric_wrapper.return_value.__enter__.return_value = mock_eric_wrapper
             self.pyeric_controller.get_eric_response()
 
@@ -72,7 +72,7 @@ class TestEstPyericControllerGetEricResponse(unittest.TestCase):
         expected_response = EricResponse(0, expected_eric_response, expected_server_response)
         pyeric_controller = EstPyericProcessController(self.correct_input_xml, TEST_EST_VERANLAGUNGSJAHR)
 
-        with patch("src.erica_legacy.pyeric.eric.EricWrapper.process", MagicMock(return_value=expected_response)):
+        with patch("erica.erica_legacy.pyeric.eric.EricWrapper.process", MagicMock(return_value=expected_response)):
             result = pyeric_controller.get_eric_response()
 
         self.assertEqual(expected_eric_response.decode(), result.eric_response)
@@ -193,7 +193,7 @@ class TestBelegIdRequestPyericControllerRunPyEric(unittest.TestCase):
         mock_eric_wrapper = MagicMock()
         transfer_handle = 0
 
-        with patch('src.erica_legacy.pyeric.pyeric_controller.pointer', MagicMock(return_value=transfer_handle)):
+        with patch('erica.erica_legacy.pyeric.pyeric_controller.pointer', MagicMock(return_value=transfer_handle)):
             pyeric_controller.run_eric(mock_eric_wrapper)
 
         mock_eric_wrapper.process_verfahren.assert_called_once_with(
@@ -312,7 +312,7 @@ class TestBelegIdRequestPyericControllerRunEric(unittest.TestCase):
 
     def test_calls_eric_process_verfahren_with_correct_params(self):
         transfer_handle = 'th'
-        with patch('src.erica_legacy.pyeric.pyeric_controller.pointer', MagicMock(return_value=transfer_handle)):
+        with patch('erica.erica_legacy.pyeric.pyeric_controller.pointer', MagicMock(return_value=transfer_handle)):
             xml = '</xml'
             self.mocked_process_verfahren.reset_mock()
             BelegIdRequestPyericProcessController(xml).run_eric(self.mocked_eric_wrapper)
@@ -329,7 +329,7 @@ class TestBelegRequestPyericControllerRunPyEric(unittest.TestCase):
 
     def test_calls_eric_process_verfahren_with_correct_params(self):
         transfer_handle = 'th'
-        with patch('src.erica_legacy.pyeric.pyeric_controller.pointer', MagicMock(return_value=transfer_handle)):
+        with patch('erica.erica_legacy.pyeric.pyeric_controller.pointer', MagicMock(return_value=transfer_handle)):
             xml = '</xml'
             self.mocked_process_verfahren.reset_mock()
             BelegRequestPyericProcessController(xml).run_eric(self.mocked_eric_wrapper)

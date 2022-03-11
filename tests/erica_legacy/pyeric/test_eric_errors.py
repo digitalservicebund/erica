@@ -1,6 +1,6 @@
 import unittest
 
-from src.erica_legacy.pyeric.eric_errors import EricGlobalError, EricProcessNotSuccessful, EricGlobalValidationError, \
+from erica.erica_legacy.pyeric.eric_errors import EricGlobalError, EricProcessNotSuccessful, EricGlobalValidationError, \
     EricGlobalInitialisationError, EricTransferError, EricCryptError, EricIOError, EricPrintError, \
     EricNullReturnedError, EricAlreadyRequestedError, EricAntragNotFoundError, check_result, EricUnknownError, \
     check_xml, EricInvalidXmlReturnedError, EricAlreadyRevokedError, check_handle, EricWrongTaxNumberError

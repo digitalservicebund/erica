@@ -4,21 +4,21 @@ from unittest.mock import patch, MagicMock, mock_open
 
 import pytest
 
-from src.erica_legacy.config import get_settings
+from erica.erica_legacy.config import get_settings
 from tests.erica_legacy.utils import gen_random_key, missing_cert, missing_pyeric_lib
-from src.erica_legacy.pyeric.eric import EricWrapper, EricDruckParameterT, EricVerschluesselungsParameterT, EricResponse, \
+from erica.erica_legacy.pyeric.eric import EricWrapper, EricDruckParameterT, EricVerschluesselungsParameterT, EricResponse, \
     get_eric_wrapper
-from src.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricNullReturnedError, EricGlobalError
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricNullReturnedError, EricGlobalError
 
-TEST_CERTIFICATE_PATH = 'src/erica_legacy/instances/blueprint/cert.pfx'
+TEST_CERTIFICATE_PATH = 'erica/erica_legacy/instances/blueprint/cert.pfx'
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
 @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
 class TestGetEricWrapper(unittest.TestCase):
     def test_calls_initialise(self):
-        with patch('src.erica_legacy.pyeric.eric.EricWrapper.initialise') as init_fun, \
-                patch('src.erica_legacy.pyeric.eric.EricWrapper.shutdown'), \
+        with patch('erica.erica_legacy.pyeric.eric.EricWrapper.initialise') as init_fun, \
+                patch('erica.erica_legacy.pyeric.eric.EricWrapper.shutdown'), \
                 patch('builtins.open', mock_open()):
             with get_eric_wrapper():
                 pass
@@ -26,8 +26,8 @@ class TestGetEricWrapper(unittest.TestCase):
             init_fun.assert_called_once()
 
     def test_calls_shutdown(self):
-        with patch('src.erica_legacy.pyeric.eric.EricWrapper.initialise'), \
-             patch('src.erica_legacy.pyeric.eric.EricWrapper.shutdown') as shutdown_fun, \
+        with patch('erica.erica_legacy.pyeric.eric.EricWrapper.initialise'), \
+             patch('erica.erica_legacy.pyeric.eric.EricWrapper.shutdown') as shutdown_fun, \
                 patch('builtins.open', mock_open()):
             with get_eric_wrapper():
                 pass
@@ -71,8 +71,8 @@ class TestEricInitialise(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_log_path_set_then_set_logpath_and_pluginpath_as_arguments(self):
-        with patch('src.erica_legacy.pyeric.eric.c_char_p') as char_pointer, \
-                patch('src.erica_legacy.pyeric.eric.os.path.dirname', MagicMock(return_value=self.plugin_path)):
+        with patch('erica.erica_legacy.pyeric.eric.c_char_p') as char_pointer, \
+                patch('erica.erica_legacy.pyeric.eric.os.path.dirname', MagicMock(return_value=self.plugin_path)):
             char_pointer.side_effect = lambda value: value
             self.eric_api_with_mocked_binaries.initialise(self.log_path)
 
@@ -215,8 +215,8 @@ class TestValidateAndSend(unittest.TestCase):
         enter_object = MagicMock()
         enter_object.name = self.print_path
         temporary_file_object = MagicMock(__enter__=lambda _: enter_object)
-        with patch('src.erica_legacy.pyeric.eric.pointer') as pointer, \
-                patch('src.erica_legacy.pyeric.eric.tempfile.NamedTemporaryFile', MagicMock(return_value=temporary_file_object)):
+        with patch('erica.erica_legacy.pyeric.eric.pointer') as pointer, \
+                patch('erica.erica_legacy.pyeric.eric.tempfile.NamedTemporaryFile', MagicMock(return_value=temporary_file_object)):
             pointer.side_effect = self.mock_function
             self.eric_api_with_mocked_binaries.validate_and_send(self.xml, self.data_type_version)
 
@@ -234,8 +234,8 @@ class TestValidateAndSend(unittest.TestCase):
         enter_object = MagicMock()
         enter_object.name = self.print_path
         temporary_file_object = MagicMock(__enter__=lambda _: enter_object)
-        with patch('src.erica_legacy.pyeric.eric.pointer') as pointer, \
-                patch('src.erica_legacy.pyeric.eric.tempfile.NamedTemporaryFile', MagicMock(return_value=temporary_file_object)):
+        with patch('erica.erica_legacy.pyeric.eric.pointer') as pointer, \
+                patch('erica.erica_legacy.pyeric.eric.tempfile.NamedTemporaryFile', MagicMock(return_value=temporary_file_object)):
             pointer.side_effect = self.mock_function
             response = self.eric_api_with_mocked_binaries.validate_and_send(self.xml, self.data_type_version)
 
@@ -253,7 +253,7 @@ class TestAllocEricDruckParameterT(unittest.TestCase):
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_print_path_set_then_return_eric_druck_parameter_with_print_path_set(self):
         printing_path = "Not/All/Those/Who/Wander/Are/Lost"
-        with patch('src.erica_legacy.pyeric.eric.c_char_p') as char_pointer:
+        with patch('erica.erica_legacy.pyeric.eric.c_char_p') as char_pointer:
             char_pointer.side_effect = lambda value: value
             returned_druck_parameter = self.eric_api.alloc_eric_druck_parameter_t(printing_path)
 
@@ -341,7 +341,7 @@ class TestGetCertHandle(unittest.TestCase):
         self.mock_fun_handle_certificate_successful.reset_mock()
 
         c_int_pointer = c_int()
-        with patch("src.erica_legacy.pyeric.eric.pointer", MagicMock(return_value=c_int_pointer)):
+        with patch("erica.erica_legacy.pyeric.eric.pointer", MagicMock(return_value=c_int_pointer)):
             self.eric_api_with_mocked_binaries.get_cert_handle()
 
         if get_settings().using_stick:
@@ -455,7 +455,7 @@ class TestProcess(unittest.TestCase):
     def test_if_eric_bearbeite_vorgang_ends_with_return_code_zero_then_return_eric_response(self):
         self.mock_fun_process_successful.reset_mock()
         expected_response = EricResponse(0, self.buffer.encode(), self.buffer.encode())
-        with patch('src.erica_legacy.pyeric.eric.pointer') as pointer:
+        with patch('erica.erica_legacy.pyeric.eric.pointer') as pointer:
             pointer.side_effect = self.mock_function
             actual_response = self.eric_api_with_mocked_binaries.process(self.xml,
                                                                          self.data_type_version,
@@ -470,7 +470,7 @@ class TestProcess(unittest.TestCase):
     def test_if_eric_bearbeite_vorgang_ends_with_return_code_greater_zero_then_raise_exception(self):
         self.mock_eric.EricMtBearbeiteVorgang = self.mock_fun_process_res_gt_zero
 
-        with patch('src.erica_legacy.pyeric.eric.pointer') as pointer:
+        with patch('erica.erica_legacy.pyeric.eric.pointer') as pointer:
             pointer.side_effect = self.mock_function
             self.assertRaises(EricProcessNotSuccessful,
                               self.eric_api_with_mocked_binaries.process,
@@ -485,7 +485,7 @@ class TestProcess(unittest.TestCase):
     def test_if_eric_bearbeite_vorgang_ends_with_return_code_smaller_zero_then_raise_exception(self):
         self.mock_eric.EricMtBearbeiteVorgang = self.mock_fun_process_res_lt_zero
 
-        with patch('src.erica_legacy.pyeric.eric.pointer') as pointer:
+        with patch('erica.erica_legacy.pyeric.eric.pointer') as pointer:
             pointer.side_effect = self.mock_function
             self.assertRaises(EricProcessNotSuccessful,
                               self.eric_api_with_mocked_binaries.process,
@@ -501,7 +501,7 @@ class TestProcess(unittest.TestCase):
         self.mock_fun_process_successful.reset_mock()
         self.mock_eric.EricBearbeiteVorgang = self.mock_fun_process_successful
 
-        with patch('src.erica_legacy.pyeric.eric.pointer') as pointer:
+        with patch('erica.erica_legacy.pyeric.eric.pointer') as pointer:
             pointer.side_effect = self.mock_function
             self.eric_api_with_mocked_binaries.process(self.xml,
                                                        self.data_type_version,
@@ -526,7 +526,7 @@ class TestProcess(unittest.TestCase):
         self.mock_fun_process_successful.reset_mock()
         self.mock_eric.EricBearbeiteVorgang = self.mock_fun_process_successful
 
-        with patch('src.erica_legacy.pyeric.eric.pointer') as pointer:
+        with patch('erica.erica_legacy.pyeric.eric.pointer') as pointer:
             pointer.side_effect = self.mock_function
             self.eric_api_with_mocked_binaries.process(self.xml,
                                                        self.data_type_version,
@@ -831,7 +831,7 @@ class TestSendToElsterWithMockedFunctions(unittest.TestCase):
         c_int_pointer = c_int()
 
         for verf in self.verfahren:
-            with patch("src.erica_legacy.pyeric.eric.pointer", MagicMock(return_value=c_int_pointer)):
+            with patch("erica.erica_legacy.pyeric.eric.pointer", MagicMock(return_value=c_int_pointer)):
                 self.eric_api_with_mocked_process_method.process_verfahren(self.xml_string, verf)
 
             self.mock_fun_process.assert_called_once_with(self.xml_string, verf,
@@ -865,7 +865,7 @@ class TestGetBelegIds(unittest.TestCase):
     def test_get_beleg_ids_calls_process_method(self):
         c_int_pointer = c_int()
 
-        with patch("src.erica_legacy.pyeric.eric.pointer", MagicMock(return_value=c_int_pointer)):
+        with patch("erica.erica_legacy.pyeric.eric.pointer", MagicMock(return_value=c_int_pointer)):
             self.eric_api_with_mocked_process_method.process_verfahren(self.xml_string, self.verfahren,
                                                                        self.abruf_code, transfer_handle=c_int_pointer)
 

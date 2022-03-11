@@ -3,7 +3,7 @@ from typing import List
 
 import pytest
 
-from src.erica_legacy.elster_xml.common.xml_conversion import CustomDictParser, convert_object_to_xml
+from erica.erica_legacy.elster_xml.common.xml_conversion import CustomDictParser, convert_object_to_xml
 
 
 class TestCustomDictParser:

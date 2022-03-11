@@ -2,9 +2,9 @@ from xml.etree import ElementTree
 
 import pytest
 
-from src.erica_legacy.elster_xml.common.basic_xml_data_representation import EEmpfaenger, ENutzdatenHeader, ENutzdaten, \
+from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import EEmpfaenger, ENutzdatenHeader, ENutzdaten, \
     ENutzdatenblock, EDatenTeil, EElster, EXml, construct_basic_xml_data_representation
-from src.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
+from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 
 
 @pytest.fixture

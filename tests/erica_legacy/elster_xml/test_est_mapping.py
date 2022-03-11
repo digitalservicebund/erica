@@ -2,9 +2,9 @@ import datetime
 import unittest
 from decimal import Decimal
 
-from src.erica_legacy.elster_xml.est_mapping import check_and_generate_entries, PersonSpecificFieldId, _elsterify, \
+from erica.erica_legacy.elster_xml.est_mapping import check_and_generate_entries, PersonSpecificFieldId, _elsterify, \
     _convert_to_elster_identifiers, generate_electronic_steuernummer
-from src.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
+from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 
 
 class TestElsterify(unittest.TestCase):

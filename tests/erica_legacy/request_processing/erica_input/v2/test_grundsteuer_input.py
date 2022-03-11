@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from src.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import Eigentuemer, Verheiratet, SteuerId, Person
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import Eigentuemer, Verheiratet, SteuerId, Person
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_sample_single_person_dict
 
 

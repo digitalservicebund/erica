@@ -4,9 +4,9 @@ import click
 import sys
 sys.path.append(os.getcwd())
 
-from src.erica_legacy.elster_xml import elster_xml_generator
-from src.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
-from src.erica_legacy.pyeric.pyeric_controller import PermitListingPyericProcessController
+from erica.erica_legacy.elster_xml import elster_xml_generator
+from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
+from erica.erica_legacy.pyeric.pyeric_controller import PermitListingPyericProcessController
 
 
 @click.command()

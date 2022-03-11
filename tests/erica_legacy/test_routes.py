@@ -5,12 +5,13 @@ from unittest.mock import patch, MagicMock
 import pytest
 from fastapi.exceptions import HTTPException
 
-from src.erica_legacy.api.v1.endpoints.grundsteuer.grundsteuer import send_grundsteuer
-from src.erica_legacy.api.v1.endpoints.rente.est import validate_est, send_est
-from src.erica_legacy.api.v1.endpoints.rente.tax import is_valid_tax_number, get_tax_offices
-from src.erica_legacy.api.v1.endpoints.rente.unlock_code import request_unlock_code, activate_unlock_code, revoke_unlock_code
-from src.erica_legacy.pyeric.eric import EricResponse
-from src.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
+from erica.erica_legacy.api.v1.endpoints.grundsteuer.grundsteuer import send_grundsteuer
+from erica.erica_legacy.api.v1.endpoints.rente.est import validate_est, send_est
+from erica.erica_legacy.api.v1.endpoints.rente.tax import is_valid_tax_number, get_tax_offices
+from erica.erica_legacy.api.v1.endpoints.rente.unlock_code import request_unlock_code, activate_unlock_code, revoke_unlock_code
+from erica.erica_legacy.pyeric.eric import EricResponse
+from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import StateAbbreviation
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
 
 from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, create_unlock_revocation, \
@@ -130,7 +131,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         correct_request_include = create_unlock_request(correct=True)
 
         try:
-            with patch('src.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -146,7 +147,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         correct_request_no_include = create_unlock_request(correct=True)
 
         try:
-            with patch('src.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -182,7 +183,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         correct_activation_include = create_unlock_activation(correct=True)
 
         try:
-            with patch('src.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -200,7 +201,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         correct_activation_no_include = create_unlock_activation(correct=True)
 
         try:
-            with patch('src.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -225,7 +226,7 @@ class TestRevokeUnlockCode(unittest.TestCase):
         correct_revocation_include = create_unlock_revocation(correct=True)
 
         try:
-            with patch('src.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -242,7 +243,7 @@ class TestRevokeUnlockCode(unittest.TestCase):
         correct_revocation_no_include = create_unlock_revocation(correct=True)
 
         try:
-            with patch('src.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):

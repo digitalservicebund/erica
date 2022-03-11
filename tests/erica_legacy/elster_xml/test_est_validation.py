@@ -1,7 +1,7 @@
 import unittest
 
-from src.erica_legacy.config import get_settings
-from src.erica_legacy.elster_xml.est_validation import is_valid_bufa
+from erica.erica_legacy.config import get_settings
+from erica.erica_legacy.elster_xml.est_validation import is_valid_bufa
 
 
 class TestIsInvalidBufa(unittest.TestCase):

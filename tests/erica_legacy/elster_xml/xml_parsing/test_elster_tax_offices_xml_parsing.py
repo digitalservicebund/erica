@@ -1,6 +1,6 @@
 import unittest
 
-from src.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_state_ids, get_tax_offices, \
+from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_state_ids, get_tax_offices, \
     get_antrag_id_from_xml, get_idnr_from_xml, get_transfer_ticket_from_xml, get_address_from_xml, \
     get_relevant_beleg_ids
 from tests.erica_legacy.utils import replace_text_in_xml

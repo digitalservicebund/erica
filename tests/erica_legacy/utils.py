@@ -5,11 +5,11 @@ from datetime import date
 from decimal import Decimal
 from xml.etree import ElementTree as ET
 
-from src.erica_legacy.config import get_settings
-from src.erica_legacy.request_processing.erica_input.v1.erica_input import EstData, FormDataEst, MetaDataEst, UnlockCodeRequestData, \
+from erica.erica_legacy.config import get_settings
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import EstData, FormDataEst, MetaDataEst, UnlockCodeRequestData, \
     UnlockCodeActivationData, UnlockCodeRevocationData
     
-from src.erica_legacy.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
+from erica.erica_legacy.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
 
 TEST_EST_VERANLAGUNGSJAHR = VERANLAGUNGSJAHR
 
@@ -235,20 +235,20 @@ INCORRECT_SERVER_XML = "<xml"
 
 
 def missing_cert():
-    return not os.path.exists('src/erica_legacy/instances/blueprint/cert.pfx')
+    return not os.path.exists('erica/erica_legacy/instances/blueprint/cert.pfx')
 
 
 def missing_pyeric_lib():
-    return not (os.path.exists('src/erica_legacy/lib/libericapi.so') or os.path.exists('src/erica_legacy/lib/libericapi.dylib'))
+    return not (os.path.exists('erica/erica_legacy/lib/libericapi.so') or os.path.exists('erica/erica_legacy/lib/libericapi.dylib'))
 
 
 def path_to_session_folder(session_id):
-    return os.path.abspath(os.path.join("src/erica_legacy/instances/session_" + session_id))
+    return os.path.abspath(os.path.join("erica/erica_legacy/instances/session_" + session_id))
 
 
 def get_instances_folder_without_anonymous_files():
     return list(filter(lambda path: not path.startswith('.'),
-                       os.listdir(path=os.path.abspath("src/erica_legacy/instances"))))
+                       os.listdir(path=os.path.abspath("erica/erica_legacy/instances"))))
 
 
 @contextmanager

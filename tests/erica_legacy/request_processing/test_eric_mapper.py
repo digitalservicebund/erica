@@ -2,8 +2,8 @@ from datetime import date
 
 import pytest
 
-from src.erica_legacy.request_processing.eric_mapper import EstEricMapping
-from src.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst
+from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst
 
 
 @pytest.fixture

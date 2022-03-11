@@ -2,14 +2,14 @@ from xml.etree import ElementTree
 
 import pytest
 
-from src.erica_legacy.elster_xml.common.basic_xml_data_representation import EXml
-from src.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
-from src.erica_legacy.elster_xml.grundsteuer.elster_data_representation import EAnteil, EGesetzlicherVertreter, \
+from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import EXml
+from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
+from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import EAnteil, EGesetzlicherVertreter, \
     EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EGrundsteuerSpecifics, EGrundsteuerData, \
     get_full_grundsteuer_data_representation, \
     EEigentumsverh, EAngFeststellung, EEmpfangsbevollmaechtigter
-from src.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
-from src.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import Anteil, Vertreter, Person, Eigentuemer, \
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import Anteil, Vertreter, Person, Eigentuemer, \
     Empfangsbevollmaechtigter
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
     get_grundsteuer_sample_data, get_sample_empfangsbevollmaechtigter_dict

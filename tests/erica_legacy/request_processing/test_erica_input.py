@@ -5,8 +5,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import ValidationError
 
-from src.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
-from src.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst, MetaDataEst
+from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst, MetaDataEst
 from tests.erica_legacy.utils import TEST_EST_VERANLAGUNGSJAHR
 
 
@@ -145,7 +145,7 @@ class TestFormDataEstNewAdmission:
         standard_est_data['submission_without_tax_nr'] = True
         standard_est_data['bufa_nr'] = '1981'
 
-        with patch('src.erica_legacy.request_processing.erica_input.v1.erica_input.is_valid_bufa', MagicMock(return_value=False)):
+        with patch('erica.erica_legacy.request_processing.erica_input.v1.erica_input.is_valid_bufa', MagicMock(return_value=False)):
             with pytest.raises(InvalidBufaNumberError):
                 FormDataEst.parse_obj(standard_est_data)
 
