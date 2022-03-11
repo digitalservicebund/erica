@@ -1,10 +1,10 @@
 import base64
 import json
-import string
 from unittest.mock import patch, MagicMock
 from xml.etree import ElementTree
 
 import pytest
+from xmldiff import main
 
 from erica.pyeric.pyeric_response import PyericResponse
 from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
@@ -55,14 +55,17 @@ class TestGenerateFullXml:
             resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
             with open('tests/samples/grundsteuer_sample_xml.xml') as f:
                 expected_xml = f.read()
-                assert resulting_xml.translate(str.maketrans('', '', string.whitespace)) == expected_xml.translate(str.maketrans('', '', string.whitespace))
+                diff = main.diff_texts(bytes(bytearray(resulting_xml, "utf8")),
+                                       expected_xml.encode())
+                assert diff == []
 
 
 class TestGenerateJson:
     def test_result_includes_all_relevant_aspects(self, valid_grundsteuer_request_controller):
         valid_grundsteuer_request_controller.include_elster_responses = True
         example_pyeric_response = PyericResponse("eric response", "server response", "pdf content".encode())
-        with patch('erica.request_processing.requests_controller.get_transfer_ticket_from_xml', MagicMock(return_value='transfer ticket')):
+        with patch('erica.request_processing.requests_controller.get_transfer_ticket_from_xml',
+                   MagicMock(return_value='transfer ticket')):
             result = valid_grundsteuer_request_controller.generate_json(example_pyeric_response)
             assert result['pdf'] == base64.b64encode("pdf content".encode())
             assert result['transfer_ticket'] == 'transfer ticket'

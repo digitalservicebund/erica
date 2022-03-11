@@ -39,7 +39,7 @@
                         <Eigentuemer>
                             <Beteiligter>1</Beteiligter>
                             <E7404510>03</E7404510>
-                            <E7404513>Hermine</E7404513>
+                            <E7404513>Hermione</E7404513>
                             <E7404511>Granger</E7404511>
                             <E7404524>Grimmauld Place</E7404524>
                             <E7404540>77777</E7404540>
@@ -85,7 +85,7 @@
                         <Vorgang>01</Vorgang>
                         <StNr>1121081508150</StNr>
                         <Zeitraum>2022</Zeitraum>
-                        <AbsName>Hermine Granger</AbsName>
+                        <AbsName>Hermione Granger</AbsName>
                         <AbsStr>Grimmauld Place</AbsStr>
                         <AbsPlz>77777</AbsPlz>
                         <AbsOrt>London</AbsOrt>
