@@ -260,7 +260,7 @@ class TestIsTaxNumberValid:
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_tax_number_is_valid_then_return_json_with_is_valid_true(self):
-        state_abbreviation = "by"
+        state_abbreviation = StateAbbreviation.by
         valid_tax_number = "19811310010"
 
         result = is_valid_tax_number(state_abbreviation, valid_tax_number)
@@ -270,7 +270,7 @@ class TestIsTaxNumberValid:
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_tax_number_is_invalid_then_return_json_with_is_valid_false(self):
-        state_abbreviation = "by"
+        state_abbreviation = StateAbbreviation.by
         invalid_tax_number = "19811310011"  # is invalid because of incorrect check sum (last digit should be 0)
 
         result = is_valid_tax_number(state_abbreviation, invalid_tax_number)

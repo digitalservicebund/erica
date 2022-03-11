@@ -13,6 +13,7 @@ from erica.erica_legacy.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
 
 TEST_EST_VERANLAGUNGSJAHR = VERANLAGUNGSJAHR
 
+
 def create_unlock_request(correct=True):
     if correct:
         unlock_request = UnlockCodeRequestData(idnr="04531972802", dob=date(1957, 7, 14))
