@@ -22,6 +22,7 @@ xmltodict = "*"
 pytest = "*"
 flake8 = "*"
 invoke = "*"
+xmldiff = "*"
 
 [requires]
 python_version = "3.9"
