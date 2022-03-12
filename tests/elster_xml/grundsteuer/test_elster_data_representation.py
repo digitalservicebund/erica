@@ -9,8 +9,8 @@ from erica.elster_xml.grundsteuer.elster_data_representation import EAnteil, EGe
     get_full_grundsteuer_data_representation, \
     EEigentumsverh, EAngFeststellung, EEmpfangsbevollmaechtigter
 from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
-from erica.request_processing.erica_input.v2.grundsteuer_input import Anteil, Vertreter, Person, Eigentuemer, \
-    Empfangsbevollmaechtigter
+from erica.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Vertreter, Anteil, Person, \
+    Empfangsbevollmaechtigter, Eigentuemer
 from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
     get_grundsteuer_sample_data, get_sample_empfangsbevollmaechtigter_dict
 

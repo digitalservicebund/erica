@@ -3,8 +3,9 @@ from typing import List, Optional
 
 from erica.elster_xml.common.basic_xml_data_representation import ENutzdaten, construct_basic_xml_data_representation
 from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
-from erica.request_processing.erica_input.v2.grundsteuer_input import Person, GrundsteuerData, \
-    Eigentuemer as EigentuemerInput, Anteil, Vertreter, Empfangsbevollmaechtigter
+from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Vertreter, Anteil, Person, \
+    Empfangsbevollmaechtigter, Eigentuemer as EigentuemerInput
 
 """
     The content of the Grundsteuer Nutzdaten XML as its data prepresentation.

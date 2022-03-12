@@ -250,6 +250,7 @@ def get_sample_single_person_dict(complete=True, with_vertreter=True, only_postf
 
 
 def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse=False, with_empfangsvollmacht=False):
+    valid_gebaeude = SampleGebaeude().with_wohnflaeche(42).build()
     valid_person_data = {
         "person": [
             get_sample_single_person_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
@@ -261,6 +262,7 @@ def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse
 
     valid_eigentuemer = {**valid_person_data, **valid_empfangsvollmacht_data} if with_empfangsvollmacht else valid_person_data
     valid_sample_data_single_with_vertreter = {
+        "gebaeude": valid_gebaeude,
         "eigentuemer": valid_eigentuemer
     }
     return GrundsteuerData.parse_obj(valid_sample_data_single_with_vertreter)

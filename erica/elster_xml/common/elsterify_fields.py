@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Union
 
-from erica.request_processing.erica_input.v2.grundsteuer_input import Anrede
+from erica.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede
 
 
 def elsterify_anrede(anrede_input: Anrede):

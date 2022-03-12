@@ -1,9 +1,10 @@
 import pytest
 from pydantic import ValidationError
 
-from erica.request_processing.erica_input.v2.grundsteuer_input import Eigentuemer, Verheiratet, SteuerId, Person, \
-    Ab1949, Abbruchverpflichtung, Garagen, GaragenAnzahl, Kernsaniert, WeitereWohnraeume, WeitereWohnraeumeFlaeche, \
-    Gebaeude
+from erica.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import SteuerId, Verheiratet, Person, \
+    Eigentuemer
+from erica.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Ab1949, Kernsaniert, \
+    Abbruchverpflichtung, WeitereWohnraeume, WeitereWohnraeumeFlaeche, Garagen, GaragenAnzahl, Gebaeude
 from tests.samples.grundsteuer_sample_data import get_sample_single_person_dict, SampleGebaeude
 
 
