@@ -4,6 +4,70 @@ import datetime
 from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 
 
+class SampleGebaeude:
+    def __init__(self):
+        self.dict = {
+            "ab1949": {
+                "is_ab1949": False,
+            },
+            "kernsaniert": {
+                "is_kernsaniert": False,
+            },
+            "abbruchverpflichtung": {
+                "has_abbruchverpflichtung": False,
+            },
+            "weitere_wohnraeume": {
+                "has_weitere_wohnraeume": False,
+            },
+            "garagen": {
+                "has_garagen": False,
+            },
+        }
+
+    def with_baujahr(self, baujahr=None):
+        self.dict["ab1949"]["is_ab1949"] = True
+        if baujahr:
+            self.dict["baujahr"] = {"baujahr": baujahr}
+        return self
+
+    def with_kernsanierung(self, kernsanierungsjahr=None):
+        self.dict["kernsaniert"]["is_kernsaniert"] = True
+        if kernsanierungsjahr:
+            self.dict["kernsanierungsjahr"] = {"kernsanierungsjahr": kernsanierungsjahr}
+        return self
+
+    def with_abbruchverpflichtung(self, abbruchverpflichtungsjahr=None):
+        self.dict["abbruchverpflichtung"]["has_abbruchverpflichtung"] = True
+        if abbruchverpflichtungsjahr:
+            self.dict["abbruchverpflichtungsjahr"] = {"abbruchverpflichtungsjahr": abbruchverpflichtungsjahr}
+        return self
+
+    def with_wohnflaeche(self, wohnflaeche):
+        self.dict["wohnflaeche"] = {"wohnflaeche": wohnflaeche}
+        return self
+
+    def with_wohnflaechen(self, wohnflaeche1, wohnflaeche2):
+        self.dict["wohnflaechen"] = {"wohnflaeche1": wohnflaeche1, "wohnflaeche2": wohnflaeche2}
+        return self
+
+    def with_weitere_wohnraeume(self, flaeche=None):
+        self.dict["weitere_wohnraeume"]["has_weitere_wohnraeume"] = True
+        if flaeche:
+            self.dict["weitere_wohnraeume_flaeche"] = {"flaeche": flaeche}
+        return self
+
+    def with_garagen(self, anzahl_garagen=None):
+        self.dict["garagen"]["has_garagen"] = True
+        if anzahl_garagen:
+            self.dict["garagen_anzahl"] = {"anzahl_garagen": anzahl_garagen}
+        return self
+
+    def build(self):
+        return {
+            **self.dict
+        }
+
+
 def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_strasse=False):
     if only_strasse:
         return {
