@@ -1,11 +1,11 @@
-from typing import Generic, TypeVar, List, Type, NewType
+from typing import Generic, TypeVar, List
 from uuid import UUID
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from src.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
 from src.domain.Shared.BaseDomainModel import BaseDomainModel
-from src.infrastructure.sqlalchemy.FreischaltCodeSchema import BaseDbSchema
+from src.infrastructure.sqlalchemy.EricaAuftragSchema import BaseDbSchema
 
 T = TypeVar('T', bound=BaseDomainModel)
 D = TypeVar('D', bound=BaseDbSchema)

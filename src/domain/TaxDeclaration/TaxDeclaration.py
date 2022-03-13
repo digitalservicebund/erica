@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from src.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
 from src.domain.Shared.BaseDomainModel import BaseDomainModel
-from src.domain.Shared.status import Status
+from src.domain.Shared.Status import Status
 
 
 class TaxDeclarationPayload(BaseModel):

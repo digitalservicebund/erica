@@ -5,10 +5,7 @@ from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
-from src.infrastructure.sqlalchemy.TaxDeclaration import TaxDeclarationEntity
-from src.infrastructure.sqlalchemy.FreischaltCodeSchema import FreischaltCodeSchema
-from src.infrastructure.sqlalchemy.FreischaltCodeActivateSchema import FreischaltCodeActivateSchema
-from src.infrastructure.sqlalchemy.FreischaltCodeRevocateSchema import FreischaltCodeRevocateSchema
+from src.infrastructure.sqlalchemy.EricaAuftragSchema import EricaAuftragSchema
 
 DATABASE_URL = 'postgresql://postgres:postgres@localhost/db'
 
@@ -26,10 +23,7 @@ def run_migrations():
 
 def __create_tables_if_not_exists():
     # NOTE:  use Alembic for migrations (https://alembic.sqlalchemy.org/en/latest/)
-    TaxDeclarationEntity.metadata.create_all(bind=engine)
-    FreischaltCodeSchema.metadata.create_all(bind=engine)
-    FreischaltCodeActivateSchema.metadata.create_all(bind=engine)
-    FreischaltCodeRevocateSchema.metadata.create_all(bind=engine)
+    EricaAuftragSchema.metadata.create_all(bind=engine)
 
 
 class DatabaseSessionProvider(Provider[Session]):

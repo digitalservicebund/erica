@@ -8,7 +8,6 @@ from lib.pyeric.pyeric_controller import EstValidationPyericProcessController, E
 from lib.pyeric.pyeric_response import PyericResponse
 from src.application.EricRequestProcessing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from src.application.EricRequestProcessing.erica_input.v1.erica_input import EstData, UnlockCodeRequestData
-from src.application.FreischaltCode.FreischaltCode import FreischaltCodeCreateDto
 from src.domain.ElsterXml import est_mapping, elster_xml_generator
 from src.domain.ElsterXml.elster_xml_generator import generate_vorsatz_without_tax_number, \
     generate_vorsatz_with_tax_number, get_belege_xml

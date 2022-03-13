@@ -1,61 +1,21 @@
 from datetime import date
-from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.domain.Shared.status import Status
+
+class BaseDto(BaseModel):
+    pass
 
 
-class FreischaltCodeCreateDto(BaseModel):
+class FreischaltCodeBeantragenDto(BaseDto):
     tax_ident: str
     date_of_birth: date
 
-    class Config:
-        orm_mode = True
 
-
-class FreischaltCodeDto(FreischaltCodeCreateDto):
-    id: UUID
-    status: Status
-    job_id: UUID
-
-    class Config:
-        orm_mode = True
-
-
-class FreischaltCodeRevocateDto(BaseModel):
-    id: UUID
-    status: Status
+class FreischaltCodeRevocateDto(BaseDto):
     tax_ident: str
-    elster_request_id: str
-
-    class Config:
-        orm_mode = True
 
 
-class FreischaltCodeCreateRevocateDto(BaseModel):
-    tax_ident: str
-    elster_request_id: str
-
-    class Config:
-        orm_mode = True
-
-
-class FreischaltCodeActivateDto(BaseModel):
-    id: UUID
-    status: Status
+class FreischaltCodeActivateDto(BaseDto):
     tax_ident: str
     freischalt_code: str
-    elster_request_id: str
-
-    class Config:
-        orm_mode = True
-
-
-class FreischaltCodeCreateActivateDto(BaseModel):
-    tax_ident: str
-    freischalt_code: str
-    elster_request_id: str
-
-    class Config:
-        orm_mode = True

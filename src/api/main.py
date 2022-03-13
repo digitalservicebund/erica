@@ -1,21 +1,18 @@
 from uuid import UUID
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from opyoid import Injector
 
 from src.api.ApiModule import ApiModule
-from src.application.FreischaltCode.FreischaltCode import FreischaltCodeDto, FreischaltCodeCreateDto, \
-    FreischaltCodeActivateDto, \
-    FreischaltCodeRevocateDto, FreischaltCodeCreateActivateDto, FreischaltCodeCreateRevocateDto
-from src.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationService
-from src.application.FreischaltCode.FreischaltCodeRevocationService import FreischaltCodeRevocationService
-from src.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService, FreischaltCodeServiceInterface
-from src.application.TaxDeclaration.TaxDeclarationService import TaxDeclarationService
-from src.application.TaxDeclaration.TaxDeclaration import TaxDeclarationDto, TaxDeclarationCreateDto, \
-    TaxDeclarationValidateDto
+from src.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
+from src.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface
+from src.application.FreischaltCode.FreischaltCode import FreischaltCodeBeantragenDto
+
+from src.application.FreischaltCode.FreischaltCodeService import FreischaltCodeServiceInterface
+from src.application.TaxDeclaration.TaxDeclaration import TaxDeclarationValidateDto
 from src.infrastructure.sqlalchemy.database import run_migrations
-from src.infrastructure.sqlalchemy.repositories.FreischaltCodeRepository import FreischaltCodeRepository
-from src.infrastructure.sqlalchemy.repositories.tax_declaration_repository import TaxDeclarationRepository
 from fastapi_versioning import VersionedFastAPI, version
+
+from src.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
 
 run_migrations()
 app = FastAPI(
@@ -72,25 +69,25 @@ async def create_tax_validation():
     pass
 
 
-@app.get("/freischalt_codes")
+@app.get("/erica_auftraege")
 @version(1, 0)
-async def get_freischalt_codes(skip: int, limit: int):
-    repo: FreischaltCodeRepository = injector.inject(FreischaltCodeRepository)
+async def get_erica_auftrag_status_list(skip: int, limit: int):
+    repo: EricaAuftragRepository = injector.inject(EricaAuftragRepository)
     return repo.get(skip, limit)
 
 
-@app.get("/freischalt_codes/{id}")
+@app.get("/erica_auftraege/{id}")
 @version(1, 0)
-async def get_freischalt_code(entity_id: UUID):
-    freischalt_code_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
-    return freischalt_code_service.get_status(entity_id)
+async def get_erica_auftrag_status(auftrag_id: UUID):
+    freischalt_code_service: EricaAuftragServiceInterface = injector.inject(EricaAuftragServiceInterface)
+    return freischalt_code_service.get_status(auftrag_id)
 
 
-@app.post("/freischalt_codes", response_model=FreischaltCodeDto)
+@app.post("/freischalt_code_beantragen", response_model=EricaAuftragDto)
 @version(1, 0)
-async def create_freischalt_code(freischalt_code_create_dto: FreischaltCodeCreateDto):
+async def create_freischalt_code(freischalt_code_beantragen_dto: FreischaltCodeBeantragenDto):
     freischalt_code_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
-    result = await freischalt_code_service.send_queued_to_elster(freischalt_code_create_dto)
+    result = await freischalt_code_service.freischalt_code_bei_elster_beantragen_queued(freischalt_code_beantragen_dto)
     return result
 
 
