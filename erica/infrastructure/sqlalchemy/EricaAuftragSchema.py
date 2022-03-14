@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.domain.Shared.Status import Status
-from src import AuditedSchemaMixin
+from erica.infrastructure.sqlalchemy.BaseSchema import AuditedSchemaMixin
 
 metadata = MetaData()
 BaseDbSchema = declarative_base()
