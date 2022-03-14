@@ -14,8 +14,10 @@ class FreischaltCodeBeantragenDto(BaseDto):
 
 class FreischaltCodeRevocateDto(BaseDto):
     tax_ident: str
+    elster_request_id: str
 
 
 class FreischaltCodeActivateDto(BaseDto):
     tax_ident: str
     freischalt_code: str
+    elster_request_id: str
