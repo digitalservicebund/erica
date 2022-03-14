@@ -4,7 +4,7 @@ from ctypes import pointer, c_int
 from lib.pyeric.config import get_settings
 from lib.pyeric.eric import get_eric_wrapper, EricWrapper, EricResponse
 from lib.pyeric.pyeric_response import PyericResponse
-from src.domain.ElsterXml.xml_parsing.elster_specifics_xml_parsing import get_tax_offices, get_state_ids
+from erica.domain.ElsterXml import get_tax_offices, get_state_ids
 
 _ABRUF_CODE = get_settings().abruf_code
 _INSTANCES_FOLDER = os.path.join('erica', 'instances')

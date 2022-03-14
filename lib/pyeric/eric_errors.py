@@ -1,6 +1,6 @@
 from xml.etree.ElementTree import ParseError
 
-from src.domain.ElsterXml.xml_parsing.erica_xml_parsing import get_elements_text_from_xml, \
+from erica.domain.ElsterXml import get_elements_text_from_xml, \
     remove_declaration_and_namespace
 
 _ERIC_SUCCESS_CODE = {
