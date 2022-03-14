@@ -68,10 +68,10 @@ logs/
 abruf_code_log.txt
 
 # Eric binaries and certificates
-erica/lib/*.dylib
-erica/lib/*.so
-erica/lib/plugins2/*.dylib
-erica/lib/plugins2/*.so
-erica/instances/blueprint/cert.pfx
+erica/erica_legacy/lib/*.dylib
+erica/erica_legacy/lib/*.so
+erica/erica_legacy/lib/plugins2/*.dylib
+erica/erica_legacy/lib/plugins2/*.so
+erica/erica_legacy/instances/blueprint/cert.pfx
 
 .DS_Store
