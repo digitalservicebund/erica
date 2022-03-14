@@ -255,3 +255,10 @@ class StateAbbreviation(str, Enum):
     st = "st"
     sh = "sh"
     th = "th"
+
+    # To find the correct values case insensitively
+    @classmethod
+    def _missing_(cls, value):
+        for member in cls:
+            if member.lower() == value.lower():
+                return member
