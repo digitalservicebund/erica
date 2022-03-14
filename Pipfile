@@ -17,13 +17,13 @@ python-json-logger = "*"
 boto3 = "*"
 aiofiles = "*"
 xmltodict = "*"
-requests = "*"
 
 [dev-packages]
 pytest = "*"
 flake8 = "*"
 invoke = "*"
 xmldiff = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"
