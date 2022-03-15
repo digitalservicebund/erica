@@ -1,5 +1,7 @@
+import json
 import os
 
+import orjson as orjson
 from opyoid import Provider
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
@@ -9,8 +11,16 @@ from erica.infrastructure.sqlalchemy.EricaAuftragSchema import EricaAuftragSchem
 
 DATABASE_URL = 'postgresql://postgres:postgres@localhost/db'
 
+
+def orjson_serializer(obj):
+    """
+        Note that `orjson.dumps()` return byte array, while sqlalchemy expects string, thus `decode()` call.
+    """
+    return orjson.dumps(obj, option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_NAIVE_UTC).decode()
+
+
 uri = DATABASE_URL or os.getenv('DB_URI')
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, json_serializer=orjson_serializer, json_deserializer=orjson.loads)
 if not database_exists(engine.url):
     create_database(engine.url)
 else:

@@ -1,7 +1,9 @@
 import sqlalchemy
 from sqlalchemy import MetaData, Column, String, text, Enum
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.mutable import MutableDict
 
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.domain.Shared.Status import Status
@@ -17,7 +19,7 @@ class EricaAuftragSchema(AuditedSchemaMixin, BaseDbSchema):
                 primary_key=True,
                 server_default=text("gen_random_uuid()"), )
     type = Column(Enum(AuftragType))
-    payload = Column(sqlalchemy.types.JSON)
+    payload = Column(JSONB)
     job_id = Column(UUID(as_uuid=True))
     elster_request_id = Column(String, nullable=True)
     status = Column(Enum(Status))

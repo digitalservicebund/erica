@@ -26,6 +26,7 @@ rq = "*"
 redis = "*"
 opyoid = "*"
 injector = "*"
+orjson = "*"
 
 [dev-packages]
 pytest = "*"
