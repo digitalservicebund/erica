@@ -42,7 +42,8 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         super().__init__()
         self.freischaltcode_repository = repository
 
-    async def freischalt_code_bei_elster_beantragen_queued(self, freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
+    async def freischalt_code_bei_elster_beantragen_queued(self,
+                                                           freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,
                                       payload=FreischaltCodeBeantragenPayload.parse_obj(freischaltcode_dto),

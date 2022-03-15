@@ -13,6 +13,6 @@ class BasePayloadDto(BaseModel):
 class EricaAuftragDto(BaseModel):
     type: AuftragType
     status: Status = Status.new
-    payload: BasePayloadDto
+    payload: object
     job_id: UUID
     elster_request_id: str = None

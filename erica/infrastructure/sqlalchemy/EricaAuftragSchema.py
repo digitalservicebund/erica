@@ -1,9 +1,6 @@
-import sqlalchemy
 from sqlalchemy import MetaData, Column, String, text, Enum
-from sqlalchemy.dialects import postgresql
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.mutable import MutableDict
 
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.domain.Shared.Status import Status

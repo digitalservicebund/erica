@@ -1,7 +1,6 @@
-import json
 import os
 
-import orjson as orjson
+import orjson
 from opyoid import Provider
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
@@ -19,8 +18,12 @@ def orjson_serializer(obj):
     return orjson.dumps(obj, option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_NAIVE_UTC).decode()
 
 
+def orjson_deserializer(json):
+    return orjson.loads(json)
+
+
 uri = DATABASE_URL or os.getenv('DB_URI')
-engine = create_engine(DATABASE_URL, json_serializer=orjson_serializer, json_deserializer=orjson.loads)
+engine = create_engine(DATABASE_URL, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
 if not database_exists(engine.url):
     create_database(engine.url)
 else:

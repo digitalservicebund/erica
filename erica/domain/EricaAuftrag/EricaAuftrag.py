@@ -15,7 +15,7 @@ class BasePayload(BaseModel):
 class EricaAuftrag(BaseDomainModel[UUID]):
     type: AuftragType
     status: Status = Status.new
-    payload: BasePayload
+    payload: object
     job_id: UUID
     elster_request_id: str = None
 
