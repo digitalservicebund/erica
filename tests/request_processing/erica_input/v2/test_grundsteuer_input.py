@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from erica.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import SteuerId, Verheiratet, Person, \
     Eigentuemer
 from erica.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Ab1949, Kernsaniert, \
-    Abbruchverpflichtung, WeitereWohnraeume, WeitereWohnraeumeFlaeche, Garagen, GaragenAnzahl, Gebaeude
+    Abbruchverpflichtung, WeitereWohnraeume, WeitereWohnraeumeDetails, Garagen, GaragenAnzahl, Gebaeude
 from tests.samples.grundsteuer_sample_data import get_sample_single_person_dict, SampleGebaeude
 
 
@@ -68,11 +68,12 @@ class TestWeitereWohnraeume:
 
 class TestWeitereWohnraeumeFlaeche:
     def test_on_camel_case_should_map_to_snake_case(self):
-        input_data = {"flaeche": "42"}
+        input_data = {"anzahl": "2", "flaeche": "42"}
 
-        result = WeitereWohnraeumeFlaeche.parse_obj(input_data)
+        result = WeitereWohnraeumeDetails.parse_obj(input_data)
 
-        assert result.flaeche == "42"
+        assert result.anzahl == 2
+        assert result.flaeche == 42
 
 
 class TestGebaeude:
@@ -143,17 +144,18 @@ class TestGebaeude:
         assert result.wohnflaechen.wohnflaeche2 == 3
 
     def test_on_has_weitere_wohnraeume_but_no_ww_flaeche_should_raise_error(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche("42").with_weitere_wohnraeume().build()
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_weitere_wohnraeume().build()
 
         with pytest.raises(ValidationError):
             Gebaeude.parse_obj(gebaeude)
 
     def test_on_has_weitere_wohnraeume_and_ww_flaeche_should_parse_successfully(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_weitere_wohnraeume("24").build()
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_weitere_wohnraeume(24, 2).build()
 
         result = Gebaeude.parse_obj(gebaeude)
 
-        assert result.weitere_wohnraeume_flaeche.flaeche == "24"
+        assert result.weitere_wohnraeume_details.anzahl == 2
+        assert result.weitere_wohnraeume_details.flaeche == 24
 
     def test_on_has_garagen_but_no_anzahl_should_raise_error(self):
         gebaeude = SampleGebaeude().with_wohnflaeche("42").with_garagen().build()

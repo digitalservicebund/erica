@@ -24,8 +24,9 @@
     "weitereWohnraeume": {
       "hasWeitereWohnraeume": "true"
     },
-    "weitereWohnraeumeFlaeche": {
-      "flaeche": "24"
+    "weitereWohnraeumeDetails": {
+      "anzahl": 2,
+      "flaeche": 24
     },
     "garagen": {
       "hasGaragen": "true"

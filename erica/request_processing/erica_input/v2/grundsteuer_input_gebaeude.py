@@ -42,8 +42,9 @@ class WeitereWohnraeume(PossiblyAliasedInput):
     has_weitere_wohnraeume: bool
 
 
-class WeitereWohnraeumeFlaeche(PossiblyAliasedInput):
-    flaeche: Optional[str]
+class WeitereWohnraeumeDetails(PossiblyAliasedInput):
+    anzahl: int
+    flaeche: int
 
 
 class Garagen(PossiblyAliasedInput):
@@ -64,7 +65,7 @@ class Gebaeude(PossiblyAliasedInput):
     wohnflaeche: Optional[Wohnflaeche]
     wohnflaechen: Optional[Wohnflaechen]
     weitere_wohnraeume: WeitereWohnraeume
-    weitere_wohnraeume_flaeche: Optional[WeitereWohnraeumeFlaeche]
+    weitere_wohnraeume_details: Optional[WeitereWohnraeumeDetails]
     garagen: Garagen
     garagen_anzahl: Optional[GaragenAnzahl]
 
@@ -92,7 +93,7 @@ class Gebaeude(PossiblyAliasedInput):
 
     @root_validator
     def weitere_wohnraeume_flaeche_must_be_present_if_has_weitere_wohnraeume(cls, values):
-        v = values.get("weitere_wohnraeume_flaeche")
+        v = values.get("weitere_wohnraeume_details")
         if values.get("weitere_wohnraeume").has_weitere_wohnraeume is True and (
                 not v or not v.flaeche):
             raise ValueError("has to be set if has_weitere_wohnraeume")

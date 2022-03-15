@@ -50,10 +50,10 @@ class SampleGebaeude:
         self.dict["wohnflaechen"] = {"wohnflaeche1": wohnflaeche1, "wohnflaeche2": wohnflaeche2}
         return self
 
-    def with_weitere_wohnraeume(self, flaeche=None):
+    def with_weitere_wohnraeume(self, flaeche=0, anzahl=0):
         self.dict["weitere_wohnraeume"]["has_weitere_wohnraeume"] = True
-        if flaeche:
-            self.dict["weitere_wohnraeume_flaeche"] = {"flaeche": flaeche}
+        if anzahl > 0:
+            self.dict["weitere_wohnraeume_details"] = {"anzahl": anzahl, "flaeche": flaeche}
         return self
 
     def with_garagen(self, anzahl_garagen=None):
