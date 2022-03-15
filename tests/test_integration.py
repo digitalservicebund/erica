@@ -98,7 +98,6 @@ def full_grundsteuer_data():
     return full_data
 
 
-
 class TestV1Ping:
 
     def test_if_get_from_ping_then_return_pong(self):
@@ -111,6 +110,14 @@ class TestV1ValidTaxNumber:
 
     def test_if_get_with_valid_tax_number_and_state_then_return_true(self, full_est_data):
         valid_state = "by"
+        valid_tax_number = "19811310010"
+
+        response = requests.get(ERICA_TESTING_URL + f"/01/tax_number_validity/{valid_state}/{valid_tax_number}",)
+
+        assert response.json() == {"is_valid": True}
+
+    def test_if_get_with_valid_tax_number_and_state_uppercase_then_return_true(self, full_est_data):
+        valid_state = "BY"
         valid_tax_number = "19811310010"
 
         response = requests.get(ERICA_TESTING_URL + f"/01/tax_number_validity/{valid_state}/{valid_tax_number}",)
