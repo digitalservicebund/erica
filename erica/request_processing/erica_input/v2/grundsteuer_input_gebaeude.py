@@ -30,12 +30,12 @@ class Abbruchverpflichtungsjahr(PossiblyAliasedInput):
 
 
 class Wohnflaeche(PossiblyAliasedInput):
-    wohnflaeche: Optional[int]
+    wohnflaeche: int
 
 
 class Wohnflaechen(PossiblyAliasedInput):
-    wohnflaeche1: Optional[int]
-    wohnflaeche2: Optional[int]
+    wohnflaeche1: int
+    wohnflaeche2: int
 
 
 class WeitereWohnraeume(PossiblyAliasedInput):
@@ -52,7 +52,7 @@ class Garagen(PossiblyAliasedInput):
 
 
 class GaragenAnzahl(PossiblyAliasedInput):
-    anzahl_garagen: Optional[int]
+    anzahl_garagen: int
 
 
 class Gebaeude(PossiblyAliasedInput):
