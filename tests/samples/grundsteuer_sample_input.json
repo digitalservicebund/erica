@@ -18,8 +18,9 @@
     "abbruchverpflichtungsjahr": {
       "abbruchverpflichtungsjahr": "2030"
     },
-    "wohnflaeche": {
-      "wohnflaeche": 42
+    "wohnflaechen": {
+      "wohnflaeche1": 42,
+      "wohnflaeche2": 99
     },
     "weitereWohnraeume": {
       "hasWeitereWohnraeume": "true"

@@ -2,6 +2,7 @@ import copy
 import datetime
 
 from erica.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
 
 
 class SampleGebaeude:
@@ -66,6 +67,9 @@ class SampleGebaeude:
         return {
             **self.dict
         }
+
+    def parse(self):
+        return Gebaeude.parse_obj(self.build())
 
 
 def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_strasse=False):

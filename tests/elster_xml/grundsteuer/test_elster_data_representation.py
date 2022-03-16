@@ -7,12 +7,224 @@ from erica.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.elster_xml.grundsteuer.elster_data_representation import EAnteil, EGesetzlicherVertreter, \
     EPersonData, EGW1, ERueckuebermittlung, EVorsatz, EGrundsteuerSpecifics, EGrundsteuerData, \
     get_full_grundsteuer_data_representation, \
-    EEigentumsverh, EAngFeststellung, EEmpfangsbevollmaechtigter
+    EEigentumsverh, EAngFeststellung, EEmpfangsbevollmaechtigter, EWohnUnter60, EWohn60bis100, EWohnAb100, \
+    EAngDurchschn, EWeitereWohn, EGaragen, EAngWohn
 from erica.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Vertreter, Anteil, Person, \
     Empfangsbevollmaechtigter, Eigentuemer
+from erica.request_processing.erica_input.v2.grundsteuer_input_gebaeude import WeitereWohnraeumeDetails, GaragenAnzahl
 from tests.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
-    get_grundsteuer_sample_data, get_sample_empfangsbevollmaechtigter_dict
+    get_grundsteuer_sample_data, get_sample_empfangsbevollmaechtigter_dict, SampleGebaeude
+
+
+class TestEWohnUnter60:
+    def test_flaeche_under_60_should_set_fields(self):
+        flaechen = [59]
+
+        result = EWohnUnter60(flaechen)
+
+        assert result.E7403131 == 1
+        assert result.E7403132 == 59
+
+    def test_flaeche_60_should_retain_zeroes(self):
+        flaechen = [60]
+
+        result = EWohnUnter60(flaechen)
+
+        assert result.E7403131 == 0
+        assert result.E7403132 == 0
+
+    def test_flaechen_under_60_should_set_fields(self):
+        flaechen = [59, 1]
+
+        result = EWohnUnter60(flaechen)
+
+        assert result.E7403131 == 2
+        assert result.E7403132 == 60
+
+    def test_flaechen_one_under_60_should_set_fields(self):
+        flaechen = [59, 60]
+
+        result = EWohnUnter60(flaechen)
+
+        assert result.E7403131 == 1
+        assert result.E7403132 == 59
+
+
+class TestEWohn60bis100:
+    def test_flaeche_60_should_set_fields(self):
+        flaechen = [60]
+
+        result = EWohn60bis100(flaechen)
+
+        assert result.E7403141 == 1
+        assert result.E7403142 == 60
+
+    def test_flaeche_99_should_set_fields(self):
+        flaechen = [99]
+
+        result = EWohn60bis100(flaechen)
+
+        assert result.E7403141 == 1
+        assert result.E7403142 == 99
+
+    def test_flaeche_100_should_retain_zeroes(self):
+        flaechen = [100]
+
+        result = EWohn60bis100(flaechen)
+
+        assert result.E7403141 == 0
+        assert result.E7403142 == 0
+
+    def test_flaechen_under_100_should_set_fields(self):
+        flaechen = [99, 60]
+
+        result = EWohn60bis100(flaechen)
+
+        assert result.E7403141 == 2
+        assert result.E7403142 == 159
+
+    def test_flaechen_one_under_100_should_set_fields(self):
+        flaechen = [99, 100]
+
+        result = EWohn60bis100(flaechen)
+
+        assert result.E7403141 == 1
+        assert result.E7403142 == 99
+
+
+class TestEWohnAb100:
+    def test_flaeche_100_should_set_fields(self):
+        flaechen = [100]
+
+        result = EWohnAb100(flaechen)
+
+        assert result.E7403151 == 1
+        assert result.E7403152 == 100
+
+    def test_flaeche_99_should_retain_zeroes(self):
+        flaechen = [99]
+
+        result = EWohnAb100(flaechen)
+
+        assert result.E7403151 == 0
+        assert result.E7403152 == 0
+
+    def test_flaechen_from_100_should_set_fields(self):
+        flaechen = [100, 100]
+
+        result = EWohnAb100(flaechen)
+
+        assert result.E7403151 == 2
+        assert result.E7403152 == 200
+
+    def test_flaechen_one_under_100_should_set_fields(self):
+        flaechen = [99, 100]
+
+        result = EWohnAb100(flaechen)
+
+        assert result.E7403151 == 1
+        assert result.E7403152 == 100
+
+
+class TestEWeitereWohn:
+    def test_should_construct_from_dict_correctly(self):
+        weitere_wohnraeume = WeitereWohnraeumeDetails.parse_obj({"anzahl": 2, "flaeche": 42})
+
+        result = EWeitereWohn(weitere_wohnraeume)
+
+        assert result.E7403121 == 2
+        assert result.E7403122 == 42
+
+
+class TestEGaragen:
+    def test_should_construct_from_dict_correctly(self):
+        garagen_anzahl = GaragenAnzahl.parse_obj({"anzahl_garagen": 2})
+
+        result = EGaragen(garagen_anzahl)
+
+        assert result.E7403171 == 2
+
+
+class TestEAngDurchschn:
+    def test_wohnflaeche_under_60_should_set_others_to_none(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(59).parse()
+
+        result = EAngDurchschn(gebaeude)
+
+        assert result.Wohn_Unter60 is not None
+        assert result.Wohn_60bis100 is None
+        assert result.Wohn_ab100 is None
+
+    def test_wohnflaeche_between_60_100_should_set_others_to_none(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(99).parse()
+
+        result = EAngDurchschn(gebaeude)
+
+        assert result.Wohn_Unter60 is None
+        assert result.Wohn_60bis100 is not None
+        assert result.Wohn_ab100 is None
+
+    def test_wohnflaeche_from_100_should_set_others_to_none(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(100).parse()
+
+        result = EAngDurchschn(gebaeude)
+
+        assert result.Wohn_Unter60 is None
+        assert result.Wohn_60bis100 is None
+        assert result.Wohn_ab100 is not None
+
+    def test_on_weitere_wohnraeume_flag_true_should_set_weitere_wohnraeume(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(10).with_weitere_wohnraeume(42, 2).parse()
+
+        result = EAngDurchschn(gebaeude)
+
+        assert result.Weitere_Wohn is not None
+
+    def test_on_weitere_wohnraeume_flag_false_should_not_set_weitere_wohnraeume(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(10).with_weitere_wohnraeume(42, 2).parse()
+        gebaeude.weitere_wohnraeume.has_weitere_wohnraeume = False
+
+        result = EAngDurchschn(gebaeude)
+
+        assert result.Weitere_Wohn is None
+
+
+class TestEAngWohn:
+    def test_on_ab_1949_should_contain_baujahr(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_baujahr("1959").parse()
+
+        result = EAngWohn(gebaeude)
+
+        assert result.E7403114 == "1959"
+
+    def test_on_kenrsaniert_should_contain_kernsanierungsjahr(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_kernsanierung("1959").parse()
+
+        result = EAngWohn(gebaeude)
+
+        assert result.E7403115 == "1959"
+
+    def test_on_abbruchverpflichtung_should_contain_abbruchverpflichtungsjahr(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_abbruchverpflichtung("1959").parse()
+
+        result = EAngWohn(gebaeude)
+
+        assert result.E7403116 == "1959"
+
+    def test_on_garagen_should_contain_set_anzahl(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_garagen(2).parse()
+
+        result = EAngWohn(gebaeude)
+
+        assert result.Garagen.E7403171 == 2
+
+    def test_should_set_ang_durchschn(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).parse()
+
+        result = EAngWohn(gebaeude)
+
+        assert result.Ang_Durchschn is not None
 
 
 class TestEAnteil:
@@ -351,7 +563,7 @@ class TestEGrundsteuerSpecifics:
         assert result.GW1 == EGW1(grundsteuer_obj.eigentuemer)
         assert result.xml_attr_version == "2"
         assert result.xml_attr_xmlns == "http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2"
-        assert len(vars(result)) == 4
+        assert len(vars(result)) == 5
 
 
 class TestEGrundsteuerData:
