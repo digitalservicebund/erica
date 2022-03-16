@@ -194,14 +194,14 @@ class TestEAngWohn:
 
         assert result.E7403114 is None
 
-    def test_if_kenrsaniert_then_contain_kernsanierungsjahr(self):
+    def test_if_kernsaniert_then_contain_kernsanierungsjahr(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).with_kernsanierung("1959").parse()
 
         result = EAngWohn(gebaeude)
 
         assert result.E7403115 == "1959"
 
-    def test_if_not_kenrsaniert_then_not_contain_kernsanierungsjahr(self):
+    def test_if_not_kernsaniert_then_not_contain_kernsanierungsjahr(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).with_kernsanierung("1959").parse()
         gebaeude.kernsaniert.is_kernsaniert = False
 
