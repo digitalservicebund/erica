@@ -4,8 +4,9 @@ import pytest
 
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import EXml
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
-from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import ERueckuebermittlung, EVorsatz, EGrundsteuerSpecifics, EGrundsteuerData, \
-    get_full_grundsteuer_data_representation
+from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import ERueckuebermittlung, EVorsatz, \
+    EGrundsteuerSpecifics, EGrundsteuerData, \
+    get_full_grundsteuer_data_representation, EGW2
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EGW1
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
 
@@ -48,6 +49,7 @@ class TestEGrundsteuerSpecifics:
 
         assert result.Vorsatz == EVorsatz(grundsteuer_obj)
         assert result.GW1 == EGW1(grundsteuer_obj.eigentuemer)
+        assert result.GW2 == EGW2(grundsteuer_obj)
         assert result.xml_attr_version == "2"
         assert result.xml_attr_xmlns == "http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2"
         assert len(vars(result)) == 5
