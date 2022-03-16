@@ -198,12 +198,28 @@ class TestEAngWohn:
 
         assert result.E7403114 == "1959"
 
+    def test_on_vor_1949_should_not_contain_baujahr(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_baujahr("1959").parse()
+        gebaeude.ab1949.is_ab1949 = False
+
+        result = EAngWohn(gebaeude)
+
+        assert result.E7403114 is None
+
     def test_on_kenrsaniert_should_contain_kernsanierungsjahr(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).with_kernsanierung("1959").parse()
 
         result = EAngWohn(gebaeude)
 
         assert result.E7403115 == "1959"
+
+    def test_on_not_kenrsaniert_should_not_contain_kernsanierungsjahr(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_kernsanierung("1959").parse()
+        gebaeude.kernsaniert.is_kernsaniert = False
+
+        result = EAngWohn(gebaeude)
+
+        assert result.E7403115 is None
 
     def test_on_abbruchverpflichtung_should_contain_abbruchverpflichtungsjahr(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).with_abbruchverpflichtung("1959").parse()
@@ -212,12 +228,28 @@ class TestEAngWohn:
 
         assert result.E7403116 == "1959"
 
+    def test_on_no_abbruchverpflichtung_should_not_contain_abbruchverpflichtungsjahr(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_abbruchverpflichtung("1959").parse()
+        gebaeude.abbruchverpflichtung.has_abbruchverpflichtung = False
+
+        result = EAngWohn(gebaeude)
+
+        assert result.E7403116 is None
+
     def test_on_garagen_should_contain_set_anzahl(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).with_garagen(2).parse()
 
         result = EAngWohn(gebaeude)
 
         assert result.Garagen.E7403171 == 2
+
+    def test_on_no_garagen_should_contain_not_contain_garagen(self):
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_garagen(2).parse()
+        gebaeude.garagen.has_garagen = False
+
+        result = EAngWohn(gebaeude)
+
+        assert result.Garagen is None
 
     def test_should_set_ang_durchschn(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).parse()
