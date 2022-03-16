@@ -5,16 +5,16 @@ from sqlalchemy.orm import Session
 
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.Repositories.EricaRequestRepositoryInterface import EricaRequestRepositoryInterface
-from erica.infrastructure.sqlalchemy.EricaAuftragSchema import EricaAuftragSchema
+from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
 from erica.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository
 
 
 class EricaRequestRepository(
-    BaseRepository[EricaAuftrag, EricaAuftragSchema],
+    BaseRepository[EricaAuftrag, EricaRequestSchema],
     EricaRequestRepositoryInterface,
     ABC
 ):
     def __init__(self, db_connection: Session = injector.inject(Session)):
         super().__init__(db_connection)
-        self.DatabaseEntity = EricaAuftragSchema
+        self.DatabaseEntity = EricaRequestSchema
         self.DomainModel = EricaAuftrag

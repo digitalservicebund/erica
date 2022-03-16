@@ -14,7 +14,7 @@ from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInte
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRevocatePayload
 from erica.domain.Shared.EricaAuftrag import AuftragType
-from erica.infrastructure.InfrastructureModule import InfrastructureModule
+from erica.infrastructure.infrastructure_module import InfrastructureModule
 from erica.infrastructure.rq.RqModule import RqModule
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 

@@ -10,7 +10,7 @@ metadata = MetaData()
 BaseDbSchema = declarative_base()
 
 
-class EricaAuftragSchema(AuditedSchemaMixin, BaseDbSchema):
+class EricaRequestSchema(AuditedSchemaMixin, BaseDbSchema):
     __tablename__ = 'erica_auftrag'
     id = Column(UUID(as_uuid=True),
                 primary_key=True,

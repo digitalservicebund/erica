@@ -2,7 +2,7 @@ from opyoid import Module
 
 from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface, EricaAuftragService
 from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService, FreischaltCodeServiceInterface
-from erica.infrastructure.InfrastructureModule import InfrastructureModule
+from erica.infrastructure.infrastructure_module import InfrastructureModule
 
 
 class ApplicationModule(Module):
