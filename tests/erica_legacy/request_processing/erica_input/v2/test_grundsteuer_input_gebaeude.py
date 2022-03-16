@@ -7,7 +7,7 @@ from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGebaeude
 
 
 class TestAb1949:
-    def test_if_camel_case_then_map_to_snake_case(self):
+    def test_if_valid_input_then_set_fields(self):
         input_data = {"isAb1949": True}
 
         result = Ab1949.parse_obj(input_data)
@@ -16,7 +16,7 @@ class TestAb1949:
 
 
 class TestAbbruchverpflichtung:
-    def test_if_camel_case_then_map_to_snake_case(self):
+    def test_if_valid_input_then_set_fields(self):
         input_data = {"hasAbbruchverpflichtung": True}
 
         result = Abbruchverpflichtung.parse_obj(input_data)
@@ -25,7 +25,7 @@ class TestAbbruchverpflichtung:
 
 
 class TestGaragen:
-    def test_if_camel_case_then_map_to_snake_case(self):
+    def test_if_valid_input_then_set_fields(self):
         input_data = {"hasGaragen": True}
 
         result = Garagen.parse_obj(input_data)
@@ -34,7 +34,7 @@ class TestGaragen:
 
 
 class TestGaragenAnzahl:
-    def test_if_camel_case_then_map_to_snake_case(self):
+    def test_if_valid_input_then_set_fields(self):
         input_data = {"anzahlGaragen": 3}
 
         result = GaragenAnzahl.parse_obj(input_data)
@@ -43,7 +43,7 @@ class TestGaragenAnzahl:
 
 
 class TestKernsaniert:
-    def test_if_camel_case_then_map_to_snake_case(self):
+    def test_if_valid_input_then_set_fields(self):
         input_data = {"isKernsaniert": True}
 
         result = Kernsaniert.parse_obj(input_data)
@@ -52,8 +52,8 @@ class TestKernsaniert:
 
 
 class TestWeitereWohnraeume:
-    def test_if_camel_case_then_map_to_snake_case(self):
-        input_data = {"has_weitere_wohnraeume": True}
+    def test_if_valid_input_then_set_fields(self):
+        input_data = {"hasWeitereWohnraeume": True}
 
         result = WeitereWohnraeume.parse_obj(input_data)
 
@@ -61,7 +61,7 @@ class TestWeitereWohnraeume:
 
 
 class TestWeitereWohnraeumeDetails:
-    def test_if_camel_case_then_map_to_snake_case(self):
+    def test_if_valid_input_then_set_fields(self):
         input_data = {"anzahl": "2", "flaeche": "42"}
 
         result = WeitereWohnraeumeDetails.parse_obj(input_data)
