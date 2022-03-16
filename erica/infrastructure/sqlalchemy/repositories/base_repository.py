@@ -7,6 +7,12 @@ from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInte
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
 from erica.infrastructure.sqlalchemy.EricaAuftragSchema import BaseDbSchema
 
+
+class EntityNotFoundError(Exception):
+    """ Raised in case an entity could not be found in the database"""
+    pass
+
+
 T = TypeVar('T', bound=BaseDomainModel)
 D = TypeVar('D', bound=BaseDbSchema)
 
@@ -31,18 +37,27 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
         return result
 
     def get_by_id(self, entity_id: UUID) -> T:
-        result = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
-        return self.DomainModel.from_orm(result)
+        entity = self._get_by_id(entity_id).first()
+        if entity is None:
+            raise EntityNotFoundError
+        return self.DomainModel.from_orm(entity)
+
+    def _get_by_id(self, entity_id: UUID):
+        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
+        return entity
 
     def update(self, entity_id: UUID, model: BaseModel) -> T:
-        current = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
+        current = self._get_by_id(entity_id)
         current.update(model.dict())
         self.db_connection.commit()
-        updated = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
+
+        updated = self.get_by_id(entity_id)
         return self.DomainModel.from_orm(updated)
 
-    def delete(self, entity_id: UUID) -> bool:
-        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
+    def delete(self, entity_id: UUID):
+        entity = self._get_by_id(entity_id).first()
+        if entity is None:
+            raise EntityNotFoundError
+
         self.db_connection.delete(entity)
         self.db_connection.commit()
-        return True

@@ -1,5 +1,3 @@
-import os
-
 import orjson
 from opyoid import Provider
 from sqlalchemy_utils import database_exists, create_database
@@ -8,8 +6,6 @@ from sqlalchemy.orm import sessionmaker, Session
 
 from erica.erica_legacy.config import get_settings
 from erica.infrastructure.sqlalchemy.EricaAuftragSchema import EricaAuftragSchema
-
-DATABASE_URL = get_settings().database_url
 
 
 def orjson_serializer(obj):
@@ -23,7 +19,8 @@ def orjson_deserializer(json):
     return orjson.loads(json)
 
 
-engine = create_engine(DATABASE_URL, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
+
+engine = create_engine(get_settings().database_url, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
 if not database_exists(engine.url):
     create_database(engine.url)
 else:
