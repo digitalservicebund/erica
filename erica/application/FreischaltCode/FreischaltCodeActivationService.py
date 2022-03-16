@@ -16,7 +16,7 @@ from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePay
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.infrastructure.InfrastructureModule import InfrastructureModule
 from erica.infrastructure.rq.RqModule import RqModule
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
+from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 injector = Injector([InfrastructureModule(), RqModule()])
 
@@ -36,9 +36,9 @@ class FreischaltCodeActivationServiceInterface:
 
 
 class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
-    freischaltcode_repository: EricaAuftragRepository
+    freischaltcode_repository: EricaRequestRepository
 
-    def __init__(self, repository: EricaAuftragRepository = injector.inject(EricaAuftragRepository)) -> None:
+    def __init__(self, repository: EricaRequestRepository = injector.inject(EricaRequestRepository)) -> None:
         super().__init__()
         self.freischaltcode_repository = repository
 

@@ -11,10 +11,10 @@ from erica.domain.Shared.Status import Status
 async def request_freischalt_code(entity_id):
     from erica.api.ApiModule import ApiModule
     from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeServiceInterface
-    from erica.domain.Repositories.EricaAuftragRepositoryInterface import EricaAuftragRepositoryInterface
+    from erica.domain.Repositories.EricaRequestRepositoryInterface import EricaRequestRepositoryInterface
 
     injector = Injector([ApiModule()])
-    repository = injector.inject(EricaAuftragRepositoryInterface)
+    repository = injector.inject(EricaRequestRepositoryInterface)
     service = injector.inject(FreischaltCodeServiceInterface)
     entity = repository.get_by_id(entity_id)
     request = FreischaltCodeBeantragenDto.parse_obj(entity.payload)

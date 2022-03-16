@@ -13,11 +13,11 @@ class BackgroundJobRq(BackgroundJobInterface):
     def scheduled_enqueue(self):
         pass
 
-    def get_enqueued_job_by_id(self):
-        pass
+    def get_enqueued_job_by_id(self, job_id):
+        return self.__queue.fetch_job(job_id)
 
     def list_all_jobs(self):
-        pass
+        return self.__queue
 
     def enqueue(self, f, *args, **kwargs):
 
@@ -25,7 +25,7 @@ class BackgroundJobRq(BackgroundJobInterface):
          depends_on, job_id, at_front, meta, retry, on_success,
          on_failure, pipeline, args, kwargs) = Queue.parse_args(f, *args, **kwargs)
 
-        self.__queue.enqueue(
+        return self.__queue.enqueue(
             f=f, args=args, kwargs=kwargs, timeout=timeout,
             result_ttl=result_ttl, ttl=ttl, failure_ttl=failure_ttl,
             description=description, depends_on=depends_on, job_id=job_id,

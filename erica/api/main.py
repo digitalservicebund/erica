@@ -11,7 +11,7 @@ from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCod
 from erica.infrastructure.sqlalchemy.database import run_migrations
 from fastapi_versioning import VersionedFastAPI, version
 
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
+from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 run_migrations()
 app = FastAPI(
@@ -30,7 +30,7 @@ injector = Injector([
 @app.get("/erica_auftraege")
 @version(1, 0)
 async def get_erica_auftrag_status_list(skip: int, limit: int):
-    repo: EricaAuftragRepository = injector.inject(EricaAuftragRepository)
+    repo: EricaRequestRepository = injector.inject(EricaRequestRepository)
     return repo.get(skip, limit)
 
 

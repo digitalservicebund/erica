@@ -13,7 +13,7 @@ class BackgroundJobInterface:
         pass
 
     @abstractmethod
-    def get_enqueued_job_by_id(self):
+    def get_enqueued_job_by_id(self, job_id):
         pass
 
     @abstractmethod
