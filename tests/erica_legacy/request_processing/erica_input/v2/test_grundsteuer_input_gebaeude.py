@@ -62,7 +62,7 @@ class TestWeitereWohnraeume:
 
 class TestWeitereWohnraeumeDetails:
     def test_if_valid_input_then_set_fields(self):
-        input_data = {"anzahl": "2", "flaeche": "42"}
+        input_data = {"anzahl": 2, "flaeche": 42}
 
         result = WeitereWohnraeumeDetails.parse_obj(input_data)
 
@@ -72,7 +72,7 @@ class TestWeitereWohnraeumeDetails:
 
 class TestGebaeude:
     def test_if_is_ab1949_but_no_baujahr_then_raise_error(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche("42").with_baujahr().build()
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_baujahr().build()
 
         with pytest.raises(ValidationError):
             Gebaeude.parse_obj(gebaeude)
@@ -152,7 +152,7 @@ class TestGebaeude:
         assert result.weitere_wohnraeume_details.flaeche == 24
 
     def test_if_has_garagen_but_no_anzahl_then_raise_error(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche("42").with_garagen().build()
+        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_garagen().build()
 
         with pytest.raises(ValidationError):
             Gebaeude.parse_obj(gebaeude)
