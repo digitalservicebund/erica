@@ -25,8 +25,7 @@ class FreischaltCodeRequestServiceInterface:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    async def queue_request(self,
-                            reischaltcode_dto: FreischaltCodeRequestDto) -> EricaAuftragDto:
+    async def queue(self, reischaltcode_dto: FreischaltCodeRequestDto) -> EricaAuftragDto:
         pass
 
     @abstractmethod
@@ -41,7 +40,7 @@ class FreischaltCodeRequestService(FreischaltCodeRequestServiceInterface):
         super().__init__()
         self.freischaltcode_repository = repository
 
-    async def queue_request(self,
+    async def queue(self,
                                                            freischaltcode_dto: FreischaltCodeRequestDto) -> EricaAuftragDto:
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,

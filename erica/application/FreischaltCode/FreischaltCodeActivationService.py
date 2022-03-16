@@ -9,7 +9,7 @@ from erica.application.EricRequestProcessing.erica_input.v1.erica_input import U
 from erica.application.EricRequestProcessing.requests_controller import UnlockCodeActivationRequestController
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeActivateDto
-from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code
+from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload
@@ -25,13 +25,11 @@ class FreischaltCodeActivationServiceInterface:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def freischalt_code_bei_elster_aktivieren_queued(self,
-                                                     freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
+    async def queue(self, freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
         pass
 
     @abstractmethod
-    def freischalt_code_bei_elster_aktivieren(self, freischaltcode_dto: FreischaltCodeActivateDto,
-                                              include_elster_responses: bool):
+    async def activate(self, freischaltcode_dto: FreischaltCodeActivateDto, include_elster_responses: bool):
         pass
 
 
@@ -42,12 +40,12 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
         super().__init__()
         self.freischaltcode_repository = repository
 
-    async def freischalt_code_bei_elster_aktivieren_queued(self, freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
+    async def queue(self, freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,
                                       payload=FreischaltCodeActivatePayload.parse_obj(freischaltcode_dto),
-                                      created_at=datetime.datetime.now().__str__(),
-                                      updated_at=datetime.datetime.now().__str__(),
+                                      created_at=datetime.datetime.now(),
+                                      updated_at=datetime.datetime.now(),
                                       creator_id="api",
                                       type=AuftragType.freischalt_code_activate
                                       )
@@ -55,7 +53,7 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
         created = self.freischaltcode_repository.create(freischaltcode)
         background_worker = injector.inject(BackgroundJobInterface)
 
-        background_worker.enqueue(request_freischalt_code,
+        background_worker.enqueue(activate_freischalt_code,
                                   created.id,
                                   retry=Retry(max=3, interval=1),
                                   job_id=job_id.__str__()
@@ -63,7 +61,7 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
 
         return EricaAuftragDto.parse_obj(created)
 
-    async def freischalt_code_bei_elster_aktivieren(self, freischaltcode_dto: FreischaltCodeActivateDto,
+    async def activate(self, freischaltcode_dto: FreischaltCodeActivateDto,
                                                     include_elster_responses: bool = False):
         request = UnlockCodeActivationRequestController(UnlockCodeActivationData.parse_obj(
             {"idnr": freischaltcode_dto.tax_ident, "unlock_code": freischaltcode_dto.freischalt_code,

@@ -6,6 +6,7 @@ from erica.api.ApiModule import ApiModule
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface
 from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto
+from erica.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationServiceInterface
 
 from erica.application.FreischaltCode.FreischaltCodeRequestService import FreischaltCodeRequestServiceInterface
 from erica.infrastructure.sqlalchemy.database import run_migrations
@@ -45,14 +46,14 @@ async def get_erica_auftrag_status(auftrag_id: UUID):
 @version(1, 0)
 async def request_freischalt_code(freischalt_code_request_dto: FreischaltCodeRequestDto):
     freischalt_code_service: FreischaltCodeRequestServiceInterface = injector.inject(FreischaltCodeRequestServiceInterface)
-    result = await freischalt_code_service.queue_request(freischalt_code_request_dto)
+    result = await freischalt_code_service.queue(freischalt_code_request_dto)
     return result
 
 @app.post("/freischalt_code/activate", response_model=EricaAuftragDto)
 @version(1, 0)
 async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeRequestDto):
-    freischalt_code_service: FreischaltCodeRequestServiceInterface = injector.inject(FreischaltCodeRequestServiceInterface)
-    result = await freischalt_code_service.queue_request(freischalt_code_activate_dto)
+    freischalt_code_service: FreischaltCodeActivationServiceInterface = injector.inject(FreischaltCodeActivationServiceInterface)
+    result = await freischalt_code_service.queue(freischalt_code_activate_dto)
     return result
 
 app = VersionedFastAPI(app)

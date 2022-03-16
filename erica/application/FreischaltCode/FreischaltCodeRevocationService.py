@@ -25,12 +25,12 @@ class FreischaltCodeRevocationServiceInterface:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def freischalt_code_bei_elster_deaktivieren_queued(self,
+    def queue(self,
                                                        freischaltcode_dto: FreischaltCodeRevocateDto) -> EricaAuftragDto:
         pass
 
     @abstractmethod
-    def freischalt_code_bei_elster_deaktivieren(self, freischaltcode_dto: FreischaltCodeRevocateDto,
+    def deactivate(self, freischaltcode_dto: FreischaltCodeRevocateDto,
                                                 include_elster_responses: bool):
         pass
 
@@ -42,8 +42,7 @@ class FreischaltCodeRevocationService(FreischaltCodeRevocationServiceInterface):
         super().__init__()
         self.freischaltcode_repository = repository
 
-    async def freischalt_code_bei_elster_deaktivieren_queued(self,
-                                                             freischaltcode_dto: FreischaltCodeRevocateDto) -> EricaAuftragDto:
+    async def queue(self, freischaltcode_dto: FreischaltCodeRevocateDto) -> EricaAuftragDto:
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,
                                       payload=FreischaltCodeRevocatePayload.parse_obj(freischaltcode_dto),
@@ -64,7 +63,7 @@ class FreischaltCodeRevocationService(FreischaltCodeRevocationServiceInterface):
 
         return EricaAuftragDto.parse_obj(created)
 
-    async def freischalt_code_bei_elster_deaktivieren(self, freischaltcode_dto: FreischaltCodeRevocateDto,
+    async def deactivate(self, freischaltcode_dto: FreischaltCodeRevocateDto,
                                                       include_elster_responses: bool = False):
         request = UnlockCodeRevocationRequestController(UnlockCodeRevocationData.parse_obj(
             {"idnr": freischaltcode_dto.tax_ident, "elster_request_id": freischaltcode_dto.elster_request_id}),
