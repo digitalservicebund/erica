@@ -1,6 +1,6 @@
-from erica.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer
-from erica.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
-from erica.request_processing.erica_input.v2.possibly_aliased_input import PossiblyAliasedInput
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
+from erica.erica_legacy.request_processing.erica_input.v2.possibly_aliased_input import PossiblyAliasedInput
 
 
 class GrundsteuerData(PossiblyAliasedInput):
