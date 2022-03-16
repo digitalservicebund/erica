@@ -1,4 +1,5 @@
 from abc import ABCMeta
+from typing import Optional
 from uuid import UUID
 
 from pydantic.main import BaseModel
@@ -17,7 +18,7 @@ class EricaAuftrag(BaseDomainModel[UUID]):
     status: Status = Status.new
     payload: object
     job_id: UUID
-    elster_request_id: str = None
+    elster_request_id: Optional[str] = None
 
     class Config:
         orm_mode = True

@@ -14,7 +14,7 @@ class AuditedModel(BaseModel):
 
 
 class BaseDomainModel(AuditedModel, Generic[DataT]):
-    id: Optional[DataT]
+    id: Optional[DataT] = None
 
     class Config:
         orm_mode = True

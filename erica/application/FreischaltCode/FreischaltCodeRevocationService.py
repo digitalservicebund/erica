@@ -47,8 +47,8 @@ class FreischaltCodeRevocationService(FreischaltCodeRevocationServiceInterface):
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,
                                       payload=FreischaltCodeRevocatePayload.parse_obj(freischaltcode_dto),
-                                      created_at=datetime.datetime.now().__str__(),
-                                      updated_at=datetime.datetime.now().__str__(),
+                                      created_at=datetime.datetime.now(),
+                                      updated_at=datetime.datetime.now(),
                                       creator_id="api",
                                       type=AuftragType.freischalt_code_revocate
                                       )

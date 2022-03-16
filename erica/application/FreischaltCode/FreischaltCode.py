@@ -7,7 +7,7 @@ class BaseDto(BaseModel):
     pass
 
 
-class FreischaltCodeBeantragenDto(BaseDto):
+class FreischaltCodeRequestDto(BaseDto):
     tax_ident: str
     date_of_birth: date
 
