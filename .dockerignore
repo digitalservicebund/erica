@@ -1,2 +1,6 @@
 Dockerfile
 tests/
+
+# Allow integration tests
+!tests/test_integration.py
+!tests/conftest.py
