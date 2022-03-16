@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -30,6 +30,7 @@ orjson = "*"
 
 [dev-packages]
 pytest = "*"
+fakeredis = "*"
 flake8 = "*"
 invoke = "*"
 xmldiff = "*"
