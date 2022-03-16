@@ -68,7 +68,3 @@ class FreischaltCodeRequestService(FreischaltCodeRequestServiceInterface):
             {"idnr": freischaltcode_dto.tax_ident, "dob": freischaltcode_dto.date_of_birth}), include_elster_responses)
         return request.process()
 
-
-class FreischaltCodeRequestServiceModule(Module):
-    def configure(self) -> None:
-        self.bind(FreischaltCodeRequestServiceInterface, to_class=FreischaltCodeRequestService)

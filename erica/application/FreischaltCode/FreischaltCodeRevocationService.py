@@ -69,8 +69,3 @@ class FreischaltCodeRevocationService(FreischaltCodeRevocationServiceInterface):
             {"idnr": freischaltcode_dto.tax_ident, "elster_request_id": freischaltcode_dto.elster_request_id}),
             include_elster_responses)
         return request.process()
-
-
-class FreischaltCodeRevocationServiceModule(Module):
-    def configure(self) -> None:
-        self.bind(FreischaltCodeRevocationServiceInterface, to_class=FreischaltCodeRevocationService)

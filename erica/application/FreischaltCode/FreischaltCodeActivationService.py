@@ -68,8 +68,3 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
              "elster_request_id": freischaltcode_dto.elster_request_id}),
             include_elster_responses)
         return request.process()
-
-
-class FreischaltCodeActivationServiceModule(Module):
-    def configure(self) -> None:
-        self.bind(FreischaltCodeActivationServiceInterface, to_class=FreischaltCodeActivationService)
