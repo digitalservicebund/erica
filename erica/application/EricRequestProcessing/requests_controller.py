@@ -6,6 +6,7 @@ from lib.pyeric.pyeric_controller import EstValidationPyericProcessController, E
     UnlockCodeRevocationPyericProcessController, CheckTaxNumberPyericController, BelegIdRequestPyericProcessController, \
     BelegRequestPyericProcessController, DecryptBelegePyericController
 from lib.pyeric.pyeric_response import PyericResponse
+from lib.pyeric.config import get_settings
 from erica.application.EricRequestProcessing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.application.EricRequestProcessing.erica_input.v1.erica_input import EstData, UnlockCodeRequestData
 from erica.domain.ElsterXml import elster_xml_generator
@@ -175,10 +176,6 @@ class UnlockCodeRevocationRequestController(TransferTicketRequestController):
         response = super().generate_json(pyeric_response)
         response["elster_request_id"] = get_antrag_id_from_xml(pyeric_response.server_response)
         return response
-
-
-def get_settings():
-    pass
 
 
 class CheckTaxNumberRequestController:

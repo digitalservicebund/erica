@@ -33,5 +33,3 @@ async def request_freischalt_code(entity_id):
         raise
 
     logging.getLogger().info("Unlock code Request Success. For Entity Id " + entity.id.__str__(), exc_info=True)
-
-    return
