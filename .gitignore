@@ -75,3 +75,5 @@ erica/erica_legacy/lib/plugins2/*.so
 erica/erica_legacy/instances/blueprint/cert.pfx
 
 .DS_Store
+/lib/pyeric/eric-lib/
+/lib/pyeric/lib/
