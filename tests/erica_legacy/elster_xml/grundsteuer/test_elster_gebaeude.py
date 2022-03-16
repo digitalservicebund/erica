@@ -179,19 +179,21 @@ class TestEAngDurchschn:
 
 
 class TestEAngWohn:
-    def test_if_ab_1949_then_contain_baujahr(self):
+    def test_if_ab_1949_then_contain_baujahr_but_not_flag(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).with_baujahr("1959").parse()
 
         result = EAngWohn(gebaeude)
 
+        assert result.E7403113 is None
         assert result.E7403114 == "1959"
 
-    def test_if_vor_1949_then_not_contain_baujahr(self):
+    def test_if_vor_1949_then_contain_flag_but_not_baujahr(self):
         gebaeude = SampleGebaeude().with_wohnflaeche(42).with_baujahr("1959").parse()
         gebaeude.ab1949.is_ab1949 = False
 
         result = EAngWohn(gebaeude)
 
+        assert result.E7403113 == 1
         assert result.E7403114 is None
 
     def test_if_kernsaniert_then_contain_kernsanierungsjahr(self):
