@@ -60,7 +60,7 @@ class TestWeitereWohnraeume:
         assert result.has_weitere_wohnraeume is True
 
 
-class TestWeitereWohnraeumeFlaeche:
+class TestWeitereWohnraeumeDetails:
     def test_if_camel_case_then_map_to_snake_case(self):
         input_data = {"anzahl": "2", "flaeche": "42"}
 
