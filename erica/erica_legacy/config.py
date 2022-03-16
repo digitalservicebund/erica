@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     queue_host: str = Field("localhost", env='QUEUE_HOST')
     queue_port: int = Field(6379, env='QUEUE_PORT')
     default_queues: List[str] = ['dongle', 'cert', 'common']
-    database_url: str = Field("sqlite:///dev.db", env="ERICA_DATABASE_URL")
+    database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
 
     class Config:
         dir = os.path.dirname(__file__)
