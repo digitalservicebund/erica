@@ -2,60 +2,60 @@ from typing import Optional
 
 from pydantic import root_validator
 
-from erica.erica_legacy.request_processing.erica_input.v2.possibly_aliased_input import PossiblyAliasedInput
+from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input import CamelCaseInput
 
 
-class Ab1949(PossiblyAliasedInput):
+class Ab1949(CamelCaseInput):
     is_ab1949: bool
 
 
-class Baujahr(PossiblyAliasedInput):
+class Baujahr(CamelCaseInput):
     baujahr: str
 
 
-class Kernsaniert(PossiblyAliasedInput):
+class Kernsaniert(CamelCaseInput):
     is_kernsaniert: bool
 
 
-class Kernsanierungsjahr(PossiblyAliasedInput):
+class Kernsanierungsjahr(CamelCaseInput):
     kernsanierungsjahr: str
 
 
-class Abbruchverpflichtung(PossiblyAliasedInput):
+class Abbruchverpflichtung(CamelCaseInput):
     has_abbruchverpflichtung: bool
 
 
-class Abbruchverpflichtungsjahr(PossiblyAliasedInput):
+class Abbruchverpflichtungsjahr(CamelCaseInput):
     abbruchverpflichtungsjahr: str
 
 
-class Wohnflaeche(PossiblyAliasedInput):
+class Wohnflaeche(CamelCaseInput):
     wohnflaeche: int
 
 
-class Wohnflaechen(PossiblyAliasedInput):
+class Wohnflaechen(CamelCaseInput):
     wohnflaeche1: int
     wohnflaeche2: int
 
 
-class WeitereWohnraeume(PossiblyAliasedInput):
+class WeitereWohnraeume(CamelCaseInput):
     has_weitere_wohnraeume: bool
 
 
-class WeitereWohnraeumeDetails(PossiblyAliasedInput):
+class WeitereWohnraeumeDetails(CamelCaseInput):
     anzahl: int
     flaeche: int
 
 
-class Garagen(PossiblyAliasedInput):
+class Garagen(CamelCaseInput):
     has_garagen: bool
 
 
-class GaragenAnzahl(PossiblyAliasedInput):
+class GaragenAnzahl(CamelCaseInput):
     anzahl_garagen: int
 
 
-class Gebaeude(PossiblyAliasedInput):
+class Gebaeude(CamelCaseInput):
     ab1949: Ab1949
     baujahr: Optional[Baujahr]
     kernsaniert: Kernsaniert

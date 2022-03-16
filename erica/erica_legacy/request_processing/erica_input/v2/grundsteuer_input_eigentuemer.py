@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from pydantic import validator
 
-from erica.erica_legacy.request_processing.erica_input.v2.possibly_aliased_input import PossiblyAliasedInput
+from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input import CamelCaseInput
 
 
 class Anrede(str, Enum):
@@ -13,7 +13,7 @@ class Anrede(str, Enum):
     frau = 'frau'
 
 
-class Name(PossiblyAliasedInput):
+class Name(CamelCaseInput):
     anrede: Anrede
     titel: Optional[str]
     name: str
@@ -24,7 +24,7 @@ class PersoenlicheAngaben(Name):
     geburtsdatum: Optional[date]
 
 
-class Adresse(PossiblyAliasedInput):
+class Adresse(CamelCaseInput):
     strasse: Optional[str]
     hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
@@ -33,30 +33,30 @@ class Adresse(PossiblyAliasedInput):
     ort: str
 
 
-class Telefonnummer(PossiblyAliasedInput):
+class Telefonnummer(CamelCaseInput):
     telefonnummer: str
 
 
-class SteuerId(PossiblyAliasedInput):
+class SteuerId(CamelCaseInput):
     steuer_id: str
 
 
-class Vertreter(PossiblyAliasedInput):
+class Vertreter(CamelCaseInput):
     name: Name
     adresse: Adresse
     telefonnummer: Optional[Telefonnummer]
 
 
-class Anteil(PossiblyAliasedInput):
+class Anteil(CamelCaseInput):
     zaehler: str
     nenner: str
 
 
-class Verheiratet(PossiblyAliasedInput):
+class Verheiratet(CamelCaseInput):
     are_verheiratet: bool
 
 
-class Person(PossiblyAliasedInput):
+class Person(CamelCaseInput):
     persoenlicheAngaben: PersoenlicheAngaben
     adresse: Adresse
     telefonnummer: Optional[Telefonnummer]
@@ -65,13 +65,13 @@ class Person(PossiblyAliasedInput):
     anteil: Anteil
 
 
-class Empfangsbevollmaechtigter(PossiblyAliasedInput):
+class Empfangsbevollmaechtigter(CamelCaseInput):
     name: Name
     adresse: Adresse
     telefonnummer: Optional[Telefonnummer]
 
 
-class Eigentuemer(PossiblyAliasedInput):
+class Eigentuemer(CamelCaseInput):
     person: List[Person]
     verheiratet: Optional[Verheiratet]
     empfangsbevollmaechtigter: Optional[Empfangsbevollmaechtigter]
