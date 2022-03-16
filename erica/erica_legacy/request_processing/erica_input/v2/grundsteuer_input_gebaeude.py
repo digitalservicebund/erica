@@ -10,7 +10,7 @@ class Ab1949(PossiblyAliasedInput):
 
 
 class Baujahr(PossiblyAliasedInput):
-    baujahr: Optional[str]
+    baujahr: str
 
 
 class Kernsaniert(PossiblyAliasedInput):
@@ -18,7 +18,7 @@ class Kernsaniert(PossiblyAliasedInput):
 
 
 class Kernsanierungsjahr(PossiblyAliasedInput):
-    kernsanierungsjahr: Optional[str]
+    kernsanierungsjahr: str
 
 
 class Abbruchverpflichtung(PossiblyAliasedInput):
@@ -26,7 +26,7 @@ class Abbruchverpflichtung(PossiblyAliasedInput):
 
 
 class Abbruchverpflichtungsjahr(PossiblyAliasedInput):
-    abbruchverpflichtungsjahr: Optional[str]
+    abbruchverpflichtungsjahr: str
 
 
 class Wohnflaeche(PossiblyAliasedInput):
@@ -71,40 +71,42 @@ class Gebaeude(PossiblyAliasedInput):
 
     @root_validator
     def baujahr_must_be_present_if_ab_1949(cls, values):
-        v = values.get("baujahr")
-        if values.get("ab1949").is_ab1949 is True and (not v or not v.baujahr):
-            raise ValueError('has to be set if is_ab1949')
+        field_name = "baujahr"
+        v = values.get(field_name)
+        if values.get("ab1949").is_ab1949 is True and not v:
+            raise ValueError(f"{field_name} has to be set if is_ab1949")
         return values
 
     @root_validator
     def kernsanierungsjahr_must_be_present_if_kernsaniert(cls, values):
-        v = values.get("kernsanierungsjahr")
-        if values.get('kernsaniert').is_kernsaniert is True and (not v or not v.kernsanierungsjahr):
-            raise ValueError('has to be set if is_kernsaniert')
+        field_name = "kernsanierungsjahr"
+        v = values.get(field_name)
+        if values.get('kernsaniert').is_kernsaniert is True and not v:
+            raise ValueError(f"{field_name} has to be set if is_kernsaniert")
         return values
 
     @root_validator
     def abbruchverpflichtungsjahr_must_be_present_if_has_abbruchverpflichtung(cls, values):
-        v = values.get("abbruchverpflichtungsjahr")
-        if values.get("abbruchverpflichtung").has_abbruchverpflichtung is True and (
-                    not v or not v.abbruchverpflichtungsjahr):
-            raise ValueError("has to be set if has_abbruchverpflichtung")
+        field_name = "abbruchverpflichtungsjahr"
+        v = values.get(field_name)
+        if values.get("abbruchverpflichtung").has_abbruchverpflichtung is True and not v:
+            raise ValueError(f"{field_name} has to be set if has_abbruchverpflichtung")
         return values
 
     @root_validator
-    def weitere_wohnraeume_flaeche_must_be_present_if_has_weitere_wohnraeume(cls, values):
-        v = values.get("weitere_wohnraeume_details")
-        if values.get("weitere_wohnraeume").has_weitere_wohnraeume is True and (
-                not v or not v.flaeche):
-            raise ValueError("has to be set if has_weitere_wohnraeume")
+    def weitere_wohnraeume_details_must_be_present_if_has_weitere_wohnraeume(cls, values):
+        field_name = "weitere_wohnraeume_details"
+        v = values.get(field_name)
+        if values.get("weitere_wohnraeume").has_weitere_wohnraeume is True and not v:
+            raise ValueError(f"{field_name} has to be set if has_weitere_wohnraeume")
         return values
 
     @root_validator
     def garagen_anzahl_must_be_present_if_has_garagen(cls, values):
-        v = values.get("garagen_anzahl")
-        if values.get("garagen").has_garagen is True and (
-                not v or not v.anzahl_garagen):
-            raise ValueError("has to be set if has_garagen")
+        field_name = "garagen_anzahl"
+        v = values.get(field_name)
+        if values.get("garagen").has_garagen is True and not v:
+            raise ValueError(f"{field_name} has to be set if has_garagen")
         return values
 
     @root_validator
