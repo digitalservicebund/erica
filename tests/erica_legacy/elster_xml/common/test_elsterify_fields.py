@@ -3,7 +3,7 @@ import datetime
 import pytest
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import Anrede
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede
 
 
 class TestElsterifyAnrede:
