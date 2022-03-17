@@ -76,7 +76,7 @@ class EricWrapper(object):
     ERIC_SENDE = 1 << 2
     ERIC_DRUCKE = 1 << 5
 
-    cert_path = get_settings().get_cert_path().encode()
+    cert_path = (os.getcwd() +"/" + get_settings().get_cert_path()).encode()
     cert_pin = get_settings().cert_pin
 
     def __init__(self):
@@ -96,8 +96,7 @@ class EricWrapper(object):
         fun_init.restype = c_void_p
 
         curr_dir = os.path.dirname(os.path.realpath(__file__))
-        plugin_path = c_char_p(os.path.join(curr_dir, "../lib/plugins2").encode())
-
+        plugin_path = c_char_p(os.path.join(curr_dir, "./lib/plugins2").encode())
         log_path = c_char_p(log_path.encode() if log_path else None)
 
         self.eric_instance = fun_init(plugin_path, log_path)

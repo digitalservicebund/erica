@@ -15,7 +15,7 @@ class UnknownEricaEnvironment(Exception):
 class Settings(BaseSettings):
     send_file_max_age_default: int = 60
     cert_pin: str = Field("123456", env='CERT_PIN')
-    cert_path: str = 'erica/instances/blueprint/cert.pfx'
+    cert_path: str = 'erica_legacy/instances/blueprint/cert.pfx'
     using_stick: bool = True
     use_testmerker: bool = True
     accept_test_bufa: bool = False
