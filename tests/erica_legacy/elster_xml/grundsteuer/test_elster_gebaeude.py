@@ -13,6 +13,7 @@ class TestEWohnUnter60:
 
         assert result.E7403131 == 1
         assert result.E7403132 == 59
+        assert len(vars(result)) == 2
 
     def test_if_flaeche_60_then_retain_zeroes(self):
         flaechen = [60]
@@ -47,6 +48,7 @@ class TestEWohn60bis100:
 
         assert result.E7403141 == 1
         assert result.E7403142 == 60
+        assert len(vars(result)) == 2
 
     def test_if_flaeche_99_then_set_fields(self):
         flaechen = [99]
@@ -89,6 +91,7 @@ class TestEWohnAb100:
 
         assert result.E7403151 == 1
         assert result.E7403152 == 100
+        assert len(vars(result)) == 2
 
     def test_if_flaeche_99_then_retain_zeroes(self):
         flaechen = [99]
@@ -123,6 +126,7 @@ class TestEWeitereWohn:
 
         assert result.E7403121 == 2
         assert result.E7403122 == 42
+        assert len(vars(result)) == 2
 
 
 class TestEGaragen:
@@ -132,9 +136,17 @@ class TestEGaragen:
         result = EGaragen(garagen_anzahl)
 
         assert result.E7403171 == 2
+        assert len(vars(result)) == 1
 
 
 class TestEAngDurchschn:
+    def test_contains_4_fields(self):
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).parse()
+
+        result = EAngDurchschn(gebaeude)
+
+        assert len(vars(result)) == 4
+
     def test_if_wohnflaeche_under_60_then_set_others_to_none(self):
         gebaeude = SampleGebaeude().with_wohnflaechen(59).parse()
 
@@ -179,6 +191,13 @@ class TestEAngDurchschn:
 
 
 class TestEAngWohn:
+    def test_contains_6_fields(self):
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_baujahr("1959").parse()
+
+        result = EAngWohn(gebaeude)
+
+        assert len(vars(result)) == 6
+
     def test_if_ab_1949_then_contain_baujahr_but_not_flag(self):
         gebaeude = SampleGebaeude().with_wohnflaechen(42).with_baujahr("1959").parse()
 
