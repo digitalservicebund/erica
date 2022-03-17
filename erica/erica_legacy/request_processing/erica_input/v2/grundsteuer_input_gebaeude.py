@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import root_validator
+from pydantic import root_validator, validator
 
 from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input import CamelCaseInput
 
@@ -69,45 +69,35 @@ class Gebaeude(CamelCaseInput):
     garagen: Garagen
     garagen_anzahl: Optional[GaragenAnzahl]
 
-    @root_validator
-    def baujahr_must_be_present_if_ab_1949(cls, values):
-        field_name = "baujahr"
-        v = values.get(field_name)
+    @validator("baujahr", always=True)
+    def baujahr_must_be_present_if_ab_1949(cls, v, values):
         if values.get("ab1949").is_ab1949 is True and not v:
-            raise ValueError(f"{field_name} has to be set if is_ab1949")
-        return values
+            raise ValueError("has to be set if is_ab1949")
+        return v
 
-    @root_validator
-    def kernsanierungsjahr_must_be_present_if_kernsaniert(cls, values):
-        field_name = "kernsanierungsjahr"
-        v = values.get(field_name)
+    @validator("kernsanierungsjahr", always=True)
+    def kernsanierungsjahr_must_be_present_if_kernsaniert(cls, v, values):
         if values.get('kernsaniert').is_kernsaniert is True and not v:
-            raise ValueError(f"{field_name} has to be set if is_kernsaniert")
-        return values
+            raise ValueError("has to be set if is_kernsaniert")
+        return v
 
-    @root_validator
-    def abbruchverpflichtungsjahr_must_be_present_if_has_abbruchverpflichtung(cls, values):
-        field_name = "abbruchverpflichtungsjahr"
-        v = values.get(field_name)
+    @validator("abbruchverpflichtungsjahr", always=True)
+    def abbruchverpflichtungsjahr_must_be_present_if_has_abbruchverpflichtung(cls, v, values):
         if values.get("abbruchverpflichtung").has_abbruchverpflichtung is True and not v:
-            raise ValueError(f"{field_name} has to be set if has_abbruchverpflichtung")
-        return values
+            raise ValueError("has to be set if has_abbruchverpflichtung")
+        return v
 
-    @root_validator
-    def weitere_wohnraeume_details_must_be_present_if_has_weitere_wohnraeume(cls, values):
-        field_name = "weitere_wohnraeume_details"
-        v = values.get(field_name)
+    @validator("weitere_wohnraeume_details", always=True)
+    def weitere_wohnraeume_details_must_be_present_if_has_weitere_wohnraeume(cls, v, values):
         if values.get("weitere_wohnraeume").has_weitere_wohnraeume is True and not v:
-            raise ValueError(f"{field_name} has to be set if has_weitere_wohnraeume")
-        return values
+            raise ValueError("has to be set if has_weitere_wohnraeume")
+        return v
 
-    @root_validator
-    def garagen_anzahl_must_be_present_if_has_garagen(cls, values):
-        field_name = "garagen_anzahl"
-        v = values.get(field_name)
+    @validator("garagen_anzahl", always=True)
+    def garagen_anzahl_must_be_present_if_has_garagen(cls, v, values):
         if values.get("garagen").has_garagen is True and not v:
-            raise ValueError(f"{field_name} has to be set if has_garagen")
-        return values
+            raise ValueError("has to be set if has_garagen")
+        return v
 
     @root_validator
     def must_contain_exactly_one_of_wohnflaechen_wohnflaeche(cls, values):
