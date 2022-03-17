@@ -37,8 +37,7 @@ class FreischaltCodeRequestService(FreischaltCodeRequestServiceInterface):
         self.freischaltcode_repository = freischaltcode_repository
         self.background_worker = background_worker
 
-    async def queue(self,
-                                                           freischaltcode_dto: FreischaltCodeRequestDto) -> EricaAuftragDto:
+    async def queue(self, freischaltcode_dto: FreischaltCodeRequestDto) -> EricaAuftragDto:
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,
                                       payload=FreischaltCodeRequestPayload.parse_obj(freischaltcode_dto),
