@@ -61,28 +61,26 @@ class EWeitereWohn:
 
 @dataclass
 class EAngDurchschn:
-    Wohn_Unter60: Optional[EWohnUnter60] = None
-    Wohn_60bis100: Optional[EWohn60bis100] = None
-    Wohn_ab100: Optional[EWohnAb100] = None
-    Weitere_Wohn: Optional[EWeitereWohn] = None
+    Wohn_Unter60: Optional[EWohnUnter60]
+    Wohn_60bis100: Optional[EWohn60bis100]
+    Wohn_ab100: Optional[EWohnAb100]
+    Weitere_Wohn: Optional[EWeitereWohn]
 
     def __init__(self, input_data: GebaeudeInput):
         flaechen: List[int] = input_data.wohnflaechen
 
-        wohn_unter60 = EWohnUnter60(flaechen)
-        if wohn_unter60.E7403131 > 0:
-            self.Wohn_Unter60 = wohn_unter60
+        flaechen_unter60 = list(filter(lambda f: f < 60, flaechen))
+        flaechen_60bis100 = list(filter(lambda f: 60 <= f < 100, flaechen))
+        flaechen_ab100 = list(filter(lambda f: f >= 100, flaechen))
 
-        wohn_60bis100 = EWohn60bis100(flaechen)
-        if wohn_60bis100.E7403141 > 0:
-            self.Wohn_60bis100 = wohn_60bis100
-
-        wohn_ab100 = EWohnAb100(flaechen)
-        if wohn_ab100.E7403151 > 0:
-            self.Wohn_ab100 = wohn_ab100
+        self.Wohn_Unter60 = EWohnUnter60(flaechen_unter60) if flaechen_unter60 else None
+        self.Wohn_60bis100 = EWohn60bis100(flaechen_60bis100) if flaechen_60bis100 else None
+        self.Wohn_ab100 = EWohnAb100(flaechen_ab100) if flaechen_ab100 else None
 
         if input_data.weitere_wohnraeume.has_weitere_wohnraeume:
             self.Weitere_Wohn = EWeitereWohn(input_data.weitere_wohnraeume_details)
+        else:
+            self.Weitere_Wohn = None
 
 
 @dataclass
