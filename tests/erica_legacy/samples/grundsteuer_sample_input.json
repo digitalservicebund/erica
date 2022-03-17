@@ -18,10 +18,10 @@
     "abbruchverpflichtungsjahr": {
       "abbruchverpflichtungsjahr": "2030"
     },
-    "wohnflaechen": {
-      "wohnflaeche1": 42,
-      "wohnflaeche2": 99
-    },
+    "wohnflaechen": [
+      42,
+      99
+    ],
     "weitereWohnraeume": {
       "hasWeitereWohnraeume": "true"
     },

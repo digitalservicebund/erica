@@ -67,12 +67,7 @@ class EAngDurchschn:
     Weitere_Wohn: Optional[EWeitereWohn] = None
 
     def __init__(self, input_data: GebaeudeInput):
-        flaechen: List[int] = []
-        if input_data.wohnflaeche:
-            flaechen.append(input_data.wohnflaeche.wohnflaeche)
-        elif input_data.wohnflaechen:
-            flaechen.append(input_data.wohnflaechen.wohnflaeche1)
-            flaechen.append(input_data.wohnflaechen.wohnflaeche2)
+        flaechen: List[int] = input_data.wohnflaechen
 
         wohn_unter60 = EWohnUnter60(flaechen)
         if wohn_unter60.E7403131 > 0:

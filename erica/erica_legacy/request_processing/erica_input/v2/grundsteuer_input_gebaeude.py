@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 
-from pydantic import root_validator, validator
+from pydantic import validator
 
 from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input import CamelCaseInput
 
@@ -29,15 +29,6 @@ class Abbruchverpflichtungsjahr(CamelCaseInput):
     abbruchverpflichtungsjahr: str
 
 
-class Wohnflaeche(CamelCaseInput):
-    wohnflaeche: int
-
-
-class Wohnflaechen(CamelCaseInput):
-    wohnflaeche1: int
-    wohnflaeche2: int
-
-
 class WeitereWohnraeume(CamelCaseInput):
     has_weitere_wohnraeume: bool
 
@@ -62,8 +53,7 @@ class Gebaeude(CamelCaseInput):
     kernsanierungsjahr: Optional[Kernsanierungsjahr]
     abbruchverpflichtung: Abbruchverpflichtung
     abbruchverpflichtungsjahr: Optional[Abbruchverpflichtungsjahr]
-    wohnflaeche: Optional[Wohnflaeche]
-    wohnflaechen: Optional[Wohnflaechen]
+    wohnflaechen: List[int]
     weitere_wohnraeume: WeitereWohnraeume
     weitere_wohnraeume_details: Optional[WeitereWohnraeumeDetails]
     garagen: Garagen
@@ -99,8 +89,3 @@ class Gebaeude(CamelCaseInput):
             raise ValueError("has to be set if has_garagen")
         return v
 
-    @root_validator
-    def must_contain_exactly_one_of_wohnflaechen_wohnflaeche(cls, values):
-        if bool(values.get("wohnflaeche")) == bool(values.get('wohnflaechen')):
-            raise ValueError('exactly one of wohnflaeche and wohnflaeche must be present')
-        return values

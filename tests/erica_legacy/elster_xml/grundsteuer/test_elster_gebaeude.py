@@ -136,7 +136,7 @@ class TestEGaragen:
 
 class TestEAngDurchschn:
     def test_if_wohnflaeche_under_60_then_set_others_to_none(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(59).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(59).parse()
 
         result = EAngDurchschn(gebaeude)
 
@@ -145,7 +145,7 @@ class TestEAngDurchschn:
         assert result.Wohn_ab100 is None
 
     def test_if_wohnflaeche_between_60_100_then_set_others_to_none(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(99).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(99).parse()
 
         result = EAngDurchschn(gebaeude)
 
@@ -154,7 +154,7 @@ class TestEAngDurchschn:
         assert result.Wohn_ab100 is None
 
     def test_if_wohnflaeche_from_100_then_set_others_to_none(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(100).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(100).parse()
 
         result = EAngDurchschn(gebaeude)
 
@@ -163,14 +163,14 @@ class TestEAngDurchschn:
         assert result.Wohn_ab100 == EWohnAb100([100])
 
     def test_if_weitere_wohnraeume_flag_true_then_set_weitere_wohnraeume(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(10).with_weitere_wohnraeume(42, 2).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(10).with_weitere_wohnraeume(42, 2).parse()
 
         result = EAngDurchschn(gebaeude)
 
         assert result.Weitere_Wohn is not None
 
     def test_if_weitere_wohnraeume_flag_false_then_not_set_weitere_wohnraeume(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(10).with_weitere_wohnraeume(42, 2).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(10).with_weitere_wohnraeume(42, 2).parse()
         gebaeude.weitere_wohnraeume.has_weitere_wohnraeume = False
 
         result = EAngDurchschn(gebaeude)
@@ -180,7 +180,7 @@ class TestEAngDurchschn:
 
 class TestEAngWohn:
     def test_if_ab_1949_then_contain_baujahr_but_not_flag(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_baujahr("1959").parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_baujahr("1959").parse()
 
         result = EAngWohn(gebaeude)
 
@@ -188,7 +188,7 @@ class TestEAngWohn:
         assert result.E7403114 == "1959"
 
     def test_if_vor_1949_then_contain_flag_but_not_baujahr(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_baujahr("1959").parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_baujahr("1959").parse()
         gebaeude.ab1949.is_ab1949 = False
 
         result = EAngWohn(gebaeude)
@@ -197,14 +197,14 @@ class TestEAngWohn:
         assert result.E7403114 is None
 
     def test_if_kernsaniert_then_contain_kernsanierungsjahr(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_kernsanierung("1959").parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_kernsanierung("1959").parse()
 
         result = EAngWohn(gebaeude)
 
         assert result.E7403115 == "1959"
 
     def test_if_not_kernsaniert_then_not_contain_kernsanierungsjahr(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_kernsanierung("1959").parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_kernsanierung("1959").parse()
         gebaeude.kernsaniert.is_kernsaniert = False
 
         result = EAngWohn(gebaeude)
@@ -212,14 +212,14 @@ class TestEAngWohn:
         assert result.E7403115 is None
 
     def test_if_abbruchverpflichtung_then_contain_abbruchverpflichtungsjahr(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_abbruchverpflichtung("1959").parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_abbruchverpflichtung("1959").parse()
 
         result = EAngWohn(gebaeude)
 
         assert result.E7403116 == "1959"
 
     def test_if_no_abbruchverpflichtung_then_not_contain_abbruchverpflichtungsjahr(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_abbruchverpflichtung("1959").parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_abbruchverpflichtung("1959").parse()
         gebaeude.abbruchverpflichtung.has_abbruchverpflichtung = False
 
         result = EAngWohn(gebaeude)
@@ -227,14 +227,14 @@ class TestEAngWohn:
         assert result.E7403116 is None
 
     def test_if_garagen_then_set_anzahl(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_garagen(2).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_garagen(2).parse()
 
         result = EAngWohn(gebaeude)
 
         assert result.Garagen.E7403171 == 2
 
     def test_if_no_garagen_then_not_contain_garagen(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).with_garagen(2).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).with_garagen(2).parse()
         gebaeude.garagen.has_garagen = False
 
         result = EAngWohn(gebaeude)
@@ -242,7 +242,7 @@ class TestEAngWohn:
         assert result.Garagen is None
 
     def test_if_valid_input_then_set_ang_durchschn(self):
-        gebaeude = SampleGebaeude().with_wohnflaeche(42).parse()
+        gebaeude = SampleGebaeude().with_wohnflaechen(42).parse()
 
         result = EAngWohn(gebaeude)
 

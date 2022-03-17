@@ -43,12 +43,8 @@ class SampleGebaeude:
             self.dict["abbruchverpflichtungsjahr"] = {"abbruchverpflichtungsjahr": abbruchverpflichtungsjahr}
         return self
 
-    def with_wohnflaeche(self, wohnflaeche):
-        self.dict["wohnflaeche"] = {"wohnflaeche": wohnflaeche}
-        return self
-
-    def with_wohnflaechen(self, wohnflaeche1, wohnflaeche2):
-        self.dict["wohnflaechen"] = {"wohnflaeche1": wohnflaeche1, "wohnflaeche2": wohnflaeche2}
+    def with_wohnflaechen(self, *wohnflaechen: int):
+        self.dict["wohnflaechen"] = list(wohnflaechen)
         return self
 
     def with_weitere_wohnraeume(self, flaeche=0, anzahl=0):
@@ -254,7 +250,7 @@ def get_sample_single_person_dict(complete=True, with_vertreter=True, only_postf
 
 
 def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse=False, with_empfangsvollmacht=False):
-    valid_gebaeude = SampleGebaeude().with_wohnflaeche(42).build()
+    valid_gebaeude = SampleGebaeude().with_wohnflaechen(42).build()
     valid_person_data = {
         "person": [
             get_sample_single_person_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
