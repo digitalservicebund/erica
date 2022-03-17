@@ -1,14 +1,39 @@
 from dataclasses import dataclass
+from typing import List, Optional
 
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, construct_basic_xml_data_representation
-from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EGW1
+from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
+    EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import \
+    Eigentuemer as EigentuemerInput
 
 """
     The content of the Grundsteuer Nutzdaten XML as its data prepresentation.
     The classes are prefixed with "E" for "Elster".
 """
+
+
+@dataclass
+class EGW1:
+    Ang_Feststellung: EAngFeststellung
+    Eigentuemer: List[EPersonData]
+    Eigentumsverh: EEigentumsverh
+    Empfangsv: Optional[EEmpfangsbevollmaechtigter]
+
+    def __init__(self, input_data: EigentuemerInput):
+        self.Ang_Feststellung = EAngFeststellung()
+        self.Eigentuemer = []
+        for index, input_eigentuemer in enumerate(input_data.person):
+            new_eigentuemer = EPersonData(input_eigentuemer, index)
+            self.Eigentuemer.append(new_eigentuemer)
+        self.Eigentumsverh = EEigentumsverh(input_data)
+
+        if hasattr(input_data, "empfangsbevollmaechtigter") and input_data.empfangsbevollmaechtigter:
+            self.Empfangsv = EEmpfangsbevollmaechtigter(input_data.empfangsbevollmaechtigter)
+        else:
+            self.Empfangsv = None
 
 
 @dataclass

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import Optional
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
@@ -152,24 +152,3 @@ class EEmpfangsbevollmaechtigter:
             self.E7412201 = input_data.telefonnummer.telefonnummer
         else:
             self.E7412201 = None
-
-
-@dataclass
-class EGW1:
-    Ang_Feststellung: EAngFeststellung
-    Eigentuemer: List[EPersonData]
-    Eigentumsverh: EEigentumsverh
-    Empfangsv: Optional[EEmpfangsbevollmaechtigter]
-
-    def __init__(self, input_data: EigentuemerInput):
-        self.Ang_Feststellung = EAngFeststellung()
-        self.Eigentuemer = []
-        for index, input_eigentuemer in enumerate(input_data.person):
-            new_eigentuemer = EPersonData(input_eigentuemer, index)
-            self.Eigentuemer.append(new_eigentuemer)
-        self.Eigentumsverh = EEigentumsverh(input_data)
-
-        if hasattr(input_data, "empfangsbevollmaechtigter") and input_data.empfangsbevollmaechtigter:
-            self.Empfangsv = EEmpfangsbevollmaechtigter(input_data.empfangsbevollmaechtigter)
-        else:
-            self.Empfangsv = None

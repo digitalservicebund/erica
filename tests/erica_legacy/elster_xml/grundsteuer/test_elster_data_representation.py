@@ -6,9 +6,59 @@ from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import E
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import ERueckuebermittlung, EVorsatz, \
     EGrundsteuerSpecifics, EGrundsteuerData, \
-    get_full_grundsteuer_data_representation, EGW2
-from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EGW1
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
+    get_full_grundsteuer_data_representation, EGW2, EGW1
+from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
+    EEmpfangsbevollmaechtigter
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer, Person
+from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data, \
+    get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict
+
+
+class TestEGW1:
+    def test_if_one_person_then_attributes_set_correctly(self):
+        person = get_sample_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [person], "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict()})
+
+        result = EGW1(eigentuemer_obj)
+
+        assert result.Ang_Feststellung == EAngFeststellung()
+        assert len(result.Eigentuemer) == 1
+        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
+        assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
+        assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
+        assert len(vars(result)) == 4
+
+    def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
+        person = get_sample_single_person_dict()
+        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
+
+        result = EGW1(eigentuemer_obj)
+
+        assert result.Ang_Feststellung == EAngFeststellung()
+        assert len(result.Eigentuemer) == 1
+        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
+        assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
+        assert result.Empfangsv is None
+        assert len(vars(result)) == 4
+
+    def test_if_two_persons_then_attributes_set_correctly(self):
+        person1 = get_sample_single_person_dict()
+        person1["persoenlicheAngaben"]["vorname"] = "Albus"
+        person2 = get_sample_single_person_dict()
+        person2["persoenlicheAngaben"]["vorname"] = "Rubeus"
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
+
+        result = EGW1(eigentuemer_obj)
+
+        assert result.Ang_Feststellung == EAngFeststellung()
+        assert len(result.Eigentuemer) == 2
+        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
+        assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
+        assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
+        assert result.Empfangsv is None
+        assert len(vars(result)) == 4
 
 
 class TestERueckuebermittlung:
