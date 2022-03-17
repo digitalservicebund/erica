@@ -1,5 +1,5 @@
 import copy
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock, call
 
 import pytest
 from fakeredis import FakeStrictRedis
@@ -16,18 +16,6 @@ def async_fake_redis_queue():
 @pytest.fixture()
 def sync_fake_redis_queue():
     return Queue(is_async=False, connection=FakeStrictRedis())
-
-
-@pytest.fixture()
-def mocked_queue():
-    class MockQueue(Queue, list):
-        call_list = []
-
-        @classmethod
-        def enqueue(cls, *args, **kwargs):
-            cls.call_list.append([*args, {**kwargs}])
-
-    return MockQueue
 
 
 class PickableMock(Mock):
@@ -55,7 +43,7 @@ class TestBackgroundJobRqEnqueue:
         assert len(fake_job.mock_calls) == 1
         assert job.is_finished
 
-    def test_if_job_enqueued_with_arguments_then_queue_is_called_with_arguments(self, mocked_queue):
+    def test_if_job_enqueued_with_arguments_then_queue_is_called_with_arguments(self):
         fake_job = PickableMock()
         args = [1939, "First Batman comic"]
         input_kwargs = {'job_timeout': None, 'description': 'description', 'result_ttl': 12, 'ttl': 12,
@@ -64,11 +52,12 @@ class TestBackgroundJobRqEnqueue:
         additional_kwargs = {'author': 'Bill Finger and Bob Kane'}
         expected_kwargs = copy.deepcopy(input_kwargs)
         expected_kwargs['timeout'] = expected_kwargs.pop('job_timeout')
-        background_job_rq = BackgroundJobRq(queue=mocked_queue)
+        queue = MagicMock()
+        background_job_rq = BackgroundJobRq(queue=queue)
 
         background_job_rq.enqueue(fake_job, *args, **input_kwargs, **additional_kwargs)
 
-        assert background_job_rq._BackgroundJobRq__queue.call_list == [[{'f': fake_job, 'args': tuple(args), **expected_kwargs, 'kwargs': {**additional_kwargs}}]]
+        assert queue.enqueue.mock_calls == [call(args=tuple(args), f=fake_job, **expected_kwargs, kwargs={**additional_kwargs})]
 
 
 class TestTestBackgroundJobRqGetJobById:
