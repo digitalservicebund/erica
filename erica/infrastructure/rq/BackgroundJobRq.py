@@ -1,4 +1,5 @@
 from rq import Queue
+from rq.job import Job
 
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.infrastructure.rq.queue import dongle_queue
@@ -19,7 +20,7 @@ class BackgroundJobRq(BackgroundJobInterface):
     def list_all_jobs(self):
         return self.__queue
 
-    def enqueue(self, f, *args, **kwargs):
+    def enqueue(self, f, *args, **kwargs) -> Job:
 
         (f, timeout, description, result_ttl, ttl, failure_ttl,
          depends_on, job_id, at_front, meta, retry, on_success,
