@@ -1,6 +1,5 @@
 from abc import ABC
 
-import injector as injector
 from sqlalchemy.orm import Session
 
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
@@ -14,7 +13,7 @@ class EricaAuftragRepository(
     EricaAuftragRepositoryInterface,
     ABC
 ):
-    def __init__(self, db_connection: Session = injector.inject(Session)):
+    def __init__(self, db_connection: Session):
         super().__init__(db_connection)
         self.DatabaseEntity = EricaAuftragSchema
         self.DomainModel = EricaAuftrag
