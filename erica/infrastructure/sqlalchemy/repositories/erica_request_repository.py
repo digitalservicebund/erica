@@ -14,7 +14,7 @@ class EricaRequestRepository(
     EricaRequestRepositoryInterface,
     ABC
 ):
-    def __init__(self, db_connection: Session = injector.inject(Session)):
+    def __init__(self, db_connection: Session):
         super().__init__(db_connection)
         self.DatabaseEntity = EricaRequestSchema
         self.DomainModel = EricaAuftrag
