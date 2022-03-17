@@ -14,11 +14,7 @@ from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInte
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload
 from erica.domain.Shared.EricaAuftrag import AuftragType
-from erica.infrastructure.InfrastructureModule import InfrastructureModule
-from erica.infrastructure.rq.RqModule import RqModule
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
-
-injector = Injector([InfrastructureModule(), RqModule()])
 
 
 class FreischaltCodeRequestServiceInterface:
@@ -34,11 +30,15 @@ class FreischaltCodeRequestServiceInterface:
 
 
 class FreischaltCodeRequestService(FreischaltCodeRequestServiceInterface):
+    injector: Injector
     freischaltcode_repository: EricaAuftragRepository
+    background_worker: BackgroundJobInterface
 
-    def __init__(self, repository: EricaAuftragRepository = injector.inject(EricaAuftragRepository)) -> None:
+    def __init__(self, injector: Injector) -> None:
         super().__init__()
-        self.freischaltcode_repository = repository
+        self.injector = injector
+        self.freischaltcode_repository = injector.inject(EricaAuftragRepository)
+        self.background_worker = injector.inject(BackgroundJobInterface)
 
     async def queue(self,
                                                            freischaltcode_dto: FreischaltCodeRequestDto) -> EricaAuftragDto:
@@ -52,9 +52,8 @@ class FreischaltCodeRequestService(FreischaltCodeRequestServiceInterface):
                                       )
 
         created = self.freischaltcode_repository.create(freischaltcode)
-        background_worker = injector.inject(BackgroundJobInterface)
 
-        background_worker.enqueue(request_freischalt_code,
+        self.background_worker.enqueue(request_freischalt_code,
                                   created.id,
                                   retry=Retry(max=3, interval=1),
                                   job_id=job_id.__str__()

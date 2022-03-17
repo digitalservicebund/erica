@@ -2,7 +2,7 @@ import datetime
 from abc import abstractmethod, ABCMeta
 from uuid import uuid4
 
-from opyoid import Injector, Module
+from opyoid import Injector
 from rq import Retry
 
 from erica.application.EricRequestProcessing.erica_input.v1.erica_input import UnlockCodeActivationData
@@ -14,11 +14,7 @@ from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInte
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload
 from erica.domain.Shared.EricaAuftrag import AuftragType
-from erica.infrastructure.InfrastructureModule import InfrastructureModule
-from erica.infrastructure.rq.RqModule import RqModule
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
-
-injector = Injector([InfrastructureModule(), RqModule()])
 
 
 class FreischaltCodeActivationServiceInterface:
@@ -34,11 +30,15 @@ class FreischaltCodeActivationServiceInterface:
 
 
 class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
+    injector: Injector
     freischaltcode_repository: EricaAuftragRepository
+    background_worker: BackgroundJobInterface
 
-    def __init__(self, repository: EricaAuftragRepository = injector.inject(EricaAuftragRepository)) -> None:
+    def __init__(self, injector: Injector) -> None:
         super().__init__()
-        self.freischaltcode_repository = repository
+        self.injector = injector
+        self.freischaltcode_repository = injector.inject(EricaAuftragRepository)
+        self.background_worker = self.injector.inject(BackgroundJobInterface)
 
     async def queue(self, freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
         job_id = uuid4()
@@ -51,9 +51,8 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
                                       )
 
         created = self.freischaltcode_repository.create(freischaltcode)
-        background_worker = injector.inject(BackgroundJobInterface)
 
-        background_worker.enqueue(activate_freischalt_code,
+        self.background_worker.enqueue(activate_freischalt_code,
                                   created.id,
                                   retry=Retry(max=3, interval=1),
                                   job_id=job_id.__str__()

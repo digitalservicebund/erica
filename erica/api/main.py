@@ -5,7 +5,7 @@ from opyoid import Injector
 from erica.api.ApiModule import ApiModule
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto
+from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeActivateDto, FreischaltCodeRequestDto
 from erica.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationServiceInterface
 
 from erica.application.FreischaltCode.FreischaltCodeRequestService import FreischaltCodeRequestServiceInterface
@@ -51,7 +51,7 @@ async def request_freischalt_code(freischalt_code_request_dto: FreischaltCodeReq
 
 @app.post("/freischalt_code/activate", response_model=EricaAuftragDto)
 @version(1, 0)
-async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeRequestDto):
+async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeActivateDto):
     freischalt_code_service: FreischaltCodeActivationServiceInterface = injector.inject(FreischaltCodeActivationServiceInterface)
     result = await freischalt_code_service.queue(freischalt_code_activate_dto)
     return result
