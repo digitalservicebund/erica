@@ -4,6 +4,7 @@ from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServi
 from erica.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationServiceInterface, FreischaltCodeActivationService
 from erica.application.FreischaltCode.FreischaltCodeRequestService import FreischaltCodeRequestService, FreischaltCodeRequestServiceInterface
 from erica.infrastructure.InfrastructureModule import InfrastructureModule
+from erica.infrastructure.rq.RqModule import RqModule
 
 
 class ApplicationModule(Module):
@@ -12,3 +13,4 @@ class ApplicationModule(Module):
         self.bind(FreischaltCodeActivationServiceInterface, to_class=FreischaltCodeActivationService)
         self.bind(EricaAuftragServiceInterface, to_class=EricaAuftragService)
         self.install(InfrastructureModule())
+        self.install(RqModule())

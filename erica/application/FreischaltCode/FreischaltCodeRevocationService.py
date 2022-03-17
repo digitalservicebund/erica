@@ -2,7 +2,6 @@ import datetime
 from abc import abstractmethod, ABCMeta
 from uuid import uuid4
 
-from opyoid import Injector, Module
 from rq import Retry
 
 from erica.application.EricRequestProcessing.erica_input.v1.erica_input import UnlockCodeRevocationData
@@ -31,15 +30,13 @@ class FreischaltCodeRevocationServiceInterface:
 
 
 class FreischaltCodeRevocationService(FreischaltCodeRevocationServiceInterface):
-    injector: Injector
     freischaltcode_repository: EricaAuftragRepository
     background_worker: BackgroundJobInterface
         
-    def __init__(self, injector: Injector) -> None:
+    def __init__(self, freischaltcode_repository: EricaAuftragRepository, background_worker: BackgroundJobInterface) -> None:
         super().__init__()
-        self.injector = injector
-        self.freischaltcode_repository = injector.inject(EricaAuftragRepository)
-        self.background_worker = injector.inject(BackgroundJobInterface)
+        self.freischaltcode_repository = freischaltcode_repository
+        self.background_worker = background_worker
         
     async def queue(self, freischaltcode_dto: FreischaltCodeRevocateDto) -> EricaAuftragDto:
         job_id = uuid4()
