@@ -20,9 +20,8 @@ class EWohnUnter60:
 
     def __init__(self, flaechen: List[int]):
         for flaeche in flaechen:
-            if flaeche < 60:
-                self.E7403131 += 1
-                self.E7403132 += flaeche
+            self.E7403131 += 1
+            self.E7403132 += flaeche
 
 
 @dataclass
@@ -32,9 +31,8 @@ class EWohn60bis100:
 
     def __init__(self, flaechen: List[int]):
         for flaeche in flaechen:
-            if 60 <= flaeche < 100:
-                self.E7403141 += 1
-                self.E7403142 += flaeche
+            self.E7403141 += 1
+            self.E7403142 += flaeche
 
 
 @dataclass
@@ -44,9 +42,8 @@ class EWohnAb100:
 
     def __init__(self, flaechen: List[int]):
         for flaeche in flaechen:
-            if flaeche >= 100:
-                self.E7403151 += 1
-                self.E7403152 += flaeche
+            self.E7403151 += 1
+            self.E7403152 += flaeche
 
 
 @dataclass

@@ -6,7 +6,15 @@ from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGebaeude
 
 
 class TestEWohnUnter60:
-    def test_if_flaeche_under_60_then_set_fields(self):
+    def test_if_empty_input_then_retain_zeroes(self):
+        flaechen = []
+
+        result = EWohnUnter60(flaechen)
+
+        assert result.E7403131 == 0
+        assert result.E7403132 == 0
+
+    def test_if_single_flaeche_then_set_fields(self):
         flaechen = [59]
 
         result = EWohnUnter60(flaechen)
@@ -15,15 +23,7 @@ class TestEWohnUnter60:
         assert result.E7403132 == 59
         assert len(vars(result)) == 2
 
-    def test_if_flaeche_60_then_retain_zeroes(self):
-        flaechen = [60]
-
-        result = EWohnUnter60(flaechen)
-
-        assert result.E7403131 == 0
-        assert result.E7403132 == 0
-
-    def test_if_flaechen_under_60_then_set_fields(self):
+    def test_if_multiple_flaechen_then_calculate_fields(self):
         flaechen = [59, 1]
 
         result = EWohnUnter60(flaechen)
@@ -31,17 +31,17 @@ class TestEWohnUnter60:
         assert result.E7403131 == 2
         assert result.E7403132 == 60
 
-    def test_if_flaechen_one_under_60_then_set_fields(self):
-        flaechen = [59, 60]
-
-        result = EWohnUnter60(flaechen)
-
-        assert result.E7403131 == 1
-        assert result.E7403132 == 59
-
 
 class TestEWohn60bis100:
-    def test_if_flaeche_60_then_set_fields(self):
+    def test_if_empty_input_then_retain_zeroes(self):
+        flaechen = []
+
+        result = EWohn60bis100(flaechen)
+
+        assert result.E7403141 == 0
+        assert result.E7403142 == 0
+
+    def test_if_single_flaeche_then_set_fields(self):
         flaechen = [60]
 
         result = EWohn60bis100(flaechen)
@@ -50,23 +50,7 @@ class TestEWohn60bis100:
         assert result.E7403142 == 60
         assert len(vars(result)) == 2
 
-    def test_if_flaeche_99_then_set_fields(self):
-        flaechen = [99]
-
-        result = EWohn60bis100(flaechen)
-
-        assert result.E7403141 == 1
-        assert result.E7403142 == 99
-
-    def test_if_flaeche_100_then_retain_zeroes(self):
-        flaechen = [100]
-
-        result = EWohn60bis100(flaechen)
-
-        assert result.E7403141 == 0
-        assert result.E7403142 == 0
-
-    def test_if_flaechen_under_100_then_set_fields(self):
+    def test_if_multiple_flaechen_then_calculate_fields(self):
         flaechen = [99, 60]
 
         result = EWohn60bis100(flaechen)
@@ -74,17 +58,17 @@ class TestEWohn60bis100:
         assert result.E7403141 == 2
         assert result.E7403142 == 159
 
-    def test_if_flaechen_one_under_100_then_set_fields(self):
-        flaechen = [99, 100]
-
-        result = EWohn60bis100(flaechen)
-
-        assert result.E7403141 == 1
-        assert result.E7403142 == 99
-
 
 class TestEWohnAb100:
-    def test_if_flaeche_100_then_set_fields(self):
+    def test_if_empty_input_then_retain_zeroes(self):
+        flaechen = []
+
+        result = EWohnAb100(flaechen)
+
+        assert result.E7403151 == 0
+        assert result.E7403152 == 0
+
+    def test_if_single_flaeche_then_set_fields(self):
         flaechen = [100]
 
         result = EWohnAb100(flaechen)
@@ -93,29 +77,13 @@ class TestEWohnAb100:
         assert result.E7403152 == 100
         assert len(vars(result)) == 2
 
-    def test_if_flaeche_99_then_retain_zeroes(self):
-        flaechen = [99]
-
-        result = EWohnAb100(flaechen)
-
-        assert result.E7403151 == 0
-        assert result.E7403152 == 0
-
-    def test_if_flaechen_from_100_then_set_fields(self):
+    def test_if_multiple_flaechen_then_calculate_fields(self):
         flaechen = [100, 100]
 
         result = EWohnAb100(flaechen)
 
         assert result.E7403151 == 2
         assert result.E7403152 == 200
-
-    def test_if_flaechen_one_under_100_then_set_fields(self):
-        flaechen = [99, 100]
-
-        result = EWohnAb100(flaechen)
-
-        assert result.E7403151 == 1
-        assert result.E7403152 == 100
 
 
 class TestEWeitereWohn:
@@ -172,6 +140,15 @@ class TestEAngDurchschn:
 
         assert result.Wohn_Unter60 is None
         assert result.Wohn_60bis100 is None
+        assert result.Wohn_ab100 == EWohnAb100([100])
+
+    def test_if_multiple_wohnflaechen_then_set_correct_fields(self):
+        gebaeude = SampleGebaeude().with_wohnflaechen(59, 99, 100).parse()
+
+        result = EAngDurchschn(gebaeude)
+
+        assert result.Wohn_Unter60 == EWohnUnter60([59])
+        assert result.Wohn_60bis100 == EWohn60bis100([99])
         assert result.Wohn_ab100 == EWohnAb100([100])
 
     def test_if_weitere_wohnraeume_flag_true_then_set_weitere_wohnraeume(self):
