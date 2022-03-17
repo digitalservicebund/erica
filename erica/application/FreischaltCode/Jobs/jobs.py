@@ -2,7 +2,7 @@ import logging
 
 from opyoid import Injector
 
-from lib.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeBeantragenDto
 
 from erica.domain.Shared.Status import Status
