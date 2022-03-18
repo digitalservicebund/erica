@@ -1,20 +1,18 @@
 import datetime
 from abc import abstractmethod, ABCMeta
+from typing import Type, Callable
 from uuid import uuid4
-from typing import Type
 
 from rq import Retry
 
-from erica.application.EricRequestProcessing.erica_input.v1.erica_input import UnlockCodeActivationData
 from erica.application.EricRequestProcessing.requests_controller import EricaRequestController
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
-from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltCodeActivateDto
-from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code
+from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
-from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepositoryInterface
+
 
 class JobServiceInterface():
     __metaclass__ = ABCMeta
@@ -24,7 +22,7 @@ class JobServiceInterface():
         pass
 
     @abstractmethod
-    def run(self, request_entity: EricaAuftrag, include_elster_responses: bool):
+    def apply_to_elster(self, request_entity: EricaAuftrag, include_elster_responses: bool):
         pass
 
 
@@ -56,14 +54,14 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
 
         self.background_worker.enqueue(
-            self.job_method,
             created.id,
+            f=self.job_method,
             retry=Retry(max=3, interval=1),
             job_id=request_entity.job_id.__str__(),
         )
 
         return EricaAuftragDto.parse_obj(created)
 
-    def run(self, request_entity: EricaAuftrag, include_elster_responses: bool = False):
+    def apply_to_elster(self, request_entity: EricaAuftrag, include_elster_responses: bool = False):
         controller = self.request_controller(request_entity.payload, include_elster_responses) # TODO check if we can directly inject the class
         return controller.process()

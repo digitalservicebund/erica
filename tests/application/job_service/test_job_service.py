@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Type
 from unittest.mock import Mock, MagicMock, call, patch
 
 import pytest
@@ -7,7 +8,8 @@ from opyoid import Module, Injector
 from sqlalchemy.orm import Session
 
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
-from erica.application.JobService.job_service import JobService
+from erica.application.JobService.job_service import JobService, JobServiceInterface
+from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.Repositories.EricaAuftragRepositoryInterface import EricaAuftragRepositoryInterface
 from erica.domain.Shared.EricaAuftrag import AuftragType
@@ -64,6 +66,10 @@ class MockDto(BaseDto):
     friend: str
 
 
+class MockBackgroundJob(BackgroundJobInterface, MagicMock):
+    pass
+
+
 class TestJobServiceQueue:
 
     @freeze_time("2001-01-03 08:22:00")
@@ -71,10 +77,10 @@ class TestJobServiceQueue:
     def test_if_input_data_provided_then_add_request_to_repository(self):
         mock_job = PickableMock()
         service = JobService(job_repository=MockEricaRequestRepository(), background_worker=MagicMock(),
-                             request_controller=MockRequestController, payload_type=MockDto)
+                             request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
+        service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate)
 
         assert service.repository[0] == EricaAuftrag(
             id="1234",
@@ -85,36 +91,6 @@ class TestJobServiceQueue:
             creator_id="api",
             type=AuftragType.freischalt_code_activate
         )
-
-    @freeze_time("2001-01-03 08:22:00")
-    @pytest.mark.freeze_uuids
-    def test_if_injector_is_used_then_all_dependencies_are_set_correctly(self):
-        class TestModule(Module):
-            def configure(self) -> None:
-                self.bind(EricaAuftragRepositoryInterface, to_class=MockEricaRequestRepository)
-                self.bind(EricaRequestController, to_class=MockRequestController)
-                self.bind(BaseDto, to_class=MockDto)
-
-        test_injector = Injector([
-            TestModule()
-        ])
-        mock_job = PickableMock()
-        service = test_injector.inject(JobService)
-        input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
-
-        service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
-
-        assert service.repository[0] == EricaAuftrag(
-            id="1234",
-            job_id="00000000-0000-0000-0000-000000000000",
-            payload=input_data,
-            created_at=datetime.now().__str__(),
-            updated_at=datetime.now().__str__(),
-            creator_id="api",
-            type=AuftragType.freischalt_code_activate
-        )
-
-
 
     @pytest.mark.freeze_uuids
     def test_if_input_data_provided_then_add_job_to_background_job_worker_with_correct_params(self):
@@ -122,12 +98,12 @@ class TestJobServiceQueue:
         mock_bg_worker = MagicMock()
         mock_retry = MagicMock(return_value="retry")
         service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
-                             request_controller=MockRequestController, payload_type=MockDto)
+                             request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
         with patch('erica.application.JobService.job_service.Retry', mock_retry):
             # TODO we have some dependency on the Retry object inside the service which should only be part of the infrastructure I think, so we should probably remove that
-            service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
+            service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate)
 
         assert mock_bg_worker.enqueue.mock_calls == [
             call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000", retry="retry")]
@@ -140,7 +116,7 @@ class TestJobServiceRun:
         controller_instance = MagicMock()
         mock_request_controller = MagicMock(return_value=controller_instance)
         service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
-                             request_controller=mock_request_controller, payload_type=MockDto)
+                             request_controller=mock_request_controller, payload_type=MockDto, job_method=MagicMock())
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
         request_entity = EricaAuftrag(
             id="1234",
@@ -152,7 +128,7 @@ class TestJobServiceRun:
             type=AuftragType.freischalt_code_activate
         )
 
-        service.run(request_entity)
+        service.apply_to_elster(request_entity)
 
         assert mock_request_controller.mock_calls == [call(input_data, False)]
 
@@ -161,7 +137,7 @@ class TestJobServiceRun:
         controller_instance = MagicMock()
         mock_request_controller = MagicMock(return_value=controller_instance)
         service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
-                             request_controller=mock_request_controller, payload_type=MockDto)
+                             request_controller=mock_request_controller, payload_type=MockDto, job_method=MagicMock())
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
         request_entity = EricaAuftrag(
             id="1234",
@@ -173,6 +149,6 @@ class TestJobServiceRun:
             type=AuftragType.freischalt_code_activate
         )
 
-        service.run(request_entity)
+        service.apply_to_elster(request_entity)
 
         assert controller_instance.process.call_count == 1

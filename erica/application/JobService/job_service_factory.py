@@ -10,7 +10,8 @@ from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code
 from erica.application.JobService.job_service import JobService, JobServiceInterface
 
 injectors = []
-    
+
+
 def _freischalt_code_activation_injector(dto: FreischaltCodeActivateDto):
     _freischalt_code_activation_injector.handle_type = FreischaltCodeActivateDto
     
@@ -32,7 +33,7 @@ _freischalt_code_activation_injector.handle_type = FreischaltCodeActivateDto
 injectors.append(_freischalt_code_activation_injector)
 
 
-def get_job(dto: BaseDto):
+def get_job_service(dto: BaseDto):
     for injector in injectors:
         if isinstance(dto, injector.handle_type):
             return injector(dto).inject(JobServiceInterface)

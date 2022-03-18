@@ -1,4 +1,3 @@
-from typing import Type
 from uuid import UUID
 
 from fastapi import FastAPI
@@ -6,17 +5,11 @@ from fastapi_versioning import VersionedFastAPI, version
 from opyoid import Injector
 
 from erica.api.ApiModule import ApiModule
-from erica.application.EricRequestProcessing.requests_controller import (
-    EricaRequestController, UnlockCodeActivationRequestController)
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.EricaAuftrag.EricaAuftragService import \
     EricaAuftragServiceInterface
-from erica.application.FreischaltCode.FreischaltCode import (
-    BaseDto, FreischaltCodeActivateDto, FreischaltCodeRequestDto)
-from erica.application.FreischaltCode.FreischaltCodeRequestService import \
-    FreischaltCodeRequestServiceInterface
-from erica.application.JobService.job_factory import get_job
-from erica.application.JobService.job_service import (JobService, JobServiceInterface)
+from erica.application.FreischaltCode.FreischaltCode import (FreischaltCodeActivateDto, FreischaltCodeRequestDto)
+from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.infrastructure.sqlalchemy.database import run_migrations
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import \
@@ -54,12 +47,12 @@ async def get_erica_auftrag_status(auftrag_id: UUID):
 @app.post("/freischalt_code/request", response_model=EricaAuftragDto)
 @version(1, 0)
 async def request_freischalt_code(freischalt_code_request_dto: FreischaltCodeRequestDto):
-    return get_job(freischalt_code_request_dto).queue(freischalt_code_request_dto,  AuftragType.freischalt_code_beantragen)
+    return get_job_service(freischalt_code_request_dto).queue(freischalt_code_request_dto,  AuftragType.freischalt_code_beantragen)
 
 
 @app.post("/freischalt_code/activate", response_model=EricaAuftragDto)
 @version(1, 0)
 async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeActivateDto):
-    return get_job(freischalt_code_activate_dto).queue(freischalt_code_activate_dto,  AuftragType.freischalt_code_activate)
+    return get_job_service(freischalt_code_activate_dto).queue(freischalt_code_activate_dto,  AuftragType.freischalt_code_activate)
 
 app = VersionedFastAPI(app)
