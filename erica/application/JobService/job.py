@@ -13,6 +13,12 @@ from erica.infrastructure.sqlalchemy.repositories.BaseRepository import EntityNo
 
 
 async def perform_job(entity_id: UUID, repository: BaseRepositoryInterface, service: JobServiceInterface, dto: Type[BaseDto], logger: Logger):
+    """
+    The basic implementation for a job that is put on the Erica queue. It will get an entity, interact with the ERiC
+    library using the service and then update the entity according to the result from the service.
+
+    It also measures the elapsed time during job execution.
+    """
     try:
         entity: EricaAuftrag = repository.get_by_job_id(entity_id)
     except EntityNotFoundError:
