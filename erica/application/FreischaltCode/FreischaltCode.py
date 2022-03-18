@@ -8,16 +8,16 @@ class BaseDto(BaseModel):
 
 
 class FreischaltCodeRequestDto(BaseDto):
-    tax_ident: str
+    idnr: str
     date_of_birth: date
 
 
 class FreischaltCodeRevocateDto(BaseDto):
-    tax_ident: str
+    idnr: str
     elster_request_id: str
 
 
 class FreischaltCodeActivateDto(BaseDto):
-    tax_idnr: str
+    idnr: str
     freischalt_code: str
     elster_request_id: str

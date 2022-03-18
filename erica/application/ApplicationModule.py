@@ -3,6 +3,7 @@ from opyoid import Module
 from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface, EricaAuftragService
 from erica.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationServiceInterface, FreischaltCodeActivationService
 from erica.application.FreischaltCode.FreischaltCodeRequestService import FreischaltCodeRequestService, FreischaltCodeRequestServiceInterface
+from erica.application.JobService.job_service import JobService, JobServiceInterface
 from erica.infrastructure.InfrastructureModule import InfrastructureModule
 from erica.infrastructure.rq.RqModule import RqModule
 

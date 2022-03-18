@@ -20,11 +20,11 @@ class JobServiceInterface():
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    async def queue(self, payload_dto: BaseDto, job_type: AuftragType, job_method) -> EricaAuftragDto:
+    def queue(self, payload_dto: BaseDto, job_type: AuftragType, job_method) -> EricaAuftragDto:
         pass
 
     @abstractmethod
-    async def run(self, request_entity: EricaAuftrag, include_elster_responses: bool):
+    def run(self, request_entity: EricaAuftrag, include_elster_responses: bool):
         pass
 
 
@@ -54,10 +54,10 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
 
         self.background_worker.enqueue(
+            job_method,
             created.id,
-            f=job_method,
             retry=Retry(max=3, interval=1),
-            job_id=request_entity.job_id.__str__()
+            job_id=request_entity.job_id.__str__(),
         )
 
         return EricaAuftragDto.parse_obj(created)
