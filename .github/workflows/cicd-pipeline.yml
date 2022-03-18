@@ -62,6 +62,7 @@ jobs:
 
     - name: Test
       run: |
+        docker-compose up
         pipenv run invoke --echo test | tee erica-test-report.log
       shell: bash
 
