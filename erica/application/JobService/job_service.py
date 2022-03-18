@@ -16,6 +16,8 @@ from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import 
 
 class JobServiceInterface():
     __metaclass__ = ABCMeta
+    payload_type: Type[BaseDto] = None
+    repository: EricaAuftragRepositoryInterface  = None
 
     @abstractmethod
     def queue(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
