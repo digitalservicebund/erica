@@ -36,8 +36,6 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
         super().__init__()
         self.freischaltcode_repository = freischaltcode_repository
         self.background_worker = background_worker
-        self.payload = payload
-        self.auftrag_type = auftrag_type
 
     async def queue(self, freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
         freischaltcode = EricaAuftrag(job_id=uuid4(),
