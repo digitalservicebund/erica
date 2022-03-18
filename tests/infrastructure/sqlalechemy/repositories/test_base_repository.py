@@ -25,6 +25,7 @@ class MockSchema(BaseDbSchema):
     id = Column(UUID(as_uuid=True),
                 primary_key=True,
                 server_default=text("gen_random_uuid()"), )
+    job_id = Column(UUID(as_uuid=True))
     payload = Column(JSONB)
 
 
@@ -113,10 +114,31 @@ class TestBaseRepositoryGetById:
 
     def test_if_entity_not_in_database_then_raise_exception(self, transactional_session):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
-        schema_object = MockSchema(**mock_object.dict())
+        schema_object = MockSchema(**mock_object.dict(), job_id=uuid4())
 
         with pytest.raises(EntityNotFoundError):
             MockBaseRepository(db_connection=transactional_session).get_by_id(schema_object.id)
+
+
+class TestBaseRepositoryGetByJobId:
+
+    def test_if_entity_in_database_then_return_domain_representation(self, transactional_session):
+        mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
+        job_id = uuid4()
+        schema_object = MockSchema(**mock_object.dict(), job_id=job_id)
+        transactional_session.add(schema_object)
+        transactional_session.commit()
+
+        found_entity = MockBaseRepository(db_connection=transactional_session).get_by_job_id(job_id)
+
+        assert found_entity == mock_object
+
+    def test_if_entity_not_in_database_then_raise_exception(self, transactional_session):
+        mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
+        job_id = uuid4()
+
+        with pytest.raises(EntityNotFoundError):
+            MockBaseRepository(db_connection=transactional_session).get_by_job_id(job_id)
 
 
 class TestBaseRepositoryUpdate:

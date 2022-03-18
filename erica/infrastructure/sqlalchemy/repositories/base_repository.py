@@ -42,6 +42,12 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
             raise EntityNotFoundError
         return self.DomainModel.from_orm(entity)
 
+    def get_by_job_id(self, job_id: UUID) -> T:
+        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.job_id == job_id).first()
+        if entity is None:
+            raise EntityNotFoundError
+        return self.DomainModel.from_orm(entity)
+
     def _get_by_id(self, entity_id: UUID):
         entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
         return entity
