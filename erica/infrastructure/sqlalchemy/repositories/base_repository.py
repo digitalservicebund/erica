@@ -1,6 +1,7 @@
 from typing import Generic, TypeVar, List
 from uuid import UUID
 from pydantic import BaseModel
+from sqlalchemy import Integer
 from sqlalchemy.orm import Session
 
 from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
@@ -36,7 +37,7 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
         result = self.db_connection.query(self.DatabaseEntity).offset(skip).limit(limit).all()
         return result
 
-    def get_by_id(self, entity_id: UUID) -> T:
+    def get_by_id(self, entity_id: Integer) -> T:
         entity = self._get_by_id(entity_id).first()
         if entity is None:
             raise EntityNotFoundError

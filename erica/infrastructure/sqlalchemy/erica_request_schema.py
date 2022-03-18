@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, Column, String, text, Enum
+from sqlalchemy import MetaData, Column, String, text, Enum, Integer
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,9 +12,8 @@ BaseDbSchema = declarative_base()
 
 class EricaRequestSchema(AuditedSchemaMixin, BaseDbSchema):
     __tablename__ = 'erica_auftrag'
-    id = Column(UUID(as_uuid=True),
-                primary_key=True,
-                server_default=text("gen_random_uuid()"), )
+    id = Column(Integer,
+                primary_key=True)
     type = Column(Enum(AuftragType))
     payload = Column(JSONB)
     job_id = Column(UUID(as_uuid=True))

@@ -1,8 +1,9 @@
 from abc import ABC
+from uuid import uuid4
 
 import pytest
 from pydantic import BaseModel
-from sqlalchemy import Column, text
+from sqlalchemy import Column, text, Integer
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
