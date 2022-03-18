@@ -29,9 +29,9 @@ class JobServiceInterface():
 class JobService(JobServiceInterface):
 
     def __init__(self,
-                 job_repository : EricaAuftragRepositoryInterface,
-                 background_worker : BackgroundJobInterface,
-                 payload_type: BaseDto,
+                 job_repository: EricaAuftragRepositoryInterface,
+                 background_worker: BackgroundJobInterface,
+                 payload_type: Type[BaseDto],
                  request_controller: Type[EricaRequestController],
                  job_method: Callable) -> None:
         super().__init__()

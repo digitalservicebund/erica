@@ -1,20 +1,16 @@
 from datetime import datetime
-from typing import Type
 from unittest.mock import Mock, MagicMock, call, patch
 
 import pytest
 from freezegun import freeze_time
-from opyoid import Module, Injector
 from sqlalchemy.orm import Session
 
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
-from erica.application.JobService.job_service import JobService, JobServiceInterface
+from erica.application.JobService.job_service import JobService
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
-from erica.domain.Repositories.EricaAuftragRepositoryInterface import EricaAuftragRepositoryInterface
 from erica.domain.Shared.EricaAuftrag import AuftragType
-from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController, \
-    EricaRequestController
+from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
 
 
