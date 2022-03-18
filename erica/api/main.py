@@ -1,18 +1,27 @@
 from uuid import UUID
+
 from fastapi import FastAPI
-from opyoid import Injector
 
 from erica.api.ApiModule import ApiModule
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
-from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeActivateDto, FreischaltCodeRequestDto
-from erica.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationServiceInterface
-
-from erica.application.FreischaltCode.FreischaltCodeRequestService import FreischaltCodeRequestServiceInterface
+from erica.application.EricaAuftrag.EricaAuftragService import \
+    EricaAuftragServiceInterface
+from erica.application.EricRequestProcessing.requests_controller import (
+    EricaRequestController, UnlockCodeActivationRequestController)
+from erica.application.FreischaltCode.FreischaltCode import (
+    BaseDto, FreischaltCodeActivateDto, FreischaltCodeRequestDto)
+from erica.application.FreischaltCode.FreischaltCodeActivationService import \
+    FreischaltCodeActivationServiceInterface
+from erica.application.FreischaltCode.FreischaltCodeRequestService import \
+    FreischaltCodeRequestServiceInterface
+from erica.application.JobService.job_service import (JobService,
+                                                      JobServiceInterface)
+from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.infrastructure.sqlalchemy.database import run_migrations
+from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import \
+    EricaAuftragRepository
 from fastapi_versioning import VersionedFastAPI, version
-
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
+from opyoid import Injector
 
 run_migrations()
 app = FastAPI(
@@ -26,6 +35,11 @@ app = FastAPI(
 injector = Injector([
     ApiModule(),
 ])
+
+async def queue_job(injector: Injector, request: BaseDto, job_type: AuftragType, job_function):
+    job_service: JobServiceInterface = injector.inject(JobServiceInterface)
+    result = await job_service.queue(request, job_type, job_function)
+    return result
 
 
 @app.get("/erica_auftraege")
@@ -52,8 +66,16 @@ async def request_freischalt_code(freischalt_code_request_dto: FreischaltCodeReq
 @app.post("/freischalt_code/activate", response_model=EricaAuftragDto)
 @version(1, 0)
 async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeActivateDto):
-    freischalt_code_service: FreischaltCodeActivationServiceInterface = injector.inject(FreischaltCodeActivationServiceInterface)
-    result = await freischalt_code_service.queue(freischalt_code_activate_dto)
-    return result
+    module = ApiModule()
+    module.bind(EricaRequestController, to_class=UnlockCodeActivationRequestController)
+    module.bind(BaseDto, to_class=FreischaltCodeActivateDto)
+    
+    freischalt_code_activation_injector = Injector([
+        module
+    ])
+    
+    return await queue_job(freischalt_code_activation_injector, freischalt_code_activate_dto,  AuftragType.freischalt_code_activate, activate_freischalt_code)
+
+
 
 app = VersionedFastAPI(app)

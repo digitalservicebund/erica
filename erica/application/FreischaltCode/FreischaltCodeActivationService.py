@@ -13,7 +13,7 @@ from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInte
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload
 from erica.domain.Shared.EricaAuftrag import AuftragType
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
+from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepositoryInterface
 
 
 class FreischaltCodeActivationServiceInterface:
@@ -29,22 +29,23 @@ class FreischaltCodeActivationServiceInterface:
 
 
 class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
-    freischaltcode_repository: EricaAuftragRepository
+    freischaltcode_repository: EricaAuftragRepositoryInterface
     background_worker: BackgroundJobInterface
 
-    def __init__(self, freischaltcode_repository : EricaAuftragRepository, background_worker : BackgroundJobInterface) -> None:
+    def __init__(self, freischaltcode_repository : EricaAuftragRepositoryInterface, background_worker : BackgroundJobInterface) -> None:
         super().__init__()
         self.freischaltcode_repository = freischaltcode_repository
         self.background_worker = background_worker
+        self.payload = payload
+        self.auftrag_type = auftrag_type
 
     async def queue(self, freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
-        job_id = uuid4()
-        freischaltcode = EricaAuftrag(job_id=job_id,
-                                      payload=FreischaltCodeActivatePayload.parse_obj(freischaltcode_dto),
+        freischaltcode = EricaAuftrag(job_id=uuid4(),
+                                      payload=self.payload.parse_obj(freischaltcode_dto),
                                       created_at=datetime.datetime.now(),
                                       updated_at=datetime.datetime.now(),
                                       creator_id="api",
-                                      type=AuftragType.freischalt_code_activate
+                                      type=self.auftrag_type
                                       )
 
         created = self.freischaltcode_repository.create(freischaltcode)
@@ -52,7 +53,7 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
         self.background_worker.enqueue(activate_freischalt_code,
                                   created.id,
                                   retry=Retry(max=3, interval=1),
-                                  job_id=job_id.__str__()
+                                  job_id=freischaltcode.job_id.__str__()
                                   )
 
         return EricaAuftragDto.parse_obj(created)

@@ -7,6 +7,10 @@ from lib.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.domain.Shared.Status import Status
 
 
+
+def other_job(entity_id):
+    base_job(entity_id, **injections)
+
 async def request_freischalt_code(entity_id):
     from erica.api.ApiModule import ApiModule
     from erica.application.FreischaltCode.FreischaltCodeRequestService import FreischaltCodeRequestServiceInterface
