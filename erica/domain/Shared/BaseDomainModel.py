@@ -9,7 +9,7 @@ ClassT = TypeVar('ClassT')
 
 class AuditedModel(BaseModel):
     created_at: datetime.datetime
-    updated_at: datetime.datetime
+    updated_at: Optional[datetime.datetime]
     creator_id: str
 
 
