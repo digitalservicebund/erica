@@ -23,8 +23,7 @@ def orjson_deserializer(json):
 engine = create_engine(get_settings().database_url, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
 if not database_exists(engine.url):
     create_database(engine.url)
-else:
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def run_migrations():
