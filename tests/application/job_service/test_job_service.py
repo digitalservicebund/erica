@@ -6,7 +6,7 @@ from freezegun import freeze_time
 from rq import Retry
 from sqlalchemy.orm import Session
 
-from unittest.mock import Mock, MagicMock, call
+from unittest.mock import Mock, MagicMock, call, patch
 
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
@@ -55,21 +55,6 @@ class MockRequestController(CheckTaxNumberRequestController):
         cls.call_list.append({'args': [*args], 'kwargs': {**kwargs}})
 
 
-class MockBackgroundJob(BackgroundJobInterface, list):
-
-    def enqueue(self, f, *args, **kwargs):
-        self.append({'f': f, 'args': [*args], 'kwargs': {**kwargs}})
-
-    def scheduled_enqueue(self):
-        pass
-
-    def get_enqueued_job_by_id(self, job_id):
-        pass
-
-    def list_all_jobs(self):
-        return self
-
-
 class PickableMock(Mock):
 
      def __reduce__(self):
@@ -87,7 +72,7 @@ class TestJobServiceQueue:
     @pytest.mark.freeze_uuids
     def test_if_input_data_provided_then_add_request_to_repository(self):
         mock_job = PickableMock()
-        service = JobService(job_repository= MockEricaRequestRepository(), background_worker=MockBackgroundJob, request_controller=MockRequestController, payload_type=MockDto)
+        service = JobService(job_repository= MockEricaRequestRepository(), background_worker=MagicMock(), request_controller=MockRequestController, payload_type=MockDto)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
         
         service.queue(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
@@ -106,15 +91,18 @@ class TestJobServiceQueue:
     def test_if_input_data_provided_then_add_job_to_background_job_worker_with_correct_params(self):
         mock_job = PickableMock()
         mock_bg_worker = MagicMock()
-        service = JobService(job_repository= MockEricaRequestRepository(), background_worker=mock_bg_worker, request_controller=MockRequestController, payload_type=MockDto)
+        mock_retry = MagicMock(return_value="retry")
+        service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker, request_controller=MockRequestController, payload_type=MockDto)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.queue(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
+        with patch('erica.application.JobService.job_service.Retry', mock_retry):
+            # TODO we have some dependency on the Retry object inside the service which should only be part of the infrastructure I think, so we should probably remove that
+            service.queue(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
 
-        assert mock_bg_worker.enqueue.mock_calls == [call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000", retry=Retry(max=3, interval=1))]
+        assert mock_bg_worker.enqueue.mock_calls == [call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000", retry="retry")]
 
 
-class TestTaxNumberValidationServiceCheckTaxNumber:
+class TestJobServiceRun:
 
     def test_if_input_data_provided_then_call_init_of_request_controller_with_correct_data(self):
         mock_bg_worker = MagicMock()
