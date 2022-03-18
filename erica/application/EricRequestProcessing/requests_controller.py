@@ -1,12 +1,6 @@
 import base64
 
-from lib.pyeric.eric_errors import InvalidBufaNumberError
-from lib.pyeric.pyeric_controller import EstValidationPyericProcessController, EstPyericProcessController, \
-    UnlockCodeRequestPyericProcessController, UnlockCodeActivationPyericProcessController, \
-    UnlockCodeRevocationPyericProcessController, CheckTaxNumberPyericController, BelegIdRequestPyericProcessController, \
-    BelegRequestPyericProcessController, DecryptBelegePyericController
-from lib.pyeric.pyeric_response import PyericResponse
-from lib.pyeric.config import get_settings
+
 from erica.application.EricRequestProcessing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.application.EricRequestProcessing.erica_input.v1.erica_input import EstData, UnlockCodeRequestData
 from erica.domain.ElsterXml import elster_xml_generator
@@ -16,6 +10,13 @@ from erica.domain.ElsterXml.elster_xml_generator import generate_vorsatz_without
 from erica.domain.ElsterXml.xml_parsing.elster_specifics_xml_parsing import get_transfer_ticket_from_xml, \
     get_antrag_id_from_xml, get_relevant_beleg_ids, get_address_from_xml
 from erica.domain.ElsterXml.xml_parsing.erica_xml_parsing import get_elements_text_from_xml
+from erica.erica_legacy.config import get_settings
+from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
+from erica.erica_legacy.pyeric.pyeric_controller import EstValidationPyericProcessController, \
+    EstPyericProcessController, UnlockCodeRequestPyericProcessController, UnlockCodeActivationPyericProcessController, \
+    UnlockCodeRevocationPyericProcessController, CheckTaxNumberPyericController, BelegIdRequestPyericProcessController, \
+    BelegRequestPyericProcessController, DecryptBelegePyericController
+from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 
 SPECIAL_TESTMERKER_IDNR = ['04452397687',
                            '02259674819',

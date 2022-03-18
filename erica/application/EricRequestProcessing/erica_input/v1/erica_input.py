@@ -5,9 +5,10 @@ from typing import Optional, List
 
 from pydantic import BaseModel, validator
 
-from lib.pyeric.eric_errors import InvalidBufaNumberError
+
 from erica.domain.ElsterXml.elster_xml_generator import VERANLAGUNGSJAHR
 from erica.domain.ElsterXml.est_validation import is_valid_bufa
+from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 
 
 class AccountHolder(str, Enum):

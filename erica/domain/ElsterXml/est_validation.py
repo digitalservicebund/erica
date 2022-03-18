@@ -1,5 +1,6 @@
-from lib.pyeric.config import get_settings
+
 from erica.domain.ElsterXml.bufa_numbers import VALID_BUFA_NUMBERS, VALID_TEST_BUFA_NUMBERS
+from erica.erica_legacy.config import get_settings
 
 
 def is_valid_bufa(bufa, use_testmerker=False):

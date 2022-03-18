@@ -9,14 +9,14 @@ import xml.etree.ElementTree as ET
 
 # TODO: Refactor how the xml is generated.
 #       The current structure does not have an easy entrypoint and we currently have quite similar functions
-from lib.pyeric.config import get_settings
-from lib.pyeric.eric import get_eric_wrapper
 from erica.domain.ElsterXml.elster_xml_tree import TOP_ELEMENT_ESTA1A, TOP_ELEMENT_SA, TOP_ELEMENT_AGB, TOP_ELEMENT_HA35A, \
     TOP_ELEMENT_VOR, ElsterXmlTreeNode
 from erica.domain.ElsterXml.est_mapping import PersonSpecificFieldId
 from erica.domain.ElsterXml.transfer_header_fields import get_est_th_fields, get_vast_request_th_fields, \
     get_vast_activation_th_fields, get_vast_revocation_th_fields, get_vast_list_th_fields, \
     get_vast_beleg_ids_request_th_fields, get_abrufcode_th_fields, get_vast_beleg_request_th_fields
+from erica.erica_legacy.config import get_settings
+from erica.erica_legacy.pyeric.eric import get_eric_wrapper
 
 VERANLAGUNGSJAHR = 2021
 
@@ -347,8 +347,8 @@ def _generate_transfer_header(xml_top, th_fields, eric_wrapper=None):
     xml_string_with_th = eric_wrapper.create_th(
             xml_string,
             datenart=th_fields.datenart, testmerker=th_fields.testmerker,
-            herstellerId=th_fields.herstellerId, verfahren=th_fields.verfahren,
-            datenLieferant=th_fields.datenLieferant)
+            hersteller_id=th_fields.herstellerId, verfahren=th_fields.verfahren,
+            daten_lieferant=th_fields.datenLieferant)
 
     return xml_string_with_th.decode()
 

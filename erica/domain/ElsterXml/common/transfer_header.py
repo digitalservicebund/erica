@@ -1,5 +1,6 @@
-from lib.pyeric.eric import get_eric_wrapper
+
 from erica.domain.ElsterXml.transfer_header_fields import TransferHeaderFields
+from erica.erica_legacy.pyeric.eric import get_eric_wrapper
 
 
 def add_transfer_header(base_xml: str, th_fields: TransferHeaderFields):

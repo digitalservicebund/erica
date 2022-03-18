@@ -7,9 +7,14 @@ class BaseDto(BaseModel):
     pass
 
 
-class FreischaltCodeBeantragenDto(BaseDto):
+class FscRequestDataDto(BaseDto):
     tax_ident: str
     date_of_birth: date
+
+
+class FscRequestDataWithClientIdentifier(BaseModel):
+    payload: FscRequestDataDto
+    clientIdentifier: str
 
 
 class FreischaltCodeRevocateDto(BaseDto):

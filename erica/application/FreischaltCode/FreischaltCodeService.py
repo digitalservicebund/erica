@@ -8,7 +8,7 @@ from rq import Retry
 from erica.application.EricRequestProcessing.erica_input.v1.erica_input import UnlockCodeRequestData
 from erica.application.EricRequestProcessing.requests_controller import UnlockCodeRequestController
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeBeantragenDto
+from erica.application.FreischaltCode.FreischaltCode import FscRequestDataDto
 from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
@@ -26,11 +26,11 @@ class FreischaltCodeServiceInterface:
 
     @abstractmethod
     def freischalt_code_bei_elster_beantragen_queued(self,
-                                                     freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
+                                                     freischaltcode_dto: FscRequestDataDto) -> EricaAuftragDto:
         pass
 
     @abstractmethod
-    def freischalt_code_bei_elster_beantragen(self, freischaltcode_dto: FreischaltCodeBeantragenDto,
+    def freischalt_code_bei_elster_beantragen(self, freischaltcode_dto: FscRequestDataDto,
                                               include_elster_responses: bool):
         pass
 
@@ -43,7 +43,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         self.freischaltcode_repository = repository
 
     async def freischalt_code_bei_elster_beantragen_queued(self,
-                                                           freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
+                                                           freischaltcode_dto: FscRequestDataDto) -> EricaAuftragDto:
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,
                                       payload=FreischaltCodeBeantragenPayload.parse_obj(freischaltcode_dto),
@@ -64,7 +64,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
 
         return EricaAuftragDto.parse_obj(created)
 
-    async def freischalt_code_bei_elster_beantragen(self, freischaltcode_dto: FreischaltCodeBeantragenDto,
+    async def freischalt_code_bei_elster_beantragen(self, freischaltcode_dto: FscRequestDataDto,
                                                     include_elster_responses: bool = False):
         request = UnlockCodeRequestController(UnlockCodeRequestData.parse_obj(
             {"idnr": freischaltcode_dto.tax_ident, "dob": freischaltcode_dto.date_of_birth}), include_elster_responses)

@@ -3,7 +3,7 @@ import logging
 from fastapi import status, APIRouter
 from starlette.responses import JSONResponse
 
-from erica.erica_legacy.api.v2.responses.model import response_model_post_to_queue, response_model_get_est_validation_from_queue, \
+from erica.api.v2.responses.model import response_model_post_to_queue, response_model_get_est_validation_from_queue, \
     response_model_get_send_est_from_queue
 from erica.erica_legacy.pyeric.utils import generate_dummy_error_response
 from erica.erica_legacy.request_processing.erica_input.v2.erica_input import EstDataWithTtl

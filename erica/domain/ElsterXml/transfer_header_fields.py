@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from lib.pyeric.config import get_settings
+from erica.erica_legacy.config import get_settings
 
 TransferHeaderFields = namedtuple(
     'TransferHeaderFields',

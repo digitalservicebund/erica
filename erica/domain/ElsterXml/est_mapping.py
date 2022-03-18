@@ -4,8 +4,8 @@ from babel.numbers import format_decimal
 from datetime import date
 from decimal import Decimal
 
-from lib.pyeric.eric_errors import InvalidBufaNumberError
 from erica.domain.ElsterXml.est_validation import is_valid_bufa
+from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 
 UNKNOWN = 'unknown'
 

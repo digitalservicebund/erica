@@ -2,10 +2,10 @@ import logging
 
 from opyoid import Injector
 
-from lib.pyeric.eric_errors import EricProcessNotSuccessful
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeBeantragenDto
+from erica.application.FreischaltCode.FreischaltCode import FscRequestDataDto
 
 from erica.domain.Shared.Status import Status
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 
 
 async def request_freischalt_code(entity_id):
@@ -17,7 +17,7 @@ async def request_freischalt_code(entity_id):
     repository = injector.inject(EricaAuftragRepositoryInterface)
     service = injector.inject(FreischaltCodeServiceInterface)
     entity = repository.get_by_id(entity_id)
-    request = FreischaltCodeBeantragenDto.parse_obj(entity.payload)
+    request = FscRequestDataDto.parse_obj(entity.payload)
 
     logging.getLogger().info("Try to request unlock code. For Entity Id " + entity.id.__str__(), exc_info=True)
     try:

@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.responses import JSONResponse
 
-from erica.erica_legacy.api.v2.responses.model import response_model_post_to_queue
+from erica.api.v2.responses.model import response_model_post_to_queue
 from erica.erica_legacy.pyeric.utils import generate_dummy_error_response
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerWithTtl
 
