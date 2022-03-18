@@ -22,3 +22,6 @@ class EricaAuftrag(BaseDomainModel[UUID]):
 
     class Config:
         orm_mode = True
+
+    def __str__(self):
+        return f"EricaAuftrag(type={self.type}, job_id={self.job_id}, status={self.status}"
