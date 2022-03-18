@@ -45,7 +45,7 @@ async def get_erica_auftrag_status(auftrag_id: UUID):
 @version(1, 0)
 async def create_freischalt_code(freischalt_code_beantragen_dto: FreischaltCodeBeantragenDto):
     freischalt_code_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
-    result = await freischalt_code_service.freischalt_code_bei_elster_beantragen_queued(freischalt_code_beantragen_dto)
+    result = await freischalt_code_service.freischalt_code_apply_to_elster_queued(freischalt_code_beantragen_dto)
     return result
 
 

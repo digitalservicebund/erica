@@ -21,7 +21,7 @@ async def request_freischalt_code(entity_id):
 
     logging.getLogger().info("Try to request unlock code. For Entity Id " + entity.id.__str__(), exc_info=True)
     try:
-        response = await service.freischalt_code_bei_elster_beantragen(request, True)
+        response = await service.freischalt_code_apply_to_elster(request, True)
         entity.elster_request_id = response.__str__
         entity.status = Status.success
         repository.update(entity.id, entity)

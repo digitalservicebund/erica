@@ -25,13 +25,13 @@ class FreischaltCodeServiceInterface:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def freischalt_code_bei_elster_beantragen_queued(self,
-                                                     freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
+    def freischalt_code_apply_to_elster_queued(self,
+                                               freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
         pass
 
     @abstractmethod
-    def freischalt_code_bei_elster_beantragen(self, freischaltcode_dto: FreischaltCodeBeantragenDto,
-                                              include_elster_responses: bool):
+    def freischalt_code_apply_to_elster(self, freischaltcode_dto: FreischaltCodeBeantragenDto,
+                                        include_elster_responses: bool):
         pass
 
 
@@ -42,8 +42,8 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         super().__init__()
         self.freischaltcode_repository = repository
 
-    async def freischalt_code_bei_elster_beantragen_queued(self,
-                                                           freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
+    async def freischalt_code_apply_to_elster_queued(self,
+                                                     freischaltcode_dto: FreischaltCodeBeantragenDto) -> EricaAuftragDto:
         job_id = uuid4()
         freischaltcode = EricaAuftrag(job_id=job_id,
                                       payload=FreischaltCodeBeantragenPayload.parse_obj(freischaltcode_dto),
@@ -64,13 +64,8 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
 
         return EricaAuftragDto.parse_obj(created)
 
-    async def freischalt_code_bei_elster_beantragen(self, freischaltcode_dto: FreischaltCodeBeantragenDto,
-                                                    include_elster_responses: bool = False):
+    async def freischalt_code_apply_to_elster(self, freischaltcode_dto: FreischaltCodeBeantragenDto,
+                                              include_elster_responses: bool = False):
         request = UnlockCodeRequestController(UnlockCodeRequestData.parse_obj(
             {"idnr": freischaltcode_dto.tax_ident, "dob": freischaltcode_dto.date_of_birth}), include_elster_responses)
         return request.process()
-
-
-class FreischaltCodeServiceModule(Module):
-    def configure(self) -> None:
-        self.bind(FreischaltCodeServiceInterface, to_class=FreischaltCodeService)
