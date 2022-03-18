@@ -1,7 +1,7 @@
 import datetime
 from abc import abstractmethod, ABCMeta
 from uuid import uuid4
-from typing import Type
+from typing import Callable, Type
 
 from rq import Retry
 
@@ -34,15 +34,17 @@ class JobService(JobServiceInterface):
                  job_repository : EricaAuftragRepositoryInterface,
                  background_worker : BackgroundJobInterface,
                  payload_type: BaseDto,
-                 request_controller: Type[EricaRequestController]) -> None:
+                 request_controller: Type[EricaRequestController],
+                 job_method: Callable) -> None:
         super().__init__()
 
         self.repository = job_repository
         self.background_worker = background_worker
         self.payload_type = payload_type
         self.request_controller = request_controller
+        self.job_method = job_method
 
-    def queue(self, payload_dto: BaseDto, job_type: AuftragType, job_method) -> EricaAuftragDto:
+    def queue(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
         request_entity = EricaAuftrag(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       created_at=datetime.datetime.now(),
@@ -54,7 +56,7 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
 
         self.background_worker.enqueue(
-            job_method,
+            self.job_method,
             created.id,
             retry=Retry(max=3, interval=1),
             job_id=request_entity.job_id.__str__(),
