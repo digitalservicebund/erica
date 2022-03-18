@@ -1,27 +1,24 @@
 from uuid import UUID
 
 from fastapi import FastAPI
+from fastapi_versioning import VersionedFastAPI, version
+from opyoid import Injector
 
 from erica.api.ApiModule import ApiModule
+from erica.application.EricRequestProcessing.requests_controller import (
+    EricaRequestController, UnlockCodeActivationRequestController)
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.EricaAuftrag.EricaAuftragService import \
     EricaAuftragServiceInterface
-from erica.application.EricRequestProcessing.requests_controller import (
-    EricaRequestController, UnlockCodeActivationRequestController)
 from erica.application.FreischaltCode.FreischaltCode import (
     BaseDto, FreischaltCodeActivateDto, FreischaltCodeRequestDto)
-from erica.application.FreischaltCode.FreischaltCodeActivationService import \
-    FreischaltCodeActivationServiceInterface
 from erica.application.FreischaltCode.FreischaltCodeRequestService import \
     FreischaltCodeRequestServiceInterface
-from erica.application.JobService.job_service import (JobService,
-                                                      JobServiceInterface)
+from erica.application.JobService.job_service import (JobServiceInterface)
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.infrastructure.sqlalchemy.database import run_migrations
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import \
     EricaAuftragRepository
-from fastapi_versioning import VersionedFastAPI, version
-from opyoid import Injector
 
 run_migrations()
 app = FastAPI(
@@ -75,7 +72,6 @@ async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeA
     ])
     
     return await queue_job(freischalt_code_activation_injector, freischalt_code_activate_dto,  AuftragType.freischalt_code_activate, activate_freischalt_code)
-
 
 
 app = VersionedFastAPI(app)

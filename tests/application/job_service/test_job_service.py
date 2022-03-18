@@ -3,13 +3,16 @@ from unittest.mock import Mock, MagicMock, call, patch
 
 import pytest
 from freezegun import freeze_time
+from opyoid import Module, Injector
 from sqlalchemy.orm import Session
 
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobService
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
+from erica.domain.Repositories.EricaAuftragRepositoryInterface import EricaAuftragRepositoryInterface
 from erica.domain.Shared.EricaAuftrag import AuftragType
-from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
+from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController, \
+    EricaRequestController
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
 
 
@@ -82,6 +85,36 @@ class TestJobServiceQueue:
             creator_id="api",
             type=AuftragType.freischalt_code_activate
         )
+
+    @freeze_time("2001-01-03 08:22:00")
+    @pytest.mark.freeze_uuids
+    def test_if_injector_is_used_then_all_dependencies_are_set_correctly(self):
+        class TestModule(Module):
+            def configure(self) -> None:
+                self.bind(EricaAuftragRepositoryInterface, to_class=MockEricaRequestRepository)
+                self.bind(EricaRequestController, to_class=MockRequestController)
+                self.bind(BaseDto, to_class=MockDto)
+
+        test_injector = Injector([
+            TestModule()
+        ])
+        mock_job = PickableMock()
+        service = test_injector.inject(JobService)
+        input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
+
+        service.queue(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
+
+        assert service.repository[0] == EricaAuftrag(
+            id="1234",
+            job_id="00000000-0000-0000-0000-000000000000",
+            payload=input_data,
+            created_at=datetime.now().__str__(),
+            updated_at=datetime.now().__str__(),
+            creator_id="api",
+            type=AuftragType.freischalt_code_activate
+        )
+
+
 
     @pytest.mark.freeze_uuids
     def test_if_input_data_provided_then_add_job_to_background_job_worker_with_correct_params(self):

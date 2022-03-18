@@ -27,6 +27,7 @@ class JobServiceInterface():
     async def run(self, request_entity: EricaAuftrag, include_elster_responses: bool):
         pass
 
+
 class JobService(JobServiceInterface):
 
     def __init__(self,
