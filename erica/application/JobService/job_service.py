@@ -1,7 +1,7 @@
 import datetime
 from abc import abstractmethod, ABCMeta
 from uuid import uuid4
-from typing import Callable, Type
+from typing import Type
 
 from rq import Retry
 
@@ -44,7 +44,7 @@ class JobService(JobServiceInterface):
         self.request_controller = request_controller
         self.job_method = job_method
 
-    def queue(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
+    def apply_queued_to_elster(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
         request_entity = EricaAuftrag(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       created_at=datetime.datetime.now(),

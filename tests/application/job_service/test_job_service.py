@@ -74,7 +74,7 @@ class TestJobServiceQueue:
                              request_controller=MockRequestController, payload_type=MockDto)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.queue(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
+        service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
 
         assert service.repository[0] == EricaAuftrag(
             id="1234",
@@ -102,7 +102,7 @@ class TestJobServiceQueue:
         service = test_injector.inject(JobService)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.queue(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
+        service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
 
         assert service.repository[0] == EricaAuftrag(
             id="1234",
@@ -127,7 +127,7 @@ class TestJobServiceQueue:
 
         with patch('erica.application.JobService.job_service.Retry', mock_retry):
             # TODO we have some dependency on the Retry object inside the service which should only be part of the infrastructure I think, so we should probably remove that
-            service.queue(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
+            service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate, job_method=mock_job)
 
         assert mock_bg_worker.enqueue.mock_calls == [
             call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000", retry="retry")]

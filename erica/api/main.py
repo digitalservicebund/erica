@@ -6,14 +6,17 @@ from fastapi_versioning import VersionedFastAPI, version
 from opyoid import Injector
 
 from erica.api.ApiModule import ApiModule
+from erica.application.EricRequestProcessing.requests_controller import (
+    EricaRequestController, UnlockCodeActivationRequestController)
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.EricaAuftrag.EricaAuftragService import \
     EricaAuftragServiceInterface
 from erica.application.FreischaltCode.FreischaltCode import (
-    FreischaltCodeActivateDto, FreischaltCodeRequestDto)
+    BaseDto, FreischaltCodeActivateDto, FreischaltCodeRequestDto)
 from erica.application.FreischaltCode.FreischaltCodeRequestService import \
     FreischaltCodeRequestServiceInterface
 from erica.application.JobService.job_factory import get_job
+from erica.application.JobService.job_service import (JobService, JobServiceInterface)
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.infrastructure.sqlalchemy.database import run_migrations
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import \
