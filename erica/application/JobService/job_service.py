@@ -41,7 +41,7 @@ class JobService(JobServiceInterface):
         self.payload_type = payload_type
         self.request_controller = request_controller
 
-    async def queue(self, payload_dto: BaseDto, job_type: AuftragType, job_method) -> EricaAuftragDto:
+    def queue(self, payload_dto: BaseDto, job_type: AuftragType, job_method) -> EricaAuftragDto:
         request_entity = EricaAuftrag(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       created_at=datetime.datetime.now(),
@@ -52,14 +52,15 @@ class JobService(JobServiceInterface):
 
         created = self.repository.create(request_entity)
 
-        self.background_worker.enqueue(job_method,
-                                  created.id,
-                                  retry=Retry(max=3, interval=1),
-                                  job_id=request_entity.job_id.__str__()
-                                  )
+        self.background_worker.enqueue(
+            created.id,
+            f=job_method,
+            retry=Retry(max=3, interval=1),
+            job_id=request_entity.job_id.__str__()
+        )
 
         return EricaAuftragDto.parse_obj(created)
 
-    async def run(self, request_entity: EricaAuftrag, include_elster_responses: bool = False):
+    def run(self, request_entity: EricaAuftrag, include_elster_responses: bool = False):
         controller = self.request_controller(request_entity.payload, include_elster_responses) # TODO check if we can directly inject the class
         return controller.process()
