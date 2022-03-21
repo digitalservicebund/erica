@@ -62,7 +62,7 @@ class Grundstueck(CamelCaseInput):
     adresse: Adresse
     innerhalb_einer_gemeinde: bool
     anzahl: int
-    bodenrichtwert: str
+    bodenrichtwert: constr(regex=r"^(?=.{4,9}$)(?!0\d)\d{1,6}(,\d{2,2})$")
     flurstueck: List[Flurstueck]
 
     @validator("adresse", always=True)

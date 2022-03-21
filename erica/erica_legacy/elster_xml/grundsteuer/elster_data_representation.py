@@ -10,7 +10,7 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input impo
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import \
     Eigentuemer as EigentuemerInput
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
-    EGemarkungen
+    EGemarkungen, EAngGrund
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import \
     Grundstueck as GrundstueckInput
 
@@ -53,10 +53,12 @@ class EGW1:
 @dataclass
 class EGW2:
     Ang_Grundstuecksart: EAngGrundstuecksart
+    Ang_Grund: EAngGrund
     Ang_Wohn: EAngWohn
 
     def __init__(self, input_data: GrundsteuerData):
         self.Ang_Grundstuecksart = EAngGrundstuecksart(input_data.grundstueck)
+        self.Ang_Grund = EAngGrund(input_data.grundstueck)
         self.Ang_Wohn = EAngWohn(input_data.gebaeude)
 
 

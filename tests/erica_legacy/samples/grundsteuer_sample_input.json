@@ -11,7 +11,7 @@
     "typ": "einfamilienhaus",
     "innerhalb_einer_gemeinde": true,
     "anzahl": 1,
-    "bodenrichtwert": "42",
+    "bodenrichtwert": "41,99",
     "flurstueck": [
       {
         "angaben": {
@@ -39,7 +39,7 @@
           "wirtschaftliche_einheit_zaehler": "2.0000",
           "wirtschaftliche_einheit_nenner": "4"
         },
-        "groesse_qm": 123456789012345
+        "groesse_qm": 100000000000000
       }
     ]
   },

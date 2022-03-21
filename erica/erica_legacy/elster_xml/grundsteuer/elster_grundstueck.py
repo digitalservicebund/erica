@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import Optional, List
 
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck, \
@@ -91,3 +92,26 @@ class EGemarkungen:
         for flurstueck in flurstucke:
             elster_flurstueck = EFlurstueck(flurstueck)
             self.Einz.append(elster_flurstueck)
+
+
+@dataclass
+class EAngFlaeche:
+    E7403010: int  # flaeche
+    E7403011: str  # bodenrichtwert
+
+    def __init__(self, grundstueck: Grundstueck):
+        gesamtflaeche = 0
+        for flurstueck in grundstueck.flurstueck:
+            w_einheit_zaehler = Decimal(flurstueck.flur.wirtschaftliche_einheit_zaehler)
+            w_einheit_nenner = flurstueck.flur.wirtschaftliche_einheit_nenner
+            gesamtflaeche += (w_einheit_zaehler / w_einheit_nenner) * flurstueck.groesse_qm
+        self.E7403010 = int(gesamtflaeche)
+        self.E7403011 = grundstueck.bodenrichtwert
+
+
+@dataclass
+class EAngGrund:
+    Ang_Flaeche: EAngFlaeche
+
+    def __init__(self, grundstueck: Grundstueck):
+        self.Ang_Flaeche = EAngFlaeche(grundstueck)

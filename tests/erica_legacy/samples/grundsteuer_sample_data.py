@@ -78,7 +78,7 @@ class SampleGrundstueck(Builder):
             "typ": "einfamilienhaus",
             "innerhalb_einer_gemeinde": True,
             "anzahl": 1,
-            "bodenrichtwert": "42",
+            "bodenrichtwert": "41,99",
             "flurstueck": [
             ]
         }
@@ -113,6 +113,10 @@ class SampleGrundstueck(Builder):
 
     def abweichende_enwticklung(self, zustand):
         self.dict["abweichende_entwicklung"] = zustand
+        return self
+
+    def bodenrichtwert(self, bodenrichtwert):
+        self.dict["bodenrichtwert"] = bodenrichtwert
         return self
 
     def flurstuck(self, flurstueck: SampleFlurstueck):
