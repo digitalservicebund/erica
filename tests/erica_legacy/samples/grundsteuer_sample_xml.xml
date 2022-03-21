@@ -80,6 +80,30 @@
                             <E7412201>123-456</E7412201>
                         </Empfangsv>
                     </GW1>
+                    <GW2>
+                        <Ang_Wohn>
+                            <E7403114>1970</E7403114>
+                            <E7403115>2002</E7403115>
+                            <E7403116>2030</E7403116>
+                            <Garagen>
+                                <E7403171>2</E7403171>
+                            </Garagen>
+                            <Ang_Durchschn>
+                                <Wohn_Unter60>
+                                    <E7403131>1</E7403131>
+                                    <E7403132>42</E7403132>
+                                </Wohn_Unter60>
+                                <Wohn_60bis100>
+                                    <E7403141>1</E7403141>
+                                    <E7403142>99</E7403142>
+                                </Wohn_60bis100>
+                                <Weitere_Wohn>
+                                    <E7403121>2</E7403121>
+                                    <E7403122>24</E7403122>
+                                </Weitere_Wohn>
+                            </Ang_Durchschn>
+                        </Ang_Wohn>
+                    </GW2>
                     <Vorsatz>
                         <Unterfallart>88</Unterfallart>
                         <Vorgang>01</Vorgang>

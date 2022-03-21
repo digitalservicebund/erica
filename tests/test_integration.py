@@ -7,8 +7,7 @@ from decimal import Decimal
 import pytest
 import requests
 
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_sample_single_person_dict, \
-    get_sample_empfangsbevollmaechtigter_dict
+from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
 
 ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://0.0.0.0:8000")
 
@@ -81,21 +80,7 @@ def full_est_data():
 
 @pytest.fixture()
 def full_grundsteuer_data():
-    valid_person_data = {
-        "person": [
-            get_sample_single_person_dict(complete=True, only_postfach=True, only_strasse=True)
-        ],
-    }
-    valid_empfangsvollmacht_data = {
-        "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict(complete=True, only_postfach=True, only_strasse=True)
-    }
-
-    valid_eigentuemer = {**valid_person_data, **valid_empfangsvollmacht_data}
-    full_data = {
-        "eigentuemer": valid_eigentuemer
-    }
-
-    return full_data
+    return get_grundsteuer_sample_data().dict()
 
 
 class TestV1Ping:
@@ -236,7 +221,7 @@ class TestV1Grundsteuer:
 
         assert response.status_code == 422
 
-    def test_if_post_without_data_then_return_422(self, full_grundsteuer_data):
+    def test_if_post_with_data_then_return_422(self, full_grundsteuer_data):
         response = requests.post(ERICA_TESTING_URL + "/01/grundsteuer",  data=json.dumps(full_grundsteuer_data, default=str))
 
         assert response.status_code == 422
