@@ -24,7 +24,7 @@ class FreischaltCodeRevocationServiceInterface:
         pass
 
     @abstractmethod
-    def deactivate(self, freischaltcode_dto: FreischaltCodeRevocateDto,
+    def revocate(self, freischaltcode_dto: FreischaltCodeRevocateDto,
                                                 include_elster_responses: bool):
         pass
 
@@ -58,9 +58,9 @@ class FreischaltCodeRevocationService(FreischaltCodeRevocationServiceInterface):
 
         return EricaAuftragDto.parse_obj(created)
 
-    async def deactivate(self, freischaltcode_dto: FreischaltCodeRevocateDto,
+    async def revocate(self, freischaltcode_dto: FreischaltCodeRevocateDto,
                                                       include_elster_responses: bool = False):
         request = UnlockCodeRevocationRequestController(UnlockCodeRevocationData.parse_obj(
-            {"idnr": freischaltcode_dto.tax_ident, "elster_request_id": freischaltcode_dto.elster_request_id}),
+            {"idnr": freischaltcode_dto.idnr, "elster_request_id": freischaltcode_dto.elster_request_id}),
             include_elster_responses)
         return request.process()

@@ -18,7 +18,7 @@ class JobServiceInterface():
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def queue(self, payload_dto: BaseDto, job_type: AuftragType, job_method) -> EricaAuftragDto:
+    def queue(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
         pass
 
     @abstractmethod
@@ -42,7 +42,7 @@ class JobService(JobServiceInterface):
         self.request_controller = request_controller
         self.job_method = job_method
 
-    def apply_queued_to_elster(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
+    def queue(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
         request_entity = EricaAuftrag(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       created_at=datetime.datetime.now(),
@@ -54,7 +54,6 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
 
         self.background_worker.enqueue(
-            created.id,
             f=self.job_method,
             retry=Retry(max=3, interval=1),
             job_id=request_entity.job_id.__str__(),

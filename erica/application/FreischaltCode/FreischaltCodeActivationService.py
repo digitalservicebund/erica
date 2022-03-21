@@ -59,7 +59,7 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
     async def activate(self, freischaltcode_dto: FreischaltCodeActivateDto,
                                                     include_elster_responses: bool = False):
         request = UnlockCodeActivationRequestController(UnlockCodeActivationData.parse_obj(
-            {"idnr": freischaltcode_dto.tax_ident, "unlock_code": freischaltcode_dto.freischalt_code,
+            {"idnr": freischaltcode_dto.idnr, "unlock_code": freischaltcode_dto.freischalt_code,
              "elster_request_id": freischaltcode_dto.elster_request_id}),
             include_elster_responses)
         return request.process()

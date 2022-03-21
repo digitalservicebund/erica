@@ -1,6 +1,7 @@
 import logging
 
 from opyoid import Injector
+from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRevocateDto
 
 from lib.pyeric.eric_errors import EricProcessNotSuccessful
 
@@ -50,7 +51,7 @@ async def activate_freischalt_code(entity_id):
     logging.getLogger().info("Try to activcate unlock code. For Entity Id " + entity.id.__str__(), exc_info=True)
     
     try:
-        response = await service.request(request, True)
+        response = await service.activate(request, True)
         entity.elster_request_id = response.__str__
         entity.status = Status.success
         repository.update(entity.id, entity)
@@ -62,3 +63,31 @@ async def activate_freischalt_code(entity_id):
         raise
 
     logging.getLogger().info("Unlock code activation success. For entity id " + entity.id.__str__(), exc_info=True)
+
+async def revocation_freischalt_code(entity_id):
+    from erica.api.ApiModule import ApiModule
+    from erica.application.FreischaltCode.FreischaltCodeRevocationService import FreischaltCodeRevocationServiceInterface
+    from erica.domain.Repositories.EricaAuftragRepositoryInterface import EricaAuftragRepositoryInterface
+    from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRevocateDto
+
+    injector = Injector([ApiModule()])
+    repository = injector.inject(EricaAuftragRepositoryInterface)
+    service = injector.inject(FreischaltCodeRevocationServiceInterface)
+    entity = repository.get_by_id(entity_id)
+    request = FreischaltCodeRevocateDto.parse_obj(entity.payload)
+
+    logging.getLogger().info("Try to revocate unlock code. For Entity Id " + entity.id.__str__(), exc_info=True)
+    
+    try:
+        response = await service.revocate(request, True)
+        entity.elster_request_id = response.__str__
+        entity.status = Status.success
+        repository.update(entity.id, entity)
+    except EricProcessNotSuccessful as e:
+        logging.getLogger().warn(
+            "Could not revocate unlock code. Got Error Message: " + e.generate_error_response(True).__str__(),
+            exc_info=True
+        )
+        raise
+
+    logging.getLogger().info("Revocate code Request Success. For Entity Id " + entity.id.__str__(), exc_info=True)

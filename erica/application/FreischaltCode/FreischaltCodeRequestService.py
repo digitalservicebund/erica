@@ -60,6 +60,6 @@ class FreischaltCodeRequestService(FreischaltCodeRequestServiceInterface):
     async def request(self, freischaltcode_dto: FreischaltCodeRequestDto,
                                                     include_elster_responses: bool = False):
         request = UnlockCodeRequestController(UnlockCodeRequestData.parse_obj(
-            {"idnr": freischaltcode_dto.tax_ident, "dob": freischaltcode_dto.date_of_birth}), include_elster_responses)
+            {"idnr": freischaltcode_dto.idnr, "dob": freischaltcode_dto.date_of_birth}), include_elster_responses)
         return request.process()
 
