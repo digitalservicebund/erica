@@ -14,7 +14,6 @@ class EntityNotFoundError(Exception):
     pass
 
 
-
 class EntityNotFoundError(Exception):
     """ Raised in case an entity could not be found in the database"""
     pass
@@ -49,28 +48,21 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
             raise EntityNotFoundError
         return self.DomainModel.from_orm(entity)
 
-    def get_by_job_id(self, job_id: UUID) -> T:
-        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.job_id == job_id).first()
-        if entity is None:
-            raise EntityNotFoundError
-        return self.DomainModel.from_orm(entity)
-
-    def _get_by_id(self, entity_id: UUID):
+    def _get_by_id(self, entity_id: Integer):
         entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
         return entity
 
-    def update(self, entity_id: UUID, model: BaseModel) -> T:
+    def update(self, entity_id: Integer, model: BaseModel) -> T:
         current = self._get_by_id(entity_id)
         current.update(model.dict())
         self.db_connection.commit()
 
-        updated = self.get_by_job_id(entity_id)
+        updated = self.get_by_id(entity_id)
         return self.DomainModel.from_orm(updated)
 
-    def delete(self, entity_id: UUID):
+    def delete(self, entity_id: Integer):
         entity = self._get_by_id(entity_id).first()
         if entity is None:
             raise EntityNotFoundError
-
         self.db_connection.delete(entity)
         self.db_connection.commit()
