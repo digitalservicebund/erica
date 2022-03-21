@@ -21,7 +21,7 @@ class EricaAuftragServiceInterface:
 class EricaAuftragService(EricaAuftragServiceInterface):
     erica_auftrag_repository: EricaRequestRepository
 
-    def __init__(self, repository: EricaRequestRepository = injector.inject(EricaRequestRepository)) -> None:
+    def __init__(self, repository: EricaRequestRepository) -> None:
         super().__init__()
         self.erica_auftrag_repository = repository
 
