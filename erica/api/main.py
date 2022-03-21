@@ -47,12 +47,12 @@ async def get_erica_auftrag_status(auftrag_id: UUID):
 @app.post("/freischalt_code/request", response_model=EricaAuftragDto)
 @version(1, 0)
 async def request_freischalt_code(freischalt_code_request_dto: FreischaltCodeRequestDto):
-    return get_job_service(RequestType.freischalt_code_request).apply_queued_to_elster(freischalt_code_request_dto, RequestType.freischalt_code_request)
+    return get_job_service(RequestType.freischalt_code_request).add_to_queue(freischalt_code_request_dto, RequestType.freischalt_code_request)
 
 
 @app.post("/freischalt_code/activate", response_model=EricaAuftragDto)
 @version(1, 0)
 async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeActivateDto):
-    return get_job_service(RequestType.freischalt_code_activate).apply_queued_to_elster(freischalt_code_activate_dto, RequestType.freischalt_code_activate)
+    return get_job_service(RequestType.freischalt_code_activate).add_to_queue(freischalt_code_activate_dto, RequestType.freischalt_code_activate)
 
 app = VersionedFastAPI(app)

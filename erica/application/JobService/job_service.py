@@ -20,7 +20,7 @@ class JobServiceInterface():
     repository: EricaAuftragRepositoryInterface  = None
 
     @abstractmethod
-    def apply_queued_to_elster(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
+    def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         pass
 
     @abstractmethod
@@ -44,7 +44,7 @@ class JobService(JobServiceInterface):
         self.request_controller = request_controller
         self.job_method = job_method
 
-    def apply_queued_to_elster(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
+    def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         request_entity = EricaAuftrag(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       created_at=datetime.datetime.now(),
