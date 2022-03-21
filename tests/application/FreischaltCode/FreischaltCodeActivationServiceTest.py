@@ -4,32 +4,11 @@ from unittest.mock import Mock, patch, MagicMock, mock_open
 from opyoid import Module
 
 import pytest
-from erica.application.FreischaltCode.FreischaltCodeActivationService import FreischaltCodeActivationService
 
-from erica.erica_legacy.config import get_settings
-from tests.erica_legacy.utils import gen_random_key, missing_cert, missing_pyeric_lib
-from erica.erica_legacy.pyeric.eric import EricWrapper, EricDruckParameterT, EricVerschluesselungsParameterT, EricResponse, \
-    get_eric_wrapper
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricNullReturnedError, EricGlobalError
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepositoryInterface
-from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
+from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
+from erica.erica_legacy.pyeric.eric import get_eric_wrapper
 
 TEST_CERTIFICATE_PATH = 'erica/erica_legacy/instances/blueprint/cert.pfx'
-
-
-class FreischaltCodeActivationServiceTest(unittest.TestCase):
-    
-    def given_freischaltcode_dto_when_queue_then_entity_created_in_repository(self):
-        entity = Mock()
-        freischaltcode_repository_mock = Mock()
-        
-        entity.id
-        freischaltcode_repository_mock.create.return_value = entity
-        
-        service = FreischaltCodeActivationService(freischaltcode_repository_mock, Mock())
-        
-        
-
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
