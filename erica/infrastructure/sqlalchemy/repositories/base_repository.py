@@ -58,7 +58,7 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
         current.update(model.dict())
         self.db_connection.commit()
 
-        updated = self.get_by_id(entity_id)
+        updated = self.get_by_job_id(entity_id)
         return self.DomainModel.from_orm(updated)
 
     def delete(self, entity_id: UUID):
