@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic.main import BaseModel
 
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
-from erica.domain.Shared.EricaAuftrag import AuftragType
+from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.domain.Shared.Status import Status
 
 
@@ -14,7 +14,7 @@ class BasePayload(BaseModel):
 
 
 class EricaAuftrag(BaseDomainModel[UUID]):
-    type: AuftragType
+    type: RequestType
     status: Status = Status.new
     payload: object
     job_id: UUID

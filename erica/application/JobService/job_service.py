@@ -10,7 +10,7 @@ from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
-from erica.domain.Shared.EricaAuftrag import AuftragType
+from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepositoryInterface
 
 
@@ -20,7 +20,7 @@ class JobServiceInterface():
     repository: EricaAuftragRepositoryInterface  = None
 
     @abstractmethod
-    def queue(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
+    def apply_queued_to_elster(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         pass
 
     @abstractmethod
@@ -44,7 +44,7 @@ class JobService(JobServiceInterface):
         self.request_controller = request_controller
         self.job_method = job_method
 
-    def queue(self, payload_dto: BaseDto, job_type: AuftragType) -> EricaAuftragDto:
+    def apply_queued_to_elster(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         request_entity = EricaAuftrag(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       created_at=datetime.datetime.now(),
@@ -56,6 +56,7 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
 
         self.background_worker.enqueue(
+            created.id,
             f=self.job_method,
             retry=Retry(max=3, interval=1),
             job_id=request_entity.job_id.__str__(),
@@ -63,6 +64,6 @@ class JobService(JobServiceInterface):
 
         return EricaAuftragDto.parse_obj(created)
 
-    def apply_to_elster(self, request_entity: EricaAuftrag, include_elster_responses: bool = False):
-        controller = self.request_controller(request_entity.payload, include_elster_responses) # TODO check if we can directly inject the class
+    def apply_to_elster(self, payload_data, include_elster_responses: bool = False):
+        controller = self.request_controller(payload_data, include_elster_responses) # TODO check if we can directly inject the class
         return controller.process()

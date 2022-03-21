@@ -9,7 +9,7 @@ from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobService
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
-from erica.domain.Shared.EricaAuftrag import AuftragType
+from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
 
@@ -76,7 +76,7 @@ class TestJobServiceQueue:
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate)
+        service.apply_queued_to_elster(input_data, job_type=RequestType.freischalt_code_activate)
 
         assert service.repository[0] == EricaAuftrag(
             id="1234",
@@ -85,7 +85,7 @@ class TestJobServiceQueue:
             created_at=datetime.now().__str__(),
             updated_at=datetime.now().__str__(),
             creator_id="api",
-            type=AuftragType.freischalt_code_activate
+            type=RequestType.freischalt_code_activate
         )
 
     @pytest.mark.freeze_uuids
@@ -99,7 +99,7 @@ class TestJobServiceQueue:
 
         with patch('erica.application.JobService.job_service.Retry', mock_retry):
             # TODO we have some dependency on the Retry object inside the service which should only be part of the infrastructure I think, so we should probably remove that
-            service.apply_queued_to_elster(input_data, job_type=AuftragType.freischalt_code_activate)
+            service.apply_queued_to_elster(input_data, job_type=RequestType.freischalt_code_activate)
 
         assert mock_bg_worker.enqueue.mock_calls == [
             call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000", retry="retry")]
@@ -114,17 +114,8 @@ class TestJobServiceRun:
         service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
                              request_controller=mock_request_controller, payload_type=MockDto, job_method=MagicMock())
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
-        request_entity = EricaAuftrag(
-            id="1234",
-            job_id="00000000-0000-0000-0000-000000000000",
-            payload=input_data,
-            created_at=datetime.now().__str__(),
-            updated_at=datetime.now().__str__(),
-            creator_id="api",
-            type=AuftragType.freischalt_code_activate
-        )
 
-        service.apply_to_elster(request_entity)
+        service.apply_to_elster(input_data)
 
         assert mock_request_controller.mock_calls == [call(input_data, False)]
 
@@ -142,7 +133,7 @@ class TestJobServiceRun:
             created_at=datetime.now().__str__(),
             updated_at=datetime.now().__str__(),
             creator_id="api",
-            type=AuftragType.freischalt_code_activate
+            type=RequestType.freischalt_code_activate
         )
 
         service.apply_to_elster(request_entity)

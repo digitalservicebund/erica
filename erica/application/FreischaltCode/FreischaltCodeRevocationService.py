@@ -12,7 +12,7 @@ from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRevocatePayload
-from erica.domain.Shared.EricaAuftrag import AuftragType
+from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
 
 
@@ -45,7 +45,7 @@ class FreischaltCodeRevocationService(FreischaltCodeRevocationServiceInterface):
                                       created_at=datetime.datetime.now(),
                                       updated_at=datetime.datetime.now(),
                                       creator_id="api",
-                                      type=AuftragType.freischalt_code_revocate
+                                      type=RequestType.freischalt_code_revocate
                                       )
 
         created = self.freischaltcode_repository.create(freischaltcode)
