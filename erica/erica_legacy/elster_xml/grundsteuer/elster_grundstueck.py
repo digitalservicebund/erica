@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass
 from typing import Optional
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck
 
 
 @dataclass
@@ -40,3 +40,11 @@ class ELage:
         self.E7401131 = adresse.zusatzangaben
         self.E7401121 = adresse.plz
         self.E7401122 = adresse.ort
+
+
+@dataclass
+class EAngGrundstuecksart:
+    E7401322: str
+
+    def __init__(self, grundstueck: Grundstueck):
+        self.E7401322 = grundstueck.typ

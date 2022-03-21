@@ -1,15 +1,17 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
-from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, construct_basic_xml_data_representation
+from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, \
+    construct_basic_xml_data_representation
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import \
     Eigentuemer as EigentuemerInput
-from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck as GrundstueckInput
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import \
+    Grundstueck as GrundstueckInput
 
 """
     The content of the Grundsteuer Nutzdaten XML as its data prepresentation.
@@ -42,9 +44,11 @@ class EGW1:
 
 @dataclass
 class EGW2:
+    Ang_Grundstuecksart: EAngGrundstuecksart
     Ang_Wohn: EAngWohn
 
     def __init__(self, input_data: GrundsteuerData):
+        self.Ang_Grundstuecksart = EAngGrundstuecksart(input_data.grundstueck)
         self.Ang_Wohn = EAngWohn(input_data.gebaeude)
 
 

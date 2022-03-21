@@ -9,8 +9,9 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import
     get_full_grundsteuer_data_representation, EGW2, EGW1
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
+from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer, Person
-from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data, \
     get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict, SampleGrundstueck
 
@@ -63,6 +64,17 @@ class TestEGW1:
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
         assert len(vars(result)) == 5
+
+
+class TestEGW2:
+    def test_if_one_person_then_attributes_set_correctly(self):
+        input_data = get_grundsteuer_sample_data()
+
+        result = EGW2(input_data)
+
+        assert result.Ang_Grundstuecksart == EAngGrundstuecksart(input_data.grundstueck)
+        assert result.Ang_Wohn == EAngWohn(input_data.gebaeude)
+        assert len(vars(result)) == 2
 
 
 class TestERueckuebermittlung:
