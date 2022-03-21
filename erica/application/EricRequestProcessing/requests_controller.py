@@ -6,7 +6,7 @@ from erica.erica_legacy.pyeric.pyeric_controller import EstValidationPyericProce
     UnlockCodeRevocationPyericProcessController, CheckTaxNumberPyericController, BelegIdRequestPyericProcessController, \
     BelegRequestPyericProcessController, DecryptBelegePyericController
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.erica_legacy.pyeric.config import get_settings
+from erica.erica_legacy.config import get_settings
 from erica.application.EricRequestProcessing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.application.EricRequestProcessing.erica_input.v1.erica_input import EstData, UnlockCodeRequestData
 from erica.erica_legacy.elster_xml import elster_xml_generator
