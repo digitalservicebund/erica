@@ -33,6 +33,7 @@ def __create_tables_if_not_exists():
 
 
 class DatabaseSessionProvider(Provider[Session]):
+
     def get(self) -> Session:
         engine = get_engine()
         if not database_exists(engine.url):

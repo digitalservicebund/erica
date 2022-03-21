@@ -11,4 +11,4 @@ class TestInfrastructureModule:
         injector = Injector([InfrastructureModule()])
         erica_request_repository = injector.inject(EricaRequestRepository)
 
-        assert erica_request_repository.db_connection.bind == DatabaseSessionProvider().get().bind
+        assert erica_request_repository.db_connection.bind.url == DatabaseSessionProvider().get().bind.url
