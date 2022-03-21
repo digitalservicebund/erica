@@ -9,7 +9,7 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import \
     Eigentuemer as EigentuemerInput
-from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import \
     Grundstueck as GrundstueckInput
 
@@ -23,6 +23,7 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grun
 class EGW1:
     Ang_Feststellung: EAngFeststellung
     Lage: ELage
+    Mehrere_Gemeinden: Optional[EMehrereGemeinden]
     Eigentuemer: List[EPersonData]
     Eigentumsverh: EEigentumsverh
     Empfangsv: Optional[EEmpfangsbevollmaechtigter]
@@ -30,6 +31,10 @@ class EGW1:
     def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput):
         self.Ang_Feststellung = EAngFeststellung()
         self.Lage = ELage(grundstueck.adresse)
+        if not grundstueck.innerhalb_einer_gemeinde:
+            self.Mehrere_Gemeinden = EMehrereGemeinden()
+        else:
+            self.Mehrere_Gemeinden = None
         self.Eigentuemer = []
         for index, input_eigentuemer in enumerate(eigentuemer.person):
             new_eigentuemer = EPersonData(input_eigentuemer, index)

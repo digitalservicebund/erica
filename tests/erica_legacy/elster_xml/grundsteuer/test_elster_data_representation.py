@@ -11,7 +11,7 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFes
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer, Person
-from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data, \
     get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict, SampleGrundstueck
 
@@ -25,12 +25,11 @@ class TestEGW1:
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Ang_Feststellung == EAngFeststellung()
-        assert result.Lage == ELage(grundstueck_obj.adresse)
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
-        assert len(vars(result)) == 5
+        assert len(vars(result)) == 6
 
     def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
         person = get_sample_single_person_dict()
@@ -44,7 +43,7 @@ class TestEGW1:
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
-        assert len(vars(result)) == 5
+        assert len(vars(result)) == 6
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = get_sample_single_person_dict()
@@ -63,7 +62,37 @@ class TestEGW1:
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
-        assert len(vars(result)) == 5
+        assert len(vars(result)) == 6
+
+    def test_if_valid_grundstueck_then_set_lage_correctly(self):
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [get_sample_single_person_dict()]})
+        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinder(False).parse()
+
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
+
+        assert result.Lage == ELage(grundstueck_obj.adresse)
+        assert len(vars(result)) == 6
+
+    def test_if_not_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden(self):
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [get_sample_single_person_dict()]})
+        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinder(False).parse()
+
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
+
+        assert result.Mehrere_Gemeinden == EMehrereGemeinden()
+        assert len(vars(result)) == 6
+
+    def test_if_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden_to_none(self):
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [get_sample_single_person_dict()]})
+        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinder(True).parse()
+
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
+
+        assert result.Mehrere_Gemeinden is None
+        assert len(vars(result)) == 6
 
 
 class TestEGW2:

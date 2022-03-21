@@ -96,6 +96,10 @@ class SampleGrundstueck(Builder):
         self.dict["typ"] = typ
         return self
 
+    def innerhalb_einer_gemeinder(self, flag):
+        self.dict["innerhalb_einer_gemeinde"] = flag
+        return self
+
     def abweichende_enwticklung(self, zustand):
         self.dict["abweichende_entwicklung"] = zustand
         return self

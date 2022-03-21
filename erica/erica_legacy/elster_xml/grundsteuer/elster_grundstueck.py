@@ -48,3 +48,11 @@ class EAngGrundstuecksart:
 
     def __init__(self, grundstueck: Grundstueck):
         self.E7401322 = grundstueck.typ
+
+
+@dataclass
+class EMehrereGemeinden:
+    E7401190: int
+
+    def __init__(self):
+        self.E7401190 = 1

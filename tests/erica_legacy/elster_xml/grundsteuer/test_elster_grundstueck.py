@@ -1,4 +1,4 @@
-from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck
 
 
@@ -76,3 +76,11 @@ class TestAdresse:
         assert result.E7401131 is None
         assert result.E7401121 is None
         assert result.E7401122 is None
+
+
+class TestMehrereGemeinden:
+    def test_has_one_field_with_value_one(self):
+        result = EMehrereGemeinden()
+
+        assert result.E7401190 == 1
+        assert len(vars(result)) == 1
