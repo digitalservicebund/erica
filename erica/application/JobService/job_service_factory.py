@@ -2,7 +2,7 @@
 from typing import Callable, Type
 
 from opyoid import Injector
-from erica.api.ApiModule import ApiModule
+from erica.application.ApplicationModule import ApplicationModule
 from erica.application.EricRequestProcessing.requests_controller import EricaRequestController, UnlockCodeActivationRequestController
 
 from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltCodeActivateDto
@@ -15,7 +15,7 @@ injectors = []
 def _freischalt_code_activation_injector(dto: FreischaltCodeActivateDto):
     _freischalt_code_activation_injector.handle_type = FreischaltCodeActivateDto
     
-    module = ApiModule()
+    module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=UnlockCodeActivationRequestController)
     module.bind(BaseDto, to_instance=dto)
     module.bind(object, to_instance=dto)
