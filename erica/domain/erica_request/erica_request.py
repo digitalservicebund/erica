@@ -12,7 +12,7 @@ class BasePayload(BaseModel):
     __metaclass__ = ABCMeta
 
 
-class EricaAuftrag(BaseDomainModel[UUID]):
+class EricaRequest(BaseDomainModel[UUID]):
     type: AuftragType
     status: Status = Status.new
     payload: object

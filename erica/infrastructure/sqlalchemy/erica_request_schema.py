@@ -11,7 +11,7 @@ BaseDbSchema = declarative_base()
 
 
 class EricaRequestSchema(AuditedSchemaMixin, BaseDbSchema):
-    __tablename__ = 'erica_auftrag'
+    __tablename__ = 'erica_request'
     id = Column(Integer,
                 primary_key=True)
     type = Column(Enum(AuftragType))

@@ -11,7 +11,7 @@ from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeActivateDto
 from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
+from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload
 from erica.domain.Shared.EricaAuftrag import AuftragType
 from erica.infrastructure.infrastructure_module import InfrastructureModule
@@ -44,7 +44,7 @@ class FreischaltCodeActivationService(FreischaltCodeActivationServiceInterface):
 
     async def freischalt_code_bei_elster_aktivieren_queued(self, freischaltcode_dto: FreischaltCodeActivateDto) -> EricaAuftragDto:
         job_id = uuid4()
-        freischaltcode = EricaAuftrag(job_id=job_id,
+        freischaltcode = EricaRequest(job_id=job_id,
                                       payload=FreischaltCodeActivatePayload.parse_obj(freischaltcode_dto),
                                       created_at=datetime.datetime.now().__str__(),
                                       updated_at=datetime.datetime.now().__str__(),

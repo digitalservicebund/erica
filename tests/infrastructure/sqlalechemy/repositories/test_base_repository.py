@@ -3,7 +3,7 @@ from uuid import uuid4
 
 import pytest
 from pydantic import BaseModel
-from sqlalchemy import Column, text, Integer
+from sqlalchemy import Column, text
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
@@ -135,7 +135,6 @@ class TestBaseRepositoryGetByJobId:
         assert found_entity == mock_object
 
     def test_if_entity_not_in_database_then_raise_exception(self, transactional_session):
-        mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
         job_id = uuid4()
 
         with pytest.raises(EntityNotFoundError):
