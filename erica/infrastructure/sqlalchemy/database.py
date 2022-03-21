@@ -26,8 +26,7 @@ uri = DATABASE_URL or os.getenv('DB_URI')
 engine = create_engine(DATABASE_URL, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
 if not database_exists(engine.url):
     create_database(engine.url)
-else:
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def run_migrations():
