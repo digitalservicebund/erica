@@ -58,7 +58,6 @@ def get_job_service(request_type: RequestType) -> JobServiceInterface:
     This is a factory to get a corretly wired job service. Use that function to get any JobServiceInterface instance.
 
     :param request_type: The request type. The JobServiceInterface is chosen and wired based on this type.
-    :param dto: Optional data transfer object; the input coming in through the API.
     :return: Correctly wired JobServiceInterface
     """
     injector = injectors.get(request_type)
