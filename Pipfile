@@ -35,6 +35,7 @@ flake8 = "*"
 invoke = "*"
 xmldiff = "*"
 requests = "*"
+pytest-frozen-uuids = "*"
 
 [requires]
 python_version = "3.9"

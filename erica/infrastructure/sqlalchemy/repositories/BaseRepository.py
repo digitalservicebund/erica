@@ -7,6 +7,12 @@ from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInte
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
 from erica.infrastructure.sqlalchemy.EricaAuftragSchema import BaseDbSchema
 
+
+class EntityNotFoundError(Exception):
+    """ Raised in case an entity could not be found in the database"""
+    pass
+
+
 T = TypeVar('T', bound=BaseDomainModel)
 D = TypeVar('D', bound=BaseDbSchema)
 

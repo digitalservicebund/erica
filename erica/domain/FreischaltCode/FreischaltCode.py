@@ -4,7 +4,7 @@ from datetime import date
 from erica.domain.EricaAuftrag.EricaAuftrag import BasePayload
 
 
-class FreischaltCodeBeantragenPayload(BasePayload, ABC):
+class FreischaltCodeRequestPayload(BasePayload, ABC):
     tax_ident: str
     date_of_birth: date
 

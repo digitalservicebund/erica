@@ -82,9 +82,20 @@ You also need to obtain a test certificate from ELSTER and place it under `erica
 
 ## Developing 👩‍💻 👨‍💻
 
+
+Start your docker:
+```bash
+docker-compose up
+```
+
 ```bash
 export ERICA_ENV=development
 python -m erica 
+```
+
+Start a worker:
+```bash
+python3 -m erica.infrastructure.rq.worker [dongle|cert|common]
 ```
 
 ## Testing 📃
