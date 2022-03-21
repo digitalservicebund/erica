@@ -1,5 +1,5 @@
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden, EFlurstueck, \
-    EAngFlaeche
+    EAngFlaeche, EEntwZust, EAngGrund
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck, SampleFlurstueck
 
 
@@ -64,6 +64,7 @@ class TestAdresse:
         assert result.E7401131 == "hinterhaus"
         assert result.E7401121 == "12345"
         assert result.E7401122 == "Berlin"
+        assert len(vars(result)) == 6
 
     def test_if_empty_input_then_should_assign_all_fields_none(self):
         adresse = SampleGrundstueck().typ("baureif").strasse("").hausnummer("").zusatzangaben("").plz("").ort(
@@ -77,6 +78,7 @@ class TestAdresse:
         assert result.E7401131 is None
         assert result.E7401121 is None
         assert result.E7401122 is None
+        assert len(vars(result)) == 6
 
 
 class TestMehrereGemeinden:
@@ -102,6 +104,7 @@ class TestEFlurstueck:
         assert result.E7411001 == 4242
         assert result.E7410702 == "1.0000"
         assert result.E7410703 == 4
+        assert len(vars(result)) == 8
 
     def test_if_largest_groesse_then_parsed_identically(self):
         flurstuck = SampleFlurstueck().groesse(999999999999999).parse()
@@ -109,6 +112,38 @@ class TestEFlurstueck:
         result = EFlurstueck(flurstuck)
 
         assert result.E7411001 == 999999999999999
+
+
+class TestEEntwZust:
+    def test_if_bauerwartungsland_should_set_1(self):
+        result = EEntwZust("bauerwartungsland")
+
+        assert result.E7403051 == 1
+
+    def test_if_rohbauland_should_set_1(self):
+        result = EEntwZust("rohbauland")
+
+        assert result.E7403051 == 2
+
+
+class TestEAngGrund:
+    def test_if_valid_input_then_set_fields_correctly(self):
+        grundstueck = SampleGrundstueck().abweichende_enwticklung("rohbauland").parse()
+
+        result = EAngGrund(grundstueck)
+
+        assert result.Ang_Flaeche == EAngFlaeche(grundstueck)
+        assert result.Entw_Zust == EEntwZust(grundstueck.abweichende_entwicklung)
+        assert len(vars(result)) == 2
+
+    def test_if_no_abweichende_entwicklung_then_set_field_none(self):
+        grundstueck = SampleGrundstueck().parse()
+
+        result = EAngGrund(grundstueck)
+
+        assert result.Ang_Flaeche == EAngFlaeche(grundstueck)
+        assert result.Entw_Zust is None
+        assert len(vars(result)) == 2
 
 
 class TestEAngFlaeche:
@@ -120,6 +155,7 @@ class TestEAngFlaeche:
 
         assert result.E7403010 == 1000
         assert result.E7403011 == "422,99"
+        assert len(vars(result)) == 2
 
     def test_if_one_flurstueck_partial_should_calculate_correctly(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.0000").w_einheit_nenner(2).parse()

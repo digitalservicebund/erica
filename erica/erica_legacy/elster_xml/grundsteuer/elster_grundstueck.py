@@ -110,8 +110,24 @@ class EAngFlaeche:
 
 
 @dataclass
+class EEntwZust:
+    E7403051: int
+
+    def __init__(self, abweichende_entwicklung: str):
+        if abweichende_entwicklung == "bauerwartungsland":
+            self.E7403051 = 1
+        elif abweichende_entwicklung == "rohbauland":
+            self.E7403051 = 2
+
+
+@dataclass
 class EAngGrund:
     Ang_Flaeche: EAngFlaeche
+    Entw_Zust: Optional[EEntwZust]
 
     def __init__(self, grundstueck: Grundstueck):
         self.Ang_Flaeche = EAngFlaeche(grundstueck)
+        if grundstueck.abweichende_entwicklung:
+            self.Entw_Zust = EEntwZust(grundstueck.abweichende_entwicklung)
+        else:
+            self.Entw_Zust = None
