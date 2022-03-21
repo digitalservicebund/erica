@@ -33,6 +33,7 @@ injector = Injector([
 @app.get("/erica_auftraege")
 @version(1, 0)
 async def get_erica_auftrag_status_list(skip: int, limit: int):
+    # TODO Don't access the repository here directly. We should use a Service instead
     repo: EricaAuftragRepository = injector.inject(EricaAuftragRepository)
     return repo.get(skip, limit)
 
