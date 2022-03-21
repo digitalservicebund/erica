@@ -64,6 +64,6 @@ class JobService(JobServiceInterface):
 
         return EricaAuftragDto.parse_obj(created)
 
-    def apply_to_elster(self, payload_data, include_elster_responses: bool = False):
+    async def apply_to_elster(self, payload_data, include_elster_responses: bool = False):
         controller = self.request_controller(payload_data, include_elster_responses) # TODO check if we can directly inject the class
         return controller.process()

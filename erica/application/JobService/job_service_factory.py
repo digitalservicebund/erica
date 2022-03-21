@@ -11,7 +11,6 @@ from erica.application.JobService.job_service import JobService, JobServiceInter
 from erica.domain.Shared.EricaAuftrag import RequestType
 
 
-
 def _freischalt_code_request_injector():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=UnlockCodeRequestController)

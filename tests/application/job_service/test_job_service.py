@@ -107,7 +107,8 @@ class TestJobServiceQueue:
 
 class TestJobServiceRun:
 
-    def test_if_input_data_provided_then_call_init_of_request_controller_with_correct_data(self):
+    @pytest.mark.asyncio
+    async def test_if_input_data_provided_then_call_init_of_request_controller_with_correct_data(self):
         mock_bg_worker = MagicMock()
         controller_instance = MagicMock()
         mock_request_controller = MagicMock(return_value=controller_instance)
@@ -115,11 +116,12 @@ class TestJobServiceRun:
                              request_controller=mock_request_controller, payload_type=MockDto, job_method=MagicMock())
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.apply_to_elster(input_data)
+        await service.apply_to_elster(input_data)
 
         assert mock_request_controller.mock_calls == [call(input_data, False)]
 
-    def test_if_input_data_provided_then_call_process_with_input_data(self):
+    @pytest.mark.asyncio
+    async def test_if_input_data_provided_then_call_process_with_input_data(self):
         mock_bg_worker = MagicMock()
         controller_instance = MagicMock()
         mock_request_controller = MagicMock(return_value=controller_instance)
@@ -136,6 +138,6 @@ class TestJobServiceRun:
             type=RequestType.freischalt_code_activate
         )
 
-        service.apply_to_elster(request_entity)
+        await service.apply_to_elster(request_entity)
 
         assert controller_instance.process.call_count == 1
