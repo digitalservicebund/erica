@@ -63,7 +63,7 @@ class SampleGrundstueck(Builder):
                 "plz": "33333",
                 "ort": "Bielefeld",
             },
-            "steuernummer": "1234012345678",
+            "steuernummer": "1121081508150",
             "typ": "einfamilienhaus",
             "innerhalb_einer_gemeinde": True,
             "anzahl": 1,

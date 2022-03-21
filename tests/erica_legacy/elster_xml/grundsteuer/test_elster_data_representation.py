@@ -81,7 +81,7 @@ class TestEVorsatz:
 
         assert result.Unterfallart == "88"
         assert result.Vorgang == "01"
-        # TODO assert result.StNr == grundsteuer_obj.grundstueck.stnr.stnr
+        assert result.StNr == "1121081508150"
         assert result.Zeitraum == "2022"
         assert result.AbsName == grundsteuer_obj.eigentuemer.person[0].persoenlicheAngaben.vorname + \
                " " + \

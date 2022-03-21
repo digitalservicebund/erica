@@ -73,8 +73,7 @@ class EVorsatz:
     def __init__(self, input_data: GrundsteuerData):
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
-        # TODO
-        self.StNr = "1121081508150"
+        self.StNr = input_data.grundstueck.steuernummer
         self.Zeitraum = "2022"  # TODO require on input?
         self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + \
                        input_data.eigentuemer.person[0].persoenlicheAngaben.name
