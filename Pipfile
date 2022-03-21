@@ -37,6 +37,7 @@ xmldiff = "*"
 requests = "*"
 pytest-frozen-uuids = "*"
 pytest-pgsql = "*"
+pytest-asyncio = "*"
 
 [requires]
 python_version = "3.9"
