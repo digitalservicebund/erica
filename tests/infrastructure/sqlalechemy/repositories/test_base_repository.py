@@ -5,7 +5,7 @@ import pytest
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 
-from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
+from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
 from erica.infrastructure.sqlalchemy.database import run_migrations
 from erica.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
 from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockDomainModel, MockSchema

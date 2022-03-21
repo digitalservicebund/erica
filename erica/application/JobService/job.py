@@ -5,14 +5,14 @@ from uuid import UUID
 
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobServiceInterface
-from erica.domain.Repositories import BaseRepositoryInterface
+from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
-async def perform_job(entity_id: UUID, repository: BaseRepositoryInterface, service: JobServiceInterface, dto: Type[BaseDto], logger: Logger):
+async def perform_job(entity_id: UUID, repository: base_repository_interface, service: JobServiceInterface, dto: Type[BaseDto], logger: Logger):
     """
     The basic implementation for a job that is put on the Erica queue. It will get an entity, interact with the ERiC
     library using the service and then update the entity according to the result from the service.

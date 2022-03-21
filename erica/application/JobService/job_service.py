@@ -9,7 +9,7 @@ from erica.application.EricRequestProcessing.requests_controller import EricaReq
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.domain.Repositories.EricaRequestRepositoryInterface import EricaRequestRepositoryInterface
+from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.Shared.EricaAuftrag import RequestType
 
 from erica.domain.erica_request.erica_request import EricaRequest

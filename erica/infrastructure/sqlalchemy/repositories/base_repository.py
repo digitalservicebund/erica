@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy import Integer
 from sqlalchemy.orm import Session
 
-from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
+from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
 from erica.infrastructure.sqlalchemy.erica_request_schema import BaseDbSchema
 

@@ -4,7 +4,7 @@ from uuid import UUID
 from pydantic import BaseModel
 
 from erica.domain.erica_request.erica_request import EricaRequest
-from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
+from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
 
 
 class EricaRequestRepositoryInterface(BaseRepositoryInterface[EricaRequest], ABC):
