@@ -8,6 +8,8 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import \
     Eigentuemer as EigentuemerInput
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck as GrundstueckInput
 
 """
     The content of the Grundsteuer Nutzdaten XML as its data prepresentation.
@@ -18,20 +20,22 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eige
 @dataclass
 class EGW1:
     Ang_Feststellung: EAngFeststellung
+    Lage: ELage
     Eigentuemer: List[EPersonData]
     Eigentumsverh: EEigentumsverh
     Empfangsv: Optional[EEmpfangsbevollmaechtigter]
 
-    def __init__(self, input_data: EigentuemerInput):
+    def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput):
         self.Ang_Feststellung = EAngFeststellung()
+        self.Lage = ELage(grundstueck.adresse)
         self.Eigentuemer = []
-        for index, input_eigentuemer in enumerate(input_data.person):
+        for index, input_eigentuemer in enumerate(eigentuemer.person):
             new_eigentuemer = EPersonData(input_eigentuemer, index)
             self.Eigentuemer.append(new_eigentuemer)
-        self.Eigentumsverh = EEigentumsverh(input_data)
+        self.Eigentumsverh = EEigentumsverh(eigentuemer)
 
-        if hasattr(input_data, "empfangsbevollmaechtigter") and input_data.empfangsbevollmaechtigter:
-            self.Empfangsv = EEmpfangsbevollmaechtigter(input_data.empfangsbevollmaechtigter)
+        if hasattr(eigentuemer, "empfangsbevollmaechtigter") and eigentuemer.empfangsbevollmaechtigter:
+            self.Empfangsv = EEmpfangsbevollmaechtigter(eigentuemer.empfangsbevollmaechtigter)
         else:
             self.Empfangsv = None
 
@@ -92,7 +96,7 @@ class EGrundsteuerSpecifics:
     xml_attr_xmlns: str
 
     def __init__(self, input_data: GrundsteuerData):
-        self.GW1 = EGW1(input_data.eigentuemer)
+        self.GW1 = EGW1(input_data.eigentuemer, input_data.grundstueck)
         self.GW2 = EGW2(input_data)
         self.Vorsatz = EVorsatz(input_data)
         self.xml_attr_version = "2"

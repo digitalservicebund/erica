@@ -3,6 +3,7 @@ import datetime
 
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck
 
 
 class Builder:
@@ -79,6 +80,10 @@ class SampleGrundstueck(Builder):
         self.dict["adresse"]["hausnummer"] = hausnummer
         return self
 
+    def zusatzangaben(self, zusatzangaben):
+        self.dict["adresse"]["zusatzangaben"] = zusatzangaben
+        return self
+
     def plz(self, plz):
         self.dict["adresse"]["plz"] = plz
         return self
@@ -98,6 +103,9 @@ class SampleGrundstueck(Builder):
     def flurstuck(self, flurstueck: SampleFlurstueck):
         self.dict["flurstueck"].append(flurstueck)
         return self
+
+    def parse(self):
+        return Grundstueck.parse_obj(self.build())
 
 
 class SampleGebaeude(Builder):

@@ -2,8 +2,8 @@
   "grundstueck": {
     "adresse": {
       "strasse": "Madeupstr",
-      "hausnummer": "22",
-      "hausnummerzusatz": "b",
+      "hausnummer": "22a",
+      "zusatzangaben": "hinterhaus",
       "plz": "33333",
       "ort": "Bielefeld"
     },

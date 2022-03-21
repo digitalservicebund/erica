@@ -6,7 +6,8 @@ from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input impor
 
 
 class Adresse(CamelCaseInput):
-    hausnummer: Optional[str]
+    # string with 1-4 digits followed by an alphanumeric string of any length
+    hausnummer: Optional[constr(regex=r"([0-9]{1,4})([a-zA-Z0-9]*)")]  # noqa: F722
     strasse: Optional[str]
     zusatzangaben: Optional[str]
     plz: Optional[str]
@@ -66,7 +67,7 @@ class Grundstueck(CamelCaseInput):
 
     @validator("adresse", always=True)
     def adresse_fields_must_be_set_if_beabut(cls, v, values):
-        if "typ" in values and values["typ"] in ["einfamilienhaus", "mehrfamilienhaus", "wohnungseigentum"]:
-            if not v.strasse or not v.plz or not v.ort:
-                raise ValueError("strasse, plz and ort must be set if bebaut")
+        if "typ" in values and values["typ"] in ["einfamilienhaus", "mehrfamilienhaus", "wohnungseigentum"] and (
+                not v.strasse or not v.plz or not v.ort):
+            raise ValueError("strasse, plz and ort must be set if bebaut")
         return v

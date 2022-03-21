@@ -10,8 +10,9 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer, Person
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data, \
-    get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict
+    get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict, SampleGrundstueck
 
 
 class TestEGW1:
@@ -19,28 +20,30 @@ class TestEGW1:
         person = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person], "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict()})
-
-        result = EGW1(eigentuemer_obj)
+        grundstueck_obj = SampleGrundstueck().parse()
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Ang_Feststellung == EAngFeststellung()
+        assert result.Lage == ELage(grundstueck_obj.adresse)
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
-        assert len(vars(result)) == 4
+        assert len(vars(result)) == 5
 
     def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
         person = get_sample_single_person_dict()
         eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
+        grundstueck_obj = SampleGrundstueck().parse()
 
-        result = EGW1(eigentuemer_obj)
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Ang_Feststellung == EAngFeststellung()
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
-        assert len(vars(result)) == 4
+        assert len(vars(result)) == 5
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = get_sample_single_person_dict()
@@ -49,8 +52,9 @@ class TestEGW1:
         person2["persoenlicheAngaben"]["vorname"] = "Rubeus"
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
+        grundstueck_obj = SampleGrundstueck().parse()
 
-        result = EGW1(eigentuemer_obj)
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Ang_Feststellung == EAngFeststellung()
         assert len(result.Eigentuemer) == 2
@@ -58,7 +62,7 @@ class TestEGW1:
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
-        assert len(vars(result)) == 4
+        assert len(vars(result)) == 5
 
 
 class TestERueckuebermittlung:
@@ -98,7 +102,7 @@ class TestEGrundsteuerSpecifics:
         result = EGrundsteuerSpecifics(grundsteuer_obj)
 
         assert result.Vorsatz == EVorsatz(grundsteuer_obj)
-        assert result.GW1 == EGW1(grundsteuer_obj.eigentuemer)
+        assert result.GW1 == EGW1(grundsteuer_obj.eigentuemer, grundsteuer_obj.grundstueck)
         assert result.GW2 == EGW2(grundsteuer_obj)
         assert result.xml_attr_version == "2"
         assert result.xml_attr_xmlns == "http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2"

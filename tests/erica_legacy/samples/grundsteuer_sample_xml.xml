@@ -36,6 +36,14 @@
                         <Ang_Feststellung>
                             <E7401311>1</E7401311>
                         </Ang_Feststellung>
+                        <Lage>
+                            <E7401124>Madeupstr</E7401124>
+                            <E7401125>22</E7401125>
+                            <E7401126>a</E7401126>
+                            <E7401131>hinterhaus</E7401131>
+                            <E7401121>33333</E7401121>
+                            <E7401122>Bielefeld</E7401122>
+                        </Lage>
                         <Eigentuemer>
                             <Beteiligter>1</Beteiligter>
                             <E7404510>03</E7404510>
