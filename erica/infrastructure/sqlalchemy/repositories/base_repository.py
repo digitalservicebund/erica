@@ -14,6 +14,12 @@ class EntityNotFoundError(Exception):
     pass
 
 
+
+class EntityNotFoundError(Exception):
+    """ Raised in case an entity could not be found in the database"""
+    pass
+
+
 T = TypeVar('T', bound=BaseDomainModel)
 D = TypeVar('D', bound=BaseDbSchema)
 

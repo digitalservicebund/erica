@@ -2,6 +2,70 @@ import copy
 import datetime
 
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
+
+
+class SampleGebaeude:
+    def __init__(self):
+        self.dict = {
+            "ab1949": {
+                "is_ab1949": False,
+            },
+            "kernsaniert": {
+                "is_kernsaniert": False,
+            },
+            "abbruchverpflichtung": {
+                "has_abbruchverpflichtung": False,
+            },
+            "weitere_wohnraeume": {
+                "has_weitere_wohnraeume": False,
+            },
+            "garagen": {
+                "has_garagen": False,
+            },
+        }
+
+    def with_baujahr(self, baujahr=None):
+        self.dict["ab1949"]["is_ab1949"] = True
+        if baujahr:
+            self.dict["baujahr"] = {"baujahr": baujahr}
+        return self
+
+    def with_kernsanierung(self, kernsanierungsjahr=None):
+        self.dict["kernsaniert"]["is_kernsaniert"] = True
+        if kernsanierungsjahr:
+            self.dict["kernsanierungsjahr"] = {"kernsanierungsjahr": kernsanierungsjahr}
+        return self
+
+    def with_abbruchverpflichtung(self, abbruchverpflichtungsjahr=None):
+        self.dict["abbruchverpflichtung"]["has_abbruchverpflichtung"] = True
+        if abbruchverpflichtungsjahr:
+            self.dict["abbruchverpflichtungsjahr"] = {"abbruchverpflichtungsjahr": abbruchverpflichtungsjahr}
+        return self
+
+    def with_wohnflaechen(self, *wohnflaechen: int):
+        self.dict["wohnflaechen"] = list(wohnflaechen)
+        return self
+
+    def with_weitere_wohnraeume(self, flaeche=0, anzahl=0):
+        self.dict["weitere_wohnraeume"]["has_weitere_wohnraeume"] = True
+        if anzahl > 0:
+            self.dict["weitere_wohnraeume_details"] = {"anzahl": anzahl, "flaeche": flaeche}
+        return self
+
+    def with_garagen(self, anzahl_garagen=None):
+        self.dict["garagen"]["has_garagen"] = True
+        if anzahl_garagen:
+            self.dict["garagen_anzahl"] = {"anzahl_garagen": anzahl_garagen}
+        return self
+
+    def build(self):
+        return {
+            **self.dict
+        }
+
+    def parse(self):
+        return Gebaeude.parse_obj(self.build())
 
 
 def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_strasse=False):
@@ -186,6 +250,7 @@ def get_sample_single_person_dict(complete=True, with_vertreter=True, only_postf
 
 
 def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse=False, with_empfangsvollmacht=False):
+    valid_gebaeude = SampleGebaeude().with_wohnflaechen(42).build()
     valid_person_data = {
         "person": [
             get_sample_single_person_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
@@ -197,6 +262,7 @@ def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse
 
     valid_eigentuemer = {**valid_person_data, **valid_empfangsvollmacht_data} if with_empfangsvollmacht else valid_person_data
     valid_sample_data_single_with_vertreter = {
+        "gebaeude": valid_gebaeude,
         "eigentuemer": valid_eigentuemer
     }
     return GrundsteuerData.parse_obj(valid_sample_data_single_with_vertreter)
