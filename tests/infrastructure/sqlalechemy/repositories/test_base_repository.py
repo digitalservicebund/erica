@@ -2,32 +2,13 @@ from abc import ABC
 from uuid import uuid4
 
 import pytest
-from pydantic import BaseModel
-from sqlalchemy import Column, text
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 
 from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
-from erica.infrastructure.sqlalchemy.database import engine, run_migrations
-from erica.infrastructure.sqlalchemy.erica_request_schema import BaseDbSchema
+from erica.infrastructure.sqlalchemy.database import run_migrations
 from erica.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
-
-
-class MockDomainModel(BaseModel):
-    payload: dict
-
-    class Config:
-        orm_mode = True
-
-
-class MockSchema(BaseDbSchema):
-    __tablename__ = 'mock_schema'
-    id = Column(UUID(as_uuid=True),
-                primary_key=True,
-                server_default=text("gen_random_uuid()"), )
-    job_id = Column(UUID(as_uuid=True))
-    payload = Column(JSONB)
+from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockDomainModel, MockSchema
 
 
 class MockBaseRepository(
@@ -42,17 +23,9 @@ class MockBaseRepository(
 
 
 @pytest.fixture
-def transactional_session():
-    if not database_exists(engine.url):
-        create_database(engine.url)
-    run_migrations()
-    session = sessionmaker(autocommit=False, autoflush=False, bind=engine)()
-    yield session
-
-    tables = MockSchema.metadata.sorted_tables
-    for table in tables:
-        session.execute(table.delete())
-    session.commit()
+def transactional_session(transacted_postgresql_db):
+    transacted_postgresql_db.create_table(MockSchema)
+    yield transacted_postgresql_db.session
 
 
 class TestBaseRepositoryCreate:

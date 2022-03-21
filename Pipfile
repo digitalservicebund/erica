@@ -36,6 +36,7 @@ invoke = "*"
 xmldiff = "*"
 requests = "*"
 pytest-frozen-uuids = "*"
+pytest-pgsql = "*"
 
 [requires]
 python_version = "3.9"
