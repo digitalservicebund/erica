@@ -5,7 +5,102 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input impo
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
 
 
-class SampleGebaeude:
+class Builder:
+    def build(self):
+        return {
+            **self.dict
+        }
+
+
+class SampleFlurstueck(Builder):
+    def __init__(self):
+        self.dict = {
+            "angaben": {
+                "grundbuchblattnummer": "1A",
+                "gemarkung": "random gemarkung",
+            },
+            "flur": {
+                "flur": 1,
+                "flurstueck_zaehler": 7,
+                "flurstueck_nenner": "7",
+            },
+            "groesse_qm": 42,
+        }
+
+    def groesse(self, groesse):
+        self.dict["groesse_qm"] = groesse
+        return self
+
+    def flur(self, flur):
+        self.dict["flur"]["flur"] = flur
+        return self
+
+    def flurstueck_zaehler(self, zaehler):
+        self.dict["flur"]["flurstueck_zaehler"] = zaehler
+        return self
+
+    def flurstueck_nenner(self, nenner):
+        self.dict["flur"]["flurstueck_nenner"] = nenner
+        return self
+
+    def w_einheit_zaehler(self, zaehler):
+        self.dict["flur"]["wirtschaftliche_einheit_zaehler"] = zaehler
+        return self
+
+    def w_einheit_nenner(self, nenner):
+        self.dict["flur"]["wirtschaftliche_einheit_nenner"] = nenner
+        return self
+
+
+class SampleGrundstueck(Builder):
+    def __init__(self):
+        self.dict = {
+            "adresse": {
+                "strasse": "Madeupstr",
+                "hausnummer": "22",
+                "hausnummerzusatz": "b",
+                "plz": "33333",
+                "ort": "Bielefeld",
+            },
+            "steuernummer": "1234012345678",
+            "typ": "einfamilienhaus",
+            "innerhalb_einer_gemeinde": True,
+            "anzahl": 1,
+            "bodenrichtwert": "42",
+            "flurstueck": [
+            ]
+        }
+
+    def strasse(self, strasse):
+        self.dict["adresse"]["strasse"] = strasse
+        return self
+
+    def hausnummer(self, hausnummer):
+        self.dict["adresse"]["hausnummer"] = hausnummer
+        return self
+
+    def plz(self, plz):
+        self.dict["adresse"]["plz"] = plz
+        return self
+
+    def ort(self, ort):
+        self.dict["adresse"]["ort"] = ort
+        return self
+
+    def typ(self, typ):
+        self.dict["typ"] = typ
+        return self
+
+    def abweichende_enwticklung(self, zustand):
+        self.dict["abweichende_entwicklung"] = zustand
+        return self
+
+    def flurstuck(self, flurstueck: SampleFlurstueck):
+        self.dict["flurstueck"].append(flurstueck)
+        return self
+
+
+class SampleGebaeude(Builder):
     def __init__(self):
         self.dict = {
             "ab1949": {
@@ -58,11 +153,6 @@ class SampleGebaeude:
         if anzahl_garagen:
             self.dict["garagen_anzahl"] = {"anzahl_garagen": anzahl_garagen}
         return self
-
-    def build(self):
-        return {
-            **self.dict
-        }
 
     def parse(self):
         return Gebaeude.parse_obj(self.build())
@@ -257,10 +347,13 @@ def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse
         ],
     }
     valid_empfangsvollmacht_data = {
-        "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
+        "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict(complete=complete,
+                                                                               only_postfach=only_postfach,
+                                                                               only_strasse=only_strasse)
     }
 
-    valid_eigentuemer = {**valid_person_data, **valid_empfangsvollmacht_data} if with_empfangsvollmacht else valid_person_data
+    valid_eigentuemer = {**valid_person_data,
+                         **valid_empfangsvollmacht_data} if with_empfangsvollmacht else valid_person_data
     valid_sample_data_single_with_vertreter = {
         "gebaeude": valid_gebaeude,
         "eigentuemer": valid_eigentuemer
