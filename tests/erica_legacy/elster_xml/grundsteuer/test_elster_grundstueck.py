@@ -1,5 +1,5 @@
-from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck
+from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden, EFlurstueck
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck, SampleFlurstueck
 
 
 class TestAdresse:
@@ -84,3 +84,27 @@ class TestMehrereGemeinden:
 
         assert result.E7401190 == 1
         assert len(vars(result)) == 1
+
+
+class TestEFlurstueck:
+    def test_if_valid_input_then_set_fields(self):
+        flurstuck = SampleFlurstueck().gemarkung("gemarky").grundbuchblattnummer("hi123").flur("c2").flurstueck_zaehler(
+            42).flurstueck_nenner("24").groesse(4242).w_einheit_zaehler("1.0000").w_einheit_nenner(4).parse()
+
+        result = EFlurstueck(flurstuck)
+
+        assert result.E7401141 == "gemarky"
+        assert result.E7401142 == "hi123"
+        assert result.E7401143 == "c2"
+        assert result.E7401144 == 42
+        assert result.E7401145 == "24"
+        assert result.E7411001 == 4242
+        assert result.E7410702 == "1.0000"
+        assert result.E7410703 == 4
+
+    def test_if_largest_groesse_then_parsed_identically(self):
+        flurstuck = SampleFlurstueck().groesse(999999999999999).parse()
+
+        result = EFlurstueck(flurstuck)
+
+        assert result.E7411001 == 999999999999999

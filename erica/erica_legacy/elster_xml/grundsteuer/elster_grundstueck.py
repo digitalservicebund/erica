@@ -1,8 +1,9 @@
 import re
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck, \
+    Flurstueck
 
 
 @dataclass
@@ -23,12 +24,12 @@ class Hausnummer:
 
 @dataclass
 class ELage:
-    E7401124: Optional[str]  # strasse
-    E7401125: Optional[str]  # hausnummer
-    E7401126: Optional[str]  # hausnummerzusatz
-    E7401131: Optional[str]  # zusatzangaben
-    E7401121: Optional[str]  # plz
-    E7401122: Optional[str]  # oret
+    E7401124: Optional[str]
+    E7401125: Optional[str]
+    E7401126: Optional[str]
+    E7401131: Optional[str]
+    E7401121: Optional[str]
+    E7401122: Optional[str]
 
     def __init__(self, adresse: Adresse):
         self.E7401124 = adresse.strasse
@@ -56,3 +57,37 @@ class EMehrereGemeinden:
 
     def __init__(self):
         self.E7401190 = 1
+
+
+@dataclass
+class EFlurstueck:
+    E7401141: str
+    E7401142: str
+    E7401143: str
+    E7401144: int
+    E7401145: str
+    E7411001: int
+    E7410702: str
+    E7410703: int
+    # E7410704 TODO
+
+    def __init__(self, flurstueck: Flurstueck):
+        self.E7401141 = flurstueck.angaben.gemarkung
+        self.E7401142 = flurstueck.angaben.grundbuchblattnummer
+        self.E7401143 = flurstueck.flur.flur
+        self.E7401144 = flurstueck.flur.flurstueck_zaehler
+        self.E7401145 = flurstueck.flur.flurstueck_nenner
+        self.E7411001 = flurstueck.groesse_qm
+        self.E7410702 = flurstueck.flur.wirtschaftliche_einheit_zaehler
+        self.E7410703 = flurstueck.flur.wirtschaftliche_einheit_nenner
+
+
+@dataclass
+class EGemarkungen:
+    Einz: List[EFlurstueck]
+
+    def __init__(self, flurstucke: List[Flurstueck]):
+        self.Einz = []
+        for flurstueck in flurstucke:
+            elster_flurstueck = EFlurstueck(flurstueck)
+            self.Einz.append(elster_flurstueck)

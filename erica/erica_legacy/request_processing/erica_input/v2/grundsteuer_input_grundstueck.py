@@ -26,7 +26,7 @@ class FlurstueckAngaben(CamelCaseInput):
 
 
 class Flur(CamelCaseInput):
-    flur: int
+    flur: str
     flurstueck_zaehler: int
     flurstueck_nenner: str
     # number with 1-6 integer digits and exactly 4 fractional digits with '.' as decimal separator, e.g.90.1234
@@ -52,7 +52,7 @@ class Flur(CamelCaseInput):
 class Flurstueck(CamelCaseInput):
     angaben: FlurstueckAngaben
     flur: Flur
-    groesse_qm: str
+    groesse_qm: int
 
 
 class Grundstueck(CamelCaseInput):

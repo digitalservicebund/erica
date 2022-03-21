@@ -13,6 +13,34 @@
     "anzahl": 1,
     "bodenrichtwert": "42",
     "flurstueck": [
+      {
+        "angaben": {
+          "grundbuchblattnummer": "1A",
+          "gemarkung": "some gemarkung"
+        },
+        "flur": {
+          "flur": "1",
+          "flurstueck_zaehler": 7,
+          "flurstueck_nenner": "14",
+          "wirtschaftliche_einheit_zaehler": "1.0000",
+          "wirtschaftliche_einheit_nenner": "2"
+        },
+        "groesse_qm": 42
+      },
+      {
+        "angaben": {
+          "grundbuchblattnummer": "2C",
+          "gemarkung": "another gemarkung"
+        },
+        "flur": {
+          "flur": "2",
+          "flurstueck_zaehler": 6,
+          "flurstueck_nenner": "12",
+          "wirtschaftliche_einheit_zaehler": "2.0000",
+          "wirtschaftliche_einheit_nenner": "4"
+        },
+        "groesse_qm": 123456789012345
+      }
     ]
   },
   "gebaeude": {

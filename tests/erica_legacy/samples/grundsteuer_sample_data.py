@@ -3,7 +3,7 @@ import datetime
 
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck, Flurstueck
 
 
 class Builder:
@@ -28,6 +28,14 @@ class SampleFlurstueck(Builder):
             "groesse_qm": 42,
         }
 
+    def gemarkung(self, gemarkung):
+        self.dict["angaben"]["gemarkung"] = gemarkung
+        return self
+
+    def grundbuchblattnummer(self, grundbuchblattnummer):
+        self.dict["angaben"]["grundbuchblattnummer"] = grundbuchblattnummer
+        return self
+
     def groesse(self, groesse):
         self.dict["groesse_qm"] = groesse
         return self
@@ -51,6 +59,9 @@ class SampleFlurstueck(Builder):
     def w_einheit_nenner(self, nenner):
         self.dict["flur"]["wirtschaftliche_einheit_nenner"] = nenner
         return self
+
+    def parse(self):
+        return Flurstueck.parse_obj(self.build())
 
 
 class SampleGrundstueck(Builder):
