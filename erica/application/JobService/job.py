@@ -5,11 +5,11 @@ from uuid import UUID
 
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobServiceInterface
-from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.Repositories import BaseRepositoryInterface
 from erica.domain.Shared.Status import Status
+from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
-from erica.infrastructure.sqlalchemy.repositories.BaseRepository import EntityNotFoundError
+from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
 async def perform_job(entity_id: UUID, repository: BaseRepositoryInterface, service: JobServiceInterface, dto: Type[BaseDto], logger: Logger):
@@ -20,7 +20,7 @@ async def perform_job(entity_id: UUID, repository: BaseRepositoryInterface, serv
     It also measures the elapsed time during job execution.
     """
     try:
-        entity: EricaAuftrag = repository.get_by_job_id(entity_id)
+        entity: EricaRequest = repository.get_by_job_id(entity_id)
     except EntityNotFoundError:
         logger.warning(f"Entity not found for job_id {entity_id}", exc_info=True)
         raise
