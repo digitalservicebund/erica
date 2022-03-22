@@ -8,7 +8,7 @@ from freezegun import freeze_time
 from erica.application.JobService.job import perform_job
 from erica.domain.Shared.Status import Status
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
-from erica.infrastructure.sqlalchemy.repositories.BaseRepository import EntityNotFoundError
+from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
 class TestJob:

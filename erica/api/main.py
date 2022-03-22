@@ -12,8 +12,7 @@ from erica.application.FreischaltCode.FreischaltCode import (FreischaltCodeActiv
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.sqlalchemy.database import run_migrations
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import \
-    EricaAuftragRepository
+from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
     
 
 run_migrations()
@@ -34,7 +33,7 @@ injector = Injector([
 @version(1, 0)
 async def get_erica_auftrag_status_list(skip: int, limit: int):
     # TODO Don't access the repository here directly. We should use a Service instead
-    repo: EricaAuftragRepository = injector.inject(EricaAuftragRepository)
+    repo: EricaRequestRepository = injector.inject(EricaRequestRepository)
     return repo.get(skip, limit)
 
 

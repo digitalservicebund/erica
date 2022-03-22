@@ -8,7 +8,7 @@ from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController
 from erica.infrastructure.rq.BackgroundJobRq import BackgroundJobRq
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
+from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 
 class TestJobServiceFactory:
@@ -23,7 +23,7 @@ class TestJobServiceFactory:
     def test_if_fsc_request_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.freischalt_code_request)
 
-        assert isinstance(job_service.repository, EricaAuftragRepository)
+        assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
         assert issubclass(job_service.payload_type, FreischaltCodeRequestDto)
         assert issubclass(job_service.request_controller, UnlockCodeRequestController)
@@ -31,7 +31,7 @@ class TestJobServiceFactory:
     def test_if_fsc_activate_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.freischalt_code_activate)
 
-        assert isinstance(job_service.repository, EricaAuftragRepository)
+        assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
         assert issubclass(job_service.payload_type, FreischaltCodeActivateDto)
         assert issubclass(job_service.request_controller, UnlockCodeActivationRequestController)
@@ -39,7 +39,7 @@ class TestJobServiceFactory:
     def test_if_fsc_revocate_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.freischalt_code_revocate)
 
-        assert isinstance(job_service.repository, EricaAuftragRepository)
+        assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
         assert issubclass(job_service.payload_type, FreischaltCodeRevocateDto)
         assert issubclass(job_service.request_controller, UnlockCodeRevocationRequestController)
@@ -47,7 +47,7 @@ class TestJobServiceFactory:
     def test_if_fsc_revocate_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.check_tax_number)
 
-        assert isinstance(job_service.repository, EricaAuftragRepository)
+        assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
         assert issubclass(job_service.payload_type, CheckTaxNumberDto)
         assert issubclass(job_service.request_controller, CheckTaxNumberRequestController)
