@@ -18,7 +18,7 @@ def elsterify_anrede(anrede_input: Anrede):
 def elsterify_grundstuecksart(grundstuecksart_input: Grundstuecksart):
     grundstuecksart_mapping = {
         Grundstuecksart.baureif: 1,
-        Grundstuecksart.abweichendeEntwicklung: 1,
+        Grundstuecksart.abweichende_entwicklung: 1,
         Grundstuecksart.einfamilienhaus: 2,
         Grundstuecksart.zweifamilienhaus: 3,
         Grundstuecksart.wohnungseigentum: 5,

@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, \
     construct_basic_xml_data_representation
-from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
+from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
@@ -12,12 +12,22 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eige
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
     EGemarkungen, EAngGrund
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import \
-    Grundstueck as GrundstueckInput
+    Grundstueck as GrundstueckInput, Grundstuecksart
 
 """
     The content of the Grundsteuer Nutzdaten XML as its data prepresentation.
     The classes are prefixed with "E" for "Elster".
 """
+
+
+@dataclass
+class EAngFeststellung:
+    E7401311: str
+    E7401310: int
+
+    def __init__(self, grundstuecksart: Grundstuecksart):
+        self.E7401311 = "1"  # Hauptfeststellung
+        self.E7401310 = 2 if grundstuecksart.is_bebaut() else 1
 
 
 @dataclass
@@ -42,7 +52,7 @@ class EGW1:
     Erg_Angaben: Optional[EErgAngaben]
 
     def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput, freitext=None):
-        self.Ang_Feststellung = EAngFeststellung()
+        self.Ang_Feststellung = EAngFeststellung(grundstueck.typ)
         self.Lage = ELage(grundstueck.adresse)
         if not grundstueck.innerhalb_einer_gemeinde:
             self.Mehrere_Gemeinden = EMehrereGemeinden()

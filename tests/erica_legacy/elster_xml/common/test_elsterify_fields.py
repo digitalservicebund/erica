@@ -33,7 +33,7 @@ class TestElsterifyGrundstuecksart:
         assert result == 1
 
     def test_abweichende_entwicklung_is_correctly_translated(self):
-        result = elsterify_grundstuecksart(Grundstuecksart.abweichendeEntwicklung)
+        result = elsterify_grundstuecksart(Grundstuecksart.abweichende_entwicklung)
 
         assert result == 1
 

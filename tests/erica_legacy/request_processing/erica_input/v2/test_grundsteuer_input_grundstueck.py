@@ -1,8 +1,27 @@
 import pytest
 from pydantic import ValidationError
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Flurstueck, Grundstueck
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Flurstueck, Grundstueck, \
+    Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleFlurstueck, SampleGrundstueck
+
+
+class TestGrundstuecksart:
+    def test_einfamilienhaus(self):
+        assert Grundstuecksart.einfamilienhaus.is_bebaut() is True
+
+    def test_zweifamilienhaus(self):
+        assert Grundstuecksart.zweifamilienhaus.is_bebaut() is True
+
+    def test_wohnungseigentum(self):
+        assert Grundstuecksart.wohnungseigentum.is_bebaut() is True
+
+    def test_baureif(self):
+        assert Grundstuecksart.baureif.is_bebaut() is False
+
+    def test_abweichende_entwicklung(self):
+        assert Grundstuecksart("abweichendeEntwicklung") == Grundstuecksart.abweichende_entwicklung
+        assert Grundstuecksart.abweichende_entwicklung.is_bebaut() is False
 
 
 class TestFlur:

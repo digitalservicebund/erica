@@ -11,7 +11,13 @@ class Grundstuecksart(str, Enum):
     zweifamilienhaus = "zweifamilienhaus"
     wohnungseigentum = "wohnungseigentum"
     baureif = "baureif"
-    abweichendeEntwicklung = "abweichendeEntwicklung"
+    abweichende_entwicklung = "abweichendeEntwicklung"
+
+    def is_bebaut(self):
+        if self in [Grundstuecksart.einfamilienhaus, Grundstuecksart.zweifamilienhaus, Grundstuecksart.wohnungseigentum]:
+            return True
+        else:
+            return False
 
 
 class Adresse(CamelCaseInput):

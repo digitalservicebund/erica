@@ -6,8 +6,8 @@ from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import E
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import ERueckuebermittlung, EVorsatz, \
     EGrundsteuerSpecifics, EGrundsteuerData, \
-    get_full_grundsteuer_data_representation, EGW2, EGW1, EErgAngaben
-from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
+    get_full_grundsteuer_data_representation, EGW2, EGW1, EErgAngaben, EAngFeststellung
+from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer, Person
@@ -34,7 +34,7 @@ class TestEGW1:
         grundstueck_obj = SampleGrundstueck().parse()
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung()
+        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
@@ -49,7 +49,7 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung()
+        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
@@ -68,7 +68,7 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung()
+        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 2
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
