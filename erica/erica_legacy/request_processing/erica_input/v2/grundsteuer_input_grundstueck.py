@@ -12,6 +12,7 @@ class Adresse(CamelCaseInput):
     zusatzangaben: Optional[str]
     plz: Optional[str]
     ort: Optional[str]
+    bundesland: str
 
     @validator("strasse", always=True)
     def strasse_mus_be_present_if_hausnummer_given(cls, v, values):

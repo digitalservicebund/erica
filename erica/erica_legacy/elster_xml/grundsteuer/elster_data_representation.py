@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, \
     construct_basic_xml_data_representation
+from erica.erica_legacy.elster_xml.est_mapping import generate_electronic_steuernummer
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
@@ -90,7 +91,8 @@ class ERueckuebermittlung:
 class EVorsatz:
     Unterfallart: str
     Vorgang: str
-    StNr: str
+    StNr: Optional[str]
+    Aktenzeichen: Optional[str]
     Zeitraum: str
     AbsName: str
     AbsStr: str
@@ -103,7 +105,6 @@ class EVorsatz:
     def __init__(self, input_data: GrundsteuerData):
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
-        self.StNr = input_data.grundstueck.steuernummer
         self.Zeitraum = "2022"  # TODO require on input?
         self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + \
                        input_data.eigentuemer.person[0].persoenlicheAngaben.name
@@ -111,8 +112,19 @@ class EVorsatz:
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
         self.Copyright = "(C) 2022 DigitalService4Germany"
-        # TODO Steuernummer or Aktenzeichen?
-        self.OrdNrArt = "S"
+
+        electronic_steuernummer = generate_electronic_steuernummer(input_data.grundstueck.steuernummer,
+                                                                   input_data.grundstueck.adresse.bundesland)
+        BUNDESLAENDER_WITH_STEUERNUMMER = ["BE", "HB", "SH"]
+        if input_data.grundstueck.adresse.bundesland in BUNDESLAENDER_WITH_STEUERNUMMER:
+            self.OrdNrArt = "S"
+            self.StNr = electronic_steuernummer
+            self.Aktenzeichen = None
+        else:
+            self.OrdNrArt = "A"
+            self.StNr = None
+            self.Aktenzeichen = electronic_steuernummer
+
         self.Rueckuebermittlung = ERueckuebermittlung()
 
 

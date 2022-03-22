@@ -73,8 +73,9 @@ class SampleGrundstueck(Builder):
                 "hausnummerzusatz": "b",
                 "plz": "33333",
                 "ort": "Bielefeld",
+                "bundesland": "BE"
             },
-            "steuernummer": "1121081508150",
+            "steuernummer": "2181508150",
             "typ": "einfamilienhaus",
             "innerhalb_einer_gemeinde": True,
             "bodenrichtwert": "41,99",
@@ -100,6 +101,14 @@ class SampleGrundstueck(Builder):
 
     def ort(self, ort):
         self.dict["adresse"]["ort"] = ort
+        return self
+
+    def bundesland(self, bundesland):
+        self.dict["adresse"]["bundesland"] = bundesland
+        return self
+
+    def steuernummer(self, steuernummer):
+        self.dict["steuernummer"] = steuernummer
         return self
 
     def typ(self, typ):

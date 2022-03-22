@@ -5,9 +5,10 @@
       "hausnummer": "22a",
       "zusatzangaben": "hinterhaus",
       "plz": "33333",
-      "ort": "Bielefeld"
+      "ort": "Bielefeld",
+      "bundesland": "BB"
     },
-    "steuernummer": "1121081508150",
+    "steuernummer": "09881508157",
     "typ": "einfamilienhaus",
     "innerhalb_einer_gemeinde": true,
     "bodenrichtwert": "41,99",

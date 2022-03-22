@@ -28,7 +28,7 @@
         <Nutzdatenblock>
             <NutzdatenHeader version="11">
                 <NutzdatenTicket>1</NutzdatenTicket>
-                <Empfaenger id="F">1121</Empfaenger>
+                <Empfaenger id="F">3098</Empfaenger>
             </NutzdatenHeader>
             <Nutzdaten>
                 <E88 version="2" xmlns="http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2">
@@ -152,14 +152,14 @@
                     <Vorsatz>
                         <Unterfallart>88</Unterfallart>
                         <Vorgang>01</Vorgang>
-                        <StNr>1121081508150</StNr>
+                        <Aktenzeichen>3098081508157</Aktenzeichen>
                         <Zeitraum>2022</Zeitraum>
                         <AbsName>Hermione Granger</AbsName>
                         <AbsStr>Grimmauld Place</AbsStr>
                         <AbsPlz>77777</AbsPlz>
                         <AbsOrt>London</AbsOrt>
                         <Copyright>(C) 2022 DigitalService4Germany</Copyright>
-                        <OrdNrArt>S</OrdNrArt>
+                        <OrdNrArt>A</OrdNrArt>
                         <Rueckuebermittlung>
                             <Bescheid>2</Bescheid>
                         </Rueckuebermittlung>

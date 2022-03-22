@@ -163,6 +163,7 @@ class TestEVorsatz:
         assert result.Unterfallart == "88"
         assert result.Vorgang == "01"
         assert result.StNr == "1121081508150"
+        assert result.Aktenzeichen is None
         assert result.Zeitraum == "2022"
         assert result.AbsName == grundsteuer_obj.eigentuemer.person[0].persoenlicheAngaben.vorname + \
                " " + \
@@ -173,7 +174,47 @@ class TestEVorsatz:
         assert result.Copyright == "(C) 2022 DigitalService4Germany"
         assert result.OrdNrArt == "S"
         assert result.Rueckuebermittlung == ERueckuebermittlung()
-        assert len(vars(result)) == 11
+        assert len(vars(result)) == 12
+
+    def test_if_berlin_then_attributes_set_correctly_for_steuernummer(self):
+        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("BE").steuernummer("2181508150").parse()
+
+        result = EVorsatz(grundsteuer_obj)
+
+        assert result.StNr == "1121081508150"
+        assert result.Aktenzeichen is None
+        assert result.OrdNrArt == "S"
+
+    def test_if_bremen_then_attributes_set_correctly_for_steuernummer(self):
+        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("HB").steuernummer("7581508152").parse()
+
+        result = EVorsatz(grundsteuer_obj)
+
+        assert result.StNr == "2475081508152"
+        assert result.Aktenzeichen is None
+        assert result.OrdNrArt == "S"
+
+    def test_if_schleswig_holstein_then_attributes_set_correctly_for_steuernummer(self):
+        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("SH").steuernummer("2981508158").parse()
+
+        result = EVorsatz(grundsteuer_obj)
+
+        assert result.StNr == "2129081508158"
+        assert result.Aktenzeichen is None
+        assert result.OrdNrArt == "S"
+
+    def test_if_brandenburg_then_attributes_set_correctly_for_aktenzeichen(self):
+        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("BB").steuernummer("09881508157").parse()
+
+        result = EVorsatz(grundsteuer_obj)
+
+        assert result.StNr is None
+        assert result.Aktenzeichen == "3098081508157"
+        assert result.OrdNrArt == "A"
 
 
 class TestEGrundsteuerSpecifics:
