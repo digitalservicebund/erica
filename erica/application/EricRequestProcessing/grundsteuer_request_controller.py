@@ -1,12 +1,12 @@
 import base64
 
-from lib.pyeric.pyeric_controller import GrundsteuerPyericProcessController
-from lib.pyeric.pyeric_response import PyericResponse
+from erica.erica_legacy.pyeric.pyeric_controller import GrundsteuerPyericProcessController
+from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.application.EricRequestProcessing.requests_controller import TransferTicketRequestController
-from erica.domain.ElsterXml.common.transfer_header import add_transfer_header
-from erica.domain.ElsterXml.common.xml_conversion import convert_object_to_xml
-from erica.domain.ElsterXml.grundsteuer.elster_data_representation import get_full_grundsteuer_data_representation
-from erica.domain.ElsterXml.transfer_header_fields import get_grundsteuer_th_fields
+from erica.erica_legacy.elster_xml.common.transfer_header import add_transfer_header
+from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
+from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import get_full_grundsteuer_data_representation
+from erica.erica_legacy.elster_xml.transfer_header_fields import get_grundsteuer_th_fields
 
 
 class GrundsteuerRequestController(TransferTicketRequestController):
