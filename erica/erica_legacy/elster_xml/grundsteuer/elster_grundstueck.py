@@ -63,7 +63,7 @@ class EMehrereGemeinden:
 @dataclass
 class EFlurstueck:
     E7401141: str
-    E7401142: str
+    E7401142: Optional[str]  # TODO determine if mandatory
     E7401143: str
     E7401144: int
     E7401145: str

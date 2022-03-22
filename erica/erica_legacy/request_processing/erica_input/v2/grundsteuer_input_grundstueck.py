@@ -21,7 +21,8 @@ class Adresse(CamelCaseInput):
 
 
 class FlurstueckAngaben(CamelCaseInput):
-    grundbuchblattnummer: str
+    # TODO determine if this is mandatory (only in NRW?)
+    grundbuchblattnummer: Optional[str]
     gemarkung: str
 
 
