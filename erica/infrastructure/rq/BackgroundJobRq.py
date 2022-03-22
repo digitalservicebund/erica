@@ -2,13 +2,13 @@ from rq import Queue
 from rq.job import Job
 
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.infrastructure.rq.queue import dongle_queue
+from erica.infrastructure.rq.queue import get_queue
 
 
 class BackgroundJobRq(BackgroundJobInterface):
     __queue: Queue
 
-    def __init__(self, queue: Queue = dongle_queue):
+    def __init__(self, queue: Queue = get_queue('dongle')):
         self.__queue = queue
 
     def scheduled_enqueue(self):

@@ -8,13 +8,13 @@ from sqlalchemy.orm import Session
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobService
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
 from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
+from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 
-class MockEricaRequestRepository(EricaAuftragRepository, list):
+class MockEricaRequestRepository(EricaRequestRepository, list):
 
     def __init__(self, db_connection: Session = None):
         self.DatabaseEntity = None
@@ -78,7 +78,7 @@ class TestJobServiceQueue:
 
         service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
 
-        assert service.repository[0] == EricaAuftrag(
+        assert service.repository[0] == EricaRequest(
             id="1234",
             job_id="00000000-0000-0000-0000-000000000000",
             payload=input_data,
@@ -128,7 +128,7 @@ class TestJobServiceRun:
         service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
                              request_controller=mock_request_controller, payload_type=MockDto, job_method=MagicMock())
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
-        request_entity = EricaAuftrag(
+        request_entity = EricaRequest(
             id="1234",
             job_id="00000000-0000-0000-0000-000000000000",
             payload=input_data,

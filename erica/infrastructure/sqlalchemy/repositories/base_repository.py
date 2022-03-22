@@ -1,11 +1,17 @@
 from typing import Generic, TypeVar, List
 from uuid import UUID
 from pydantic import BaseModel
+from sqlalchemy import Integer
 from sqlalchemy.orm import Session
 
-from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
+from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
-from erica.infrastructure.sqlalchemy.EricaAuftragSchema import BaseDbSchema
+from erica.infrastructure.sqlalchemy.erica_request_schema import BaseDbSchema
+
+
+class EntityNotFoundError(Exception):
+    """ Raised in case an entity could not be found in the database"""
+    pass
 
 
 class EntityNotFoundError(Exception):
@@ -36,19 +42,27 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
         result = self.db_connection.query(self.DatabaseEntity).offset(skip).limit(limit).all()
         return result
 
-    def get_by_id(self, entity_id: UUID) -> T:
-        result = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
-        return self.DomainModel.from_orm(result)
+    def get_by_id(self, entity_id: Integer) -> T:
+        entity = self._get_by_id(entity_id).first()
+        if entity is None:
+            raise EntityNotFoundError
+        return self.DomainModel.from_orm(entity)
 
-    def update(self, entity_id: UUID, model: BaseModel) -> T:
-        current = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
+    def _get_by_id(self, entity_id: Integer):
+        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
+        return entity
+
+    def update(self, entity_id: Integer, model: BaseModel) -> T:
+        current = self._get_by_id(entity_id)
         current.update(model.dict())
         self.db_connection.commit()
-        updated = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
+
+        updated = self.get_by_id(entity_id)
         return self.DomainModel.from_orm(updated)
 
-    def delete(self, entity_id: UUID) -> bool:
-        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id).first()
+    def delete(self, entity_id: Integer):
+        entity = self._get_by_id(entity_id).first()
+        if entity is None:
+            raise EntityNotFoundError
         self.db_connection.delete(entity)
         self.db_connection.commit()
-        return True

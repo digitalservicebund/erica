@@ -5,7 +5,7 @@ from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltC
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.rq.BackgroundJobRq import BackgroundJobRq
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepository
+from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 
 class TestJobServiceFactory:
@@ -20,7 +20,7 @@ class TestJobServiceFactory:
     def test_if_fsc_activate_type_then_return_correctly_configured_dto(self):
         job_service = get_job_service(RequestType.freischalt_code_activate)
 
-        assert isinstance(job_service.repository, EricaAuftragRepository)
+        assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
         assert issubclass(job_service.payload_type, FreischaltCodeActivateDto)
         assert issubclass(job_service.request_controller, UnlockCodeActivationRequestController)

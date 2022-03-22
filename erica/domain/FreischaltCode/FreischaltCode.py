@@ -1,7 +1,7 @@
 from abc import ABC
 from datetime import date
 
-from erica.domain.EricaAuftrag.EricaAuftrag import BasePayload
+from erica.domain.erica_request.erica_request import BasePayload
 
 
 class FreischaltCodeRequestPayload(BasePayload, ABC):
