@@ -21,6 +21,16 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grun
 
 
 @dataclass
+class EErgAngaben:
+    E7413001: Optional[int]
+    E7411702: Optional[str]
+
+    def __init__(self, freitext: str):
+        self.E7413001 = 1
+        self.E7411702 = freitext
+
+
+@dataclass
 class EGW1:
     Ang_Feststellung: EAngFeststellung
     Lage: ELage
@@ -29,8 +39,9 @@ class EGW1:
     Eigentuemer: List[EPersonData]
     Eigentumsverh: EEigentumsverh
     Empfangsv: Optional[EEmpfangsbevollmaechtigter]
+    Erg_Angaben: Optional[EErgAngaben]
 
-    def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput):
+    def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput, freitext=None):
         self.Ang_Feststellung = EAngFeststellung()
         self.Lage = ELage(grundstueck.adresse)
         if not grundstueck.innerhalb_einer_gemeinde:
@@ -48,6 +59,11 @@ class EGW1:
             self.Empfangsv = EEmpfangsbevollmaechtigter(eigentuemer.empfangsbevollmaechtigter)
         else:
             self.Empfangsv = None
+
+        if freitext:
+            self.Erg_Angaben = EErgAngaben(freitext)
+        else:
+            self.Erg_Angaben = None
 
 
 @dataclass
@@ -109,7 +125,7 @@ class EGrundsteuerSpecifics:
     xml_attr_xmlns: str
 
     def __init__(self, input_data: GrundsteuerData):
-        self.GW1 = EGW1(input_data.eigentuemer, input_data.grundstueck)
+        self.GW1 = EGW1(input_data.eigentuemer, input_data.grundstueck, input_data.freitext)
         self.GW2 = EGW2(input_data)
         self.Vorsatz = EVorsatz(input_data)
         self.xml_attr_version = "2"

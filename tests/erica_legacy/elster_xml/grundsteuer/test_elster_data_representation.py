@@ -6,7 +6,7 @@ from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import E
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import ERueckuebermittlung, EVorsatz, \
     EGrundsteuerSpecifics, EGrundsteuerData, \
-    get_full_grundsteuer_data_representation, EGW2, EGW1
+    get_full_grundsteuer_data_representation, EGW2, EGW1, EErgAngaben
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
@@ -15,6 +15,14 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, 
     EGemarkungen, EAngGrund
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data, \
     get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict, SampleGrundstueck
+
+
+class TestEErgAnbaben:
+    def test_if_instantiated_then_set_flag_and_value(self):
+        result = EErgAngaben("foo bar baz")
+
+        assert result.E7413001 == 1
+        assert result.E7411702 == "foo bar baz"
 
 
 class TestEGW1:
@@ -30,7 +38,8 @@ class TestEGW1:
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
-        assert len(vars(result)) == 7
+        assert result.Erg_Angaben is None
+        assert len(vars(result)) == 8
 
     def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
         person = get_sample_single_person_dict()
@@ -44,7 +53,8 @@ class TestEGW1:
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
-        assert len(vars(result)) == 7
+        assert result.Erg_Angaben is None
+        assert len(vars(result)) == 8
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = get_sample_single_person_dict()
@@ -63,7 +73,8 @@ class TestEGW1:
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
-        assert len(vars(result)) == 7
+        assert result.Erg_Angaben is None
+        assert len(vars(result)) == 8
 
     def test_if_valid_grundstueck_then_set_lage_correctly(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
@@ -73,7 +84,7 @@ class TestEGW1:
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Lage == ELage(grundstueck_obj.adresse)
-        assert len(vars(result)) == 7
+        assert len(vars(result)) == 8
 
     def test_if_not_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
@@ -83,7 +94,7 @@ class TestEGW1:
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Mehrere_Gemeinden == EMehrereGemeinden()
-        assert len(vars(result)) == 7
+        assert len(vars(result)) == 8
 
     def test_if_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden_to_none(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
@@ -93,7 +104,7 @@ class TestEGW1:
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Mehrere_Gemeinden is None
-        assert len(vars(result)) == 7
+        assert len(vars(result)) == 8
 
     def test_if_valid_grundstueck_then_set_gemarkungen_correctly(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
@@ -103,6 +114,24 @@ class TestEGW1:
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Gemarkungen == EGemarkungen(grundstueck_obj.flurstueck)
+
+    def test_if_no_fretext_then_set_field_to_none(self):
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [get_sample_single_person_dict()]})
+        grundstueck_obj = SampleGrundstueck().parse()
+
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
+
+        assert result.Erg_Angaben is None
+
+    def test_if_fretext_then_set_field(self):
+        eigentuemer_obj = Eigentuemer.parse_obj(
+            {"person": [get_sample_single_person_dict()]})
+        grundstueck_obj = SampleGrundstueck().parse()
+
+        result = EGW1(eigentuemer_obj, grundstueck_obj, "foo bar")
+
+        assert result.Erg_Angaben == EErgAngaben("foo bar")
 
 
 class TestEGW2:

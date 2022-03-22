@@ -111,6 +111,10 @@
                             <E7404622>Hogsmeade</E7404622>
                             <E7412201>123-456</E7412201>
                         </Empfangsv>
+                        <Erg_Angaben>
+                            <E7413001>1</E7413001>
+                            <E7411702>lorem ipsum</E7411702>
+                        </Erg_Angaben>
                     </GW1>
                     <GW2>
                         <Ang_Grundstuecksart>

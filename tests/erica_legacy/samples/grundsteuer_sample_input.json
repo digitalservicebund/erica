@@ -139,5 +139,6 @@
         "telefonnummer": "123-456"
       }
     }
-  }
+  },
+  "freitext": "lorem ipsum"
 }
