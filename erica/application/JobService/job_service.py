@@ -9,29 +9,30 @@ from erica.application.EricRequestProcessing.requests_controller import EricaReq
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.domain.EricaAuftrag.EricaAuftrag import EricaAuftrag
+from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.Shared.EricaAuftrag import RequestType
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import EricaAuftragRepositoryInterface
+
+from erica.domain.erica_request.erica_request import EricaRequest
 
 
 class JobServiceInterface():
     __metaclass__ = ABCMeta
     payload_type: Type[BaseDto]
-    repository: EricaAuftragRepositoryInterface
+    repository: EricaRequestRepositoryInterface
 
     @abstractmethod
     def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         pass
 
     @abstractmethod
-    def apply_to_elster(self, request_entity: EricaAuftrag, include_elster_responses: bool):
+    def apply_to_elster(self, request_entity: EricaRequest, include_elster_responses: bool):
         pass
 
 
 class JobService(JobServiceInterface):
 
     def __init__(self,
-                 job_repository: EricaAuftragRepositoryInterface,
+                 job_repository: EricaRequestRepositoryInterface,
                  background_worker: BackgroundJobInterface,
                  payload_type: Type[BaseDto],
                  request_controller: Type[EricaRequestController],
@@ -45,7 +46,7 @@ class JobService(JobServiceInterface):
         self.job_method = job_method
 
     def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
-        request_entity = EricaAuftrag(job_id=uuid4(),
+        request_entity = EricaRequest(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       created_at=datetime.datetime.now(),
                                       updated_at=datetime.datetime.now(),
