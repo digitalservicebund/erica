@@ -38,11 +38,7 @@ class EricaRequestRepository(
             raise EntityNotFoundError
 
         # We only want to run update with changed data
-        updated_data = {}
-        for key, value in model.dict().items():
-            if hasattr(current_entity, key) and value != getattr(current_entity, key):
-                updated_data[key] = value
-        current_query.update(updated_data)
+        current_query.update(self._get_changed_data(current_query.first(), model))
         self.db_connection.commit()
 
         updated = self.get_by_job_id(job_id)

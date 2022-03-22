@@ -43,7 +43,8 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
         return result
 
     def get_by_id(self, entity_id: Integer) -> T:
-        entity = self._get_by_id(entity_id).first()
+        entity = self._get_by_id(entity_id)
+        entity = entity.first()
         if entity is None:
             raise EntityNotFoundError
         return self.DomainModel.from_orm(entity)
@@ -52,11 +53,20 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
         entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
         return entity
 
+    @staticmethod
+    def _get_changed_data(old_entity: BaseModel, updated_entity: BaseModel):
+        updated_data = {}
+        for key, value in updated_entity.dict().items():
+            if hasattr(old_entity, key) and value != getattr(old_entity, key):
+                updated_data[key] = value
+
+        return updated_data
+
     def update(self, entity_id: Integer, model: BaseModel) -> T:
         current = self._get_by_id(entity_id)
         if current.first() is None:
             raise EntityNotFoundError
-        current.update(model.dict())
+        current.update(self._get_changed_data(old_entity=current.first(), updated_entity=model))
         self.db_connection.commit()
 
         updated = self.get_by_id(entity_id)
