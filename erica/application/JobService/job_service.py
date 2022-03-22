@@ -5,12 +5,12 @@ from uuid import uuid4
 
 from rq import Retry
 
-from erica.application.EricRequestProcessing.requests_controller import EricaRequestController
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
 from erica.domain.erica_request.erica_request import EricaRequest
 
