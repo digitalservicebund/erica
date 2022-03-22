@@ -66,7 +66,7 @@ class EFlurstueck:
     E7401142: Optional[str]  # TODO determine if mandatory
     E7401143: str
     E7401144: int
-    E7401145: str
+    E7401145: Optional[str]
     E7411001: int
     E7410702: str
     E7410703: int
