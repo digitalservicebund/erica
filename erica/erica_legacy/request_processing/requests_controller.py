@@ -3,14 +3,16 @@ import base64
 from erica.erica_legacy.config import get_settings
 from erica.erica_legacy.elster_xml.elster_xml_generator import get_belege_xml, generate_vorsatz_without_tax_number, \
     generate_vorsatz_with_tax_number
-from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, get_transfer_ticket_from_xml, get_address_from_xml, get_relevant_beleg_ids
+from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
+    get_transfer_ticket_from_xml, get_address_from_xml, get_relevant_beleg_ids
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.elster_xml import est_mapping, elster_xml_generator
 
 from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import get_elements_text_from_xml
 
-from erica.erica_legacy.pyeric.pyeric_controller import EstPyericProcessController, EstValidationPyericProcessController, \
+from erica.erica_legacy.pyeric.pyeric_controller import EstPyericProcessController, \
+    EstValidationPyericProcessController, \
     UnlockCodeActivationPyericProcessController, UnlockCodeRequestPyericProcessController, \
     UnlockCodeRevocationPyericProcessController, \
     DecryptBelegePyericController, BelegIdRequestPyericProcessController, \
@@ -93,15 +95,15 @@ class EstValidationRequestController(TransferTicketRequestController):
         fields = est_mapping.check_and_generate_entries(est_with_eric_mapping.__dict__)
 
         common_vorsatz_args = (
-                self.input_data.meta_data.year,
-                self.input_data.est_data.person_a_idnr,
-                self.input_data.est_data.person_b_idnr,
-                self.input_data.est_data.person_a_first_name,
-                self.input_data.est_data.person_a_last_name,
-                self.input_data.est_data.person_a_street,
-                self.input_data.est_data.person_a_street_number,
-                self.input_data.est_data.person_a_plz,
-                self.input_data.est_data.person_a_town
+            self.input_data.meta_data.year,
+            self.input_data.est_data.person_a_idnr,
+            self.input_data.est_data.person_b_idnr,
+            self.input_data.est_data.person_a_first_name,
+            self.input_data.est_data.person_a_last_name,
+            self.input_data.est_data.person_a_street,
+            self.input_data.est_data.person_a_street_number,
+            self.input_data.est_data.person_a_plz,
+            self.input_data.est_data.person_a_town
         )
         if self.input_data.est_data.submission_without_tax_nr:
             empfaenger = self.input_data.est_data.bufa_nr
@@ -141,7 +143,7 @@ class UnlockCodeRequestController(TransferTicketRequestController):
     def generate_full_xml(self, use_testmerker):
         return elster_xml_generator.generate_full_vast_request_xml(
             UnlockCodeRequestEricMapper.parse_obj(self.input_data).__dict__,
-                                                                   use_testmerker=use_testmerker)
+            use_testmerker=use_testmerker)
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
@@ -179,13 +181,13 @@ class UnlockCodeRevocationRequestController(TransferTicketRequestController):
         return response
 
 
-class CheckTaxNumberRequestController:
+class CheckTaxNumberRequestController(EricaRequestController):
     """This handles any request that wants to check if a tax number is valid"""
 
-    @staticmethod
-    def process(state_abbreviation: str, tax_number: str):
+    def process(self):
         try:
-            full_tax_number = CheckTaxNumberRequestController._generate_tax_number(state_abbreviation.upper(), tax_number)
+            full_tax_number = CheckTaxNumberRequestController._generate_tax_number(
+                self.input_data.state_abbreviation.upper(), self.input_data.tax_number)
         except InvalidBufaNumberError:
             return CheckTaxNumberRequestController.generate_json(False)
         result = CheckTaxNumberPyericController.get_eric_response(full_tax_number)

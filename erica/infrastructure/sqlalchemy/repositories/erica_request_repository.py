@@ -1,4 +1,5 @@
 from abc import ABC
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -31,8 +32,13 @@ class EricaRequestRepository(
         return entity
 
     def update_by_job_id(self, job_id: UUID, model: BaseModel) -> EricaRequest:
-        current = self._get_by_job_id(job_id)
-        current.update(model.dict())
+        current_query = self._get_by_job_id(job_id)
+        current_entity = current_query.first()
+        if current_entity is None:
+            raise EntityNotFoundError
+
+        # We only want to run update with changed data
+        current_query.update(self._get_changed_data(current_query.first(), model))
         self.db_connection.commit()
 
         updated = self.get_by_job_id(job_id)

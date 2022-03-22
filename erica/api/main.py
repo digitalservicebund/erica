@@ -1,7 +1,6 @@
-from fastapi import FastAPI
 from uuid import UUID
 
-from erica.api.v2.api_v2 import api_router_02
+from fastapi import FastAPI
 from fastapi_versioning import VersionedFastAPI, version
 from opyoid import Injector
 
@@ -13,9 +12,8 @@ from erica.application.FreischaltCode.FreischaltCode import (FreischaltCodeActiv
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.sqlalchemy.database import run_migrations
-from erica.infrastructure.sqlalchemy.repositories.EricaAuftragRepository import \
-    EricaAuftragRepository
-
+from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+    
 
 run_migrations()
 app = FastAPI(
@@ -35,7 +33,7 @@ injector = Injector([
 @version(1, 0)
 async def get_erica_auftrag_status_list(skip: int, limit: int):
     # TODO Don't access the repository here directly. We should use a Service instead
-    repo: EricaAuftragRepository = injector.inject(EricaAuftragRepository)
+    repo: EricaRequestRepository = injector.inject(EricaRequestRepository)
     return repo.get(skip, limit)
 
 
@@ -58,5 +56,3 @@ async def activate_freischalt_code(freischalt_code_activate_dto: FreischaltCodeA
     return get_job_service(RequestType.freischalt_code_activate).add_to_queue(freischalt_code_activate_dto, RequestType.freischalt_code_activate)
 
 app = VersionedFastAPI(app)
-# Add router
-app.include_router(api_router_02)

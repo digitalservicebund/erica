@@ -16,6 +16,6 @@ class EricaRequestSchema(AuditedSchemaMixin, BaseDbSchema):
                 primary_key=True)
     type = Column(Enum(RequestType))
     payload = Column(JSONB)
+    result = Column(JSONB)
     job_id = Column(UUID(as_uuid=True))
-    elster_request_id = Column(String, nullable=True)
     status = Column(Enum(Status))

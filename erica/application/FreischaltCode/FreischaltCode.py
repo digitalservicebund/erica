@@ -1,10 +1,6 @@
 from datetime import date
 
-from pydantic import BaseModel
-
-
-class BaseDto(BaseModel):
-    pass
+from erica.application.base_dto import BaseDto
 
 
 class FreischaltCodeRequestDto(BaseDto):

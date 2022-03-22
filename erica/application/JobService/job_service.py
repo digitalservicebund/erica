@@ -5,12 +5,12 @@ from uuid import uuid4
 
 from rq import Retry
 
-from erica.application.EricRequestProcessing.requests_controller import EricaRequestController
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
 from erica.domain.erica_request.erica_request import EricaRequest
 
@@ -48,9 +48,7 @@ class JobService(JobServiceInterface):
     def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         request_entity = EricaRequest(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
-                                      created_at=datetime.datetime.now(),
-                                      updated_at=datetime.datetime.now(),
-                                      creator_id="api",
+creator_id="api",
                                       type=job_type
                                       )
 
