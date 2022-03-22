@@ -48,9 +48,7 @@ class JobService(JobServiceInterface):
     def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         request_entity = EricaRequest(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
-                                      created_at=datetime.datetime.now(),
-                                      updated_at=datetime.datetime.now(),
-                                      creator_id="api",
+creator_id="api",
                                       type=job_type
                                       )
 

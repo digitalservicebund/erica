@@ -82,8 +82,8 @@ class TestJobServiceQueue:
             id="1234",
             job_id="00000000-0000-0000-0000-000000000000",
             payload=input_data,
-            created_at=datetime.now().__str__(),
-            updated_at=datetime.now().__str__(),
+            created_at=None,
+            updated_at=None,
             creator_id="api",
             type=RequestType.freischalt_code_activate
         )
