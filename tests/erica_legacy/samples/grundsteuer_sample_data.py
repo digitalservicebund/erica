@@ -77,7 +77,6 @@ class SampleGrundstueck(Builder):
             "steuernummer": "1121081508150",
             "typ": "einfamilienhaus",
             "innerhalb_einer_gemeinde": True,
-            "anzahl": 1,
             "bodenrichtwert": "41,99",
             "flurstueck": [
             ]
