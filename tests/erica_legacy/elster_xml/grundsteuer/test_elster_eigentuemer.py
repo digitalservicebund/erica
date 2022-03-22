@@ -1,10 +1,8 @@
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
-from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import EAngFeststellung
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
     EEigentumsverh, EEmpfangsbevollmaechtigter
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
     Person, Eigentuemer, Empfangsbevollmaechtigter
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
     get_sample_empfangsbevollmaechtigter_dict
 
@@ -190,22 +188,6 @@ class TestEEigentumsverh:
         result = EEigentumsverh(eigentuemer_obj)
 
         assert result.E7401340 == "6"
-
-
-class TestEAngFeststellung:
-    def test_if_unbebaut_then_set_attributes_correctly(self):
-        result = EAngFeststellung(Grundstuecksart.baureif)
-
-        assert result.E7401311 == "1"
-        assert result.E7401310 == 1
-        assert len(vars(result)) == 2
-
-    def test_if_bebaut_then_set_attributes_correctly(self):
-        result = EAngFeststellung(Grundstuecksart.einfamilienhaus)
-
-        assert result.E7401311 == "1"
-        assert result.E7401310 == 2
-        assert len(vars(result)) == 2
 
 
 class TestEEmpfangsbevollmaechtigter:
