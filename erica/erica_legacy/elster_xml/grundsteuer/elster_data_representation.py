@@ -73,7 +73,7 @@ class EGW2:
     Ang_Wohn: EAngWohn
 
     def __init__(self, input_data: GrundsteuerData):
-        self.Ang_Grundstuecksart = EAngGrundstuecksart(input_data.grundstueck)
+        self.Ang_Grundstuecksart = EAngGrundstuecksart(input_data.grundstueck.typ)
         self.Ang_Grund = EAngGrund(input_data.grundstueck)
         self.Ang_Wohn = EAngWohn(input_data.gebaeude)
 

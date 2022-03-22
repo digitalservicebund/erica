@@ -1,8 +1,17 @@
+from enum import Enum
 from typing import Optional, List, Literal
 
 from pydantic import root_validator, validator, constr
 
 from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input import CamelCaseInput
+
+
+class Grundstuecksart(str, Enum):
+    einfamilienhaus = "einfamilienhaus"
+    zweifamilienhaus = "zweifamilienhaus"
+    wohnungseigentum = "wohnungseigentum"
+    baureif = "baureif"
+    abweichendeEntwicklung = "abweichendeEntwicklung"
 
 
 class Adresse(CamelCaseInput):
@@ -57,7 +66,7 @@ class Flurstueck(CamelCaseInput):
 
 
 class Grundstueck(CamelCaseInput):
-    typ: Literal["einfamilienhaus", "mehrfamilienhaus", "wohnungseigentum", "baureif", "abweichendeEntwicklung"]
+    typ: Grundstuecksart
     abweichende_entwicklung: Optional[Literal["bauerwartungsland", "rohbauland"]]
     steuernummer: str
     adresse: Adresse

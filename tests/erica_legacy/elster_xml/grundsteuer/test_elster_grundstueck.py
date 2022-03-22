@@ -1,9 +1,11 @@
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden, EFlurstueck, \
-    EAngFlaeche, EEntwZust, EAngGrund
+    EAngFlaeche, EEntwZust, EAngGrund, EAngGrundstuecksart
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck, SampleFlurstueck
 
 
-class TestAdresse:
+class TestELage:
     def test_if_no_zusatz_then_parse_number_component(self):
         adresse = SampleGrundstueck().hausnummer("123").parse().adresse
 
@@ -81,7 +83,15 @@ class TestAdresse:
         assert len(vars(result)) == 6
 
 
-class TestMehrereGemeinden:
+class TestEAngGrundstuecksart:
+    def test_if_valid_input_then_should_assign_field(self):
+        result = EAngGrundstuecksart(Grundstuecksart.einfamilienhaus)
+
+        assert result.E7401322 == elsterify_grundstuecksart(Grundstuecksart.einfamilienhaus)
+        assert len(vars(result)) == 1
+
+
+class TestEMehrereGemeinden:
     def test_has_one_field_with_value_one(self):
         result = EMehrereGemeinden()
 

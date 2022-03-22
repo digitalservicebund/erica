@@ -107,12 +107,12 @@ class TestGrundstueck:
 
         assert result.typ == "einfamilienhaus"
 
-    def test_if_typ_mehrfamilienhaus_then_should_parse_correctly(self):
-        grundstueck = SampleGrundstueck().typ("mehrfamilienhaus").build()
+    def test_if_typ_zweifamilienhaus_then_should_parse_correctly(self):
+        grundstueck = SampleGrundstueck().typ("zweifamilienhaus").build()
 
         result = Grundstueck.parse_obj(grundstueck)
 
-        assert result.typ == "mehrfamilienhaus"
+        assert result.typ == "zweifamilienhaus"
 
     def test_if_typ_wohnungseigentum_then_should_parse_correctly(self):
         grundstueck = SampleGrundstueck().typ("wohnungseigentum").build()
