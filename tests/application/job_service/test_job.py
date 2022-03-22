@@ -44,6 +44,8 @@ class TestJob:
         with pytest.raises(EricProcessNotSuccessful):
             await perform_job(entity_id=uuid4(), repository=mock_repository, service=mock_service, dto=MagicMock(), logger=MagicMock())
 
+        assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('code')
+        assert mock_entity.error_message == EricProcessNotSuccessful().generate_error_response().get('message')
         assert mock_entity.status == Status.failed
         assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
 
