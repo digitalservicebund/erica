@@ -34,6 +34,20 @@ class TestJob:
         assert any("Job failed" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
 
     @pytest.mark.asyncio
+    async def test_if_service_raises_error_then_update_entity_in_database_with_correct_values(self):
+        mock_entity = MagicMock(id="R2-D2", job_id="C3PO")
+        mock_get_by_job_id = MagicMock(return_value=mock_entity)
+        mock_update = MagicMock()
+        mock_repository = MagicMock(get_by_job_id=mock_get_by_job_id, update=mock_update)
+        mock_service = MagicMock(apply_to_elster=MagicMock(side_effect=EricProcessNotSuccessful))
+
+        with pytest.raises(EricProcessNotSuccessful):
+            await perform_job(entity_id=uuid4(), repository=mock_repository, service=mock_service, dto=MagicMock(), logger=MagicMock())
+
+        assert mock_entity.status == Status.failed
+        assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
+
+    @pytest.mark.asyncio
     @freeze_time("Jan 3th, 1892", auto_tick_seconds=15)
     async def test_if_service_raises_error_then_log_runtime_of_job(self):
         mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful)

@@ -41,6 +41,8 @@ async def perform_job(entity_id: UUID, repository: base_repository_interface, se
                 f"Job failed: {entity}. Got Error Message: {e.generate_error_response(True).__str__()}",
                 exc_info=True
             )
+            entity.status = Status.failed
+            repository.update(entity.id, entity)
             raise
 
         logger.info(f"Job finished: {entity}", exc_info=True)
