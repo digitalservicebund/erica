@@ -121,7 +121,7 @@ class TestEEntwZust:
 
         assert result.E7403051 == 1
 
-    def test_if_rohbauland_should_set_1(self):
+    def test_if_rohbauland_should_set_2(self):
         result = EEntwZust("rohbauland")
 
         assert result.E7403051 == 2

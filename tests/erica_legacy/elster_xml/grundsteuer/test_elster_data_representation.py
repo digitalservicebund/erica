@@ -17,7 +17,7 @@ from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_s
     get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict, SampleGrundstueck
 
 
-class TestEErgAnbaben:
+class TestEErgAngaben:
     def test_if_instantiated_then_set_flag_and_value(self):
         result = EErgAngaben("foo bar baz")
 
@@ -79,7 +79,7 @@ class TestEGW1:
     def test_if_valid_grundstueck_then_set_lage_correctly(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [get_sample_single_person_dict()]})
-        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinder(False).parse()
+        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinde(False).parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
@@ -89,7 +89,7 @@ class TestEGW1:
     def test_if_not_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [get_sample_single_person_dict()]})
-        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinder(False).parse()
+        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinde(False).parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
@@ -99,7 +99,7 @@ class TestEGW1:
     def test_if_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden_to_none(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [get_sample_single_person_dict()]})
-        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinder(True).parse()
+        grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinde(True).parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
@@ -115,7 +115,7 @@ class TestEGW1:
 
         assert result.Gemarkungen == EGemarkungen(grundstueck_obj.flurstueck)
 
-    def test_if_no_fretext_then_set_field_to_none(self):
+    def test_if_no_frertext_then_set_field_to_none(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [get_sample_single_person_dict()]})
         grundstueck_obj = SampleGrundstueck().parse()
@@ -124,7 +124,7 @@ class TestEGW1:
 
         assert result.Erg_Angaben is None
 
-    def test_if_fretext_then_set_field(self):
+    def test_if_frertext_then_set_field(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [get_sample_single_person_dict()]})
         grundstueck_obj = SampleGrundstueck().parse()

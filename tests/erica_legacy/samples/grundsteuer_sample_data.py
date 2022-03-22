@@ -106,7 +106,7 @@ class SampleGrundstueck(Builder):
         self.dict["typ"] = typ
         return self
 
-    def innerhalb_einer_gemeinder(self, flag):
+    def innerhalb_einer_gemeinde(self, flag):
         self.dict["innerhalb_einer_gemeinde"] = flag
         return self
 
