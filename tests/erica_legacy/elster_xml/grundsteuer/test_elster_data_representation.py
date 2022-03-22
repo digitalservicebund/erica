@@ -23,6 +23,7 @@ class TestEErgAngaben:
 
         assert result.E7413001 == 1
         assert result.E7411702 == "foo bar baz"
+        assert len(vars(result)) == 2
 
 
 class TestEGW1:
