@@ -115,7 +115,7 @@ class TestEGW1:
 
         assert result.Gemarkungen == EGemarkungen(grundstueck_obj.flurstueck)
 
-    def test_if_no_frertext_then_set_field_to_none(self):
+    def test_if_no_freitext_then_set_field_to_none(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [get_sample_single_person_dict()]})
         grundstueck_obj = SampleGrundstueck().parse()
@@ -124,7 +124,7 @@ class TestEGW1:
 
         assert result.Erg_Angaben is None
 
-    def test_if_frertext_then_set_field(self):
+    def test_if_freitext_then_set_field(self):
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [get_sample_single_person_dict()]})
         grundstueck_obj = SampleGrundstueck().parse()
