@@ -54,6 +54,8 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
 
     def update(self, entity_id: Integer, model: BaseModel) -> T:
         current = self._get_by_id(entity_id)
+        if current.first() is None:
+            raise EntityNotFoundError
         current.update(model.dict())
         self.db_connection.commit()
 

@@ -88,7 +88,8 @@ class TestBaseRepositoryGetById:
 
     def test_if_entity_not_in_database_then_raise_exception(self, transactional_session):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
-        schema_object = MockSchema(**mock_object.dict(), job_id=uuid4())
+        mock_object.job_id = uuid4()
+        schema_object = MockSchema(**mock_object.dict())
 
         with pytest.raises(EntityNotFoundError):
             MockBaseRepository(db_connection=transactional_session).get_by_id(schema_object.id)

@@ -18,7 +18,7 @@ class EricaRequest(BaseDomainModel[UUID]):
     status: Status = Status.new
     payload: object
     job_id: UUID
-    elster_request_id: Optional[str] = None
+    result: Optional[object]
 
     class Config:
         orm_mode = True
