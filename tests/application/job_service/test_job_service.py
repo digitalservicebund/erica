@@ -92,17 +92,14 @@ class TestJobServiceQueue:
     def test_if_input_data_provided_then_add_job_to_background_job_worker_with_correct_params(self):
         mock_job = PickableMock()
         mock_bg_worker = MagicMock()
-        mock_retry = MagicMock(return_value="retry")
         service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        with patch('erica.application.JobService.job_service.Retry', mock_retry):
-            # TODO we have some dependency on the Retry object inside the service which should only be part of the infrastructure I think, so we should probably remove that
-            service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
+        service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
 
         assert mock_bg_worker.enqueue.mock_calls == [
-            call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000", retry="retry")]
+            call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000")]
 
 
 class TestJobServiceRun:

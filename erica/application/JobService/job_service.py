@@ -48,7 +48,7 @@ class JobService(JobServiceInterface):
     def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
         request_entity = EricaRequest(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
-creator_id="api",
+                                      creator_id="api",
                                       type=job_type
                                       )
 
@@ -57,12 +57,12 @@ creator_id="api",
         self.background_worker.enqueue(
             created.id,
             f=self.job_method,
-            retry=Retry(max=3, interval=1),
             job_id=request_entity.job_id.__str__(),
         )
 
         return EricaAuftragDto.parse_obj(created)
 
     async def apply_to_elster(self, payload_data, include_elster_responses: bool = False):
-        controller = self.request_controller(payload_data, include_elster_responses) # TODO check if we can directly inject the class
+        controller = self.request_controller(payload_data,
+                                             include_elster_responses)
         return controller.process()
