@@ -70,7 +70,7 @@ class EFlurstueck:
     E7411001: int
     E7410702: str
     E7410703: int
-    # E7410704 TODO
+    E7410704: int  # Enthalten in der/den in Anlage Grundstück, Zeile 4 angegebenen Fläche(n) des (Teil-)Grundstücks
 
     def __init__(self, flurstueck: Flurstueck):
         self.E7401141 = flurstueck.angaben.gemarkung
@@ -81,6 +81,7 @@ class EFlurstueck:
         self.E7411001 = flurstueck.groesse_qm
         self.E7410702 = flurstueck.flur.wirtschaftliche_einheit_zaehler
         self.E7410703 = flurstueck.flur.wirtschaftliche_einheit_nenner
+        self.E7410704 = 1  # "erste Flaeche"
 
 
 @dataclass

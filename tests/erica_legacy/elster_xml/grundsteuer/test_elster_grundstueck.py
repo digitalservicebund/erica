@@ -104,7 +104,8 @@ class TestEFlurstueck:
         assert result.E7411001 == 4242
         assert result.E7410702 == "1.0000"
         assert result.E7410703 == 4
-        assert len(vars(result)) == 8
+        assert result.E7410704 == 1
+        assert len(vars(result)) == 9
 
     def test_if_largest_groesse_then_parsed_identically(self):
         flurstuck = SampleFlurstueck().groesse(999999999999999).parse()
