@@ -35,7 +35,7 @@ class TestJob:
 
     @pytest.mark.asyncio
     async def test_if_service_raises_error_then_update_entity_in_database_with_correct_values(self):
-        mock_entity = MagicMock(id="R2-D2", job_id="C3PO")
+        mock_entity = MagicMock(id="R2-D2", request_id="C3PO")
         mock_get_by_job_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_id=mock_get_by_job_id, update=mock_update)
@@ -96,7 +96,7 @@ class TestJob:
 
     @pytest.mark.asyncio
     async def test_if_entity_exists_then_call_service_with_parsed_entity_payload_and_include_elster_response_true(self):
-        mock_entity = MagicMock(id="R2-D2", job_id="C3PO")
+        mock_entity = MagicMock(id="R2-D2", request_id="C3PO")
         mock_repository = MagicMock(get_by_job_id=MagicMock(return_value=mock_entity))
         dto_parse_obj = MagicMock()
         mock_apply_to_elster = AsyncMock()
@@ -108,7 +108,7 @@ class TestJob:
 
     @pytest.mark.asyncio
     async def test_if_job_ran_successful_then_update_entity_in_database_with_correct_values(self):
-        mock_entity = MagicMock(id="R2-D2", job_id="C3PO")
+        mock_entity = MagicMock(id="R2-D2", request_id="C3PO")
         mock_get_by_job_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_id=mock_get_by_job_id, update=mock_update)
@@ -126,7 +126,7 @@ class TestJob:
         original_id = "R2-D2"
         original_job_id = "C3P0"
         original_type = "droid"
-        mock_entity = MagicMock(id=original_id, job_id=original_job_id, type=original_type)
+        mock_entity = MagicMock(id=original_id, request_id=original_job_id, type=original_type)
         mock_get_by_job_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_id=mock_get_by_job_id, update=mock_update)
@@ -136,7 +136,7 @@ class TestJob:
         await perform_job(entity_id=uuid4(), repository=mock_repository, service=service, dto=MagicMock(), logger=MagicMock())
 
         assert mock_entity.id == original_id
-        assert mock_entity.job_id == original_job_id
+        assert mock_entity.request_id == original_job_id
         assert mock_entity.type == original_type
 
     @pytest.mark.asyncio

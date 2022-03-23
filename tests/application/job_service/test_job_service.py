@@ -80,7 +80,7 @@ class TestJobServiceQueue:
 
         assert service.repository[0] == EricaRequest(
             id="1234",
-            job_id="00000000-0000-0000-0000-000000000000",
+            request_id="00000000-0000-0000-0000-000000000000",
             payload=input_data,
             created_at=None,
             updated_at=None,
@@ -127,7 +127,7 @@ class TestJobServiceRun:
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
         request_entity = EricaRequest(
             id="1234",
-            job_id="00000000-0000-0000-0000-000000000000",
+            request_id="00000000-0000-0000-0000-000000000000",
             payload=input_data,
             created_at=datetime.now().__str__(),
             updated_at=datetime.now().__str__(),

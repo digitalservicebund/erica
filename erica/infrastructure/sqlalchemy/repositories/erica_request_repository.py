@@ -28,7 +28,7 @@ class EricaRequestRepository(
         return self.DomainModel.from_orm(entity)
 
     def _get_by_job_id(self, job_id: UUID):
-        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.job_id == job_id)
+        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.request_id == job_id)
         return entity
 
     def update_by_job_id(self, job_id: UUID, model: BaseModel) -> EricaRequest:
