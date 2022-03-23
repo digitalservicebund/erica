@@ -1,5 +1,6 @@
 from datetime import datetime
 from unittest.mock import Mock, MagicMock, call, patch
+from uuid import UUID
 
 import pytest
 from freezegun import freeze_time
@@ -99,7 +100,7 @@ class TestJobServiceQueue:
         service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
 
         assert mock_bg_worker.enqueue.mock_calls == [
-            call("1234", f=mock_job)]
+            call(UUID('00000000-0000-0000-0000-000000000000'), f=mock_job)]
 
 
 class TestJobServiceRun:
