@@ -6,6 +6,7 @@ import pytest
 import pytest_pgsql
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
+from testing import postgresql
 
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.domain.Shared.Status import Status
@@ -26,24 +27,16 @@ class MockEricaRequestRepository(
         self.DomainModel = MockDomainModel
 
 
-
 @pytest.fixture
 def transactional_session(transacted_postgresql_db):
     transacted_postgresql_db.create_table(MockSchema)
     yield transacted_postgresql_db.session
 
-@pytest.fixture
-def transactional_erica_request_session():
-    if not database_exists(get_engine().url):
-        create_database(get_engine().url)
-    run_migrations()
-    session = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())()
-    yield session
 
-    tables = MockSchema.metadata.sorted_tables
-    for table in tables:
-        session.execute(table.delete())
-    session.commit()
+@pytest.fixture
+def transactional_erica_request_session(transacted_postgresql_db):
+    transacted_postgresql_db.create_table(EricaRequestSchema)
+    yield transacted_postgresql_db.session
 
 
 class TestEricaRepositoryCreate:
@@ -121,22 +114,26 @@ class TestEricaRepositoryUpdateByJobId:
         with pytest.raises(EntityNotFoundError):
             MockEricaRequestRepository(db_connection=transactional_session).update_by_job_id(schema_object.job_id, updated_object)
 
-    def test_if_update_object_then_set_only_updated_at_timestamp(self, transactional_erica_request_session):
-        job_id = uuid4()
-        mock_object = EricaRequest(job_id=job_id,
-                                   payload={'endboss': 'Melkor'},
-                                   creator_id="api",
-                                   type=RequestType.freischalt_code_request,
-                                   status=Status.new)
-        created_object = EricaRequestRepository(db_connection=transactional_erica_request_session).create(mock_object)
-        found_entity_before_update = transactional_erica_request_session.query(EricaRequestSchema).filter(EricaRequestSchema.job_id == job_id).first()
-        before_update_created_at_timestamp = found_entity_before_update.created_at
-        before_update_updated_at_timestamp = found_entity_before_update.updated_at
-        created_object.payload = {'endboss': 'Sauron'}
+    def test_if_update_object_then_set_only_updated_at_timestamp(self, transacted_postgresql_db):
+        with transacted_postgresql_db.time.freeze('December 31st 1999 11:59:59 PM') as freezer:
+            transacted_postgresql_db.create_table(EricaRequestSchema)
+            job_id = uuid4()
+            mock_object = EricaRequest(job_id=job_id,
+                                       payload={'endboss': 'Melkor'},
+                                       creator_id="api",
+                                       type=RequestType.freischalt_code_request,
+                                       status=Status.new)
+            created_object = EricaRequestRepository(db_connection=transacted_postgresql_db.session).create(mock_object)
+            found_entity_before_update = transacted_postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.job_id == job_id).first()
+            before_update_created_at_timestamp = found_entity_before_update.created_at
+            before_update_updated_at_timestamp = found_entity_before_update.updated_at
+            created_object.payload = {'endboss': 'Sauron'}
 
-        EricaRequestRepository(db_connection=transactional_erica_request_session).update_by_job_id(job_id, created_object)
+            freezer.tick()
 
-        found_entity = transactional_erica_request_session.query(EricaRequestSchema).filter(EricaRequestSchema.job_id == job_id).first()
+            EricaRequestRepository(db_connection=transacted_postgresql_db.session).update_by_job_id(job_id, created_object)
+
+            found_entity = transacted_postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.job_id==job_id).first()
 
         assert found_entity.created_at == before_update_created_at_timestamp
         assert found_entity.updated_at > before_update_updated_at_timestamp
