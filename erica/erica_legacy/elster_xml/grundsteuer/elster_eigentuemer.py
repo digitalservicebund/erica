@@ -113,14 +113,6 @@ class EEigentumsverh:
 
 
 @dataclass
-class EAngFeststellung:
-    E7401311: str
-
-    def __init__(self):
-        self.E7401311 = "1"  # Hauptfeststellung
-
-
-@dataclass
 class EEmpfangsbevollmaechtigter:
     E7404610: str
     E7404614: Optional[str]

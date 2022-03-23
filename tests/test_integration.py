@@ -7,7 +7,7 @@ from decimal import Decimal
 import pytest
 import requests
 
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 
 ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://0.0.0.0:8000")
 
@@ -80,7 +80,7 @@ def full_est_data():
 
 @pytest.fixture()
 def full_grundsteuer_data():
-    return get_grundsteuer_sample_data().dict()
+    return SampleGrundsteuerData().build().dict()
 
 
 class TestV1Ping:
