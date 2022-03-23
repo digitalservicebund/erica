@@ -392,7 +392,7 @@ class SampleGrundsteuerData(Builder):
             "freitext": ""
         }
 
-    def with_with_empfangsvollmacht(self):
+    def with_empfangsvollmacht(self):
         self.eigentuemer.empfangsbevollmaechtigter(SampleBevollmaechtigter().build())
         return self
 
