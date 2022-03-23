@@ -1,13 +1,9 @@
 from typing import  Union
 from pydantic import BaseModel
-from erica.erica_legacy.request_processing.erica_input.v1.erica_input import EstData, UnlockCodeRequestData, \
+
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, \
     UnlockCodeActivationData, UnlockCodeRevocationData
 from enum import Enum
-
-
-class EstDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: EstData
 
 
 class TaxValidity(BaseModel):

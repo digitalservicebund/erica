@@ -19,3 +19,7 @@ class BaseDomainModel(AuditedModel, Generic[DataT]):
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True
+
+
+class BasePayload(BaseModel):
+    pass

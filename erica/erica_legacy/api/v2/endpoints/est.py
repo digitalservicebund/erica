@@ -6,13 +6,13 @@ from starlette.responses import JSONResponse
 from erica.erica_legacy.api.v2.responses.model import response_model_post_to_queue, response_model_get_est_validation_from_queue, \
     response_model_get_send_est_from_queue
 from erica.erica_legacy.pyeric.utils import generate_dummy_error_response
-from erica.erica_legacy.request_processing.erica_input.v2.erica_input import EstDataWithTtl
+from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 
 router = APIRouter()
 
 
 @router.post('/est_validations', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-def validate_est(est_data_ttl: EstDataWithTtl):
+def validate_est(est_data_ttl: TaxDeclarationDto):
     """
     Route for validation of a tax declaration using the job queue.
     :param est_data_ttl: payload with TTL, JSON input data for the ESt and declaration year.
@@ -39,7 +39,7 @@ def get_validate_est_job(request_id: str):
 
 
 @router.post('/ests', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-def send_est(est_data_ttl: EstDataWithTtl):
+def send_est(est_data_ttl: TaxDeclarationDto):
     """
     Route for sending a tax declaration using the job queue.
     :param est_data_ttl: payload with TTL, JSON input data for the ESt and declaration year.
