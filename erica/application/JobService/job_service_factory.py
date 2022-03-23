@@ -2,15 +2,16 @@
 from typing import Callable, Type
 
 from opyoid import Injector
-from erica.application.ApplicationModule import ApplicationModule
 
-from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltCodeActivateDto, FreischaltCodeRequestDto, FreischaltCodeRevocateDto
-from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, request_freischalt_code, revocate_freischalt_code
+from erica.application.ApplicationModule import ApplicationModule
+from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltCodeActivateDto, \
+    FreischaltCodeRequestDto, FreischaltCodeRevocateDto
+from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, request_freischalt_code, \
+    revocate_freischalt_code
 from erica.application.JobService.job_service import JobService, JobServiceInterface
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
-from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
-    FreischaltCodeRevocatePayload
+from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
@@ -69,7 +70,7 @@ def _check_tax_number_injector():
 def _send_est_injector():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=EstRequestController)
-    module.bind(Type[BaseDto], to_instance=TaxDeclarationPayload)
+    module.bind(Type[BasePayload], to_instance=TaxDeclarationPayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=send_est)
 
@@ -86,7 +87,6 @@ injectors = {
     RequestType.check_tax_number: _check_tax_number_injector,
     RequestType.send_est: _send_est_injector,
 }
-
 
 
 def get_job_service(request_type: RequestType) -> JobServiceInterface:

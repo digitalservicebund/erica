@@ -12,7 +12,8 @@ from erica.domain.repositories.erica_request_repository_interface import EricaRe
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
-from erica.domain.erica_request.erica_request import EricaRequest, BasePayload
+from erica.domain.erica_request.erica_request import EricaRequest
+from erica.domain.Shared.BaseDomainModel import BasePayload
 
 
 class JobServiceInterface:
