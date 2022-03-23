@@ -45,20 +45,33 @@ class TestEErgAngaben:
 
 
 class TestEGW1:
-    def test_if_one_person_then_attributes_set_correctly(self):
-        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
-            SampleBevollmaechtigter().complete().build()).parse()
+    def test_if_valid_input_then_all_attributes_set_correctly(self):
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
+        grundstueck_obj = SampleGrundstueck().flurstuck(SampleFlurstueck().build()).parse()
 
-        grundstueck_obj = SampleGrundstueck().parse()
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
+        assert result.Lage == ELage(grundstueck_obj.adresse)
+        assert result.Mehrere_Gemeinden is None
+        assert result.Gemarkungen == EGemarkungen(grundstueck_obj.flurstueck)
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(eigentuemer_obj.person[0]), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
-        assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
+        assert result.Empfangsv is None
         assert result.Erg_Angaben is None
         assert len(vars(result)) == 8
+
+    def test_if_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
+        grundstueck_obj = SampleGrundstueck().parse()
+
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
+
+        assert result.Eigentuemer[0] == EPersonData(eigentuemer_obj.person[0], person_index=0)
+        assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
+        assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
 
     def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
         eigentuemer_obj = DefaultSampleEigentuemer().parse()
@@ -66,13 +79,9 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
-        assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(eigentuemer_obj.person[0], person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
-        assert result.Erg_Angaben is None
-        assert len(vars(result)) == 8
 
     def test_if_two_persons_then_attributes_set_correctly(self):
         person1 = SamplePerson().vorname("Albus").build()
@@ -82,14 +91,10 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 2
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
-        assert result.Empfangsv is None
-        assert result.Erg_Angaben is None
-        assert len(vars(result)) == 8
 
     def test_if_valid_grundstueck_then_set_lage_correctly(self):
         eigentuemer_obj = DefaultSampleEigentuemer().parse()
