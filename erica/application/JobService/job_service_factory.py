@@ -8,9 +8,11 @@ from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltC
 from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, request_freischalt_code, revocate_freischalt_code
 from erica.application.JobService.job_service import JobService, JobServiceInterface
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
-from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
+from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
+    FreischaltCodeRevocatePayload
 from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
     CheckTaxNumberRequestController, EstRequestController
@@ -67,7 +69,7 @@ def _check_tax_number_injector():
 def _send_est_injector():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=EstRequestController)
-    module.bind(Type[BaseDto], to_instance=TaxDeclarationDto)
+    module.bind(Type[BaseDto], to_instance=TaxDeclarationPayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=send_est)
 

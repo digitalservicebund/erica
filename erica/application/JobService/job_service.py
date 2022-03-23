@@ -12,20 +12,20 @@ from erica.domain.repositories.erica_request_repository_interface import EricaRe
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
-from erica.domain.erica_request.erica_request import EricaRequest
+from erica.domain.erica_request.erica_request import EricaRequest, BasePayload
 
 
-class JobServiceInterface():
+class JobServiceInterface:
     __metaclass__ = ABCMeta
-    payload_type: Type[BaseDto]
+    payload_type: Type[BasePayload]
     repository: EricaRequestRepositoryInterface
 
     @abstractmethod
-    def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
+    def add_to_queue(self, payload_dto: BasePayload, job_type: RequestType) -> EricaAuftragDto:
         pass
 
     @abstractmethod
-    def apply_to_elster(self, request_entity: EricaRequest, include_elster_responses: bool):
+    def apply_to_elster(self, payload_data: BasePayload, include_elster_responses: bool):
         pass
 
 
@@ -34,7 +34,7 @@ class JobService(JobServiceInterface):
     def __init__(self,
                  job_repository: EricaRequestRepositoryInterface,
                  background_worker: BackgroundJobInterface,
-                 payload_type: Type[BaseDto],
+                 payload_type: Type[BasePayload],
                  request_controller: Type[EricaRequestController],
                  job_method: Callable) -> None:
         super().__init__()

@@ -6,6 +6,7 @@ from erica.application.JobService.job_service_factory import get_job_service
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
 from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \
     EstRequestController
@@ -59,5 +60,5 @@ class TestJobServiceFactory:
 
         assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
-        assert issubclass(job_service.payload_type, TaxDeclarationDto)
+        assert issubclass(job_service.payload_type, TaxDeclarationPayload)
         assert issubclass(job_service.request_controller, EstRequestController)

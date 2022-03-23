@@ -22,7 +22,7 @@ class TestTaxDeclarationJob:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        dto=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type)]
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
