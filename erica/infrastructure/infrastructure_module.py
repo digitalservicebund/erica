@@ -2,8 +2,8 @@ from opyoid import Module
 from sqlalchemy.orm import Session
 
 from erica.domain.DomainModule import DomainModule
-from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
-from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
+from erica.domain.Repositories.base_repository_interface import BaseRepositoryInterface
+from erica.domain.Repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
 from erica.infrastructure.sqlalchemy.database import DatabaseSessionProvider
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
