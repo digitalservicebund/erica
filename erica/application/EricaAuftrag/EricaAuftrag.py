@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 
 from pydantic.main import BaseModel
@@ -15,4 +16,6 @@ class EricaAuftragDto(BaseModel):
     status: Status = Status.new
     payload: object
     job_id: UUID
-    elster_request_id: str = None
+    result: Optional[object]
+    error_code: Optional[str]
+    error_message: Optional[str]

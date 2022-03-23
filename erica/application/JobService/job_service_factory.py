@@ -7,11 +7,13 @@ from erica.application.ApplicationModule import ApplicationModule
 from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltCodeActivateDto, FreischaltCodeRequestDto, FreischaltCodeRevocateDto
 from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, request_freischalt_code, revocate_freischalt_code
 from erica.application.JobService.job_service import JobService, JobServiceInterface
+from erica.application.tax_declaration.tax_declaration_jobs import send_est
+from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
-    CheckTaxNumberRequestController
+    CheckTaxNumberRequestController, EstRequestController
 
 
 def _freischalt_code_request_injector():
@@ -62,12 +64,25 @@ def _check_tax_number_injector():
     ])
 
 
+def _send_est_injector():
+    module = ApplicationModule()
+    module.bind(Type[EricaRequestController], to_instance=EstRequestController)
+    module.bind(Type[BaseDto], to_instance=TaxDeclarationDto)
+    module.bind(JobServiceInterface, to_class=JobService)
+    module.bind(Callable, to_instance=send_est)
+
+    return Injector([
+        module
+    ])
+
+
 # Register injector
 injectors = {
     RequestType.freischalt_code_request: _freischalt_code_request_injector,
     RequestType.freischalt_code_activate: _freischalt_code_activation_injector,
     RequestType.freischalt_code_revocate: _freischalt_code_revocation_injector,
     RequestType.check_tax_number: _check_tax_number_injector,
+    RequestType.send_est: _send_est_injector,
 }
 
 
