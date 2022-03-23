@@ -49,10 +49,10 @@ class EGW1:
     Lage: ELage
     Mehrere_Gemeinden: Optional[EMehrereGemeinden]
     Gemarkungen: EGemarkungen
-    Eigentuemer: List[EPersonData]
-    Eigentumsverh: EEigentumsverh
     Empfangsv: Optional[EEmpfangsbevollmaechtigter]
     Erg_Angaben: Optional[EErgAngaben]
+    Eigentumsverh: EEigentumsverh
+    Eigentuemer: List[EPersonData]
 
     def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput, freitext=None):
         self.Ang_Feststellung = EAngFeststellung(grundstueck.typ)
@@ -62,11 +62,6 @@ class EGW1:
         else:
             self.Mehrere_Gemeinden = None
         self.Gemarkungen = EGemarkungen(grundstueck.flurstueck)
-        self.Eigentuemer = []
-        for index, input_eigentuemer in enumerate(eigentuemer.person):
-            new_eigentuemer = EPersonData(input_eigentuemer, index)
-            self.Eigentuemer.append(new_eigentuemer)
-        self.Eigentumsverh = EEigentumsverh(eigentuemer)
 
         if hasattr(eigentuemer, "empfangsbevollmaechtigter") and eigentuemer.empfangsbevollmaechtigter:
             self.Empfangsv = EEmpfangsbevollmaechtigter(eigentuemer.empfangsbevollmaechtigter)
@@ -77,6 +72,12 @@ class EGW1:
             self.Erg_Angaben = EErgAngaben(freitext)
         else:
             self.Erg_Angaben = None
+
+        self.Eigentumsverh = EEigentumsverh(eigentuemer)
+        self.Eigentuemer = []
+        for index, input_eigentuemer in enumerate(eigentuemer.person):
+            new_eigentuemer = EPersonData(input_eigentuemer, index)
+            self.Eigentuemer.append(new_eigentuemer)
 
 
 @dataclass
