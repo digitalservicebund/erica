@@ -233,14 +233,14 @@ class TestEVorsatz:
         assert result.Aktenzeichen is None
         assert result.OrdNrArt == "S"
 
-    def test_if_brandenburg_then_attributes_set_correctly_for_aktenzeichen(self):
+    def test_if_nrw_then_attributes_set_correctly_for_aktenzeichen(self):
         grundsteuer_obj = get_grundsteuer_sample_data()
-        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("BB").steuernummer("09881508157").parse()
+        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("NW").steuernummer("2080353038893").parse()
 
         result = EVorsatz(grundsteuer_obj)
 
         assert result.StNr is None
-        assert result.Aktenzeichen == "3098081508157"
+        assert result.Aktenzeichen == "520850353038893"
         assert result.OrdNrArt == "A"
 
 
