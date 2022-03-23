@@ -140,8 +140,8 @@ class TestBaseRepositoryUpdate:
         # We need a mock object to be able to intercept the call to the update function
         repo = MockBaseRepository(db_connection=transactional_session)
         update_mock = MagicMock()
-        mocked_get_by_id = MagicMock(side_effect=lambda entity_id: MagicMock(
-            first=MagicMock(return_value=MockBaseRepository(db_connection=transactional_session)._get_by_id(entity_id).first()),
+        mocked_get_by_id = MagicMock(side_effect=lambda request_id: MagicMock(
+            first=MagicMock(return_value=MockBaseRepository(db_connection=transactional_session)._get_by_id(request_id).first()),
             update=update_mock))
         repo._get_by_id = mocked_get_by_id
 

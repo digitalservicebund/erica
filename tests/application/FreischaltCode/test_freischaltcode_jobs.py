@@ -13,13 +13,13 @@ class TestRequestFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_perform_job_called_with_correct_parameters(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.FreischaltCode.Jobs.jobs.perform_job", AsyncMock()) as mock_perform_job:
-            await request_freischalt_code(entity_id)
+            await request_freischalt_code(request_id)
 
-            assert mock_perform_job.mock_calls == [call(entity_id=entity_id,
+            assert mock_perform_job.mock_calls == [call(request_id=request_id,
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
@@ -27,11 +27,11 @@ class TestRequestFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.FreischaltCode.Jobs.jobs.perform_job", AsyncMock()):
-            await request_freischalt_code(entity_id)
+            await request_freischalt_code(request_id)
 
             assert mock_get_service.mock_calls == [call(RequestType.freischalt_code_request)]
 
@@ -59,13 +59,13 @@ class TestActivateFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_perform_job_called_with_correct_parameters(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.FreischaltCode.Jobs.jobs.perform_job", AsyncMock()) as mock_perform_job:
-            await activate_freischalt_code(entity_id)
+            await activate_freischalt_code(request_id)
 
-            assert mock_perform_job.mock_calls == [call(entity_id=entity_id,
+            assert mock_perform_job.mock_calls == [call(request_id=request_id,
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
@@ -73,11 +73,11 @@ class TestActivateFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.FreischaltCode.Jobs.jobs.perform_job", AsyncMock()):
-            await activate_freischalt_code(entity_id)
+            await activate_freischalt_code(request_id)
 
             assert mock_get_service.mock_calls == [call(RequestType.freischalt_code_activate)]
 
@@ -105,13 +105,13 @@ class TestRevocateFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_perform_job_called_with_correct_parameters(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.FreischaltCode.Jobs.jobs.perform_job", AsyncMock()) as mock_perform_job:
-            await revocate_freischalt_code(entity_id)
+            await revocate_freischalt_code(request_id)
 
-            assert mock_perform_job.mock_calls == [call(entity_id=entity_id,
+            assert mock_perform_job.mock_calls == [call(request_id=request_id,
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
@@ -119,11 +119,11 @@ class TestRevocateFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.FreischaltCode.Jobs.jobs.perform_job", AsyncMock()):
-            await revocate_freischalt_code(entity_id)
+            await revocate_freischalt_code(request_id)
 
             assert mock_get_service.mock_calls == [call(RequestType.freischalt_code_revocate)]
 

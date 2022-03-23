@@ -29,8 +29,8 @@ class MockEricaRequestRepository(EricaRequestRepository, list):
     def get(self, skip: int = 0, limit: int = 100):
         return self
 
-    def get_by_id(self, entity_id):
-        return [entity for entity in self if entity.id == entity_id][0]
+    def get_by_id(self, request_id):
+        return [entity for entity in self if entity.id == request_id][0]
 
     def update(self, model_id, model):
         for entity, index in enumerate(self):
@@ -38,9 +38,9 @@ class MockEricaRequestRepository(EricaRequestRepository, list):
                 self[index] = model
         return model
 
-    def delete(self, entity_id):
+    def delete(self, request_id):
         for entity, index in enumerate(self):
-            if entity.id == entity_id:
+            if entity.id == request_id:
                 self.pop(index)
 
 
