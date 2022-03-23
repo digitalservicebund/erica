@@ -54,6 +54,9 @@ class EstValidationPyericProcessController(EstPyericProcessController):
 class GrundsteuerPyericProcessController(PyericProcessController):
     _VERFAHREN = "Grundsteuerwert_2"
 
+    def run_eric(self, eric_wrapper):
+        return eric_wrapper.validate_and_send(self.xml, self._VERFAHREN)
+
 
 class UnlockCodeRequestPyericProcessController(PyericProcessController):
     _VERFAHREN = "SpezRechtAntrag"
