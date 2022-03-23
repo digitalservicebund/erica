@@ -1,6 +1,6 @@
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
-    EEigentumsverh, EAngFeststellung, EEmpfangsbevollmaechtigter
+    EEigentumsverh, EEmpfangsbevollmaechtigter
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
     Person, Eigentuemer, Empfangsbevollmaechtigter
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
@@ -188,14 +188,6 @@ class TestEEigentumsverh:
         result = EEigentumsverh(eigentuemer_obj)
 
         assert result.E7401340 == "6"
-
-
-class TestEAngFeststellung:
-    def test_sets_attributes_correctly(self):
-        result = EAngFeststellung()
-
-        assert result.E7401311 == "1"
-        assert len(vars(result)) == 1
 
 
 class TestEEmpfangsbevollmaechtigter:

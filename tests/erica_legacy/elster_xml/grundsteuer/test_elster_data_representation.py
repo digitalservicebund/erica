@@ -6,15 +6,32 @@ from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import E
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import ERueckuebermittlung, EVorsatz, \
     EGrundsteuerSpecifics, EGrundsteuerData, \
-    get_full_grundsteuer_data_representation, EGW2, EGW1, EErgAngaben
-from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
+    get_full_grundsteuer_data_representation, EGW2, EGW1, EErgAngaben, EAngFeststellung
+from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer, Person
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
     EGemarkungen, EAngGrund
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data, \
     get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict, SampleGrundstueck
+
+
+class TestEAngFeststellung:
+    def test_if_unbebaut_then_set_attributes_correctly(self):
+        result = EAngFeststellung(Grundstuecksart.baureif)
+
+        assert result.E7401311 == "1"
+        assert result.E7401310 == 1
+        assert len(vars(result)) == 2
+
+    def test_if_bebaut_then_set_attributes_correctly(self):
+        result = EAngFeststellung(Grundstuecksart.einfamilienhaus)
+
+        assert result.E7401311 == "1"
+        assert result.E7401310 == 2
+        assert len(vars(result)) == 2
 
 
 class TestEErgAngaben:
@@ -23,6 +40,7 @@ class TestEErgAngaben:
 
         assert result.E7413001 == 1
         assert result.E7411702 == "foo bar baz"
+        assert len(vars(result)) == 2
 
 
 class TestEGW1:
@@ -33,7 +51,7 @@ class TestEGW1:
         grundstueck_obj = SampleGrundstueck().parse()
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung()
+        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
@@ -48,7 +66,7 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung()
+        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 1
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
@@ -67,7 +85,7 @@ class TestEGW1:
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
-        assert result.Ang_Feststellung == EAngFeststellung()
+        assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 2
         assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person1), person_index=0)
         assert result.Eigentuemer[1] == EPersonData(Person.parse_obj(person2), person_index=1)
@@ -140,7 +158,7 @@ class TestEGW2:
 
         result = EGW2(input_data)
 
-        assert result.Ang_Grundstuecksart == EAngGrundstuecksart(input_data.grundstueck)
+        assert result.Ang_Grundstuecksart == EAngGrundstuecksart(input_data.grundstueck.typ)
         assert result.Ang_Grund == EAngGrund(input_data.grundstueck)
         assert result.Ang_Wohn == EAngWohn(input_data.gebaeude)
         assert len(vars(result)) == 3

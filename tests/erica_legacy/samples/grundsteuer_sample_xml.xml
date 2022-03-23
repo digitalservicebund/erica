@@ -35,6 +35,7 @@
                     <GW1>
                         <Ang_Feststellung>
                             <E7401311>1</E7401311>
+                            <E7401310>2</E7401310>
                         </Ang_Feststellung>
                         <Lage>
                             <E7401124>Madeupstr</E7401124>
@@ -118,7 +119,7 @@
                     </GW1>
                     <GW2>
                         <Ang_Grundstuecksart>
-                            <E7401322>einfamilienhaus</E7401322>
+                            <E7401322>2</E7401322>
                         </Ang_Grundstuecksart>
                         <Ang_Grund>
                             <Ang_Flaeche>

@@ -3,8 +3,9 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Optional, List
 
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck, \
-    Flurstueck
+    Flurstueck, Grundstuecksart
 
 
 @dataclass
@@ -46,10 +47,10 @@ class ELage:
 
 @dataclass
 class EAngGrundstuecksart:
-    E7401322: str
+    E7401322: int
 
-    def __init__(self, grundstueck: Grundstueck):
-        self.E7401322 = grundstueck.typ
+    def __init__(self, typ: Grundstuecksart):
+        self.E7401322 = elsterify_grundstuecksart(typ)
 
 
 @dataclass

@@ -1,9 +1,11 @@
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden, EFlurstueck, \
-    EAngFlaeche, EEntwZust, EAngGrund
+    EAngFlaeche, EEntwZust, EAngGrund, EAngGrundstuecksart
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck, SampleFlurstueck
 
 
-class TestAdresse:
+class TestELage:
     def test_if_no_zusatz_then_parse_number_component(self):
         adresse = SampleGrundstueck().hausnummer("123").parse().adresse
 
@@ -81,7 +83,15 @@ class TestAdresse:
         assert len(vars(result)) == 6
 
 
-class TestMehrereGemeinden:
+class TestEAngGrundstuecksart:
+    def test_if_valid_input_then_should_assign_field(self):
+        result = EAngGrundstuecksart(Grundstuecksart.einfamilienhaus)
+
+        assert result.E7401322 == elsterify_grundstuecksart(Grundstuecksart.einfamilienhaus)
+        assert len(vars(result)) == 1
+
+
+class TestEMehrereGemeinden:
     def test_has_one_field_with_value_one(self):
         result = EMehrereGemeinden()
 
@@ -148,7 +158,7 @@ class TestEAngGrund:
 
 
 class TestEAngFlaeche:
-    def test_if_one_flurstueck_whole_should_calculate_correctly(self):
+    def test_if_one_flurstueck_whole_then_calculate_correctly(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.0000").w_einheit_nenner(1).parse()
         grundstueck = SampleGrundstueck().bodenrichtwert("422,99").flurstuck(flurstueck1).parse()
 
@@ -158,7 +168,7 @@ class TestEAngFlaeche:
         assert result.E7403011 == "422,99"
         assert len(vars(result)) == 2
 
-    def test_if_one_flurstueck_partial_should_calculate_correctly(self):
+    def test_if_one_flurstueck_partial_then_calculate_correctly(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.0000").w_einheit_nenner(2).parse()
         grundstueck = SampleGrundstueck().flurstuck(flurstueck1).parse()
 
@@ -166,7 +176,7 @@ class TestEAngFlaeche:
 
         assert result.E7403010 == 500
 
-    def test_if_zaehler_with_nonzero_fraction_should_calculate_correctly(self):
+    def test_if_zaehler_with_nonzero_fraction_then_calculate_correctly(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.2345").w_einheit_nenner(2).parse()
         grundstueck = SampleGrundstueck().flurstuck(flurstueck1).parse()
 
@@ -174,7 +184,7 @@ class TestEAngFlaeche:
 
         assert result.E7403010 == 617
 
-    def test_if_zaehler_fraction_less_than_half_result_should_round_down_to_int(self):
+    def test_if_zaehler_fraction_less_than_half_result_then_round_down_to_int(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.0000").w_einheit_nenner(3).parse()
         grundstueck = SampleGrundstueck().flurstuck(flurstueck1).parse()
 
@@ -182,7 +192,7 @@ class TestEAngFlaeche:
 
         assert result.E7403010 == 333
 
-    def test_if_zaehler_fraction_greater_than_half_result_should_round_down_to_int(self):
+    def test_if_zaehler_fraction_greater_than_half_result_then_round_down_to_int(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("2.0000").w_einheit_nenner(3).parse()
         grundstueck = SampleGrundstueck().flurstuck(flurstueck1).parse()
 
@@ -190,7 +200,7 @@ class TestEAngFlaeche:
 
         assert result.E7403010 == 666
 
-    def test_if_two_flurstuecke_should_calculate_sum(self):
+    def test_if_two_flurstuecke_then_calculate_sum(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.0000").w_einheit_nenner(1).parse()
         flurstueck2 = SampleFlurstueck().groesse(500).w_einheit_zaehler("2.0000").w_einheit_nenner(4).parse()
 
@@ -199,3 +209,23 @@ class TestEAngFlaeche:
         result = EAngFlaeche(grundstueck)
 
         assert result.E7403010 == 1250
+
+    def test_if_two_flurstuecke_without_explicit_values_then_calculate_sum_from_defaults(self):
+        flurstueck1 = SampleFlurstueck().groesse(1000).parse()
+        flurstueck2 = SampleFlurstueck().groesse(500).parse()
+
+        grundstueck = SampleGrundstueck().flurstuck(flurstueck1).flurstuck(flurstueck2).parse()
+
+        result = EAngFlaeche(grundstueck)
+
+        assert result.E7403010 == 1500
+
+    def test_if_two_flurstuecke_only_one_with_explicit_values_then_calculate_sum_from_defaults(self):
+        flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.0000").w_einheit_nenner(4).parse()
+        flurstueck2 = SampleFlurstueck().groesse(500).parse()
+
+        grundstueck = SampleGrundstueck().flurstuck(flurstueck1).flurstuck(flurstueck2).parse()
+
+        result = EAngFlaeche(grundstueck)
+
+        assert result.E7403010 == 750
