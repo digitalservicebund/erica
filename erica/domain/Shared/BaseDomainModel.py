@@ -8,13 +8,13 @@ ClassT = TypeVar('ClassT')
 
 
 class AuditedModel(BaseModel):
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
+    created_at: Optional[datetime.datetime]
+    updated_at: Optional[datetime.datetime]
     creator_id: str
 
 
 class BaseDomainModel(AuditedModel, Generic[DataT]):
-    id: Optional[DataT]
+    id: Optional[DataT] = None
 
     class Config:
         orm_mode = True

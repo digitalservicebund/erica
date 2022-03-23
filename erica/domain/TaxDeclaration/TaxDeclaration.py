@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
+from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
 from erica.domain.Shared.Status import Status
 

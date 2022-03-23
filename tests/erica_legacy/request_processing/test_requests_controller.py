@@ -4,6 +4,7 @@ from unittest.mock import patch, MagicMock, call
 
 import pytest
 
+from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
@@ -667,8 +668,9 @@ class TestCheckTaxNumberRequestControllerProcess:
     def test_if_tax_number_is_valid_then_return_json_with_is_valid_true(self):
         state_abbreviation = "by"
         valid_tax_number = "19811310010"
+        input_data = CheckTaxNumberDto(state_abbreviation=state_abbreviation, tax_number=valid_tax_number)
 
-        result = CheckTaxNumberRequestController.process(state_abbreviation, valid_tax_number)
+        result = CheckTaxNumberRequestController(input_data).process()
 
         assert result == {'is_valid': True}
 
@@ -677,8 +679,9 @@ class TestCheckTaxNumberRequestControllerProcess:
     def test_if_tax_number_is_invalid_then_return_json_with_is_valid_false(self):
         state_abbreviation = "by"
         invalid_tax_number = "19811310011"  # is invalid because of incorrect check sum (last digit should be 0)
+        input_data = CheckTaxNumberDto(state_abbreviation=state_abbreviation, tax_number=invalid_tax_number)
 
-        result = CheckTaxNumberRequestController.process(state_abbreviation, invalid_tax_number)
+        result = CheckTaxNumberRequestController(input_data).process()
 
         assert result == {'is_valid': False}
 
@@ -687,9 +690,10 @@ class TestCheckTaxNumberRequestControllerProcess:
     def test_if_generate_electronic_steuernummer_raises_invalid_bufa_nr_then_return_json_with_is_valid_false(self):
         state_abbreviation = "by"
         valid_tax_number = "19811310010"
+        input_data = CheckTaxNumberDto(state_abbreviation=state_abbreviation, tax_number=valid_tax_number)
 
         with patch('erica.erica_legacy.elster_xml.est_mapping.generate_electronic_steuernummer', MagicMock(side_effect=InvalidBufaNumberError)):
-            result = CheckTaxNumberRequestController.process(state_abbreviation, valid_tax_number)
+            result = CheckTaxNumberRequestController(input_data).process()
 
         assert result == {'is_valid': False}
 

@@ -5,6 +5,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 from fastapi.exceptions import HTTPException
 
+from erica.application.tax_number_validation.check_tax_number_dto import StateAbbreviation
 from erica.erica_legacy.api.v1.endpoints.est import validate_est, send_est
 from erica.erica_legacy.api.v1.endpoints.grundsteuer import send_grundsteuer
 from erica.erica_legacy.api.v1.endpoints.tax import is_valid_tax_number, get_tax_offices
@@ -12,10 +13,10 @@ from erica.erica_legacy.api.v1.endpoints.unlock_code import request_unlock_code,
     revoke_unlock_code
 from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
-from erica.erica_legacy.request_processing.erica_input.v1.erica_input import StateAbbreviation
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
-    create_unlock_revocation, missing_cert, missing_pyeric_lib
+    create_unlock_revocation, \
+    missing_cert, missing_pyeric_lib
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")

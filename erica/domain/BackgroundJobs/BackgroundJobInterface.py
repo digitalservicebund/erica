@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
+from rq.job import Job
+
 
 class BackgroundJobInterface:
     __metaclass__ = ABCMeta
@@ -13,9 +15,9 @@ class BackgroundJobInterface:
         pass
 
     @abstractmethod
-    def get_enqueued_job_by_id(self):
+    def get_enqueued_job_by_id(self, job_id):
         pass
 
     @abstractmethod
-    def list_all_jobs(self):
+    def list_all_jobs(self) -> Job:
         pass

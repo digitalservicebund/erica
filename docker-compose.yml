@@ -11,6 +11,7 @@ services:
     image: postgres:latest
     restart: always
     environment:
+      - POSTGRES_DB=db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
