@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Optional, List
 
-from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart, \
+    elsterify_wirtschaftliche_einheit_zaehler
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck, \
     Flurstueck, Grundstuecksart
 
@@ -80,7 +81,7 @@ class EFlurstueck:
         self.E7401144 = flurstueck.flur.flurstueck_zaehler
         self.E7401145 = flurstueck.flur.flurstueck_nenner
         self.E7411001 = flurstueck.groesse_qm
-        self.E7410702 = flurstueck.flur.wirtschaftliche_einheit_zaehler
+        self.E7410702 = elsterify_wirtschaftliche_einheit_zaehler(flurstueck.flur.wirtschaftliche_einheit_zaehler)
         self.E7410703 = flurstueck.flur.wirtschaftliche_einheit_nenner
         self.E7410704 = 1  # "erste Flaeche"
 

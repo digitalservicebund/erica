@@ -3,7 +3,7 @@ import datetime
 import pytest
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date, \
-    elsterify_grundstuecksart
+    elsterify_grundstuecksart, elsterify_wirtschaftliche_einheit_zaehler
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
 
@@ -69,3 +69,21 @@ class TestElsterifyDate:
     def test_if_invalid_date_then_raise_attribute_error(self):
         with pytest.raises(AttributeError):
             elsterify_date("INVALID")
+
+
+class TestElsterifyWirtschaftlicheEinheitZaehler:
+    def test_if_valid_string_with_dot_then_replaces_dot_by_comma(self):
+        result = elsterify_wirtschaftliche_einheit_zaehler("1.0000")
+        assert result == "1,0000"
+
+    def test_if_valid_string_without_dot_then_return_as_is(self):
+        result = elsterify_wirtschaftliche_einheit_zaehler("10000")
+        assert result == "10000"
+
+    def test_if_none_then_return_none(self):
+        result = elsterify_wirtschaftliche_einheit_zaehler(None)
+        assert result is None
+
+    def test_if_not_string_then_raise_attribute_error(self):
+        with pytest.raises(AttributeError):
+            elsterify_wirtschaftliche_einheit_zaehler(1)
