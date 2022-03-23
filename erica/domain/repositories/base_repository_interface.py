@@ -18,11 +18,7 @@ class BaseRepositoryInterface(Generic[ClassT]):
         pass
 
     @abstractmethod
-    def get_by_id(self, entity_id) -> ClassT:
-        pass
-
-    @abstractmethod
-    def get_by_job_id(self, job_id) -> ClassT:
+    def get_by_id(self, request_id) -> ClassT:
         pass
 
     @abstractmethod
@@ -30,7 +26,7 @@ class BaseRepositoryInterface(Generic[ClassT]):
         pass
 
     @abstractmethod
-    def delete(self, entity_id) -> bool:
+    def delete(self, request_id) -> bool:
         pass
 
 
