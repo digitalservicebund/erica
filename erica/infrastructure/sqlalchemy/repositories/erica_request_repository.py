@@ -21,18 +21,18 @@ class EricaRequestRepository(
         self.DatabaseEntity = EricaRequestSchema
         self.DomainModel = EricaRequest
 
-    def get_by_job_id(self, job_id: UUID) -> EricaRequest:
-        entity = self._get_by_job_id(job_id).first()
+    def get_by_job_request_id(self, request_id: UUID) -> EricaRequest:
+        entity = self._get_by_job_request_id(request_id).first()
         if entity is None:
             raise EntityNotFoundError
         return self.DomainModel.from_orm(entity)
 
-    def _get_by_job_id(self, job_id: UUID):
-        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.request_id == job_id)
+    def _get_by_job_request_id(self, request_id: UUID):
+        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.request_id == request_id)
         return entity
 
-    def update_by_job_id(self, job_id: UUID, model: BaseModel) -> EricaRequest:
-        current_query = self._get_by_job_id(job_id)
+    def update_by_job_request_id(self, request_id: UUID, model: BaseModel) -> EricaRequest:
+        current_query = self._get_by_job_request_id(request_id)
         current_entity = current_query.first()
         if current_entity is None:
             raise EntityNotFoundError
@@ -41,11 +41,11 @@ class EricaRequestRepository(
         current_query.update(self._get_changed_data(current_query.first(), model))
         self.db_connection.commit()
 
-        updated = self.get_by_job_id(job_id)
+        updated = self.get_by_job_request_id(request_id)
         return self.DomainModel.from_orm(updated)
 
-    def delete_by_job_id(self, job_id: UUID):
-        entity = self._get_by_job_id(job_id).first()
+    def delete_by_job_request_id(self, request_id: UUID):
+        entity = self._get_by_job_request_id(request_id).first()
         if entity is None:
             raise EntityNotFoundError
 

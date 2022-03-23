@@ -22,10 +22,6 @@ class BaseRepositoryInterface(Generic[ClassT]):
         pass
 
     @abstractmethod
-    def get_by_job_id(self, job_id) -> ClassT:
-        pass
-
-    @abstractmethod
     def update(self, model_id, model: ClassT) -> ClassT:
         pass
 

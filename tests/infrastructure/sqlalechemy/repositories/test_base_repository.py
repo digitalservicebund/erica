@@ -128,7 +128,7 @@ class TestBaseRepositoryUpdate:
             MockBaseRepository(db_connection=transactional_session).update(schema_object.id, updated_object)
 
     @pytest.mark.freeze_uuids
-    def test_if_only_job_id_changed_then_only_call_update_with_changed_attributes(self, transactional_session):
+    def test_if_only_request_id_changed_then_only_call_update_with_changed_attributes(self, transactional_session):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
         schema_object = MockSchema(**mock_object.dict())
         transactional_session.add(schema_object)
