@@ -1,10 +1,9 @@
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
     EEigentumsverh, EEmpfangsbevollmaechtigter
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
-    Person, Eigentuemer, Empfangsbevollmaechtigter
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
-    get_sample_empfangsbevollmaechtigter_dict
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleVertreter, SampleBevollmaechtigter, SamplePerson, \
+    SampleEigentuemer
 
 
 class TestEAnteil:
@@ -19,7 +18,7 @@ class TestEAnteil:
 
 class TestEGesetzlicherVertreter:
     def test_attributes_set_correctly(self):
-        full_vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict())
+        full_vertreter_obj = SampleVertreter().complete().parse()
 
         result = EGesetzlicherVertreter(full_vertreter_obj)
 
@@ -37,7 +36,7 @@ class TestEGesetzlicherVertreter:
         assert len(vars(result)) == 11
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=False))
+        vertreter_obj = SampleVertreter().parse()
 
         result = EGesetzlicherVertreter(vertreter_obj)
 
@@ -54,30 +53,10 @@ class TestEGesetzlicherVertreter:
         assert result.E7415604 is None
         assert len(vars(result)) == 11
 
-    def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
-        vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=True))
-        vertreter_obj.name.titel = None
-        vertreter_obj.adresse.strasse = None
-
-        result = EGesetzlicherVertreter(vertreter_obj)
-
-        assert result.E7415101 == elsterify_anrede(vertreter_obj.name.anrede)
-        assert result.E7415102 is None
-        assert result.E7415201 == vertreter_obj.name.vorname
-        assert result.E7415301 == vertreter_obj.name.name
-        assert result.E7415401 is None
-        assert result.E7415501 == vertreter_obj.adresse.hausnummer
-        assert result.E7415502 == vertreter_obj.adresse.hausnummerzusatz
-        assert result.E7415601 == vertreter_obj.adresse.plz
-        assert result.E7415602 == vertreter_obj.adresse.postfach
-        assert result.E7415603 == vertreter_obj.adresse.ort
-        assert result.E7415604 == vertreter_obj.telefonnummer.telefonnummer
-        assert len(vars(result)) == 11
-
 
 class TestEPersonData:
     def test_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_sample_single_person_dict())
+        person_obj = SamplePerson().with_telefonnummer().with_vertreter().parse()
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
@@ -101,7 +80,7 @@ class TestEPersonData:
         assert len(vars(result)) == 16
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_sample_single_person_dict(complete=False, with_vertreter=False))
+        person_obj = SamplePerson().parse()
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
@@ -125,7 +104,7 @@ class TestEPersonData:
         assert len(vars(result)) == 16
 
     def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_sample_single_person_dict())
+        person_obj = SamplePerson().with_vertreter().with_telefonnummer().parse()
         person_obj.persoenlicheAngaben.titel = None
         person_index = 2
 
@@ -152,7 +131,7 @@ class TestEPersonData:
 
 class TestEEigentumsverh:
     def test_if_one_person_then_attributes_set_correctly(self):
-        person = get_sample_single_person_dict()
+        person = SamplePerson().parse()
         eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
 
         result = EEigentumsverh(eigentuemer_obj)
@@ -160,8 +139,8 @@ class TestEEigentumsverh:
         assert result.E7401340 == "0"
 
     def test_if_two_married_persons_then_attributes_set_correctly(self):
-        person1 = get_sample_single_person_dict()
-        person2 = get_sample_single_person_dict()
+        person1 = SamplePerson().parse()
+        person2 = SamplePerson().parse()
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}})
 
@@ -170,20 +149,19 @@ class TestEEigentumsverh:
         assert result.E7401340 == "4"
 
     def test_if_two_not_married_persons_then_attributes_set_correctly(self):
-        person1 = get_sample_single_person_dict()
-        person2 = get_sample_single_person_dict()
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
+        person1 = SamplePerson().build()
+        person2 = SamplePerson().build()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).verheiratet(False).parse()
 
         result = EEigentumsverh(eigentuemer_obj)
 
         assert result.E7401340 == "6"
 
     def test_if_three_persons_then_attributes_set_correctly(self):
-        person1 = get_sample_single_person_dict()
-        person2 = get_sample_single_person_dict()
-        person3 = get_sample_single_person_dict()
-        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person1, person2, person3]})
+        person1 = SamplePerson().build()
+        person2 = SamplePerson().build()
+        person3 = SamplePerson().build()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).person(person3).parse()
 
         result = EEigentumsverh(eigentuemer_obj)
 
@@ -192,7 +170,7 @@ class TestEEigentumsverh:
 
 class TestEEmpfangsbevollmaechtigter:
     def test_attributes_set_correctly(self):
-        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict())
+        input_data = SampleBevollmaechtigter().complete().parse()
 
         result = EEmpfangsbevollmaechtigter(input_data)
 
@@ -210,7 +188,7 @@ class TestEEmpfangsbevollmaechtigter:
         assert len(vars(result)) == 11
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict(complete=False))
+        input_data = SampleBevollmaechtigter().parse()
 
         result = EEmpfangsbevollmaechtigter(input_data)
 
@@ -225,23 +203,4 @@ class TestEEmpfangsbevollmaechtigter:
         assert result.E7404627 is None
         assert result.E7404622 == input_data.adresse.ort
         assert result.E7412201 is None
-        assert len(vars(result)) == 11
-
-    def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
-        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict())
-        input_data.name.titel = None
-
-        result = EEmpfangsbevollmaechtigter(input_data)
-
-        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
-        assert result.E7404614 is None
-        assert result.E7404613 == input_data.name.vorname
-        assert result.E7404611 == input_data.name.name
-        assert result.E7404624 == input_data.adresse.strasse
-        assert result.E7404625 == input_data.adresse.hausnummer
-        assert result.E7404626 == input_data.adresse.hausnummerzusatz
-        assert result.E7404640 == input_data.adresse.plz
-        assert result.E7404627 == input_data.adresse.postfach
-        assert result.E7404622 == input_data.adresse.ort
-        assert result.E7412201 == input_data.telefonnummer.telefonnummer
         assert len(vars(result)) == 11

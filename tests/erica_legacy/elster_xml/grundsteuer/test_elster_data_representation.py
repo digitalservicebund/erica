@@ -10,12 +10,13 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Eigentuemer, Person
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
     EGemarkungen, EAngGrund
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Person
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data, \
-    get_sample_single_person_dict, get_sample_empfangsbevollmaechtigter_dict, SampleGrundstueck
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck, SampleBevollmaechtigter, SamplePerson, \
+    SampleEigentuemer, \
+    DefaultSampleEigentuemer, SampleFlurstueck, SampleGrundsteuerData
 
 
 class TestEAngFeststellung:
@@ -45,42 +46,38 @@ class TestEErgAngaben:
 
 class TestEGW1:
     def test_if_one_person_then_attributes_set_correctly(self):
-        person = get_sample_single_person_dict()
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [person], "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict()})
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
+
         grundstueck_obj = SampleGrundstueck().parse()
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 1
-        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
+        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(eigentuemer_obj.person[0]), person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
         assert result.Erg_Angaben is None
         assert len(vars(result)) == 8
 
     def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
-        person = get_sample_single_person_dict()
-        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
         grundstueck_obj = SampleGrundstueck().parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Ang_Feststellung == EAngFeststellung(grundstueck_obj.typ)
         assert len(result.Eigentuemer) == 1
-        assert result.Eigentuemer[0] == EPersonData(Person.parse_obj(person), person_index=0)
+        assert result.Eigentuemer[0] == EPersonData(eigentuemer_obj.person[0], person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
         assert result.Empfangsv is None
         assert result.Erg_Angaben is None
         assert len(vars(result)) == 8
 
     def test_if_two_persons_then_attributes_set_correctly(self):
-        person1 = get_sample_single_person_dict()
-        person1["persoenlicheAngaben"]["vorname"] = "Albus"
-        person2 = get_sample_single_person_dict()
-        person2["persoenlicheAngaben"]["vorname"] = "Rubeus"
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
+        person1 = SamplePerson().vorname("Albus").build()
+        person2 = SamplePerson().vorname("Rubeus").build()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).verheiratet(True).parse()
         grundstueck_obj = SampleGrundstueck().parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
@@ -95,8 +92,7 @@ class TestEGW1:
         assert len(vars(result)) == 8
 
     def test_if_valid_grundstueck_then_set_lage_correctly(self):
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [get_sample_single_person_dict()]})
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
         grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinde(False).parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
@@ -105,8 +101,7 @@ class TestEGW1:
         assert len(vars(result)) == 8
 
     def test_if_not_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden(self):
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [get_sample_single_person_dict()]})
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
         grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinde(False).parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
@@ -115,8 +110,7 @@ class TestEGW1:
         assert len(vars(result)) == 8
 
     def test_if_innerhalb_einer_gemeinde_then_set_mehrere_gemeinden_to_none(self):
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [get_sample_single_person_dict()]})
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
         grundstueck_obj = SampleGrundstueck().innerhalb_einer_gemeinde(True).parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
@@ -125,17 +119,27 @@ class TestEGW1:
         assert len(vars(result)) == 8
 
     def test_if_valid_grundstueck_then_set_gemarkungen_correctly(self):
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [get_sample_single_person_dict()]})
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
+
         grundstueck_obj = SampleGrundstueck().parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
 
         assert result.Gemarkungen == EGemarkungen(grundstueck_obj.flurstueck)
 
+    def test_if_valid_grundstueck_multiple_flurstuecke_then_set_gemarkungen_correctly(self):
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
+        flurstueck1 = SampleFlurstueck().build()
+        flurstueck2 = SampleFlurstueck().build()
+
+        grundstueck_obj = SampleGrundstueck().flurstuck(flurstueck1).flurstuck(flurstueck2).parse()
+
+        result = EGW1(eigentuemer_obj, grundstueck_obj)
+
+        assert result.Gemarkungen == EGemarkungen(grundstueck_obj.flurstueck)
+
     def test_if_no_freitext_then_set_field_to_none(self):
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [get_sample_single_person_dict()]})
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
         grundstueck_obj = SampleGrundstueck().parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj)
@@ -143,8 +147,8 @@ class TestEGW1:
         assert result.Erg_Angaben is None
 
     def test_if_freitext_then_set_field(self):
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [get_sample_single_person_dict()]})
+        eigentuemer_obj = DefaultSampleEigentuemer().parse()
+
         grundstueck_obj = SampleGrundstueck().parse()
 
         result = EGW1(eigentuemer_obj, grundstueck_obj, "foo bar")
@@ -154,7 +158,7 @@ class TestEGW1:
 
 class TestEGW2:
     def test_if_valid_input_then_set_fields_correctly(self):
-        input_data = get_grundsteuer_sample_data()
+        input_data = SampleGrundsteuerData().parse()
 
         result = EGW2(input_data)
 
@@ -174,7 +178,7 @@ class TestERueckuebermittlung:
 
 class TestEVorsatz:
     def test_attributes_set_correctly(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj = SampleGrundsteuerData().parse()
 
         result = EVorsatz(grundsteuer_obj)
 
@@ -196,7 +200,7 @@ class TestEVorsatz:
 
 class TestEGrundsteuerSpecifics:
     def test_attributes_set_correctly(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj = SampleGrundsteuerData().parse()
 
         result = EGrundsteuerSpecifics(grundsteuer_obj)
 
@@ -210,7 +214,7 @@ class TestEGrundsteuerSpecifics:
 
 class TestEGrundsteuerData:
     def test_attributes_set_correctly(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj = SampleGrundsteuerData().parse()
 
         result = EGrundsteuerData(grundsteuer_obj)
 
@@ -220,7 +224,7 @@ class TestEGrundsteuerData:
 
 class TestGetFullGrundsteuerDataRepresentation:
     def test_returns_full_xml_including_grundsteuer_object(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj = SampleGrundsteuerData().parse()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
 
@@ -229,7 +233,7 @@ class TestGetFullGrundsteuerDataRepresentation:
         assert result.Elster.DatenTeil.Nutzdatenblock.Nutzdaten == EGrundsteuerData(grundsteuer_obj)
 
     def test_sets_empfaenger_data_correctly(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj = SampleGrundsteuerData().parse()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         empfaenger_result = result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.Empfaenger
@@ -237,13 +241,13 @@ class TestGetFullGrundsteuerDataRepresentation:
         # TODO assert empfaenger_result.xml_text == get_bufa_nr(...)
 
     def test_sets_nutzdaten_header_version_correctly(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj = SampleGrundsteuerData().parse()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         assert result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.xml_attr_version == "11"
 
     def test_returns_an_object_convertable_to_valid_xml(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj = SampleGrundsteuerData().parse()
         resulting_object = get_full_grundsteuer_data_representation(grundsteuer_obj)
         resulting_xml = convert_object_to_xml(resulting_object)
         try:
