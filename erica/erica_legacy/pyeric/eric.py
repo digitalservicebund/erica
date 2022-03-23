@@ -353,6 +353,16 @@ class EricWrapper(object):
         return self._call_and_return_buffer_contents_and_decode(
             fun_get_tax_offices)
 
+    def get_electronic_aktenzeichen(self, aktenzeichen, bundesland):
+        """ Make the elster format out of the given aktenzeichen """
+        fun_make_elster_ewaz = self.eric.EricMtMakeElsterEWAz
+        fun_make_elster_ewaz.argtypes = [c_void_p, c_char_p, c_char_p, c_void_p]
+        fun_make_elster_ewaz.restype = int
+
+        return self._call_and_return_buffer_contents_no_xml(
+            fun_make_elster_ewaz,
+            aktenzeichen.encode(),
+            bundesland.encode()).decode()
     def _call_and_return_buffer_contents(self, function, *args):
         """
         :param function: The ERIC function to be called. The argtypes and restype have to be set before.
@@ -367,6 +377,21 @@ class EricWrapper(object):
             returned_xml = self.read_buffer(buf)
             check_xml(returned_xml)
             return returned_xml
+        finally:
+            self.close_buffer(buf)
+
+    def _call_and_return_buffer_contents_no_xml(self, function, *args):
+        """
+        :param function: The ERIC function to be called. The argtypes and restype have to be set before.
+        """
+
+        buf = self.create_buffer()
+        try:
+            res = function(self.eric_instance, *args, buf)
+            check_result(res)
+            logger.debug(f"function {function.__name__} from _call_and_return_buffer_contents res {res}")
+
+            return self.read_buffer(buf)
         finally:
             self.close_buffer(buf)
 
