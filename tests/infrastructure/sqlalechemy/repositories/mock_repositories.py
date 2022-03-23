@@ -9,7 +9,7 @@ from erica.infrastructure.sqlalchemy.erica_request_schema import BaseDbSchema
 
 
 class MockDomainModel(BaseModel):
-    request_id: Optional[uuid.UUID]
+    job_id: Optional[uuid.UUID]
     payload: dict
 
     class Config:
@@ -21,5 +21,5 @@ class MockSchema(BaseDbSchema):
     id = Column(UUID(as_uuid=True),
                 primary_key=True,
                 server_default=text("gen_random_uuid()"), )
-    request_id = Column(UUID(as_uuid=True))
+    job_id = Column(UUID(as_uuid=True))
     payload = Column(JSONB)

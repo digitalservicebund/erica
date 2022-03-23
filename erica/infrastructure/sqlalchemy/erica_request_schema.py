@@ -17,7 +17,7 @@ class EricaRequestSchema(AuditedSchemaMixin, BaseDbSchema):
     type = Column(Enum(RequestType))
     payload = Column(JSONB)
     result = Column(JSONB)
-    request_id = Column(UUID(as_uuid=True))
+    job_id = Column(UUID(as_uuid=True))
     status = Column(Enum(Status))
     error_code = Column(String, nullable=True)
     error_message = Column(String, nullable=True)
