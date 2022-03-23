@@ -28,6 +28,7 @@ class StateAbbreviation(str, Enum):
             if member.lower() == value.lower():
                 return member
 
+
 class CheckTaxNumberDto(BaseDto):
     state_abbreviation: StateAbbreviation
     tax_number: str
