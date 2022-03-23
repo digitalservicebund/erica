@@ -1,4 +1,5 @@
-from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart, \
+    elsterify_wirtschaftliche_einheit_zaehler
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden, EFlurstueck, \
     EAngFlaeche, EEntwZust, EAngGrund, EAngGrundstuecksart
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
@@ -112,7 +113,7 @@ class TestEFlurstueck:
         assert result.E7401144 == 42
         assert result.E7401145 == "24"
         assert result.E7411001 == 4242
-        assert result.E7410702 == "1.0000"
+        assert result.E7410702 == elsterify_wirtschaftliche_einheit_zaehler("1.0000")
         assert result.E7410703 == 4
         assert result.E7410704 == 1
         assert len(vars(result)) == 9

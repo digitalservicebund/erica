@@ -31,3 +31,9 @@ def elsterify_date(date_input: Union[date, None]):
     if not date_input:
         return None
     return date_input.strftime("%d.%m.%Y")
+
+
+def elsterify_wirtschaftliche_einheit_zaehler(zaehler_input: Union[str, None]):
+    if not zaehler_input:
+        return None
+    return zaehler_input.replace(".", ",")
