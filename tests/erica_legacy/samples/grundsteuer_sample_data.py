@@ -46,6 +46,10 @@ class SampleAdresse(Builder):
         self.dict["ort"] = ort
         return self
 
+    def bundesland(self, bundesland):
+        self.dict["bundesland"] = bundesland
+        return self
+
 
 class SampleName(Builder):
     def anrede(self, anrede):
@@ -127,9 +131,9 @@ class SampleGrundstueck(Builder):
     def __init__(self):
         super().__init__()
         self.adresse = SampleAdresse().strasse("Madeupstr").hausnummer("22").hausnummerzusatz("b").plz("33333").ort(
-            "Bielefeld")
+            "Bielefeld").bundesland("BE")
         self.dict = {
-            "steuernummer": "1121081508150",
+            "steuernummer": "2181508150",
             "typ": "einfamilienhaus",
             "innerhalb_einer_gemeinde": True,
             "bodenrichtwert": "41,99",
@@ -158,7 +162,7 @@ class SampleGrundstueck(Builder):
         return self
 
     def bundesland(self, bundesland):
-        self.dict["adresse"]["bundesland"] = bundesland
+        self.adresse.dict['bundesland'] = bundesland
         return self
 
     def steuernummer(self, steuernummer):
@@ -402,6 +406,10 @@ class SampleGrundsteuerData(Builder):
 
     def with_empfangsvollmacht(self):
         self.eigentuemer.empfangsbevollmaechtigter(SampleBevollmaechtigter().build())
+        return self
+
+    def with_grundstueck(self, grundstueck: SampleGrundstueck):
+        self.grundstueck = grundstueck
         return self
 
     def build(self):

@@ -204,8 +204,8 @@ class TestEVorsatz:
         assert len(vars(result)) == 12
 
     def test_if_berlin_then_attributes_set_correctly_for_steuernummer(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
-        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("BE").steuernummer("2181508150").parse()
+        grundsteuer_obj = SampleGrundsteuerData().with_grundstueck(
+            SampleGrundstueck().bundesland("BE").steuernummer("2181508150")).parse()
 
         result = EVorsatz(grundsteuer_obj)
 
@@ -214,8 +214,8 @@ class TestEVorsatz:
         assert result.OrdNrArt == "S"
 
     def test_if_bremen_then_attributes_set_correctly_for_steuernummer(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
-        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("HB").steuernummer("7581508152").parse()
+        grundsteuer_obj = SampleGrundsteuerData().with_grundstueck(
+            SampleGrundstueck().bundesland("HB").steuernummer("7581508152")).parse()
 
         result = EVorsatz(grundsteuer_obj)
 
@@ -224,8 +224,8 @@ class TestEVorsatz:
         assert result.OrdNrArt == "S"
 
     def test_if_schleswig_holstein_then_attributes_set_correctly_for_steuernummer(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
-        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("SH").steuernummer("2981508158").parse()
+        grundsteuer_obj = SampleGrundsteuerData().with_grundstueck(
+            SampleGrundstueck().bundesland("SH").steuernummer("2981508158")).parse()
 
         result = EVorsatz(grundsteuer_obj)
 
@@ -234,8 +234,8 @@ class TestEVorsatz:
         assert result.OrdNrArt == "S"
 
     def test_if_nrw_then_attributes_set_correctly_for_aktenzeichen(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
-        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("NW").steuernummer("2080353038893").parse()
+        grundsteuer_obj = SampleGrundsteuerData().with_grundstueck(
+            SampleGrundstueck().bundesland("NW").steuernummer("2080353038893")).parse()
 
         result = EVorsatz(grundsteuer_obj)
 
@@ -288,8 +288,8 @@ class TestGetFullGrundsteuerDataRepresentation:
         assert empfaenger_result.xml_text == "1121"  # BUFA-Nr of Berlin for given steuernummer
 
     def test_sets_empfaenger_data_correctly_for_bundesland_with_aktenzeichen(self):
-        grundsteuer_obj = get_grundsteuer_sample_data()
-        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("NW").steuernummer("2080353038893").parse()
+        grundsteuer_obj = SampleGrundsteuerData().with_grundstueck(
+            SampleGrundstueck().bundesland("NW").steuernummer("2080353038893")).parse()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         empfaenger_result = result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.Empfaenger
