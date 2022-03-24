@@ -26,7 +26,7 @@ class PersoenlicheAngaben(Name):
 
 class Adresse(CamelCaseInput):
     strasse: Optional[str]
-    hausnummer: Optional[str]
+    hausnummer: Optional[int]
     hausnummerzusatz: Optional[str]
     postfach: Optional[str]
     plz: str

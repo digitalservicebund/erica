@@ -298,7 +298,7 @@ class SampleBevollmaechtigter(Builder):
         return self
 
     def with_strasse(self):
-        self.adressse.strasse("Diagon Alley").hausnummer("3").hausnummerzusatz("c")
+        self.adressse.strasse("Diagon Alley").hausnummer(3).hausnummerzusatz("c")
         return self
 
     def with_postfach(self):

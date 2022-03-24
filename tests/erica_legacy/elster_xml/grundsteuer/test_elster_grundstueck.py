@@ -8,7 +8,7 @@ from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck
 
 class TestELage:
     def test_if_no_zusatz_then_parse_number_component(self):
-        adresse = SampleGrundstueck().hausnummer("123").hausnummerzusatz(None).parse().adresse
+        adresse = SampleGrundstueck().hausnummer(123).hausnummerzusatz(None).parse().adresse
 
         result = ELage(adresse)
 
@@ -16,7 +16,7 @@ class TestELage:
         assert result.E7401126 is None
 
     def test_if_hausnummer_1a_then_parse_1_a(self):
-        adresse = SampleGrundstueck().hausnummer("1").hausnummerzusatz("a").parse().adresse
+        adresse = SampleGrundstueck().hausnummer(1).hausnummerzusatz("a").parse().adresse
 
         result = ELage(adresse)
 
@@ -32,7 +32,7 @@ class TestELage:
         assert result.E7401126 is None
 
     def test_if_valid_input_then_should_assign_all_fields(self):
-        adresse = SampleGrundstueck().strasse("Foostr").hausnummer("42").hausnummerzusatz("a").zusatzangaben("hinterhaus").plz("12345").ort(
+        adresse = SampleGrundstueck().strasse("Foostr").hausnummer(42).hausnummerzusatz("a").zusatzangaben("hinterhaus").plz("12345").ort(
             "Berlin").parse().adresse
 
         result = ELage(adresse)

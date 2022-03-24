@@ -2,7 +2,7 @@
   "grundstueck": {
     "adresse": {
       "strasse": "Madeupstr",
-      "hausnummer": "22",
+      "hausnummer": 22,
       "hausnummerzusatz": "a",
       "zusatzangaben": "hinterhaus",
       "plz": "33333",
@@ -93,7 +93,7 @@
         },
         "adresse": {
           "strasse": "Grimmauld Place",
-          "hausnummer": "12",
+          "hausnummer": 12,
           "hausnummerzusatz": "a",
           "plz": "77777",
           "ort": "London"
@@ -134,7 +134,7 @@
         "plz": "08642",
         "ort": "Hogsmeade",
         "strasse": "Three Brooms",
-        "hausnummer": "3",
+        "hausnummer": 3,
         "hausnummerzusatz": "c"
       },
       "telefonnummer": {
