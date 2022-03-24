@@ -11,6 +11,7 @@ from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRevocatePayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRequestPayload
 from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.application.tax_number_validation.jobs import check_tax_number
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
@@ -60,7 +61,7 @@ def _check_tax_number_injector():
     module.bind(Type[EricaRequestController], to_instance=CheckTaxNumberRequestController)
     module.bind(Type[BasePayload], to_instance=CheckTaxNumberPayload)
     module.bind(JobServiceInterface, to_class=JobService)
-    module.bind(Callable, to_instance=revocate_freischalt_code)
+    module.bind(Callable, to_instance=check_tax_number)
 
     return Injector([
         module

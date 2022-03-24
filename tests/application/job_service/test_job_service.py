@@ -1,5 +1,6 @@
 from datetime import datetime
 from unittest.mock import Mock, MagicMock, call, patch
+from uuid import UUID
 
 import pytest
 from freezegun import freeze_time
@@ -28,8 +29,8 @@ class MockEricaRequestRepository(EricaRequestRepository, list):
     def get(self, skip: int = 0, limit: int = 100):
         return self
 
-    def get_by_id(self, entity_id):
-        return [entity for entity in self if entity.id == entity_id][0]
+    def get_by_id(self, request_id):
+        return [entity for entity in self if entity.id == request_id][0]
 
     def update(self, model_id, model):
         for entity, index in enumerate(self):
@@ -37,9 +38,9 @@ class MockEricaRequestRepository(EricaRequestRepository, list):
                 self[index] = model
         return model
 
-    def delete(self, entity_id):
+    def delete(self, request_id):
         for entity, index in enumerate(self):
-            if entity.id == entity_id:
+            if entity.id == request_id:
                 self.pop(index)
 
 
@@ -80,7 +81,7 @@ class TestJobServiceQueue:
 
         assert service.repository[0] == EricaRequest(
             id="1234",
-            job_id="00000000-0000-0000-0000-000000000000",
+            request_id="00000000-0000-0000-0000-000000000000",
             payload=input_data,
             created_at=None,
             updated_at=None,
@@ -99,7 +100,7 @@ class TestJobServiceQueue:
         service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
 
         assert mock_bg_worker.enqueue.mock_calls == [
-            call("1234", f=mock_job, job_id="00000000-0000-0000-0000-000000000000")]
+            call(mock_job, UUID('00000000-0000-0000-0000-000000000000'))]
 
 
 class TestJobServiceRun:
@@ -127,7 +128,7 @@ class TestJobServiceRun:
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
         request_entity = EricaRequest(
             id="1234",
-            job_id="00000000-0000-0000-0000-000000000000",
+            request_id="00000000-0000-0000-0000-000000000000",
             payload=input_data,
             created_at=datetime.now().__str__(),
             updated_at=datetime.now().__str__(),

@@ -47,7 +47,7 @@ class JobService(JobServiceInterface):
         self.job_method = job_method
 
     def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
-        request_entity = EricaRequest(job_id=uuid4(),
+        request_entity = EricaRequest(request_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
                                       creator_id="api",
                                       type=job_type
@@ -56,9 +56,8 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
 
         self.background_worker.enqueue(
-            created.id,
-            f=self.job_method,
-            job_id=request_entity.job_id.__str__(),
+            self.job_method,
+            created.request_id
         )
 
         return EricaAuftragDto.parse_obj(created)

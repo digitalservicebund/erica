@@ -9,13 +9,13 @@ from xmldiff import main
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
 
 
 @pytest.fixture
 def valid_grundsteuer_request_controller():
-    grundsteuer_input = get_grundsteuer_sample_data()
+    grundsteuer_input = SampleGrundsteuerData().parse()
     return GrundsteuerRequestController(grundsteuer_input)
 
 

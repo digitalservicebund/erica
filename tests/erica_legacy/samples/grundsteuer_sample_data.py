@@ -1,12 +1,193 @@
-import copy
 import datetime
 
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Vertreter, \
+    Empfangsbevollmaechtigter, Person, Eigentuemer
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck, Flurstueck
 
 
-class SampleGebaeude:
+class Builder:
     def __init__(self):
+        self.dict = {}
+
+    def build(self):
+        return {
+            **self.dict
+        }
+
+
+class SampleAdresse(Builder):
+    def strasse(self, strasse):
+        self.dict["strasse"] = strasse
+        return self
+
+    def hausnummer(self, hausnummer):
+        self.dict["hausnummer"] = hausnummer
+        return self
+
+    def hausnummerzusatz(self, hausnummerzusatz):
+        self.dict["hausnummerzusatz"] = hausnummerzusatz
+        return self
+
+    def zusatzangaben(self, zusatzangaben):
+        self.dict["zusatzangaben"] = zusatzangaben
+        return self
+
+    def postfach(self, postfach):
+        self.dict["postfach"] = postfach
+        return self
+
+    def plz(self, plz):
+        self.dict["plz"] = plz
+        return self
+
+    def ort(self, ort):
+        self.dict["ort"] = ort
+        return self
+
+
+class SampleName(Builder):
+    def anrede(self, anrede):
+        self.dict["anrede"] = anrede
+        return self
+
+    def titel(self, titel):
+        self.dict["titel"] = titel
+        return self
+
+    def name(self, name):
+        self.dict["name"] = name
+        return self
+
+    def vorname(self, vorname):
+        self.dict["vorname"] = vorname
+        return self
+
+    def geburtsdatum(self, geburtsdatum):
+        self.dict["geburtsdatum"] = geburtsdatum
+        return self
+
+
+class SampleFlurstueck(Builder):
+    def __init__(self):
+        super().__init__()
+        self.dict = {
+            "angaben": {
+                "grundbuchblattnummer": "1A",
+                "gemarkung": "random gemarkung",
+            },
+            "flur": {
+                "flur": 1,
+                "flurstueck_zaehler": 7,
+                "flurstueck_nenner": "7",
+            },
+            "groesse_qm": 42,
+        }
+
+    def gemarkung(self, gemarkung):
+        self.dict["angaben"]["gemarkung"] = gemarkung
+        return self
+
+    def grundbuchblattnummer(self, grundbuchblattnummer):
+        self.dict["angaben"]["grundbuchblattnummer"] = grundbuchblattnummer
+        return self
+
+    def groesse(self, groesse):
+        self.dict["groesse_qm"] = groesse
+        return self
+
+    def flur(self, flur):
+        self.dict["flur"]["flur"] = flur
+        return self
+
+    def flurstueck_zaehler(self, zaehler):
+        self.dict["flur"]["flurstueck_zaehler"] = zaehler
+        return self
+
+    def flurstueck_nenner(self, nenner):
+        self.dict["flur"]["flurstueck_nenner"] = nenner
+        return self
+
+    def w_einheit_zaehler(self, zaehler):
+        self.dict["flur"]["wirtschaftliche_einheit_zaehler"] = zaehler
+        return self
+
+    def w_einheit_nenner(self, nenner):
+        self.dict["flur"]["wirtschaftliche_einheit_nenner"] = nenner
+        return self
+
+    def parse(self):
+        return Flurstueck.parse_obj(self.build())
+
+
+class SampleGrundstueck(Builder):
+    adresse: SampleAdresse
+
+    def __init__(self):
+        super().__init__()
+        self.adresse = SampleAdresse().strasse("Madeupstr").hausnummer("22").hausnummerzusatz("b").plz("33333").ort(
+            "Bielefeld")
+        self.dict = {
+            "steuernummer": "1121081508150",
+            "typ": "einfamilienhaus",
+            "innerhalb_einer_gemeinde": True,
+            "bodenrichtwert": "41,99",
+            "flurstueck": [
+            ]
+        }
+
+    def strasse(self, strasse):
+        self.adresse.strasse(strasse)
+        return self
+
+    def hausnummer(self, hausnummer):
+        self.adresse.hausnummer(hausnummer)
+        return self
+
+    def zusatzangaben(self, zusatzangaben):
+        self.adresse.zusatzangaben(zusatzangaben)
+        return self
+
+    def plz(self, plz):
+        self.adresse.plz(plz)
+        return self
+
+    def ort(self, ort):
+        self.adresse.ort(ort)
+        return self
+
+    def typ(self, typ):
+        self.dict["typ"] = typ
+        return self
+
+    def innerhalb_einer_gemeinde(self, flag):
+        self.dict["innerhalb_einer_gemeinde"] = flag
+        return self
+
+    def abweichende_enwticklung(self, zustand):
+        self.dict["abweichende_entwicklung"] = zustand
+        return self
+
+    def bodenrichtwert(self, bodenrichtwert):
+        self.dict["bodenrichtwert"] = bodenrichtwert
+        return self
+
+    def flurstuck(self, flurstueck: SampleFlurstueck):
+        self.dict["flurstueck"].append(flurstueck)
+        return self
+
+    def build(self):
+        self.dict["adresse"] = self.adresse.build()
+        return super().build()
+
+    def parse(self):
+        return Grundstueck.parse_obj(self.build())
+
+
+class SampleGebaeude(Builder):
+    def __init__(self):
+        super().__init__()
         self.dict = {
             "ab1949": {
                 "is_ab1949": False,
@@ -59,181 +240,80 @@ class SampleGebaeude:
             self.dict["garagen_anzahl"] = {"anzahl_garagen": anzahl_garagen}
         return self
 
-    def build(self):
-        return {
-            **self.dict
-        }
-
     def parse(self):
         return Gebaeude.parse_obj(self.build())
 
 
-def get_sample_adresse_eigentuemer(complete=True, only_postfach=False, only_strasse=False):
-    if only_strasse:
-        return {
-            "strasse": "Grimmauld place",
-            "hausnummer": "12",
-            "hausnummerzusatz": "a",
-            "plz": "77777",
-            "ort": "London",
-        }
-    if only_postfach:
-        return {
-            "postfach": "11111",
-            "plz": "77777",
-            "ort": "London",
-        }
-    if complete:
-        return {
-            "strasse": "Grimmauld place",
-            "hausnummer": "12",
-            "hausnummerzusatz": "a",
-            "postfach": "11111",
-            "plz": "77777",
-            "ort": "London",
-        }
+class SampleVertreter(Builder):
+    name: SampleName
+    adresse: SampleAdresse
 
-    return {
-        "plz": "77777",
-        "ort": "London",
-    }
+    def __init__(self):
+        super().__init__()
+        self.name = SampleName().anrede("no_anrede").name("Shacklebolt").vorname("Kingsley")
+        self.adresse = SampleAdresse().plz("98765").ort("Godric's Hollow")
+
+    def complete(self):
+        self.name.titel("Prof.")
+        self.dict["telefonnummer"] = {"telefonnummer": "32168"}
+        self.adresse.postfach("32263").strasse("Diagon Alley").hausnummer("04").hausnummerzusatz("b")
+        return self
+
+    def build(self):
+        self.dict["name"] = self.name.build()
+        self.dict["adresse"] = self.adresse.build()
+        return super().build()
+
+    def parse(self):
+        return Vertreter.parse_obj(self.build())
 
 
-def get_sample_adresse_vertreter(complete=True, only_postfach=False, only_strasse=False):
-    if only_strasse:
-        return {
-            "plz": "98765",
-            "ort": "Godric's Hollow",
-            "strasse": "Diagon Alley",
-            "hausnummer": "04",
-            "hausnummerzusatz": "b",
-        }
+class SampleBevollmaechtigter(Builder):
+    name: SampleName
+    adressse: SampleAdresse
 
-    if only_postfach:
-        return {
-            "postfach": "32263",
-            "plz": "98765",
-            "ort": "Godric's Hollow"
-        }
-    if complete:
-        return {
-            "postfach": "32263",
-            "plz": "98765",
-            "ort": "Godric's Hollow",
-            "strasse": "Diagon Alley",
-            "hausnummer": "04",
-            "hausnummerzusatz": "b",
-        }
-    return {
-        "plz": "98765",
-        "ort": "Godric's Hollow"
-    }
+    def __init__(self):
+        super().__init__()
+        self.name = SampleName().anrede("frau").name("McGonagall").vorname("Minerva")
+        self.adressse = SampleAdresse().plz("08642").ort("Hogsmeade")
 
+    def with_title(self):
+        self.name.titel("Prof.")
+        return self
 
-def get_sample_adresse_empfangsbevollmaechtigter(complete=True, only_postfach=False, only_strasse=False):
-    if only_strasse:
-        return {
-            "plz": "08642",
-            "ort": "Hogsmeade",
-            "strasse": "Three Brooms",
-            "hausnummer": "3",
-            "hausnummerzusatz": "c",
-        }
+    def with_strasse(self):
+        self.adressse.strasse("Diagon Alley").hausnummer("3").hausnummerzusatz("c")
+        return self
 
-    if only_postfach:
-        return {
-            "postfach": "34567",
-            "plz": "08642",
-            "ort": "Hogsmeade"
-        }
-    if complete:
-        return {
-            "postfach": "34567",
-            "plz": "08642",
-            "ort": "Hogsmeade",
-            "strasse": "Diagon Alley",
-            "hausnummer": "3",
-            "hausnummerzusatz": "c",
-        }
-    return {
-        "plz": "08642",
-        "ort": "Hogsmeade"
-    }
+    def with_postfach(self):
+        self.adressse.postfach("34567")
+        return self
+
+    def with_telefonnummer(self):
+        self.dict["telefonnummer"] = {"telefonnummer": "123-456"}
+        return self
+
+    def complete(self):
+        return self.with_title().with_strasse().with_postfach().with_telefonnummer()
+
+    def build(self):
+        self.dict["name"] = self.name.build()
+        self.dict["adresse"] = self.adressse.build()
+        return super().build()
+
+    def parse(self):
+        return Empfangsbevollmaechtigter.parse_obj(self.build())
 
 
-def get_sample_vertreter_dict(complete=True, only_postfach=False, only_strasse=False):
-    name = {
-        "anrede": "no_anrede",
-        "titel": "Prof.",
-        "name": "Shacklebolt",
-        "vorname": "Kingsley"
-    } if complete else {
-        "anrede": "no_anrede",
-        "name": "Shacklebolt",
-        "vorname": "Kingsley",
-    }
-    adresse = get_sample_adresse_vertreter(complete, only_postfach, only_strasse)
-    telefonnummer = {
-        "telefonnummer": {
-            "telefonnummer": "32168"
-        }
-    } if complete else {}
+class SamplePerson(Builder):
+    name: SampleName
+    adresse: SampleAdresse
 
-    return copy.deepcopy({**{
-        "name": name,
-        "adresse": adresse,
-    }, **telefonnummer})
-
-
-def get_sample_empfangsbevollmaechtigter_dict(complete=True, only_postfach=False, only_strasse=False):
-    name = {
-        "anrede": "frau",
-        "titel": "Prof.",
-        "name": "McGonagall",
-        "vorname": "Minerva"
-    } if complete else {
-        "anrede": "frau",
-        "name": "McGonagall",
-        "vorname": "Minerva",
-    }
-    adresse = get_sample_adresse_empfangsbevollmaechtigter(complete, only_postfach, only_strasse)
-    telefonnummer = {
-        "telefonnummer": {
-            "telefonnummer": "123-456"
-        }
-    } if complete else {}
-
-    return copy.deepcopy({**{
-        "name": name,
-        "adresse": adresse,
-    }, **telefonnummer})
-
-
-def get_sample_single_person_dict(complete=True, with_vertreter=True, only_postfach=False, only_strasse=False):
-    vertreter = {
-        "vertreter": get_sample_vertreter_dict(complete, only_postfach, only_strasse)} if with_vertreter else {}
-    name = {
-        "persoenlicheAngaben": {
-            "anrede": "frau",
-            "titel": "Dr",
-            "name": "Granger",
-            "vorname": "Hermine",
-            "geburtsdatum": datetime.date(1979, 9, 19)
-        }} if complete else {
-        "persoenlicheAngaben": {
-            "anrede": "frau",
-            "name": "Granger",
-            "vorname": "Hermine",
-        }
-    }
-    adresse = {"adresse": get_sample_adresse_eigentuemer(complete, only_postfach, only_strasse)}
-    telefonnummer = {
-        "telefonnummer": {
-            "telefonnummer": "123",
-        }} if complete else {}
-
-    return copy.deepcopy({
-        **{
+    def __init__(self):
+        super().__init__()
+        self.name = SampleName().anrede("frau").name("Granger").vorname("Hermione")
+        self.adresse = SampleAdresse().plz("7777").ort("London")
+        self.dict = {
             "steuer_id": {
                 "steuer_id": "04452317681",
             },
@@ -241,28 +321,86 @@ def get_sample_single_person_dict(complete=True, with_vertreter=True, only_postf
                 "zaehler": 1,
                 "nenner": 1,
             },
-        },
-        **vertreter,
-        **name,
-        **adresse,
-        **telefonnummer
-    })
+        }
+
+    def vorname(self, vorname):
+        self.name.vorname(vorname)
+        return self
+
+    def with_telefonnummer(self):
+        self.dict["telefonnummer"] = {"telefonnummer": "123"}
+        return self
+
+    def with_vertreter(self):
+        self.dict["vertreter"] = SampleVertreter().build()
+        return self
+
+    def complete(self):
+        self.with_telefonnummer()
+        self.name.titel("Prof").geburtsdatum(datetime.date(1979, 9, 19))
+
+    def build(self):
+        self.dict["persoenlicheAngaben"] = self.name.build()
+        self.dict["adresse"] = self.adresse.build()
+        return super().build()
+
+    def parse(self):
+        return Person.parse_obj(self.build())
 
 
-def get_grundsteuer_sample_data(complete=True, only_postfach=False, only_strasse=False, with_empfangsvollmacht=False):
-    valid_gebaeude = SampleGebaeude().with_wohnflaechen(42).build()
-    valid_person_data = {
-        "person": [
-            get_sample_single_person_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
-        ],
-    }
-    valid_empfangsvollmacht_data = {
-        "empfangsbevollmaechtigter": get_sample_empfangsbevollmaechtigter_dict(complete=complete, only_postfach=only_postfach, only_strasse=only_strasse)
-    }
+class SampleEigentuemer(Builder):
+    def __init__(self):
+        super().__init__()
+        self.dict = {
+            "person": [],
+        }
 
-    valid_eigentuemer = {**valid_person_data, **valid_empfangsvollmacht_data} if with_empfangsvollmacht else valid_person_data
-    valid_sample_data_single_with_vertreter = {
-        "gebaeude": valid_gebaeude,
-        "eigentuemer": valid_eigentuemer
-    }
-    return GrundsteuerData.parse_obj(valid_sample_data_single_with_vertreter)
+    def person(self, person):
+        self.dict["person"].append(person)
+        return self
+
+    def verheiratet(self, are_verheiretet: bool):
+        self.dict["verheiratet"] = {"are_verheiratet": are_verheiretet}
+        return self
+
+    def empfangsbevollmaechtigter(self, empfangsbevollmaechtigter):
+        self.dict["empfangsbevollmaechtigter"] = empfangsbevollmaechtigter
+        return self
+
+    def parse(self):
+        return Eigentuemer.parse_obj(self.dict)
+
+
+class DefaultSampleEigentuemer(SampleEigentuemer):
+    def __init__(self):
+        super().__init__()
+        self.person(SamplePerson().build())
+
+
+class SampleGrundsteuerData(Builder):
+    grundstueck: SampleGrundstueck
+    gebaeude: SampleGebaeude
+    eigentuemer: SampleEigentuemer
+
+    def __init__(self):
+        super().__init__()
+        self.grundstueck = SampleGrundstueck()
+        self.gebaeude = SampleGebaeude().with_wohnflaechen(42)
+        self.eigentuemer = DefaultSampleEigentuemer()
+
+        self.dict = {
+            "freitext": ""
+        }
+
+    def with_empfangsvollmacht(self):
+        self.eigentuemer.empfangsbevollmaechtigter(SampleBevollmaechtigter().build())
+        return self
+
+    def build(self):
+        self.dict["grundstueck"] = self.grundstueck.build()
+        self.dict["gebaeude"] = self.gebaeude.build()
+        self.dict["eigentuemer"] = self.eigentuemer.build()
+        return super().build()
+
+    def parse(self):
+        return GrundsteuerData.parse_obj(self.build())

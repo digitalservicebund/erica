@@ -3,7 +3,6 @@ from logging import Logger
 from typing import Type
 from uuid import UUID
 
-from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobServiceInterface
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
@@ -13,7 +12,7 @@ from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
-async def perform_job(entity_id: UUID, repository: base_repository_interface, service: JobServiceInterface, payload_type: Type[BasePayload], logger: Logger):
+async def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface, payload_type: Type[BasePayload], logger: Logger):
     """
     The basic implementation for a job that is put on the Erica queue. It will get an entity, interact with the ERiC
     library using the service and then update the entity according to the result from the service.
@@ -21,9 +20,9 @@ async def perform_job(entity_id: UUID, repository: base_repository_interface, se
     It also measures the elapsed time during job execution.
     """
     try:
-        entity: EricaRequest = repository.get_by_job_id(entity_id)
+        entity: EricaRequest = repository.get_by_job_request_id(request_id)
     except EntityNotFoundError:
-        logger.warning(f"Entity not found for job_id {entity_id}", exc_info=True)
+        logger.warning(f"Entity not found for request_id {request_id}", exc_info=True)
         raise
 
     request_payload: payload_type = payload_type.parse_obj(entity.payload)

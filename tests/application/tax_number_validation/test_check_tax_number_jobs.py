@@ -12,13 +12,13 @@ class TestCheckTaxNumber:
 
     @pytest.mark.asyncio
     async def test_perform_job_called_with_correct_parameters(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.tax_number_validation.jobs.perform_job", AsyncMock()) as mock_perform_job:
-            await check_tax_number(entity_id)
+            await check_tax_number(request_id)
 
-            assert mock_perform_job.mock_calls == [call(entity_id=entity_id,
+            assert mock_perform_job.mock_calls == [call(request_id=request_id,
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
@@ -26,11 +26,11 @@ class TestCheckTaxNumber:
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
-        entity_id = "1234"
+        request_id = "1234"
 
         with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.application.tax_number_validation.jobs.perform_job", AsyncMock()):
-            await check_tax_number(entity_id)
+            await check_tax_number(request_id)
 
             assert mock_get_service.mock_calls == [call(RequestType.check_tax_number)]
 

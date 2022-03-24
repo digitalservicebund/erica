@@ -2,8 +2,10 @@ import datetime
 
 import pytest
 
-from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date, \
+    elsterify_grundstuecksart
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
 
 
 class TestElsterifyAnrede:
@@ -22,6 +24,37 @@ class TestElsterifyAnrede:
     def test_invalid_value_raises_key_error(self):
         with pytest.raises(KeyError):
             elsterify_anrede("INVALID")
+
+
+class TestElsterifyGrundstuecksart:
+    def test_baureif_is_correctly_translated(self):
+        result = elsterify_grundstuecksart(Grundstuecksart.baureif)
+
+        assert result == 1
+
+    def test_abweichende_entwicklung_is_correctly_translated(self):
+        result = elsterify_grundstuecksart(Grundstuecksart.abweichende_entwicklung)
+
+        assert result == 1
+
+    def test_einfamilienhaus_is_correctly_translated(self):
+        result = elsterify_grundstuecksart(Grundstuecksart.einfamilienhaus)
+
+        assert result == 2
+
+    def test_zweifamilienhaus_is_correctly_translated(self):
+        result = elsterify_grundstuecksart(Grundstuecksart.zweifamilienhaus)
+
+        assert result == 3
+
+    def test_wohnungseigentum_is_correctly_translated(self):
+        result = elsterify_grundstuecksart(Grundstuecksart.wohnungseigentum)
+
+        assert result == 5
+
+    def test_invalid_value_raises_key_error(self):
+        with pytest.raises(KeyError):
+            elsterify_grundstuecksart("INVALID")
 
 
 class TestElsterifyDate:
