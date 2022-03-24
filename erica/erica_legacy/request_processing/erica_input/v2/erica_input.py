@@ -16,21 +16,6 @@ class TaxValidityWithTtl(BaseModel):
     payload: TaxValidity
 
 
-class FscRequestDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: UnlockCodeRequestData
-
-
-class FscActivationDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: UnlockCodeActivationData
-
-
-class FscRevocationDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: UnlockCodeRevocationData
-
-
 class ErrorRequestQueue(BaseModel):
     errorCode: str
     errorMessage: str

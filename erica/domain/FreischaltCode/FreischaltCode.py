@@ -5,23 +5,16 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 
 
 class FreischaltCodeRequestPayload(BasePayload, ABC):
-    tax_ident: str
+    idnr: str
     date_of_birth: date
-
-    class Config:
-        orm_mode = True
 
 
 class FreischaltCodeActivatePayload(BasePayload, ABC):
-    tax_ident: str
+    idnr: str
     freischalt_code: str
-
-    class Config:
-        orm_mode = True
+    elster_request_id: str
 
 
 class FreischaltCodeRevocatePayload(BasePayload, ABC):
-    tax_ident: str
-
-    class Config:
-        orm_mode = True
+    idnr: str
+    elster_request_id: str

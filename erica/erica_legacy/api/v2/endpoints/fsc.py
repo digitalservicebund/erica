@@ -3,17 +3,18 @@ import logging
 from fastapi import status, APIRouter
 from starlette.responses import JSONResponse
 
+from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+    FreischaltCodeRevocateDto
 from erica.erica_legacy.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue
 from erica.erica_legacy.pyeric.utils import generate_dummy_error_response
-from erica.erica_legacy.request_processing.erica_input.v2.erica_input import ErrorRequestQueue, FscRequestDataWithTtl, \
-    FscActivationDataWithTtl, FscRevocationDataWithTtl
+from erica.erica_legacy.request_processing.erica_input.v2.erica_input import ErrorRequestQueue
 
 router = APIRouter()
 
 
 @router.post('/request', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
-def request_fsc(request_fsc_ttl: FscRequestDataWithTtl):
+def request_fsc(request_fsc_ttl: FreischaltCodeRequestDto):
     """
     Route for requesting a new fsc for the sent id_nr using the job queue.
     :param request_fsc_ttl: payload with TTL and the JSON input data for the request.
@@ -41,7 +42,7 @@ def get_request_fsc_job(request_id: str):
 
 @router.post('/activation', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
 def activation_fsc(
-        activation_fsc_ttl: FscActivationDataWithTtl):
+        activation_fsc_ttl: FreischaltCodeActivateDto):
     """
     Route for requesting activation of an fsc for the sent id_nr using the job queue.
     :param activation_fsc_ttl: payload with TTL and the JSON input data for the activation.
@@ -70,7 +71,7 @@ def get_fsc_activation_job(request_id: str):
 
 @router.post('/revocation', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
 def fsc_revocation(
-        fsc_revocation_ttl: FscRevocationDataWithTtl):
+        fsc_revocation_ttl: FreischaltCodeRevocateDto):
     """
     Route for requesting revocation of an fsc for the sent id_nr using the job queue.
     :param fsc_revocation_ttl: payload with TTL and the JSON input data for the revocation.
