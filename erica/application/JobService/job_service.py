@@ -52,7 +52,7 @@ class JobService(JobServiceInterface):
 
         self.background_worker.enqueue(
             self.job_method,
-            created.id,
+            created.request_id
         )
 
         return EricaAuftragDto.parse_obj(created)

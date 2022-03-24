@@ -10,6 +10,7 @@ from erica.application.JobService.job_service import JobService, JobServiceInter
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
+from erica.application.tax_number_validation.jobs import check_tax_number
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
@@ -57,7 +58,7 @@ def _check_tax_number_injector():
     module.bind(Type[EricaRequestController], to_instance=CheckTaxNumberRequestController)
     module.bind(Type[BaseDto], to_instance=CheckTaxNumberDto)
     module.bind(JobServiceInterface, to_class=JobService)
-    module.bind(Callable, to_instance=revocate_freischalt_code)
+    module.bind(Callable, to_instance=check_tax_number)
 
     return Injector([
         module
@@ -84,7 +85,6 @@ injectors = {
     RequestType.check_tax_number: _check_tax_number_injector,
     RequestType.send_est: _send_est_injector,
 }
-
 
 
 def get_job_service(request_type: RequestType) -> JobServiceInterface:
