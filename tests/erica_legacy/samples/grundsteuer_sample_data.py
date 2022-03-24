@@ -157,6 +157,14 @@ class SampleGrundstueck(Builder):
         self.adresse.ort(ort)
         return self
 
+    def bundesland(self, bundesland):
+        self.dict["adresse"]["bundesland"] = bundesland
+        return self
+
+    def steuernummer(self, steuernummer):
+        self.dict["steuernummer"] = steuernummer
+        return self
+
     def typ(self, typ):
         self.dict["typ"] = typ
         return self
