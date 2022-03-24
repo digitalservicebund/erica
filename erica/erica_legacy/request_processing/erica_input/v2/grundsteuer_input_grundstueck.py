@@ -19,8 +19,8 @@ class Grundstuecksart(str, Enum):
 
 
 class Adresse(CamelCaseInput):
-    # string with 1-4 digits followed by an alphanumeric string of any length
-    hausnummer: Optional[constr(regex=r"([0-9]{1,4})([a-zA-Z0-9]*)")]  # noqa: F722
+    hausnummer: Optional[int]
+    hausnummerzusatz: Optional[str]
     strasse: Optional[str]
     zusatzangaben: Optional[str]
     plz: Optional[str]

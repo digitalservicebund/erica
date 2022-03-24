@@ -149,6 +149,10 @@ class SampleGrundstueck(Builder):
         self.adresse.hausnummer(hausnummer)
         return self
 
+    def hausnummerzusatz(self, hausnummerzusatz):
+        self.adresse.hausnummerzusatz(hausnummerzusatz)
+        return self
+
     def zusatzangaben(self, zusatzangaben):
         self.adresse.zusatzangaben(zusatzangaben)
         return self
