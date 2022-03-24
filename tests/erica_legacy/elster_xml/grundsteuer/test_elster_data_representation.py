@@ -278,13 +278,23 @@ class TestGetFullGrundsteuerDataRepresentation:
         assert isinstance(result, EXml)
         assert result.Elster.DatenTeil.Nutzdatenblock.Nutzdaten == EGrundsteuerData(grundsteuer_obj)
 
-    def test_sets_empfaenger_data_correctly(self):
+    def test_sets_empfaenger_data_correctly_for_bundesland_with_steuernummer(self):
         grundsteuer_obj = SampleGrundsteuerData().parse()
+        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("BE").steuernummer("2181508150").parse()
 
         result = get_full_grundsteuer_data_representation(grundsteuer_obj)
         empfaenger_result = result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.Empfaenger
         assert empfaenger_result.xml_attr_id == "F"
-        # TODO assert empfaenger_result.xml_text == get_bufa_nr(...)
+        assert empfaenger_result.xml_text == "1121"  # BUFA-Nr of Berlin for given steuernummer
+
+    def test_sets_empfaenger_data_correctly_for_bundesland_with_aktenzeichen(self):
+        grundsteuer_obj = get_grundsteuer_sample_data()
+        grundsteuer_obj.grundstueck = SampleGrundstueck().bundesland("NW").steuernummer("2080353038893").parse()
+
+        result = get_full_grundsteuer_data_representation(grundsteuer_obj)
+        empfaenger_result = result.Elster.DatenTeil.Nutzdatenblock.NutzdatenHeader.Empfaenger
+        assert empfaenger_result.xml_attr_id == "F"
+        assert empfaenger_result.xml_text == "5208"  # BUFA-Nr of NRW for given aktenzeichen
 
     def test_sets_nutzdaten_header_version_correctly(self):
         grundsteuer_obj = SampleGrundsteuerData().parse()

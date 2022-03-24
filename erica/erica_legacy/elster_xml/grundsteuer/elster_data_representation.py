@@ -3,7 +3,8 @@ from typing import List, Optional
 
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, \
     construct_basic_xml_data_representation
-from erica.erica_legacy.elster_xml.common.electronic_steuernummer import get_bufa_nr, generate_electronic_aktenzeichen
+from erica.erica_legacy.elster_xml.common.electronic_steuernummer import get_bufa_nr, generate_electronic_aktenzeichen, \
+    BUNDESLAENDER_WITH_STEUERNUMMER
 from erica.erica_legacy.elster_xml.est_mapping import generate_electronic_steuernummer
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAngFeststellung, EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
@@ -124,7 +125,6 @@ class EVorsatz:
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
         self.Copyright = "(C) 2022 DigitalService4Germany"
 
-        BUNDESLAENDER_WITH_STEUERNUMMER = ["BE", "HB", "SH"]
         if input_data.grundstueck.adresse.bundesland in BUNDESLAENDER_WITH_STEUERNUMMER:
             self.OrdNrArt = "S"
             self.StNr = generate_electronic_steuernummer(input_data.grundstueck.steuernummer,
@@ -165,8 +165,9 @@ class EGrundsteuerData(ENutzdaten):
 
 def get_full_grundsteuer_data_representation(input_data: GrundsteuerData):
     """ Returns the full data representation of an elster XML for the Grundsteuer use case. """
+    bufa_nr = get_bufa_nr(input_data.grundstueck.steuernummer, input_data.grundstueck.adresse.bundesland)
+
     grundsteuer_elster_data_representation = EGrundsteuerData(input_data)
-    # TODO set BuFa correctly
-    return construct_basic_xml_data_representation(empfaenger_id='F', empfaenger_text="1121",
+    return construct_basic_xml_data_representation(empfaenger_id='F', empfaenger_text=bufa_nr,
                                                    nutzdaten_object=grundsteuer_elster_data_representation,
                                                    nutzdaten_header_version="11")
