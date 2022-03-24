@@ -10,17 +10,17 @@ from erica.domain.repositories.base_repository_interface import BaseRepositoryIn
 class EricaRequestRepositoryInterface(BaseRepositoryInterface[EricaRequest], ABC):
 
     @abstractmethod
-    def get_by_job_request_id(self, request_id: UUID) -> EricaRequest:
+    def get_by_job_id(self, job_id: UUID) -> EricaRequest:
         pass
 
     @abstractmethod
-    def _get_by_job_request_id(self, request_id: UUID):
+    def _get_by_job_id(self, job_id: UUID):
         pass
 
     @abstractmethod
-    def update_by_job_request_id(self, request_id: UUID, model: BaseModel) -> EricaRequest:
+    def update_by_job_id(self, job_id: UUID, model: BaseModel) -> EricaRequest:
         pass
 
     @abstractmethod
-    def delete_by_job_request_id(self, request_id: UUID):
+    def delete_by_job_id(self, job_id: UUID):
         pass

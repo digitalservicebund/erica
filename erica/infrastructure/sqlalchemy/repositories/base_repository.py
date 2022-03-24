@@ -42,15 +42,15 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
         result = self.db_connection.query(self.DatabaseEntity).offset(skip).limit(limit).all()
         return result
 
-    def get_by_id(self, request_id: Integer) -> T:
-        entity = self._get_by_id(request_id)
+    def get_by_id(self, entity_id: Integer) -> T:
+        entity = self._get_by_id(entity_id)
         entity = entity.first()
         if entity is None:
             raise EntityNotFoundError
         return self.DomainModel.from_orm(entity)
 
-    def _get_by_id(self, request_id: Integer):
-        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == request_id)
+    def _get_by_id(self, entity_id: Integer):
+        entity = self.db_connection.query(self.DatabaseEntity).filter(self.DatabaseEntity.id == entity_id)
         return entity
 
     @staticmethod
@@ -62,18 +62,18 @@ class BaseRepository(BaseRepositoryInterface[T], Generic[T, D]):
 
         return updated_data
 
-    def update(self, request_id: Integer, model: BaseModel) -> T:
-        current = self._get_by_id(request_id)
+    def update(self, entity_id: Integer, model: BaseModel) -> T:
+        current = self._get_by_id(entity_id)
         if current.first() is None:
             raise EntityNotFoundError
         current.update(self._get_changed_data(old_entity=current.first(), updated_entity=model))
         self.db_connection.commit()
 
-        updated = self.get_by_id(request_id)
+        updated = self.get_by_id(entity_id)
         return self.DomainModel.from_orm(updated)
 
-    def delete(self, request_id: Integer):
-        entity = self._get_by_id(request_id).first()
+    def delete(self, entity_id: Integer):
+        entity = self._get_by_id(entity_id).first()
         if entity is None:
             raise EntityNotFoundError
         self.db_connection.delete(entity)

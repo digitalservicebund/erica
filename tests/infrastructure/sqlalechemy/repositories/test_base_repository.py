@@ -3,8 +3,11 @@ from unittest.mock import MagicMock, call
 from uuid import uuid4, UUID
 
 import pytest
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy_utils import database_exists, create_database
 
 from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
+from erica.infrastructure.sqlalchemy.database import run_migrations
 from erica.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
 from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockDomainModel, MockSchema
 
@@ -86,7 +89,7 @@ class TestBaseRepositoryGetById:
 
     def test_if_entity_not_in_database_then_raise_exception(self, transactional_session):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
-        mock_object.request_id = uuid4()
+        mock_object.job_id = uuid4()
         schema_object = MockSchema(**mock_object.dict())
 
         with pytest.raises(EntityNotFoundError):
@@ -128,26 +131,26 @@ class TestBaseRepositoryUpdate:
             MockBaseRepository(db_connection=transactional_session).update(schema_object.id, updated_object)
 
     @pytest.mark.freeze_uuids
-    def test_if_only_request_id_changed_then_only_call_update_with_changed_attributes(self, transactional_session):
+    def test_if_only_job_id_changed_then_only_call_update_with_changed_attributes(self, transactional_session):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
         schema_object = MockSchema(**mock_object.dict())
         transactional_session.add(schema_object)
         transactional_session.commit()
 
-        updated_object = MockDomainModel(request_id=uuid4(),
+        updated_object = MockDomainModel(job_id=uuid4(),
                                          payload={'endboss': 'Melkor'})
 
         # We need a mock object to be able to intercept the call to the update function
         repo = MockBaseRepository(db_connection=transactional_session)
         update_mock = MagicMock()
-        mocked_get_by_id = MagicMock(side_effect=lambda request_id: MagicMock(
-            first=MagicMock(return_value=MockBaseRepository(db_connection=transactional_session)._get_by_id(request_id).first()),
+        mocked_get_by_id = MagicMock(side_effect=lambda entity_id: MagicMock(
+            first=MagicMock(return_value=MockBaseRepository(db_connection=transactional_session)._get_by_id(entity_id).first()),
             update=update_mock))
         repo._get_by_id = mocked_get_by_id
 
         repo.update(schema_object.id, updated_object)
 
-        assert update_mock.mock_calls == [call({'request_id': UUID('00000000-0000-0000-0000-000000000000')})]
+        assert update_mock.mock_calls == [call({'job_id': UUID('00000000-0000-0000-0000-000000000000')})]
 
 
 class TestBaseRepositoryDelete:
