@@ -226,11 +226,3 @@ class TestV1Grundsteuer:
 
         assert response.status_code == 422
         assert response.json()['detail']["message"] == 'ERIC_GLOBAL_PRUEF_FEHLER'
-
-
-class TestV2Ping:
-
-    def test_if_get_from_ping_then_return_pong(self):
-        response = requests.get(ERICA_TESTING_URL + "/v2/ping")
-
-        assert response.text == '"pong"'
