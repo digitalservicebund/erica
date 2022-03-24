@@ -1,3 +1,5 @@
+import base64
+import io
 import json
 import unittest
 from unittest.mock import patch, MagicMock
@@ -13,9 +15,11 @@ from erica.erica_legacy.api.v1.endpoints.unlock_code import request_unlock_code,
     revoke_unlock_code
 from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
-from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
-    create_unlock_revocation, \
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import StateAbbreviation
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
+
+from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, create_unlock_revocation, \
     missing_cert, missing_pyeric_lib
 
 
@@ -94,16 +98,13 @@ class TestSendEst(unittest.TestCase):
 class TestSendGrundsteuer(unittest.TestCase):
 
     def test_if_request_correct_then_no_error_and_correct_response(self):
-        try:
-            send_grundsteuer(SampleGrundsteuerData().with_empfangsvollmacht().parse(), include_elster_responses=True)
-        except HTTPException as e:
-            assert e.status_code == 422
-            assert e.detail["code"] == 2
-            assert e.detail["message"] == 'ERIC_GLOBAL_PRUEF_FEHLER'
-            print(e.detail['validation_problems'])
-            return
+        with open("tests/erica_legacy/samples/grundsteuer_sample_input.json") as f:
+            payload = json.loads(f.read())
+            parsed_input = GrundsteuerData.parse_obj(payload)
+            result = send_grundsteuer(parsed_input)
 
-        pytest.fail("Did expect HTTP error")
+        assert result['transfer_ticket']
+        assert result['pdf']
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
