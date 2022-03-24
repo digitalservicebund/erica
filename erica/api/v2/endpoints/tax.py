@@ -3,9 +3,9 @@ import logging
 from fastapi import status, APIRouter
 from starlette.responses import FileResponse, JSONResponse
 
-from erica.api.v2.responses.model import response_model_get_tax_number_validity_from_queue
-from erica.erica_legacy.pyeric.utils import generate_dummy_error_response
-from erica.erica_legacy.request_processing.erica_input.v2.erica_input import TaxValidityWithTtl, ErrorRequestQueue
+from erica.api.utils import generate_error_response
+from erica.api.v2.responses.model import response_model_get_tax_number_validity_from_queue, TaxValidityWithTtl, \
+    ErrorRequestQueue
 
 router = APIRouter()
 
@@ -20,7 +20,7 @@ def is_valid_tax_number(tax_validity_ttl: TaxValidityWithTtl):
         raise NotImplementedError()
     except NotImplementedError:
         logging.getLogger().info("Could not validate tax number", exc_info=True)
-        return JSONResponse(status_code=422, content=generate_dummy_error_response())
+        return JSONResponse(status_code=422, content=generate_error_response())
 
 
 @router.get('/tax_number_validity/{request_id}', status_code=status.HTTP_200_OK,
@@ -34,7 +34,7 @@ def get_valid_tax_number_job(request_id: str):
         raise NotImplementedError()
     except NotImplementedError:
         logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
-        return JSONResponse(status_code=500, content=generate_dummy_error_response())
+        return JSONResponse(status_code=500, content=generate_error_response())
 
 
 @router.get('/tax_offices/', status_code=status.HTTP_200_OK)

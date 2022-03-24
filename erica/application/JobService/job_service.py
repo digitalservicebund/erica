@@ -1,10 +1,6 @@
-import datetime
 from abc import abstractmethod, ABCMeta
 from typing import Type, Callable
 from uuid import uuid4
-
-from rq import Retry
-
 from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
@@ -15,13 +11,13 @@ from erica.erica_legacy.request_processing.requests_controller import EricaReque
 from erica.domain.erica_request.erica_request import EricaRequest
 
 
-class JobServiceInterface():
+class JobServiceInterface:
     __metaclass__ = ABCMeta
     payload_type: Type[BaseDto]
     repository: EricaRequestRepositoryInterface
 
     @abstractmethod
-    def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
+    def add_to_queue(self, payload_dto: BaseDto, client_identifier: str, job_type: RequestType) -> EricaAuftragDto:
         pass
 
     @abstractmethod
@@ -45,10 +41,10 @@ class JobService(JobServiceInterface):
         self.request_controller = request_controller
         self.job_method = job_method
 
-    def add_to_queue(self, payload_dto: BaseDto, job_type: RequestType) -> EricaAuftragDto:
+    def add_to_queue(self, payload_dto: BaseDto, client_identifier: str, job_type: RequestType) -> EricaAuftragDto:
         request_entity = EricaRequest(job_id=uuid4(),
                                       payload=self.payload_type.parse_obj(payload_dto),
-                                      creator_id="api",
+                                      creator_id=client_identifier,
                                       type=job_type
                                       )
 

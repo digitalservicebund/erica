@@ -1,5 +1,4 @@
 from typing import Generic, TypeVar, List
-from uuid import UUID
 from pydantic import BaseModel
 from sqlalchemy import Integer
 from sqlalchemy.orm import Session
@@ -10,12 +9,7 @@ from erica.infrastructure.sqlalchemy.erica_request_schema import BaseDbSchema
 
 
 class EntityNotFoundError(Exception):
-    """ Raised in case an entity could not be found in the database"""
-    pass
-
-
-class EntityNotFoundError(Exception):
-    """ Raised in case an entity could not be found in the database"""
+    """Raised in case an entity could not be found in the database"""
     pass
 
 

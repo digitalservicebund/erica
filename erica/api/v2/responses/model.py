@@ -1,6 +1,76 @@
-from erica.erica_legacy.request_processing.erica_input.v2.erica_input import ErrorRequestQueue, SuccessResponseGetFromQueue, \
-    SuccessResponseGetSendEstFromQueue, SuccessResponseGetTaxNumberValidityFromQueue, \
-    SuccessResponseGetUnlockCodeRequestAndActivationFromQueue, SuccessResponseGetUnlockCodeRevocationFromQueue
+
+from typing import Optional
+from pydantic import BaseModel
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import EstData
+from enum import Enum
+
+
+class EstDataWithTtl(BaseModel):
+    ttlInMinutes: int
+    payload: EstData
+
+
+class TaxValidity(BaseModel):
+    state_abbreviation: str
+    tax_number: str
+
+
+class TaxValidityWithTtl(BaseModel):
+    ttlInMinutes: int
+    payload: TaxValidity
+
+
+class ErrorRequestQueue(BaseModel):
+    errorCode: str
+    errorMessage: str
+
+
+class JobState(Enum):
+    PROCESSING = "Processing"
+    FAILURE = "Failure"
+    SUCCESS = "Success"
+
+
+class SuccessResponseGetFromQueue(BaseModel):
+    processStatus: JobState
+    result: Optional[BaseModel]
+    errorCode: Optional[str]
+    errorMessage: Optional[str]
+
+
+class ResultGetSendEstFromQueue(BaseModel):
+    transfer_ticket: str
+    pdf: str
+
+
+class SuccessResponseGetSendEstFromQueue(SuccessResponseGetFromQueue):
+    result: ResultGetSendEstFromQueue
+
+
+class ResultGetTaxNumberValidityFromQueue(BaseModel):
+    is_valid: bool
+
+
+class SuccessResponseGetTaxNumberValidityFromQueue(SuccessResponseGetFromQueue):
+    result: ResultGetTaxNumberValidityFromQueue
+
+
+class TransferTicketAndIdnr(BaseModel):
+    transfer_ticket: str
+    idnr: str
+
+
+class ResultGetUnlockCodeRequestAndActivationFromQueue(TransferTicketAndIdnr):
+    elster_request_id: str
+
+
+class SuccessResponseGetUnlockCodeRequestAndActivationFromQueue(SuccessResponseGetFromQueue):
+    result: Optional[ResultGetUnlockCodeRequestAndActivationFromQueue]
+
+
+class SuccessResponseGetUnlockCodeRevocationFromQueue(SuccessResponseGetFromQueue):
+    result: Optional[TransferTicketAndIdnr]
+
 
 model_error_request_queue = {"model": ErrorRequestQueue,
                              "description": "Job status could not be retrieved from the queue."}

@@ -4,8 +4,8 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.responses import JSONResponse
 
+from erica.api.utils import generate_error_response
 from erica.api.v2.responses.model import response_model_post_to_queue
-from erica.erica_legacy.pyeric.utils import generate_dummy_error_response
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerWithTtl
 
 router = APIRouter()
@@ -21,7 +21,7 @@ def send_grundsteuer(grundsteuer_ttl: GrundsteuerWithTtl):
         raise NotImplementedError()
     except NotImplementedError:
         logging.getLogger().info("Could not send est", exc_info=True)
-        return JSONResponse(status_code=422, content=generate_dummy_error_response())
+        return JSONResponse(status_code=422, content=generate_error_response())
 
 
 @router.get('/grundsteuer/{request_id}', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
@@ -34,4 +34,4 @@ def get_grundsteuer(request_id: str):
         raise NotImplementedError()
     except NotImplementedError:
         logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
-        return JSONResponse(status_code=500, content=generate_dummy_error_response())
+        return JSONResponse(status_code=500, content=generate_error_response())

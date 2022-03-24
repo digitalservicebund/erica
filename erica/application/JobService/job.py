@@ -20,7 +20,7 @@ async def perform_job(entity_id: UUID, repository: base_repository_interface, se
     It also measures the elapsed time during job execution.
     """
     try:
-        entity: EricaRequest = repository.get_by_job_id(entity_id)
+        entity: EricaRequest = repository.get_by_id(entity_id)
     except EntityNotFoundError:
         logger.warning(f"Entity not found for job_id {entity_id}", exc_info=True)
         raise
