@@ -26,7 +26,7 @@ class EricaAuftragService(EricaAuftragServiceInterface):
         self.erica_auftrag_repository = repository
 
     def get_status(self, job_id: UUID):
-        return self.erica_auftrag_repository.get_by_job_id(job_id)
+        return self.erica_auftrag_repository.get_by_job_request_id(job_id)
 
 
 class EricaAuftragServiceModule(Module):

@@ -1,4 +1,10 @@
+from uuid import UUID
+
+from opyoid import Injector
+
+from erica.api.ApiModule import ApiModule
 from erica.api.v2.responses.model import JobState
+from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface
 from erica.domain.Shared.Status import Status
 
 
@@ -33,3 +39,13 @@ def generate_error_response(errorcode=-1, errormessage="API resource not yet imp
                       "errorMessage": errormessage
                       }
     return error_response
+
+
+injector = Injector([
+    ApiModule(),
+])
+
+
+def get_erica_request(job_id: UUID):
+    freischalt_code_service: EricaAuftragServiceInterface = injector.inject(EricaAuftragServiceInterface)
+    return freischalt_code_service.get_status(job_id)

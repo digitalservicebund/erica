@@ -1,23 +1,7 @@
 
 from typing import Optional
 from pydantic import BaseModel
-from erica.erica_legacy.request_processing.erica_input.v1.erica_input import EstData
 from enum import Enum
-
-
-class EstDataWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: EstData
-
-
-class TaxValidity(BaseModel):
-    state_abbreviation: str
-    tax_number: str
-
-
-class TaxValidityWithTtl(BaseModel):
-    ttlInMinutes: int
-    payload: TaxValidity
 
 
 class ErrorRequestQueue(BaseModel):
@@ -44,7 +28,7 @@ class ResultGetSendEstFromQueue(BaseModel):
 
 
 class SuccessResponseGetSendEstFromQueue(SuccessResponseGetFromQueue):
-    result: ResultGetSendEstFromQueue
+    result: Optional[ResultGetSendEstFromQueue]
 
 
 class ResultGetTaxNumberValidityFromQueue(BaseModel):
@@ -52,7 +36,7 @@ class ResultGetTaxNumberValidityFromQueue(BaseModel):
 
 
 class SuccessResponseGetTaxNumberValidityFromQueue(SuccessResponseGetFromQueue):
-    result: ResultGetTaxNumberValidityFromQueue
+    result: Optional[ResultGetTaxNumberValidityFromQueue]
 
 
 class TransferTicketAndIdnr(BaseModel):
@@ -102,14 +86,17 @@ response_model_get_tax_number_validity_from_queue = {
 response_model_get_unlock_code_request_from_queue = {
     200: {"model": SuccessResponseGetUnlockCodeRequestAndActivationFromQueue,
           "description": "Job status of an unlock code request was successfully retrieved from the queue."},
+    404: model_error_request_queue,
     500: model_error_request_queue}
 
 response_model_get_unlock_code_activation_from_queue = {
     200: {"model": SuccessResponseGetUnlockCodeRequestAndActivationFromQueue,
           "description": "Job status of an unlock code activation was successfully retrieved from the queue."},
+    404: model_error_request_queue,
     500: model_error_request_queue}
 
 response_model_get_unlock_code_revocation_from_queue = {
     200: {"model": SuccessResponseGetUnlockCodeRevocationFromQueue,
           "description": "Job status of an unlock code revocation was successfully retrieved from the queue."},
+    404: model_error_request_queue,
     500: model_error_request_queue}

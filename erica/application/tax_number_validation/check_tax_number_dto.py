@@ -1,5 +1,7 @@
 from enum import Enum
 
+from pydantic import BaseModel
+
 from erica.application.base_dto import BaseDto
 
 
@@ -32,3 +34,8 @@ class StateAbbreviation(str, Enum):
 class CheckTaxNumberDto(BaseDto):
     state_abbreviation: StateAbbreviation
     tax_number: str
+
+
+class CheckTaxNumberDtoWithClientIdentifier(BaseModel):
+    payload: CheckTaxNumberDto
+    clientIdentifier: str
