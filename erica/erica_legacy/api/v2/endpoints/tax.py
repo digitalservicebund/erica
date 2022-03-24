@@ -3,15 +3,16 @@ import logging
 from fastapi import status, APIRouter
 from starlette.responses import FileResponse, JSONResponse
 
+from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
 from erica.erica_legacy.api.v2.responses.model import response_model_get_tax_number_validity_from_queue
 from erica.erica_legacy.pyeric.utils import generate_dummy_error_response
-from erica.erica_legacy.request_processing.erica_input.v2.erica_input import TaxValidityWithTtl, ErrorRequestQueue
+from erica.erica_legacy.request_processing.erica_input.v2.erica_input import ErrorRequestQueue
 
 router = APIRouter()
 
 
 @router.post('/tax_number_validity', status_code=status.HTTP_201_CREATED, responses={422: {"model": ErrorRequestQueue}})
-def is_valid_tax_number(tax_validity_ttl: TaxValidityWithTtl):
+def is_valid_tax_number(tax_validity_ttl: CheckTaxNumberDto):
     """
     Route for validation of a tax number using the job queue.
     :param tax_validity_ttl: payload with abbreviation of the state of the tax office and tax number in the standard schema.

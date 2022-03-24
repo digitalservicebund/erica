@@ -3,7 +3,7 @@ import logging
 from fastapi import HTTPException, status, APIRouter
 from starlette.responses import FileResponse
 
-from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto, StateAbbreviation
+from erica.domain.tax_number_validation.check_tax_number import StateAbbreviation, CheckTaxNumberPayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
 
@@ -19,7 +19,7 @@ def is_valid_tax_number(state_abbreviation: StateAbbreviation, tax_number: str):
     :param tax_number: Tax number in the standard schema
     """
     try:
-        input_data = CheckTaxNumberDto(state_abbreviation=state_abbreviation, tax_number=tax_number)
+        input_data = CheckTaxNumberPayload(state_abbreviation=state_abbreviation, tax_number=tax_number)
         return CheckTaxNumberRequestController(input_data).process()
     except EricProcessNotSuccessful as e:
         logging.getLogger().info("Could not validate tax number", exc_info=True)
