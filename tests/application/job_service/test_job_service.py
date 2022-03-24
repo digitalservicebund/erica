@@ -100,7 +100,7 @@ class TestJobServiceQueue:
         service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
 
         assert mock_bg_worker.enqueue.mock_calls == [
-            call(UUID('00000000-0000-0000-0000-000000000000'), f=mock_job)]
+            call(mock_job, UUID('00000000-0000-0000-0000-000000000000'))]
 
 
 class TestJobServiceRun:

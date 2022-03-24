@@ -55,8 +55,8 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
 
         self.background_worker.enqueue(
-            created.request_id,
-            f=self.job_method
+            self.job_method,
+            created.request_id
         )
 
         return EricaAuftragDto.parse_obj(created)
