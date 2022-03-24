@@ -15,7 +15,7 @@ class EricaAuftragDto(BaseModel):
     type: RequestType
     status: Status = Status.new
     payload: object
-    job_id: UUID
+    request_id: UUID
     result: Optional[object]
     error_code: Optional[str]
     error_message: Optional[str]
