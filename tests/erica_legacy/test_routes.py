@@ -277,7 +277,7 @@ class TestIsTaxNumberValid:
         assert result == {'is_valid': False}
 
 
-class TestGetTaxOffices(unittest.TestCase):
+class TestGetTaxOffices:
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_get_tax_offices_returns_same_as_request_controller_process(self):
@@ -287,4 +287,4 @@ class TestGetTaxOffices(unittest.TestCase):
 
         erica_response = GetTaxOfficesPyericController().get_eric_response()
 
-        self.assertEqual(erica_response, response_content)
+        assert erica_response == response_content
