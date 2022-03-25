@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 from fastapi.exceptions import HTTPException
 
-from erica.application.tax_number_validation.check_tax_number_dto import StateAbbreviation
+from erica.domain.tax_number_validation.check_tax_number import StateAbbreviation
 from erica.erica_legacy.api.v1.endpoints.est import validate_est, send_est
 from erica.erica_legacy.api.v1.endpoints.grundsteuer import send_grundsteuer
 from erica.erica_legacy.api.v1.endpoints.tax import is_valid_tax_number, get_tax_offices
