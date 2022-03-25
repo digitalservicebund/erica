@@ -104,6 +104,15 @@ class TestSendGrundsteuer(unittest.TestCase):
         assert result['transfer_ticket']
         assert result['pdf']
 
+    def test_if_request_correct_with_bruchteilsgemeinschaft_then_no_error_and_correct_response(self):
+        with open("tests/erica_legacy/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json") as f:
+            payload = json.loads(f.read())
+            parsed_input = GrundsteuerData.parse_obj(payload)
+            result = send_grundsteuer(parsed_input)
+
+        assert result['transfer_ticket']
+        assert result['pdf']
+
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
 @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
