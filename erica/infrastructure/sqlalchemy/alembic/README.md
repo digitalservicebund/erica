@@ -3,7 +3,7 @@ Generic single-database configuration.
 ### create new revision
 
 ```bash
-alembic revision -m"create erica request table"
+alembic revision -m"<REVISION_MESSAGE>"
 ```
 
 ### make database migrations
