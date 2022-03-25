@@ -5,7 +5,8 @@ from uuid import uuid4
 
 import pytest
 
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto
+from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+    FreischaltCodeRevocateDto
 from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code, activate_freischalt_code, \
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService
@@ -136,6 +137,32 @@ class TestActivateFreischaltcode:
             assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
 
 
+class TestIntegrationWithDatabaseAndActivateFreischaltcode:
+
+    @pytest.mark.asyncio
+    async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
+        payload = FreischaltCodeActivateDto(idnr='04452397687', freischalt_code='Alohomora', elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
+        service = get_job_service(RequestType.freischalt_code_activate)
+        entity = service.repository.create(EricaRequest(
+            request_id=uuid4(),
+            payload=payload,
+            creator_id="tests",
+            type=RequestType.freischalt_code_activate
+        ))
+        xml_string = read_text_from_sample('sample_vast_activation_response.xml')
+        with patch('erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeActivationPyericProcessController.get_eric_response',
+                   MagicMock(return_value=PyericResponse(eric_response="eric_response", server_response=xml_string))):
+            await activate_freischalt_code(entity.request_id)
+
+        updated_entity = service.repository.get_by_job_request_id(entity.request_id)
+
+        assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
+                                         'server_response': None,
+                                         'eric_response': None,
+                                         'idnr': payload.idnr,
+                                         'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
+
+
 class TestRevocateFreischaltcode:
 
     @pytest.mark.asyncio
@@ -180,3 +207,29 @@ class TestRevocateFreischaltcode:
             await revocate_freischalt_code("1234")
 
             assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
+
+
+class TestIntegrationWithDatabaseAndRevocateFreischaltcode:
+
+    @pytest.mark.asyncio
+    async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
+        payload = FreischaltCodeRevocateDto(idnr='04452397687', dob=date(1950, 8, 16), elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
+        service = get_job_service(RequestType.freischalt_code_revocate)
+        entity = service.repository.create(EricaRequest(
+            request_id=uuid4(),
+            payload=payload,
+            creator_id="tests",
+            type=RequestType.freischalt_code_revocate
+        ))
+        xml_string = read_text_from_sample('sample_vast_revocation_response.xml')
+        with patch('erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeRevocationPyericProcessController.get_eric_response',
+                   MagicMock(return_value=PyericResponse(eric_response="eric_response", server_response=xml_string))):
+            await revocate_freischalt_code(entity.request_id)
+
+        updated_entity = service.repository.get_by_job_request_id(entity.request_id)
+
+        assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
+                                         'server_response': None,
+                                         'eric_response': None,
+                                         'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
+
