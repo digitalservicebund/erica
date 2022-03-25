@@ -69,7 +69,7 @@ class TestIntegrationWithDatabaseAndRequestFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
-        payload = FreischaltCodeRequestDto(idnr='04452397687', dob=date(1950, 8, 16))
+        payload = FreischaltCodeRequestDto(idnr='04452397687', date_of_birth=date(1950, 8, 16))
         service = get_job_service(RequestType.freischalt_code_request)
         entity = service.repository.create(EricaRequest(
             request_id=uuid4(),

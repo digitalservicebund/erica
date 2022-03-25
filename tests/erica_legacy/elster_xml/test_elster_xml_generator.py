@@ -958,7 +958,7 @@ class TestVastRequest(unittest.TestCase):
         self.expected_antrag_version = '3'
         self.valid_user_data = {
             'idnr': '04452397687',
-            'dob': '1985-01-01'
+            'date_of_birth': '1985-01-01'
         }
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")

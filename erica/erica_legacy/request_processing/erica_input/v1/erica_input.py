@@ -220,7 +220,7 @@ class EstData(BaseModel):
 
 class UnlockCodeRequestData(BaseModel):
     idnr: str
-    dob: date
+    date_of_birth: date = Field(alias='dob')
 
 
 class UnlockCodeActivationData(BaseModel):

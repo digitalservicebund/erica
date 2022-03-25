@@ -5,7 +5,7 @@ from erica.application.base_dto import BaseDto
 
 class FreischaltCodeRequestDto(BaseDto):
     idnr: str
-    dob: date
+    date_of_birth: date
 
 
 class FreischaltCodeRevocateDto(BaseDto):
