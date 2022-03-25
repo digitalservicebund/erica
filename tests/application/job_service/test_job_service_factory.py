@@ -1,10 +1,11 @@
 import pytest
 
-from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltCodeActivateDto, \
+from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeActivateDto, \
     FreischaltCodeRequestDto, FreischaltCodeRevocateDto
 from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, revocate_freischalt_code, \
     request_freischalt_code
 from erica.application.JobService.job_service_factory import get_job_service
+from erica.application.base_dto import BaseDto
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
