@@ -8,7 +8,6 @@ from erica.application.EricRequestProcessing.erica_input.v1.erica_input import E
 
 
 class EstDataWithTtl(BaseModel):
-    ttlInMinutes: int
     payload: EstData
 
 
@@ -18,22 +17,18 @@ class TaxValidity(BaseModel):
 
 
 class TaxValidityWithTtl(BaseModel):
-    ttlInMinutes: int
     payload: TaxValidity
 
 
 class FscRequestDataWithTtl(BaseModel):
-    ttlInMinutes: int
     payload: UnlockCodeRequestData
 
 
 class FscActivationDataWithTtl(BaseModel):
-    ttlInMinutes: int
     payload: UnlockCodeActivationData
 
 
 class FscRevocationDataWithTtl(BaseModel):
-    ttlInMinutes: int
     payload: UnlockCodeRevocationData
 
 

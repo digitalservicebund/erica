@@ -4,15 +4,15 @@ from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayl
 
 
 class FreischaltCodeRequestDto(BaseDto):
-    ttlInMinutes: int
     payload: FreischaltCodeRequestPayload
+    clientIdentifier: str
 
 
 class FreischaltCodeActivateDto(BaseDto):
-    ttlInMinutes: int
     payload: FreischaltCodeActivatePayload
+    clientIdentifier: str
 
 
 class FreischaltCodeRevocateDto(BaseDto):
-    ttlInMinutes: int
     payload: FreischaltCodeRevocatePayload
+    clientIdentifier: str

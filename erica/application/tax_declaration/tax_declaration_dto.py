@@ -4,5 +4,5 @@ from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 
 
 class TaxDeclarationDto(BaseModel):
-    ttlInMinutes: int
     payload: TaxDeclarationPayload
+    clientIdentifier: str

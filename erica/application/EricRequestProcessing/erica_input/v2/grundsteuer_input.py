@@ -93,5 +93,5 @@ class GrundsteuerData(PossiblyAliasedInput):
 
 
 class GrundsteuerWithTtl(PossiblyAliasedInput):
-    ttlInMinutes: int
     payload: GrundsteuerData
+    clientIdentifier: str

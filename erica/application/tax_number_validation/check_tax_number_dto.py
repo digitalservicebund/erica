@@ -3,5 +3,5 @@ from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPa
 
 
 class CheckTaxNumberDto(BaseDto):
-    ttlInMinutes: int
     payload: CheckTaxNumberPayload
+    clientIdentifier: str
