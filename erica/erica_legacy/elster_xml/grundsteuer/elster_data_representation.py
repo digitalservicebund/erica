@@ -3,6 +3,8 @@ from typing import List, Optional
 
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, \
     construct_basic_xml_data_representation
+from erica.erica_legacy.elster_xml.common.electronic_steuernummer import get_bufa_nr, generate_electronic_aktenzeichen, \
+    BUNDESLAENDER_WITH_STEUERNUMMER, generate_electronic_steuernummer
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
@@ -46,10 +48,10 @@ class EGW1:
     Lage: ELage
     Mehrere_Gemeinden: Optional[EMehrereGemeinden]
     Gemarkungen: EGemarkungen
-    Eigentuemer: List[EPersonData]
-    Eigentumsverh: EEigentumsverh
     Empfangsv: Optional[EEmpfangsbevollmaechtigter]
     Erg_Angaben: Optional[EErgAngaben]
+    Eigentumsverh: EEigentumsverh
+    Eigentuemer: List[EPersonData]
 
     def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput, freitext=None):
         self.Ang_Feststellung = EAngFeststellung(grundstueck.typ)
@@ -59,11 +61,6 @@ class EGW1:
         else:
             self.Mehrere_Gemeinden = None
         self.Gemarkungen = EGemarkungen(grundstueck.flurstueck)
-        self.Eigentuemer = []
-        for index, input_eigentuemer in enumerate(eigentuemer.person):
-            new_eigentuemer = EPersonData(input_eigentuemer, index)
-            self.Eigentuemer.append(new_eigentuemer)
-        self.Eigentumsverh = EEigentumsverh(eigentuemer)
 
         if hasattr(eigentuemer, "empfangsbevollmaechtigter") and eigentuemer.empfangsbevollmaechtigter:
             self.Empfangsv = EEmpfangsbevollmaechtigter(eigentuemer.empfangsbevollmaechtigter)
@@ -74,6 +71,12 @@ class EGW1:
             self.Erg_Angaben = EErgAngaben(freitext)
         else:
             self.Erg_Angaben = None
+
+        self.Eigentumsverh = EEigentumsverh(eigentuemer)
+        self.Eigentuemer = []
+        for index, input_eigentuemer in enumerate(eigentuemer.person):
+            new_eigentuemer = EPersonData(input_eigentuemer, index)
+            self.Eigentuemer.append(new_eigentuemer)
 
 
 @dataclass
@@ -100,7 +103,8 @@ class ERueckuebermittlung:
 class EVorsatz:
     Unterfallart: str
     Vorgang: str
-    StNr: str
+    StNr: Optional[str]
+    Aktenzeichen: Optional[str]
     Zeitraum: str
     AbsName: str
     AbsStr: str
@@ -113,7 +117,6 @@ class EVorsatz:
     def __init__(self, input_data: GrundsteuerData):
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
-        self.StNr = input_data.grundstueck.steuernummer
         self.Zeitraum = "2022"  # TODO require on input?
         self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + \
                        input_data.eigentuemer.person[0].persoenlicheAngaben.name
@@ -121,8 +124,18 @@ class EVorsatz:
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
         self.Copyright = "(C) 2022 DigitalService4Germany"
-        # TODO Steuernummer or Aktenzeichen?
-        self.OrdNrArt = "S"
+
+        if input_data.grundstueck.adresse.bundesland in BUNDESLAENDER_WITH_STEUERNUMMER:
+            self.OrdNrArt = "S"
+            self.StNr = generate_electronic_steuernummer(input_data.grundstueck.steuernummer,
+                                                         input_data.grundstueck.adresse.bundesland)
+            self.Aktenzeichen = None
+        else:
+            self.OrdNrArt = "A"
+            self.StNr = None
+            self.Aktenzeichen = generate_electronic_aktenzeichen(input_data.grundstueck.steuernummer,
+                                                                 input_data.grundstueck.adresse.bundesland)
+
         self.Rueckuebermittlung = ERueckuebermittlung()
 
 
@@ -152,8 +165,9 @@ class EGrundsteuerData(ENutzdaten):
 
 def get_full_grundsteuer_data_representation(input_data: GrundsteuerData):
     """ Returns the full data representation of an elster XML for the Grundsteuer use case. """
+    bufa_nr = get_bufa_nr(input_data.grundstueck.steuernummer, input_data.grundstueck.adresse.bundesland)
+
     grundsteuer_elster_data_representation = EGrundsteuerData(input_data)
-    # TODO set BuFa correctly
-    return construct_basic_xml_data_representation(empfaenger_id='F', empfaenger_text="1121",
+    return construct_basic_xml_data_representation(empfaenger_id='F', empfaenger_text=bufa_nr,
                                                    nutzdaten_object=grundsteuer_elster_data_representation,
                                                    nutzdaten_header_version="11")
