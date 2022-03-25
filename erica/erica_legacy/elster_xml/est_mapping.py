@@ -270,6 +270,7 @@ def check_and_generate_entries(est_data):
     return _convert_to_elster_identifiers(enriched_est_data)
 
 
+# TODO remove this once queue is ready
 def generate_electronic_steuernummer(steuernummer, bundesland, use_testmerker=False):
     """
     Generates the electronic steuernummer representation of the steuernummer specific to a federal state.
