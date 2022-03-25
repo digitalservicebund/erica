@@ -8,7 +8,7 @@ from erica.api.v2.responses.model import response_model_post_to_queue, response_
     response_model_get_send_est_from_queue, JobState, SuccessResponseGetSendEstFromQueue, ResultGetSendEstFromQueue, \
     ErrorRequestQueue
 from erica.application.JobService.job_service_factory import get_job_service
-from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDtoWithClientIdentifier
+from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
@@ -16,7 +16,7 @@ router = APIRouter()
 
 
 @router.post('/est_validations', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-async def validate_est(est_data_client_identifier: TaxDeclarationDtoWithClientIdentifier):
+async def validate_est(est_data_client_identifier: TaxDeclarationDto):
     """
     Route for validation of a tax declaration using the job queue.
     :param est_data_client_identifier: payload with client identifier and the JSON input data for the tax declaration.
@@ -44,7 +44,7 @@ async def get_validate_est_job(request_id: str):
 
 @router.post('/ests', status_code=status.HTTP_201_CREATED,
              responses={422: {"model": ErrorRequestQueue}, 500: {"model": ErrorRequestQueue}})
-async def send_est(est_data_client_identifier: TaxDeclarationDtoWithClientIdentifier):
+async def send_est(est_data_client_identifier: TaxDeclarationDto):
     """
     Route for sending a tax declaration using the job queue.
     :param est_data_client_identifier: payload with client identifier and the JSON input data for the tax declaration.

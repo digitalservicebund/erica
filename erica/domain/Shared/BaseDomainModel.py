@@ -1,7 +1,7 @@
 import datetime
+from abc import ABCMeta
 from typing import TypeVar, Generic, Optional
-
-from pydantic import BaseModel
+from pydantic.main import BaseModel
 
 DataT = TypeVar('DataT')
 ClassT = TypeVar('ClassT')
@@ -19,3 +19,7 @@ class BaseDomainModel(AuditedModel, Generic[DataT]):
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True
+
+
+class BasePayload(BaseModel):
+    __metaclass__ = ABCMeta

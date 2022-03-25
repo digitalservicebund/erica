@@ -7,7 +7,7 @@ from erica.api.utils import generate_error_response, get_erica_request, map_stat
 from erica.api.v2.responses.model import response_model_get_tax_number_validity_from_queue, ErrorRequestQueue, JobState, \
     SuccessResponseGetTaxNumberValidityFromQueue, ResultGetTaxNumberValidityFromQueue
 from erica.application.JobService.job_service_factory import get_job_service
-from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDtoWithClientIdentifier
+from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
@@ -16,7 +16,7 @@ router = APIRouter()
 
 @router.post('/tax_number_validity', status_code=status.HTTP_201_CREATED,
              responses={422: {"model": ErrorRequestQueue}, 500: {"model": ErrorRequestQueue}})
-async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDtoWithClientIdentifier):
+async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDto):
     """
     Route for validation of a tax number using the job queue.
     :param tax_validity_client_identifier: payload with client identifier and the JSON input data for the tax number validity check.

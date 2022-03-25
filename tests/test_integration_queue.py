@@ -22,8 +22,8 @@ class TestV2UnlockCodeRequest:
                                  data=json.dumps(create_unlock_code_request(), default=json_default))
         assert response.status_code == 201
         response_content = response.json().split("/")
-        assert response_content[0] == "request"
-        assert is_valid_uuid(response_content[1])
+        assert response_content[0] + "/" + response_content[1] == "fsc/request"
+        assert is_valid_uuid(response_content[2])
 
     def test_if_post_without_full_data_then_return_422(self):
         request_payload = create_unlock_code_request()
@@ -36,7 +36,7 @@ class TestV2UnlockCodeRequest:
         response = requests.post(ERICA_TESTING_URL + "/v2/fsc/request",
                                  data=json.dumps(create_unlock_code_request(), default=json_default))
         assert response.status_code == 201
-        uuid = response.json().split("/")[1]
+        uuid = response.json().split("/")[2]
         response = requests.get(ERICA_TESTING_URL + "/v2/fsc/request/" + uuid)
         assert response.status_code == 200
         assert "processStatus" in response.json()
@@ -46,7 +46,7 @@ class TestV2UnlockCodeRequest:
 
     def test_if_get_non_existing_request(self):
         response = requests.get(ERICA_TESTING_URL + "/v2/fsc/request/" + str(generate_uuid()))
-        assert response.status_code == 500
+        assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
@@ -58,8 +58,8 @@ class TestV2UnlockCodeActivation:
                                  data=json.dumps(create_unlock_code_activation(), default=json_default))
         assert response.status_code == 201
         response_content = response.json().split("/")
-        assert response_content[0] == "request"
-        assert is_valid_uuid(response_content[1])
+        assert response_content[0] + "/" + response_content[1] == "fsc/activation"
+        assert is_valid_uuid(response_content[2])
 
     def test_if_post_without_full_data_then_return_422(self):
         request_payload = create_unlock_code_activation()
@@ -72,7 +72,7 @@ class TestV2UnlockCodeActivation:
         response = requests.post(ERICA_TESTING_URL + "/v2/fsc/activation",
                                  data=json.dumps(create_unlock_code_activation(), default=json_default))
         assert response.status_code == 201
-        uuid = response.json().split("/")[1]
+        uuid = response.json().split("/")[2]
         response = requests.get(ERICA_TESTING_URL + "/v2/fsc/activation/" + uuid)
         assert response.status_code == 200
         assert "processStatus" in response.json()
@@ -82,7 +82,7 @@ class TestV2UnlockCodeActivation:
 
     def test_if_get_non_existing_request(self):
         response = requests.get(ERICA_TESTING_URL + "/v2/fsc/activation/" + str(generate_uuid()))
-        assert response.status_code == 500
+        assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
@@ -94,8 +94,8 @@ class TestV2UnlockCodeRevocation:
                                  data=json.dumps(create_unlock_code_revocation(), default=json_default))
         assert response.status_code == 201
         response_content = response.json().split("/")
-        assert response_content[0] == "request"
-        assert is_valid_uuid(response_content[1])
+        assert response_content[0] + "/" + response_content[1] == "fsc/revocation"
+        assert is_valid_uuid(response_content[2])
 
     def test_if_post_without_full_data_then_return_422(self):
         request_payload = create_unlock_code_revocation()
@@ -108,7 +108,7 @@ class TestV2UnlockCodeRevocation:
         response = requests.post(ERICA_TESTING_URL + "/v2/fsc/revocation",
                                  data=json.dumps(create_unlock_code_revocation(), default=json_default))
         assert response.status_code == 201
-        uuid = response.json().split("/")[1]
+        uuid = response.json().split("/")[2]
         response = requests.get(ERICA_TESTING_URL + "/v2/fsc/revocation/" + uuid)
         assert response.status_code == 200
         assert "processStatus" in response.json()
@@ -118,7 +118,7 @@ class TestV2UnlockCodeRevocation:
 
     def test_if_get_non_existing_request(self):
         response = requests.get(ERICA_TESTING_URL + "/v2/fsc/revocation/" + str(generate_uuid()))
-        assert response.status_code == 500
+        assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
@@ -130,7 +130,7 @@ class TestV2TaxNumberValidity:
                                  data=json.dumps(create_tax_number_validity(), default=json_default))
         assert response.status_code == 201
         response_content = response.json().split("/")
-        assert response_content[0] == "request"
+        assert response_content[0] == "tax_number_validity"
         assert is_valid_uuid(response_content[1])
 
     def test_if_post_without_full_data_then_return_422(self):
@@ -154,7 +154,7 @@ class TestV2TaxNumberValidity:
 
     def test_if_get_non_existing_request(self):
         response = requests.get(ERICA_TESTING_URL + "/v2/tax_number_validity/" + str(generate_uuid()))
-        assert response.status_code == 500
+        assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
@@ -166,7 +166,7 @@ class TestV2SendEst:
                                  data=json.dumps(create_send_est(), default=json_default))
         assert response.status_code == 201
         response_content = response.json().split("/")
-        assert response_content[0] == "request"
+        assert response_content[0] == "ests"
         assert is_valid_uuid(response_content[1])
 
     def test_if_post_without_full_data_then_return_422(self):
@@ -190,6 +190,6 @@ class TestV2SendEst:
 
     def test_if_get_non_existing_request(self):
         response = requests.get(ERICA_TESTING_URL + "/v2/ests/" + str(generate_uuid()))
-        assert response.status_code == 500
+        assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()

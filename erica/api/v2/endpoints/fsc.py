@@ -4,13 +4,13 @@ from uuid import UUID
 from fastapi import status, APIRouter
 from starlette.responses import JSONResponse
 from erica.api.utils import map_status, generate_error_response, get_erica_request
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestWithClientIdentifier, \
-    FreischaltCodeActiveWithClientIdentifier, FreischaltCodeRevocationWithClientIdentifier
 from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
     ErrorRequestQueue, ResultGetUnlockCodeRequestAndActivationFromQueue, \
     SuccessResponseGetUnlockCodeRequestAndActivationFromQueue, JobState, \
     SuccessResponseGetUnlockCodeRevocationFromQueue, TransferTicketAndIdnr
+from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+    FreischaltCodeRevocateDto
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
@@ -20,7 +20,7 @@ router = APIRouter()
 
 @router.post('/request', status_code=status.HTTP_201_CREATED,
              responses={422: {"model": ErrorRequestQueue}, 500: {"model": ErrorRequestQueue}})
-async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestWithClientIdentifier):
+async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto):
     """
     Route for requesting a new fsc for the sent id_nr using the job queue.
     :param request_fsc_client_identifier: payload with client identifier and the JSON input data for the request.
@@ -58,7 +58,7 @@ async def get_fsc_request_job(request_id: UUID):
 
 @router.post('/activation', status_code=status.HTTP_201_CREATED,
              responses={422: {"model": ErrorRequestQueue}, 500: {"model": ErrorRequestQueue}})
-async def activate_fsc(activation_fsc_client_identifier: FreischaltCodeActiveWithClientIdentifier):
+async def activate_fsc(activation_fsc_client_identifier: FreischaltCodeActivateDto):
     """
     Route for requesting activation of an fsc for the sent id_nr using the job queue.
     :param activation_fsc_client_identifier: payload with client identifier and the JSON input data for the activation.
@@ -96,7 +96,7 @@ async def get_fsc_activation_job(request_id: UUID):
 
 @router.post('/revocation', status_code=status.HTTP_201_CREATED,
              responses={422: {"model": ErrorRequestQueue}, 500: {"model": ErrorRequestQueue}})
-async def revocate_fsc(revocation_fsc_client_identifier: FreischaltCodeRevocationWithClientIdentifier):
+async def revocate_fsc(revocation_fsc_client_identifier: FreischaltCodeRevocateDto):
     """
     Route for requesting revocation of an fsc for the sent id_nr using the job queue.
     :param revocation_fsc_client_identifier: payload with client identifier and the JSON input data for the revocation.

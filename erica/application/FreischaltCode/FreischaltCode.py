@@ -1,36 +1,18 @@
-from datetime import date
-
 from pydantic import BaseModel
-
-from erica.application.base_dto import BaseDto
-
-
-class FreischaltCodeRequestDto(BaseDto):
-    idnr: str
-    dob: date
+from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeRevocatePayload, \
+    FreischaltCodeActivatePayload
 
 
-class FreischaltCodeRequestWithClientIdentifier(BaseModel):
-    payload: FreischaltCodeRequestDto
+class FreischaltCodeRequestDto(BaseModel):
+    payload: FreischaltCodeRequestPayload
     clientIdentifier: str
 
 
-class FreischaltCodeRevocateDto(BaseDto):
-    idnr: str
-    elster_request_id: str
-
-
-class FreischaltCodeRevocationWithClientIdentifier(BaseModel):
-    payload: FreischaltCodeRevocateDto
+class FreischaltCodeActivateDto(BaseModel):
+    payload: FreischaltCodeActivatePayload
     clientIdentifier: str
 
 
-class FreischaltCodeActivateDto(BaseDto):
-    idnr: str
-    unlock_code: str
-    elster_request_id: str
-
-
-class FreischaltCodeActiveWithClientIdentifier(BaseModel):
-    payload: FreischaltCodeActivateDto
+class FreischaltCodeRevocateDto(BaseModel):
+    payload: FreischaltCodeRevocatePayload
     clientIdentifier: str

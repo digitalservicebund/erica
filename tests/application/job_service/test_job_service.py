@@ -1,14 +1,14 @@
 from datetime import datetime
-from unittest.mock import Mock, MagicMock, call, patch
+from unittest.mock import Mock, MagicMock, call
 from uuid import UUID
 
 import pytest
 from freezegun import freeze_time
 from sqlalchemy.orm import Session
 
-from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobService
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
+from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaAuftrag import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
@@ -58,7 +58,7 @@ class PickableMock(Mock):
         return Mock, ()
 
 
-class MockDto(BaseDto):
+class MockDto(BasePayload):
     name: str
     friend: str
 
@@ -77,7 +77,7 @@ class TestJobServiceQueue:
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
+        service.add_to_queue(input_data, "steuerlotse", job_type=RequestType.freischalt_code_activate)
 
         assert service.repository[0] == EricaRequest(
             id="1234",
@@ -97,7 +97,7 @@ class TestJobServiceQueue:
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
+        service.add_to_queue(input_data, "steuerlotse", job_type=RequestType.freischalt_code_activate)
 
         assert mock_bg_worker.enqueue.mock_calls == [
             call(mock_job, UUID('00000000-0000-0000-0000-000000000000'))]

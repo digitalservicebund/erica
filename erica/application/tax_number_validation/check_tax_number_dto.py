@@ -1,41 +1,7 @@
-from enum import Enum
-
 from pydantic import BaseModel
-
-from erica.application.base_dto import BaseDto
-
-
-class StateAbbreviation(str, Enum):
-    bw = "bw"
-    by = "by"
-    be = "be"
-    bb = "bb"
-    hb = "hb"
-    hh = "hh"
-    he = "he"
-    mv = "mv"
-    nd = "nd"
-    nw = "nw"
-    rp = "rp"
-    sl = "sl"
-    sn = "sn"
-    st = "st"
-    sh = "sh"
-    th = "th"
-
-    # To find the correct values case insensitively
-    @classmethod
-    def _missing_(cls, value):
-        for member in cls:
-            if member.lower() == value.lower():
-                return member
+from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
 
 
-class CheckTaxNumberDto(BaseDto):
-    state_abbreviation: StateAbbreviation
-    tax_number: str
-
-
-class CheckTaxNumberDtoWithClientIdentifier(BaseModel):
-    payload: CheckTaxNumberDto
+class CheckTaxNumberDto(BaseModel):
+    payload: CheckTaxNumberPayload
     clientIdentifier: str
