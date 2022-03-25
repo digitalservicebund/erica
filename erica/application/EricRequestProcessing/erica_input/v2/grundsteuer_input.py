@@ -29,7 +29,7 @@ class PersoenlicheAngaben(Name):
 
 class Adresse(PossiblyAliasedInput):
     strasse: Optional[str]
-    hausnummer: Optional[int]
+    hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
     postfach: Optional[str]
     plz: str
