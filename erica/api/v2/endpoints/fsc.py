@@ -47,8 +47,7 @@ async def get_fsc_request_job(request_id: UUID):
         return get_request_and_activate_job_status(request_id)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
-        logging.getLogger().info("Job with id " + str(request_id) + " not present in the queue.",
-                                 exc_info=True)
+        logging.getLogger().info(create_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (unlock code request) job " + str(request_id),
@@ -85,8 +84,7 @@ async def get_fsc_activation_job(request_id: UUID):
         return get_request_and_activate_job_status(request_id)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
-        logging.getLogger().info("Job with id " + str(request_id) + " not present in the queue.",
-                                 exc_info=True)
+        logging.getLogger().info(create_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (unlock code activation) job " + str(request_id),
@@ -136,8 +134,7 @@ async def get_fsc_revocation_job(request_id: str):
             return SuccessResponseGetUnlockCodeRevocationFromQueue(
                 processStatus=map_status(erica_request.status))
     except EntityNotFoundError as e:
-        logging.getLogger().info("Job with id " + str(request_id) + " not present in the queue.",
-                                 exc_info=True)
+        logging.getLogger().info(create_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (unlock code revocation) job " + str(request_id),
@@ -162,3 +159,7 @@ def get_request_and_activate_job_status(request_id: UUID):
     else:
         return SuccessResponseGetUnlockCodeRequestAndActivationFromQueue(
             processStatus=map_status(erica_request.status))
+
+
+def create_log_message(request_id: UUID):
+    return "Job with id " + str(request_id) + " not present in the queue."
