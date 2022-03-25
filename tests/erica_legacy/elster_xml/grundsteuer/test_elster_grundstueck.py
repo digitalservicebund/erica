@@ -86,7 +86,7 @@ class TestEFlurstueck:
         assert result.E7401141 == "gemarky"
         assert result.E7401142 == "hi123"
         assert result.E7401143 == "c2"
-        assert result.E7401144 == "42"
+        assert result.E7401144 == 42
         assert result.E7401145 == "24"
         assert result.E7411001 == 4242
         assert result.E7410702 == elsterify_wirtschaftliche_einheit_zaehler("1.0000")
