@@ -8,7 +8,7 @@ async def send_est(request_id):
     from erica.application.JobService.job_service_factory import get_job_service
     service = get_job_service(RequestType.send_est)
     await perform_job(request_id=request_id,
-                repository=service.repository,
-                service=service,
-                dto=service.payload_type,
-                logger=logging.getLogger())
+                      repository=service.repository,
+                      service=service,
+                      payload_type=service.payload_type,
+                      logger=logging.getLogger())
