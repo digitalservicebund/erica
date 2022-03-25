@@ -71,6 +71,7 @@ response_model_get_est_validation_from_queue = {
 response_model_get_send_est_from_queue = {
     200: {"model": SuccessResponseGetSendEstFromQueue,
           "description": "Job status of a sent est was successfully retrieved from the queue."},
+    404: model_error_request_queue,
     500: model_error_request_queue}
 
 response_model_get_send_grundsteuer_from_queue = {
@@ -81,6 +82,7 @@ response_model_get_send_grundsteuer_from_queue = {
 response_model_get_tax_number_validity_from_queue = {
     200: {"model": SuccessResponseGetTaxNumberValidityFromQueue,
           "description": "Job status of a tax number validity was successfully retrieved from the queue."},
+    404: model_error_request_queue,
     500: model_error_request_queue}
 
 response_model_get_unlock_code_request_from_queue = {

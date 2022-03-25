@@ -51,6 +51,10 @@ class TestV2UnlockCodeRequest:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
+    def test_if_get_request_with_invalid_uuid(self):
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
+        assert response.status_code == 422
+
 
 class TestV2UnlockCodeActivation:
     endpoint = "/v2/fsc/activation"
@@ -87,6 +91,10 @@ class TestV2UnlockCodeActivation:
         assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
+
+    def test_if_get_request_with_invalid_uuid(self):
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
+        assert response.status_code == 422
 
 
 class TestV2UnlockCodeRevocation:
@@ -125,6 +133,10 @@ class TestV2UnlockCodeRevocation:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
+    def test_if_get_request_with_invalid_uuid(self):
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
+        assert response.status_code == 422
+
 
 class TestV2TaxNumberValidity:
     endpoint = "/v2/tax_number_validity"
@@ -162,6 +174,10 @@ class TestV2TaxNumberValidity:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
+    def test_if_get_request_with_invalid_uuid(self):
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
+        assert response.status_code == 422
+
 
 class TestV2SendEst:
     endpoint = "/v2/ests"
@@ -198,3 +214,7 @@ class TestV2SendEst:
         assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
+
+    def test_if_get_request_with_invalid_uuid(self):
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
+        assert response.status_code == 422

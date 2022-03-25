@@ -1,4 +1,5 @@
 import logging
+from uuid import UUID
 
 from fastapi import status, APIRouter
 from starlette.responses import FileResponse, JSONResponse
@@ -34,7 +35,7 @@ async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDto)
 
 @router.get('/tax_number_validity/{request_id}', status_code=status.HTTP_200_OK,
             responses=response_model_get_tax_number_validity_from_queue)
-async def get_valid_tax_number_job(request_id: str):
+async def get_valid_tax_number_job(request_id: UUID):
     """
     Route for retrieving job status of a tax number validity from the queue.
     :param request_id: the id of the job.

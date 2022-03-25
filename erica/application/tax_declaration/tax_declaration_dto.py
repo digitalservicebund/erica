@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from erica.application.base_dto import BaseDto
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 
 
-class TaxDeclarationDto(BaseModel):
+class TaxDeclarationDto(BaseDto):
     payload: TaxDeclarationPayload
     clientIdentifier: str

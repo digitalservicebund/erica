@@ -112,7 +112,7 @@ async def revocate_fsc(revocation_fsc_client_identifier: FreischaltCodeRevocateD
 
 @router.get('/revocation/{request_id}', status_code=status.HTTP_200_OK,
             responses=response_model_get_unlock_code_revocation_from_queue)
-async def get_fsc_revocation_job(request_id: str):
+async def get_fsc_revocation_job(request_id: UUID):
     """
     Route for retrieving job status from an fsc revocation from the queue.
     :param request_id: the id of the job.

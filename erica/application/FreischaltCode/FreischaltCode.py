@@ -1,18 +1,18 @@
-from pydantic import BaseModel
+from erica.application.base_dto import BaseDto
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeRevocatePayload, \
     FreischaltCodeActivatePayload
 
 
-class FreischaltCodeRequestDto(BaseModel):
+class FreischaltCodeRequestDto(BaseDto):
     payload: FreischaltCodeRequestPayload
     clientIdentifier: str
 
 
-class FreischaltCodeActivateDto(BaseModel):
+class FreischaltCodeActivateDto(BaseDto):
     payload: FreischaltCodeActivatePayload
     clientIdentifier: str
 
 
-class FreischaltCodeRevocateDto(BaseModel):
+class FreischaltCodeRevocateDto(BaseDto):
     payload: FreischaltCodeRevocatePayload
     clientIdentifier: str

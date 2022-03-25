@@ -1,4 +1,5 @@
 import logging
+from uuid import UUID
 
 from fastapi import status, APIRouter
 from starlette.responses import JSONResponse
@@ -61,7 +62,7 @@ async def send_est(est_data_client_identifier: TaxDeclarationDto):
 
 
 @router.get('/ests/{request_id}', status_code=status.HTTP_200_OK, responses=response_model_get_send_est_from_queue)
-async def get_send_est_job(request_id: str):
+async def get_send_est_job(request_id: UUID):
     """
     Route for retrieving job status of a sent tax declaration from the queue.
     :param request_id: the id of the job.
