@@ -460,7 +460,8 @@ class SampleGrundsteuerData(Builder):
 
     def build(self):
         self.dict["grundstueck"] = self.grundstueck.build()
-        self.dict["gebaeude"] = self.gebaeude.build()
+        if self.gebaeude:
+            self.dict["gebaeude"] = self.gebaeude.build()
         self.dict["eigentuemer"] = self.eigentuemer.build()
         return super().build()
 
