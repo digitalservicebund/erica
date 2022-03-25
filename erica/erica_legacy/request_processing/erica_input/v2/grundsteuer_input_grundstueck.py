@@ -19,7 +19,7 @@ class Grundstuecksart(str, Enum):
 
 
 class Adresse(CamelCaseInput):
-    hausnummer: Optional[int]
+    hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
     strasse: Optional[str]
     zusatzangaben: Optional[str]

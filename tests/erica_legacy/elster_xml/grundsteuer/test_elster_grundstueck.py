@@ -8,19 +8,19 @@ from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck
 
 class TestELage:
     def test_if_no_zusatz_then_parse_number_component(self):
-        adresse = SampleGrundstueck().hausnummer(123).hausnummerzusatz(None).parse().adresse
+        adresse = SampleGrundstueck().hausnummer("123").hausnummerzusatz(None).parse().adresse
 
         result = ELage(adresse)
 
-        assert result.E7401125 == 123
+        assert result.E7401125 == "123"
         assert result.E7401126 is None
 
     def test_if_hausnummer_1a_then_parse_1_a(self):
-        adresse = SampleGrundstueck().hausnummer(1).hausnummerzusatz("a").parse().adresse
+        adresse = SampleGrundstueck().hausnummer("1").hausnummerzusatz("a").parse().adresse
 
         result = ELage(adresse)
 
-        assert result.E7401125 == 1
+        assert result.E7401125 == "1"
         assert result.E7401126 == "a"
 
     def test_if_no_hausnummer_then_should_set_none(self):
@@ -32,13 +32,13 @@ class TestELage:
         assert result.E7401126 is None
 
     def test_if_valid_input_then_should_assign_all_fields(self):
-        adresse = SampleGrundstueck().strasse("Foostr").hausnummer(42).hausnummerzusatz("a").zusatzangaben("hinterhaus").plz("12345").ort(
+        adresse = SampleGrundstueck().strasse("Foostr").hausnummer("42").hausnummerzusatz("a").zusatzangaben("hinterhaus").plz("12345").ort(
             "Berlin").parse().adresse
 
         result = ELage(adresse)
 
         assert result.E7401124 == "Foostr"
-        assert result.E7401125 == 42
+        assert result.E7401125 == "42"
         assert result.E7401126 == "a"
         assert result.E7401131 == "hinterhaus"
         assert result.E7401121 == "12345"
@@ -86,7 +86,7 @@ class TestEFlurstueck:
         assert result.E7401141 == "gemarky"
         assert result.E7401142 == "hi123"
         assert result.E7401143 == "c2"
-        assert result.E7401144 == 42
+        assert result.E7401144 == "42"
         assert result.E7401145 == "24"
         assert result.E7411001 == 4242
         assert result.E7410702 == elsterify_wirtschaftliche_einheit_zaehler("1.0000")
