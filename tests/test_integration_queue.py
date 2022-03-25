@@ -5,7 +5,7 @@ import requests
 from tests.utils import json_default, create_unlock_code_request, is_valid_uuid, create_unlock_code_activation, \
     generate_uuid, create_unlock_code_revocation, create_tax_number_validity, create_send_est
 
-ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://0.0.0.0:8000")
+ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://localhost:8000")
 
 
 class TestV2Ping:
