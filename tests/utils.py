@@ -69,3 +69,11 @@ def is_valid_uuid(value):
 
 def generate_uuid():
     return uuid.uuid4()
+
+
+def get_job_service_patch(endpoint):
+    return "erica.api.v2.endpoints." + endpoint + ".get_job_service"
+
+
+def get_erica_request_patch(endpoint):
+    return "erica.api.v2.endpoints." + endpoint + ".get_erica_request"
