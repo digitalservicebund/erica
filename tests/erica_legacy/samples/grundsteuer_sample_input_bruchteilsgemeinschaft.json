@@ -1,0 +1,126 @@
+{
+  "grundstueck": {
+    "adresse": {
+      "strasse": "Madeupstr",
+      "hausnummer": "22",
+      "hausnummerzusatz": "a",
+      "zusatzangaben": "hinterhaus",
+      "plz": "33333",
+      "ort": "Bielefeld",
+      "bundesland": "NW"
+    },
+    "steuernummer": "2080353038893",
+    "typ": "baureif",
+    "innerhalb_einer_gemeinde": true,
+    "bodenrichtwert": "41,99",
+    "flurstueck": [
+      {
+        "angaben": {
+          "grundbuchblattnummer": "1A",
+          "gemarkung": "some gemarkung"
+        },
+        "flur": {
+          "flur": "1",
+          "flurstueck_zaehler": 7,
+          "flurstueck_nenner": "14",
+          "wirtschaftliche_einheit_zaehler": "1.0000",
+          "wirtschaftliche_einheit_nenner": "2"
+        },
+        "groesse_qm": 42
+      },
+      {
+        "angaben": {
+          "grundbuchblattnummer": "2C",
+          "gemarkung": "another gemarkung"
+        },
+        "flur": {
+          "flur": "2",
+          "flurstueck_zaehler": 6,
+          "flurstueck_nenner": "12",
+          "wirtschaftliche_einheit_zaehler": "2.0000",
+          "wirtschaftliche_einheit_nenner": "4"
+        },
+        "groesse_qm": 100000000
+      }
+    ]
+  },
+  "eigentuemer": {
+    "person": [
+      {
+        "persoenlicheAngaben": {
+          "anrede": "frau",
+          "titel": "Dr",
+          "name": "Granger",
+          "vorname": "Hermione",
+          "geburtsdatum": "1979-09-19"
+        },
+        "adresse": {
+          "strasse": "Grimmauld Place",
+          "hausnummer": "12",
+          "hausnummerzusatz": "a",
+          "plz": "77777",
+          "ort": "London"
+        },
+        "vertreter": {
+          "name": {
+            "anrede": "no_anrede",
+            "titel": "Prof.",
+            "name": "Shacklebolt",
+            "vorname": "Kingsley"
+          },
+          "adresse": {
+            "postfach": "32263",
+            "plz": "98765",
+            "ort": "Godric's Hollow"
+          },
+          "telefonnummer": {
+            "telefonnummer": "030-32168"
+          }
+        },
+        "steuer_id": {
+          "steuer_id": "04452317681"
+        },
+        "anteil": {
+          "zaehler": 2,
+          "nenner": 3
+        }
+      },
+      {
+        "persoenlicheAngaben": {
+          "anrede": "herr",
+          "name": "Weasley",
+          "vorname": "Ronald Arthur",
+          "geburtsdatum": "1980-03-01"
+        },
+        "adresse": {
+          "strasse": "Grimmauld Place",
+          "hausnummer": "12",
+          "hausnummerzusatz": "a",
+          "plz": "77777",
+          "ort": "London"
+        },
+        "steuer_id": {
+          "steuer_id": "02259674819"
+        },
+        "anteil": {
+          "zaehler": 1,
+          "nenner": 3
+        }
+      }
+    ],
+    "verheiratet": {
+      "areVerheiratet": false
+    },
+    "bruchteilsgemeinschaft": {
+      "name": "Bruchteilsgemeinschaft Grimmauldplace 12",
+      "adresse": {
+        "plz": "08642",
+        "ort": "Hogsmeade",
+        "strasse": "Three Brooms",
+        "hausnummer": "3",
+        "hausnummerzusatz": "c"
+      }
+    }
+  },
+  "freitext": "lorem ipsum"
+}

@@ -1,8 +1,9 @@
 import datetime
+from typing import Optional
 
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Vertreter, \
-    Empfangsbevollmaechtigter, Person, Eigentuemer
+    Empfangsbevollmaechtigter, Person, Eigentuemer, Bruchteilsgemeinschaft
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck, Flurstueck
 
@@ -284,25 +285,58 @@ class SampleVertreter(Builder):
         return Vertreter.parse_obj(self.build())
 
 
+class SampleBruchteilsgemeinschaft(Builder):
+    name: str
+    adresse: SampleAdresse
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Bruchteilsgemeinschaft Hogsmeade"
+        self.adresse = SampleAdresse().plz("08642").ort("Hogsmeade")
+
+    def with_name(self, name: str):
+        self.name = name
+        return self
+
+    def with_strasse(self):
+        self.adresse.strasse("Diagon Alley").hausnummer(3).hausnummerzusatz("c")
+        return self
+
+    def with_postfach(self):
+        self.adresse.postfach("34567")
+        return self
+
+    def complete(self):
+        return self.with_strasse().with_postfach()
+
+    def build(self):
+        self.dict["name"] = self.name
+        self.dict["adresse"] = self.adresse.build()
+        return super().build()
+
+    def parse(self):
+        return Bruchteilsgemeinschaft.parse_obj(self.build())
+
+
 class SampleBevollmaechtigter(Builder):
     name: SampleName
-    adressse: SampleAdresse
+    adresse: SampleAdresse
 
     def __init__(self):
         super().__init__()
         self.name = SampleName().anrede("frau").name("McGonagall").vorname("Minerva")
-        self.adressse = SampleAdresse().plz("08642").ort("Hogsmeade")
+        self.adresse = SampleAdresse().plz("08642").ort("Hogsmeade")
 
     def with_title(self):
         self.name.titel("Prof.")
         return self
 
     def with_strasse(self):
-        self.adressse.strasse("Diagon Alley").hausnummer(3).hausnummerzusatz("c")
+        self.adresse.strasse("Diagon Alley").hausnummer(3).hausnummerzusatz("c")
         return self
 
     def with_postfach(self):
-        self.adressse.postfach("34567")
+        self.adresse.postfach("34567")
         return self
 
     def with_telefonnummer(self):
@@ -314,7 +348,7 @@ class SampleBevollmaechtigter(Builder):
 
     def build(self):
         self.dict["name"] = self.name.build()
-        self.dict["adresse"] = self.adressse.build()
+        self.dict["adresse"] = self.adresse.build()
         return super().build()
 
     def parse(self):
@@ -377,6 +411,10 @@ class SampleEigentuemer(Builder):
 
     def verheiratet(self, are_verheiretet: bool):
         self.dict["verheiratet"] = {"are_verheiratet": are_verheiretet}
+        return self
+
+    def bruchteilsgemeinschaft(self, bruchteilsgemeinschaft):
+        self.dict["bruchteilsgemeinschaft"] = bruchteilsgemeinschaft
         return self
 
     def empfangsbevollmaechtigter(self, empfangsbevollmaechtigter):

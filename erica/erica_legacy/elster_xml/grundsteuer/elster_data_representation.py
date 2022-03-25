@@ -10,7 +10,7 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPerson
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import \
-    Eigentuemer as EigentuemerInput
+    Eigentuemer as EigentuemerInput, Bruchteilsgemeinschaft
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
     EGemarkungen, EAngGrund
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import \
@@ -43,6 +43,33 @@ class EErgAngaben:
 
 
 @dataclass
+class EAngGemeinschaften:
+    E7403301: str
+    E7404591: str
+    E7404592: Optional[str]
+    E7413501: Optional[str]
+    E7413601: Optional[str]
+    E7414526: Optional[str]
+    E7413701: str
+    E7413702: Optional[str]
+    E7413703: str
+
+    def __init__(self, input_data: Bruchteilsgemeinschaft):
+        self.E7403301 = "01"  # no_anrede
+        self.E7404591 = input_data.name[:25]
+        if len(input_data.name) > 25:
+            self.E7404592 = input_data.name[25:]
+        else:
+            self.E7404592 = None
+        self.E7413501 = input_data.adresse.strasse
+        self.E7413601 = input_data.adresse.hausnummer
+        self.E7414526 = input_data.adresse.hausnummerzusatz
+        self.E7413701 = input_data.adresse.plz
+        self.E7413702 = input_data.adresse.postfach
+        self.E7413703 = input_data.adresse.ort
+
+
+@dataclass
 class EGW1:
     Ang_Feststellung: EAngFeststellung
     Lage: ELage
@@ -51,6 +78,7 @@ class EGW1:
     Empfangsv: Optional[EEmpfangsbevollmaechtigter]
     Erg_Angaben: Optional[EErgAngaben]
     Eigentumsverh: EEigentumsverh
+    Ang_Gemeinschaften: Optional[EAngGemeinschaften]
     Eigentuemer: List[EPersonData]
 
     def __init__(self, eigentuemer: EigentuemerInput, grundstueck: GrundstueckInput, freitext=None):
@@ -73,6 +101,12 @@ class EGW1:
             self.Erg_Angaben = None
 
         self.Eigentumsverh = EEigentumsverh(eigentuemer)
+
+        if eigentuemer.bruchteilsgemeinschaft:
+            self.Ang_Gemeinschaften = EAngGemeinschaften(eigentuemer.bruchteilsgemeinschaft)
+        else:
+            self.Ang_Gemeinschaften = None
+
         self.Eigentuemer = []
         for index, input_eigentuemer in enumerate(eigentuemer.person):
             new_eigentuemer = EPersonData(input_eigentuemer, index)
