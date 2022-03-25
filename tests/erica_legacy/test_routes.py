@@ -1,5 +1,3 @@
-import base64
-import io
 import json
 import unittest
 from unittest.mock import patch, MagicMock
@@ -17,7 +15,8 @@ from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 
-from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, create_unlock_revocation, \
+from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
+    create_unlock_revocation, \
     missing_cert, missing_pyeric_lib
 
 
