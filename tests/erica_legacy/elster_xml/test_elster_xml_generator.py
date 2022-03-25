@@ -24,6 +24,7 @@ from erica.erica_legacy.pyeric.eric import get_eric_wrapper
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.erica_legacy.elster_xml.transfer_header_fields import TransferHeaderFields
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib, use_testmerker_env_set_false, TEST_EST_VERANLAGUNGSJAHR
+from tests.utils import read_text_from_sample
 
 _BEANTRAGUNGSJAHR = TEST_EST_VERANLAGUNGSJAHR + 1
 
@@ -213,8 +214,7 @@ class TestGenerateTransferHeader(unittest.TestCase):
             datenLieferant='Softwaretester ERiC',
         )
 
-        with open('tests/erica_legacy/samples/sample_vast_request.xml', 'r') as f:
-            self.correct_input_xml_string = f.read()
+        self.correct_input_xml_string = read_text_from_sample('sample_vast_request.xml')
         self.correct_input_xml = remove_declaration_and_namespace(self.correct_input_xml_string)
         self.incorrect_input_xml = remove_declaration_and_namespace("<xml/>")
 
