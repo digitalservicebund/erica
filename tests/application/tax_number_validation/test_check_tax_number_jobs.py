@@ -37,7 +37,7 @@ class TestCheckTaxNumber:
     @pytest.mark.asyncio
     async def test_request_controller_process_called_with_correct_params(self):
         req_payload = {"name": "Leon, der Profi"}
-        mock_req_controller = MagicMock()
+        mock_req_controller = MagicMock(process=MagicMock(return_value={}))
         mock_get_service = MagicMock(
             return_value=JobService(
                 job_repository=MagicMock(),
@@ -51,4 +51,4 @@ class TestCheckTaxNumber:
                     "erica.erica_legacy.request_processing.requests_controller.CheckTaxNumberRequestController", mock_req_controller):
             await check_tax_number("1234")
 
-            assert mock_req_controller.mock_calls == [call(req_payload, True), call().process()]
+            assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls

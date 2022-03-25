@@ -6,7 +6,7 @@ from erica.domain.erica_request.erica_request import BasePayload
 
 class FreischaltCodeRequestPayload(BasePayload, ABC):
     tax_ident: str
-    date_of_birth: date
+    dob: date
 
     class Config:
         orm_mode = True

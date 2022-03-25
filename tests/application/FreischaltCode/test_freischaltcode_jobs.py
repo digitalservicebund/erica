@@ -1,12 +1,21 @@
 import logging
+from datetime import date
 from unittest.mock import patch, MagicMock, call, AsyncMock
+from uuid import uuid4
 
 import pytest
 
+from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto
 from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code, activate_freischalt_code, \
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService
+from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.erica_request.erica_request import EricaRequest
+from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
+    get_transfer_ticket_from_xml
+from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
+from tests.utils import read_text_from_sample
 
 
 class TestRequestFreischaltcode:
@@ -52,7 +61,8 @@ class TestRequestFreischaltcode:
                     "erica.erica_legacy.request_processing.requests_controller.UnlockCodeRequestController", mock_req_controller):
             await request_freischalt_code("1234")
 
-            assert mock_req_controller.mock_calls == [call(req_payload, True), call().process()]
+            assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
+
 
 
 class TestActivateFreischaltcode:
@@ -98,7 +108,7 @@ class TestActivateFreischaltcode:
                     "erica.erica_legacy.request_processing.requests_controller.UnlockCodeActivationRequestController", mock_req_controller):
             await activate_freischalt_code("1234")
 
-            assert mock_req_controller.mock_calls == [call(req_payload, True), call().process()]
+            assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
 
 
 class TestRevocateFreischaltcode:
@@ -144,4 +154,4 @@ class TestRevocateFreischaltcode:
                     "erica.erica_legacy.request_processing.requests_controller.UnlockCodeRevocationRequestController", mock_req_controller):
             await revocate_freischalt_code("1234")
 
-            assert mock_req_controller.mock_calls == [call(req_payload, True), call().process()]
+            assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls

@@ -112,12 +112,12 @@ class TestJob:
         mock_get_by_job_request_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_request_id=mock_get_by_job_request_id, update=mock_update)
-        mock_result = "These are not the mocks you are looking for"
+        mock_result = {'msg': "These are not the mocks you are looking for"}
         service = MagicMock(apply_to_elster=AsyncMock(return_value=mock_result))
 
         await perform_job(request_id=uuid4(), repository=mock_repository, service=service, dto=MagicMock(), logger=MagicMock())
 
-        assert mock_entity.result == mock_result
+        assert mock_entity.result == {**mock_result, 'server_response': None, 'eric_response': None}
         assert mock_entity.status == Status.success
         assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
 
@@ -130,7 +130,7 @@ class TestJob:
         mock_get_by_job_request_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_request_id=mock_get_by_job_request_id, update=mock_update)
-        mock_result = "These are not the mocks you are looking for"
+        mock_result = {'msg': "These are not the mocks you are looking for"}
         service = MagicMock(apply_to_elster=AsyncMock(return_value=mock_result))
 
         await perform_job(request_id=uuid4(), repository=mock_repository, service=service, dto=MagicMock(), logger=MagicMock())

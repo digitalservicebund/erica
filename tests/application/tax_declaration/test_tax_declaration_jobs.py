@@ -51,4 +51,4 @@ class TestTaxDeclarationJob:
                     "erica.erica_legacy.request_processing.requests_controller.EstRequestController", mock_req_controller):
             await send_est("1234")
 
-            assert mock_req_controller.mock_calls == [call(req_payload, True), call().process()]
+            assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
