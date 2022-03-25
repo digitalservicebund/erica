@@ -91,7 +91,7 @@ class EGW1:
         self.Gemarkungen = EGemarkungen(grundstueck.flurstueck)
 
         if hasattr(eigentuemer, "empfangsbevollmaechtigter") and eigentuemer.empfangsbevollmaechtigter:
-            self.Empfangsv = EEmpfangsbevollmaechtigter(eigentuemer.empfangsbevollmaechtigter)
+            self.Empfangsv = EEmpfangsbevollmaechtigter(eigentuemer)
         else:
             self.Empfangsv = None
 

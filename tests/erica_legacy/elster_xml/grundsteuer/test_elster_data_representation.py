@@ -111,7 +111,7 @@ class TestEGW1:
 
         assert result.Eigentuemer[0] == EPersonData(eigentuemer_obj.person[0], person_index=0)
         assert result.Eigentumsverh == EEigentumsverh(eigentuemer_obj)
-        assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj.empfangsbevollmaechtigter)
+        assert result.Empfangsv == EEmpfangsbevollmaechtigter(eigentuemer_obj)
 
     def test_if_no_empfangsbevollmaechtigter_set_then_attributes_set_correctly(self):
         eigentuemer_obj = DefaultSampleEigentuemer().parse()

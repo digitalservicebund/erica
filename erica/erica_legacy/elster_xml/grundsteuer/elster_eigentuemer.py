@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date, \
+    elsterify_eigentumsverhaeltnis
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
     Person, Eigentuemer as EigentuemerInput, Empfangsbevollmaechtigter
 
@@ -103,12 +104,7 @@ class EEigentumsverh:
     E7401340: str
 
     def __init__(self, input_data: EigentuemerInput):
-        if len(input_data.person) == 1:
-            self.E7401340 = "0"  # Alleineigentum
-        elif len(input_data.person) == 2 and input_data.verheiratet.are_verheiratet:
-            self.E7401340 = "4"  # Ehegatten / Lebenspartner
-        else:
-            self.E7401340 = "6"  # Bruchteilsgemeinschaft
+        self.E7401340 = elsterify_eigentumsverhaeltnis(input_data)
 
 
 @dataclass
@@ -124,22 +120,28 @@ class EEmpfangsbevollmaechtigter:
     E7404627: Optional[str]
     E7404622: str
     E7412201: Optional[str]
-    # TODO E7412901
+    E7412901: Optional[int]
 
-    def __init__(self, input_data: Empfangsbevollmaechtigter):
-        self.E7404610 = elsterify_anrede(input_data.name.anrede)
-        self.E7404614 = input_data.name.titel
-        self.E7404613 = input_data.name.vorname
-        self.E7404611 = input_data.name.name
-        self.E7404624 = input_data.adresse.strasse
-        self.E7404625 = input_data.adresse.hausnummer
-        self.E7404626 = input_data.adresse.hausnummerzusatz
-        self.E7404640 = input_data.adresse.plz
-        self.E7404627 = input_data.adresse.postfach
-        self.E7404622 = input_data.adresse.ort
+    def __init__(self, eigentuemer: EigentuemerInput):
+        empfangsbevollmaechtigter = eigentuemer.empfangsbevollmaechtigter
+        self.E7404610 = elsterify_anrede(empfangsbevollmaechtigter.name.anrede)
+        self.E7404614 = empfangsbevollmaechtigter.name.titel
+        self.E7404613 = empfangsbevollmaechtigter.name.vorname
+        self.E7404611 = empfangsbevollmaechtigter.name.name
+        self.E7404624 = empfangsbevollmaechtigter.adresse.strasse
+        self.E7404625 = empfangsbevollmaechtigter.adresse.hausnummer
+        self.E7404626 = empfangsbevollmaechtigter.adresse.hausnummerzusatz
+        self.E7404640 = empfangsbevollmaechtigter.adresse.plz
+        self.E7404627 = empfangsbevollmaechtigter.adresse.postfach
+        self.E7404622 = empfangsbevollmaechtigter.adresse.ort
 
         # input_data.telefonnummer might not be set -> handle specifically
-        if hasattr(input_data, "telefonnummer") and input_data.telefonnummer:
-            self.E7412201 = input_data.telefonnummer.telefonnummer
+        if hasattr(empfangsbevollmaechtigter, "telefonnummer") and empfangsbevollmaechtigter.telefonnummer:
+            self.E7412201 = empfangsbevollmaechtigter.telefonnummer.telefonnummer
         else:
             self.E7412201 = None
+
+        if elsterify_eigentumsverhaeltnis(eigentuemer) == "6":  # Bruchteilsgemeinschaft
+            self.E7412901 = 1
+        else:
+            self.E7412901 = None
