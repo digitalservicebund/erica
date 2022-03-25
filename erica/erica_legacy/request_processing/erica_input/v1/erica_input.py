@@ -3,7 +3,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import Optional, List
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, Field
 
 from erica.erica_legacy.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
 from erica.erica_legacy.elster_xml.est_validation import is_valid_bufa
@@ -225,7 +225,7 @@ class UnlockCodeRequestData(BaseModel):
 
 class UnlockCodeActivationData(BaseModel):
     idnr: str
-    unlock_code: str
+    freischalt_code: str = Field(alias='unlock_code')
     elster_request_id: str
 
 

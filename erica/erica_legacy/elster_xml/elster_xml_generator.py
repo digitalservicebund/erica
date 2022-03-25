@@ -284,7 +284,7 @@ def _add_vast_activation_xml_nutzdaten(xml_top, user_data):
     spez_recht_antrag_xml.set('version', '1')
 
     SubElement(spez_recht_antrag_xml, 'AntragsID').text = user_data['elster_request_id']
-    SubElement(spez_recht_antrag_xml, 'Freischaltcode').text = user_data['unlock_code']
+    SubElement(spez_recht_antrag_xml, 'Freischaltcode').text = user_data['freischalt_code']
 
 
 def _add_vast_revocation_xml_nutzdaten(xml_top, user_data):

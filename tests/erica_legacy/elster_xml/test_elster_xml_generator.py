@@ -1033,7 +1033,7 @@ class TestVastActivation(unittest.TestCase):
         self.expected_freischaltung_version = '1'
         self.valid_user_data = {
             'idnr': '04452397687',
-            'unlock_code': '1985-G456-T23L',
+            'freischalt_code': '1985-G456-T23L',
             'elster_request_id': '1234567890'
         }
 
