@@ -691,8 +691,7 @@ class TestCheckTaxNumberRequestControllerProcess:
         state_abbreviation = "by"
         valid_tax_number = "19811310010"
         input_data = CheckTaxNumberDto(state_abbreviation=state_abbreviation, tax_number=valid_tax_number)
-
-        with patch('erica.erica_legacy.elster_xml.est_mapping.generate_electronic_steuernummer', MagicMock(side_effect=InvalidBufaNumberError)):
+        with patch('erica.erica_legacy.request_processing.requests_controller.generate_electronic_steuernummer', MagicMock(side_effect=InvalidBufaNumberError)):
             result = CheckTaxNumberRequestController(input_data).process()
 
         assert result == {'is_valid': False}

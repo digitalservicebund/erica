@@ -2,12 +2,14 @@
   "grundstueck": {
     "adresse": {
       "strasse": "Madeupstr",
-      "hausnummer": "22a",
+      "hausnummer": "22",
+      "hausnummerzusatz": "a",
       "zusatzangaben": "hinterhaus",
       "plz": "33333",
-      "ort": "Bielefeld"
+      "ort": "Bielefeld",
+      "bundesland": "NW"
     },
-    "steuernummer": "1121081508150",
+    "steuernummer": "2080353038893",
     "typ": "einfamilienhaus",
     "innerhalb_einer_gemeinde": true,
     "bodenrichtwert": "41,99",
@@ -38,7 +40,7 @@
           "wirtschaftliche_einheit_zaehler": "2.0000",
           "wirtschaftliche_einheit_nenner": "4"
         },
-        "groesse_qm": 100000000000000
+        "groesse_qm": 100000000
       }
     ]
   },

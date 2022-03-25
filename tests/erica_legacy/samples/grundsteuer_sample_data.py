@@ -46,6 +46,10 @@ class SampleAdresse(Builder):
         self.dict["ort"] = ort
         return self
 
+    def bundesland(self, bundesland):
+        self.dict["bundesland"] = bundesland
+        return self
+
 
 class SampleName(Builder):
     def anrede(self, anrede):
@@ -127,9 +131,9 @@ class SampleGrundstueck(Builder):
     def __init__(self):
         super().__init__()
         self.adresse = SampleAdresse().strasse("Madeupstr").hausnummer("22").hausnummerzusatz("b").plz("33333").ort(
-            "Bielefeld")
+            "Bielefeld").bundesland("BE")
         self.dict = {
-            "steuernummer": "1121081508150",
+            "steuernummer": "2181508150",
             "typ": "einfamilienhaus",
             "innerhalb_einer_gemeinde": True,
             "bodenrichtwert": "41,99",
@@ -145,6 +149,10 @@ class SampleGrundstueck(Builder):
         self.adresse.hausnummer(hausnummer)
         return self
 
+    def hausnummerzusatz(self, hausnummerzusatz):
+        self.adresse.hausnummerzusatz(hausnummerzusatz)
+        return self
+
     def zusatzangaben(self, zusatzangaben):
         self.adresse.zusatzangaben(zusatzangaben)
         return self
@@ -155,6 +163,14 @@ class SampleGrundstueck(Builder):
 
     def ort(self, ort):
         self.adresse.ort(ort)
+        return self
+
+    def bundesland(self, bundesland):
+        self.adresse.dict['bundesland'] = bundesland
+        return self
+
+    def steuernummer(self, steuernummer):
+        self.dict["steuernummer"] = steuernummer
         return self
 
     def typ(self, typ):
@@ -282,7 +298,7 @@ class SampleBevollmaechtigter(Builder):
         return self
 
     def with_strasse(self):
-        self.adressse.strasse("Diagon Alley").hausnummer("3").hausnummerzusatz("c")
+        self.adressse.strasse("Diagon Alley").hausnummer(3).hausnummerzusatz("c")
         return self
 
     def with_postfach(self):
@@ -394,6 +410,10 @@ class SampleGrundsteuerData(Builder):
 
     def with_empfangsvollmacht(self):
         self.eigentuemer.empfangsbevollmaechtigter(SampleBevollmaechtigter().build())
+        return self
+
+    def with_grundstueck(self, grundstueck: SampleGrundstueck):
+        self.grundstueck = grundstueck
         return self
 
     def build(self):
