@@ -395,7 +395,7 @@ class DefaultSampleEigentuemer(SampleEigentuemer):
 
 class SampleGrundsteuerData(Builder):
     grundstueck: SampleGrundstueck
-    gebaeude: SampleGebaeude
+    gebaeude: Optional[SampleGebaeude]
     eigentuemer: SampleEigentuemer
 
     def __init__(self):
@@ -414,6 +414,10 @@ class SampleGrundsteuerData(Builder):
 
     def with_grundstueck(self, grundstueck: SampleGrundstueck):
         self.grundstueck = grundstueck
+        return self
+
+    def without_gebaeude(self):
+        self.gebaeude = None
         return self
 
     def build(self):

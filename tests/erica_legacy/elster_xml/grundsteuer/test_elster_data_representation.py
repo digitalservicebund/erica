@@ -172,6 +172,16 @@ class TestEGW2:
         assert result.Ang_Wohn == EAngWohn(input_data.gebaeude)
         assert len(vars(result)) == 3
 
+    def test_if_gebaeude_not_given_then_set_fields_correctly(self):
+        input_data = SampleGrundsteuerData().parse()
+
+        result = EGW2(input_data)
+
+        assert result.Ang_Grundstuecksart == EAngGrundstuecksart(input_data.grundstueck.typ)
+        assert result.Ang_Grund == EAngGrund(input_data.grundstueck)
+        assert result.Ang_Wohn == EAngWohn(input_data.gebaeude)
+        assert len(vars(result)) == 3
+
 
 class TestERueckuebermittlung:
     def test_attributes_set_correctly(self):
