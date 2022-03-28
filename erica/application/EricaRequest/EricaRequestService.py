@@ -14,7 +14,7 @@ class EricaRequestServiceInterface:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def get_request(self, request_id: UUID):
+    def get_request_by_request_id(self, request_id: UUID):
         pass
 
     @abstractmethod
@@ -30,7 +30,7 @@ class EricaRequestService(EricaRequestServiceInterface):
         super().__init__()
         self.erica_request_repository = repository
 
-    def get_request(self, request_id: UUID):
+    def get_request_by_request_id(self, request_id: UUID):
         return self.erica_request_repository.get_by_job_request_id(request_id)
 
     def get_all_by_skip_and_limit(self, skip: int, limit: int):

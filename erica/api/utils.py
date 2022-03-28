@@ -48,7 +48,7 @@ injector = Injector([
 
 def get_erica_request(request_id: UUID):
     freischalt_code_service: EricaRequestServiceInterface = injector.inject(EricaRequestServiceInterface)
-    return freischalt_code_service.get_request(request_id)
+    return freischalt_code_service.get_request_by_request_id(request_id)
 
 
 def get_entity_not_found_log_message(request_id: UUID):
