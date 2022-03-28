@@ -2,7 +2,7 @@ import logging
 
 from uuid import UUID
 from fastapi import status, APIRouter
-from starlette.responses import JSONResponse, RedirectResponse
+from starlette.responses import JSONResponse
 from erica.api.utils import map_status, generate_error_response, get_erica_request, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
@@ -29,7 +29,8 @@ async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto):
         result = get_job_service(RequestType.freischalt_code_request).add_to_queue(
             request_fsc_client_identifier.payload, request_fsc_client_identifier.clientIdentifier,
             RequestType.freischalt_code_request)
-        return RedirectResponse(url='fsc/request/' + str(result.request_id), status_code=201)
+        return 'fsc/request/' + str(result.request_id)
+        #return RedirectResponse(url='fsc/request/' + str(result.request_id), status_code=201)
     # TODO specific exception?
     except Exception:
         logging.getLogger().info("Could not request unlock code", exc_info=True)
