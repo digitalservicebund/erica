@@ -11,11 +11,9 @@ from erica.application.EricaAuftrag.EricaAuftragService import \
 from erica.application.FreischaltCode.FreischaltCode import (FreischaltCodeActivateDto, FreischaltCodeRequestDto)
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import RequestType
-from erica.infrastructure.sqlalchemy.database import run_migrations
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
     
 
-run_migrations()
 app = FastAPI(
     title="Erica Service",
     version="1.0.0",
