@@ -1,8 +1,7 @@
 import datetime
 from abc import ABCMeta
 from typing import TypeVar, Generic, Optional
-
-from pydantic import BaseModel
+from pydantic.main import BaseModel
 
 DataT = TypeVar('DataT')
 ClassT = TypeVar('ClassT')

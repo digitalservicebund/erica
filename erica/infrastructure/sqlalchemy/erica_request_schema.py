@@ -2,7 +2,7 @@ from sqlalchemy import MetaData, Column, String, Enum, Integer
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.infrastructure.sqlalchemy.base_schema import AuditedSchemaMixin
 

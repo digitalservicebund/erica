@@ -1,6 +1,7 @@
 import base64
 
 from erica.erica_legacy.config import get_settings
+from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_steuernummer
 from erica.erica_legacy.elster_xml.elster_xml_generator import get_belege_xml, generate_vorsatz_without_tax_number, \
     generate_vorsatz_with_tax_number
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
@@ -109,7 +110,7 @@ class EstValidationRequestController(TransferTicketRequestController):
             empfaenger = self.input_data.est_data.bufa_nr
             vorsatz = generate_vorsatz_without_tax_number(*common_vorsatz_args)
         else:
-            electronic_steuernummer = est_mapping.generate_electronic_steuernummer(
+            electronic_steuernummer = generate_electronic_steuernummer(
                 self.input_data.est_data.steuernummer,
                 self.input_data.est_data.bundesland,
                 use_testmerker=self._is_testmerker_used())
@@ -195,7 +196,7 @@ class CheckTaxNumberRequestController(EricaRequestController):
 
     @staticmethod
     def _generate_tax_number(state_abbreviation, tax_number):
-        return est_mapping.generate_electronic_steuernummer(
+        return generate_electronic_steuernummer(
             tax_number,
             state_abbreviation,
             use_testmerker=get_settings().use_testmerker)

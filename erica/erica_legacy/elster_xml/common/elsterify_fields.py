@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Union
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede, Eigentuemer
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
 
 
@@ -26,8 +26,23 @@ def elsterify_grundstuecksart(grundstuecksart_input: Grundstuecksart):
     return grundstuecksart_mapping[grundstuecksart_input]
 
 
+def elsterify_eigentumsverhaeltnis(eigentuemer_input: Eigentuemer):
+    if len(eigentuemer_input.person) == 1:
+        return "0"  # Alleineigentum
+    elif len(eigentuemer_input.person) == 2 and eigentuemer_input.verheiratet.are_verheiratet:
+        return "4"  # Ehegatten / Lebenspartner
+    else:
+        return "6"  # Bruchteilsgemeinschaft
+
+
 def elsterify_date(date_input: Union[date, None]):
     """ Converts input date to Elster's date format """
     if not date_input:
         return None
     return date_input.strftime("%d.%m.%Y")
+
+
+def elsterify_wirtschaftliche_einheit_zaehler(zaehler_input: Union[str, None]):
+    if not zaehler_input:
+        return None
+    return zaehler_input.replace(".", ",")

@@ -1,6 +1,5 @@
 
 from typing import Callable, Type
-
 from opyoid import Injector
 
 from erica.application.ApplicationModule import ApplicationModule
@@ -12,7 +11,7 @@ from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRevocatePay
     FreischaltCodeRequestPayload
 from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.application.tax_number_validation.jobs import check_tax_number
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \

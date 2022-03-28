@@ -6,7 +6,7 @@ import pytest
 from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code, activate_freischalt_code, \
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 
 
 class TestRequestFreischaltcode:

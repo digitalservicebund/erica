@@ -1,9 +1,11 @@
+from unittest.mock import patch, MagicMock
+
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
     EEigentumsverh, EEmpfangsbevollmaechtigter
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleVertreter, SampleBevollmaechtigter, SamplePerson, \
-    SampleEigentuemer
+    SampleEigentuemer, DefaultSampleEigentuemer
 
 
 class TestEAnteil:
@@ -170,37 +172,61 @@ class TestEEigentumsverh:
 
 class TestEEmpfangsbevollmaechtigter:
     def test_attributes_set_correctly(self):
-        input_data = SampleBevollmaechtigter().complete().parse()
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
+        
+        result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
 
-        result = EEmpfangsbevollmaechtigter(input_data)
-
-        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
-        assert result.E7404614 == input_data.name.titel
-        assert result.E7404613 == input_data.name.vorname
-        assert result.E7404611 == input_data.name.name
-        assert result.E7404624 == input_data.adresse.strasse
-        assert result.E7404625 == input_data.adresse.hausnummer
-        assert result.E7404626 == input_data.adresse.hausnummerzusatz
-        assert result.E7404640 == input_data.adresse.plz
-        assert result.E7404627 == input_data.adresse.postfach
-        assert result.E7404622 == input_data.adresse.ort
-        assert result.E7412201 == input_data.telefonnummer.telefonnummer
-        assert len(vars(result)) == 11
+        assert result.E7404610 == elsterify_anrede(eigentuemer_obj.empfangsbevollmaechtigter.name.anrede)
+        assert result.E7404614 == eigentuemer_obj.empfangsbevollmaechtigter.name.titel
+        assert result.E7404613 == eigentuemer_obj.empfangsbevollmaechtigter.name.vorname
+        assert result.E7404611 == eigentuemer_obj.empfangsbevollmaechtigter.name.name
+        assert result.E7404624 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.strasse
+        assert result.E7404625 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.hausnummer
+        assert result.E7404626 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.hausnummerzusatz
+        assert result.E7404640 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.plz
+        assert result.E7404627 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.postfach
+        assert result.E7404622 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.ort
+        assert result.E7412201 == eigentuemer_obj.empfangsbevollmaechtigter.telefonnummer.telefonnummer
+        assert result.E7412901 is None
+        assert len(vars(result)) == 12
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        input_data = SampleBevollmaechtigter().parse()
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().build()).parse()
 
-        result = EEmpfangsbevollmaechtigter(input_data)
+        result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
 
-        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
+        assert result.E7404610 == elsterify_anrede(eigentuemer_obj.empfangsbevollmaechtigter.name.anrede)
         assert result.E7404614 is None
-        assert result.E7404613 == input_data.name.vorname
-        assert result.E7404611 == input_data.name.name
+        assert result.E7404613 == eigentuemer_obj.empfangsbevollmaechtigter.name.vorname
+        assert result.E7404611 == eigentuemer_obj.empfangsbevollmaechtigter.name.name
         assert result.E7404624 is None
         assert result.E7404625 is None
         assert result.E7404626 is None
-        assert result.E7404640 == input_data.adresse.plz
+        assert result.E7404640 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.plz
         assert result.E7404627 is None
-        assert result.E7404622 == input_data.adresse.ort
+        assert result.E7404622 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.ort
         assert result.E7412201 is None
-        assert len(vars(result)) == 11
+        assert result.E7412901 is None
+        assert len(vars(result)) == 12
+
+    def test_if_no_bruchteilsgemeinschaft_set_flag_to_none(self):
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
+
+        with patch('erica.erica_legacy.elster_xml.common.elsterify_fields.elsterify_eigentumsverhaeltnis',
+                   MagicMock(return_value="1")):
+            result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
+
+        assert result.E7412901 is None
+
+    def test_if_bruchteilsgemeinschaft_set_flag_to_1(self):
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
+
+        with patch('erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer.elsterify_eigentumsverhaeltnis',
+                   MagicMock(return_value="6")):
+            result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
+
+        assert result.E7412901 == 1

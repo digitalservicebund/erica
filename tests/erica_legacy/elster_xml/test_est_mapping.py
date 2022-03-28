@@ -3,7 +3,8 @@ import unittest
 from decimal import Decimal
 
 from erica.erica_legacy.elster_xml.est_mapping import check_and_generate_entries, PersonSpecificFieldId, _elsterify, \
-    _convert_to_elster_identifiers, generate_electronic_steuernummer
+    _convert_to_elster_identifiers
+from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_steuernummer
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 
 
@@ -425,44 +426,3 @@ class TestEstMapping(unittest.TestCase):
 
         self.assertNotIn('E0101601', results.keys())
         self.assertEqual('X', results['E0102402'])
-
-
-class TestGenerateElectronicSteuernummer(unittest.TestCase):
-
-    def test_empfaenger_id_correct_for_bundesland_with_one_specific_number_and_no_prepended_number(self):
-        bundesland = 'BY'
-        steuernummer = '18181508155'
-        expected_el_steuernummer = '9181081508155'
-        actual_el_steuernummer = generate_electronic_steuernummer(steuernummer, bundesland)
-
-        self.assertEqual(expected_el_steuernummer, actual_el_steuernummer)
-
-    def test_empfaenger_id_correct_for_bundesland_with_two_specific_numbers_and_no_prepended_number(self):
-        bundesland = 'BE'
-        steuernummer = '2181508150'
-        expected_el_steuernummer = '1121081508150'
-        actual_el_steuernummer = generate_electronic_steuernummer(steuernummer, bundesland)
-
-        self.assertEqual(expected_el_steuernummer, actual_el_steuernummer)
-
-    def test_empfaenger_id_correct_for_bundesland_with_two_specific_numbers_and_with_prepended_number(self):
-        bundesland = 'HE'
-        steuernummer = '01381508153'
-        expected_el_steuernummer = '2613081508153'
-        actual_el_steuernummer = generate_electronic_steuernummer(steuernummer, bundesland)
-
-        self.assertEqual(expected_el_steuernummer, actual_el_steuernummer)
-
-    def test_if_incorrect_steuernummer_then_raise_incorrect_bufa_number_error(self):
-        bundesland = 'HE'
-        steuernummer = '99999999999'
-
-        self.assertRaises(InvalidBufaNumberError, generate_electronic_steuernummer, steuernummer, bundesland)
-
-    def test_if_incorrect_steuernummer_but_bufa_correct_then_raise_no_bufa_number_error(self):
-        bundesland = 'HE'
-        steuernummer = '01999999999'
-        try:
-            generate_electronic_steuernummer(steuernummer, bundesland)
-        except InvalidBufaNumberError:
-            self.fail("generate_electronic_steuernummer raised unexpected InvalidBufaNumberError")
