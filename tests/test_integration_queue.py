@@ -179,6 +179,17 @@ class TestV2TaxNumberValidity:
         assert response.status_code == 422
 
 
+class TestV2TaxOffices:
+    endpoint = "/v2/tax_offices"
+
+    def test_if_get_from_ping_then_return_pong(self):
+        with open("../erica/infrastructure/static/tax_offices.json", "r") as response_file:
+            response_content = json.load(response_file)
+        response = requests.get(ERICA_TESTING_URL + self.endpoint)
+        assert response.status_code == 200
+        assert response.json() == response_content
+
+
 class TestV2SendEst:
     endpoint = "/v2/ests"
 
