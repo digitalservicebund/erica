@@ -28,6 +28,7 @@ redis = "*"
 opyoid = "*"
 injector = "*"
 orjson = "*"
+alembic = "*"
 
 [dev-packages]
 pytest = "*"

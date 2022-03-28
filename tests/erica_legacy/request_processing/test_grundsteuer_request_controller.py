@@ -59,6 +59,18 @@ class TestGenerateFullXml:
                                        expected_xml.encode())
                 assert diff == []
 
+    def test_returns_full_expected_xml_for_given_input_bruchteilsgemeinschaft(self):
+        with open('tests/erica_legacy/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json') as json_file:
+            payload = json.loads(json_file.read())
+            parsed_input = GrundsteuerData.parse_obj(payload)
+            request_controller = GrundsteuerRequestController(parsed_input)
+            resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
+            with open('tests/erica_legacy/samples/grundsteuer_sample_xml_bruchteilsgemeinschaft.xml') as f:
+                expected_xml = f.read()
+                diff = main.diff_texts(bytes(bytearray(resulting_xml, "utf8")),
+                                       expected_xml.encode())
+                assert diff == []
+
 
 class TestGenerateJson:
     def test_result_includes_all_relevant_aspects(self, valid_grundsteuer_request_controller):

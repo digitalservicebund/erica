@@ -3,9 +3,10 @@ import datetime
 import pytest
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date, \
-    elsterify_grundstuecksart, elsterify_wirtschaftliche_einheit_zaehler
+    elsterify_grundstuecksart, elsterify_wirtschaftliche_einheit_zaehler, elsterify_eigentumsverhaeltnis
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
+from erica_legacy.samples.grundsteuer_sample_data import SampleEigentuemer, SamplePerson
 
 
 class TestElsterifyAnrede:
@@ -55,6 +56,43 @@ class TestElsterifyGrundstuecksart:
     def test_invalid_value_raises_key_error(self):
         with pytest.raises(KeyError):
             elsterify_grundstuecksart("INVALID")
+
+
+class TestElsterifyEigentumsverhaeltnis:
+    def test_if_one_person_then_return_01(self):
+        eigentuemer_obj = SampleEigentuemer().person(SamplePerson().build()).parse()
+
+        result = elsterify_eigentumsverhaeltnis(eigentuemer_obj)
+
+        assert result == "0"
+
+    def test_if_two_married_persons_then_attributes_set_correctly(self):
+        person1 = SamplePerson().parse()
+        person2 = SamplePerson().parse()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).verheiratet(True).parse()
+
+        result = elsterify_eigentumsverhaeltnis(eigentuemer_obj)
+
+        assert result == "4"
+
+    def test_if_two_not_married_persons_then_attributes_set_correctly(self):
+        person1 = SamplePerson().parse()
+        person2 = SamplePerson().parse()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).verheiratet(False).parse()
+
+        result = elsterify_eigentumsverhaeltnis(eigentuemer_obj)
+
+        assert result == "6"
+
+    def test_if_three_persons_then_attributes_set_correctly(self):
+        person1 = SamplePerson().build()
+        person2 = SamplePerson().build()
+        person3 = SamplePerson().build()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).person(person3).parse()
+
+        result = elsterify_eigentumsverhaeltnis(eigentuemer_obj)
+
+        assert result == "6"
 
 
 class TestElsterifyDate:
