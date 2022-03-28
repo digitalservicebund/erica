@@ -2,7 +2,7 @@ import logging
 from uuid import UUID
 
 from fastapi import status, APIRouter
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, RedirectResponse
 
 from erica.api.utils import generate_error_response, get_erica_request, map_status, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_post_to_queue, response_model_get_est_validation_from_queue, \
@@ -54,7 +54,7 @@ async def send_est(est_data_client_identifier: TaxDeclarationDto):
         result = get_job_service(RequestType.send_est).add_to_queue(
             est_data_client_identifier.payload, est_data_client_identifier.clientIdentifier,
             RequestType.send_est)
-        return 'ests/' + str(result.request_id)
+        return RedirectResponse(url='ests/' + str(result.request_id), status_code=201)
     # TODO specific exception and correct mapping to JSON error response?
     except Exception:
         logging.getLogger().info("Could not send est", exc_info=True)

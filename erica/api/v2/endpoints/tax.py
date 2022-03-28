@@ -2,7 +2,7 @@ import logging
 from uuid import UUID
 
 from fastapi import status, APIRouter
-from starlette.responses import FileResponse, JSONResponse
+from starlette.responses import FileResponse, JSONResponse, RedirectResponse
 
 from erica.api.utils import generate_error_response, get_erica_request, map_status, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_get_tax_number_validity_from_queue, ErrorRequestQueue, JobState, \
@@ -26,7 +26,7 @@ async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDto)
         result = get_job_service(RequestType.check_tax_number).add_to_queue(
             tax_validity_client_identifier.payload, tax_validity_client_identifier.clientIdentifier,
             RequestType.check_tax_number)
-        return 'tax_number_validity/' + str(result.request_id)
+        return RedirectResponse(url='tax_number_validity/' + str(result.request_id), status_code=201)
     # TODO specific exception and correct mapping to JSON error response?
     except Exception:
         logging.getLogger().info("Could not validate tax number", exc_info=True)

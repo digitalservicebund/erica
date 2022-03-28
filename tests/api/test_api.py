@@ -45,7 +45,7 @@ async def test_if_post_job_returns_location_with_uuid(api_method, input_data, re
                                      request_id=request_id))
     with patch(get_job_service_patch_string(endpoint_to_patch), MagicMock(return_value=job_service_mock)):
         response = await api_method(input_data)
-        assert response == expected_location + str(request_id)
+        assert response.headers['Location'] == expected_location + str(request_id)
 
 
 @pytest.mark.asyncio
