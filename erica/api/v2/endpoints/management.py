@@ -13,5 +13,5 @@ injector = Injector([
 
 @router.get("/erica_requests")
 async def get_erica_request_status_list(skip: int, limit: int):
-    freischalt_code_service: EricaRequestServiceInterface = injector.inject(EricaRequestServiceInterface)
-    return freischalt_code_service.get_all_by_skip_and_limit(skip, limit)
+    erica_request_service: EricaRequestServiceInterface = injector.inject(EricaRequestServiceInterface)
+    return erica_request_service.get_all_by_skip_and_limit(skip, limit)
