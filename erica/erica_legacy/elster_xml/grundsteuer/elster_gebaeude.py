@@ -89,27 +89,27 @@ class EAngWohn:
     Garagen: Optional[EGaragen]
     Ang_Durchschn: EAngDurchschn
 
-    def __init__(self, gebauede: GebaeudeInput):
-        if gebauede.ab1949.is_ab1949:
+    def __init__(self, gebaeude: GebaeudeInput):
+        if gebaeude.ab1949.is_ab1949:
             self.E7403113 = None
-            self.E7403114 = gebauede.baujahr.baujahr
+            self.E7403114 = gebaeude.baujahr.baujahr
         else:
             self.E7403113 = 1
             self.E7403114 = None
 
-        if gebauede.kernsaniert.is_kernsaniert:
-            self.E7403115 = gebauede.kernsanierungsjahr.kernsanierungsjahr
+        if gebaeude.kernsaniert.is_kernsaniert:
+            self.E7403115 = gebaeude.kernsanierungsjahr.kernsanierungsjahr
         else:
             self.E7403115 = None
 
-        if gebauede.abbruchverpflichtung.has_abbruchverpflichtung:
-            self.E7403116 = gebauede.abbruchverpflichtungsjahr.abbruchverpflichtungsjahr
+        if gebaeude.abbruchverpflichtung.has_abbruchverpflichtung:
+            self.E7403116 = gebaeude.abbruchverpflichtungsjahr.abbruchverpflichtungsjahr
         else:
             self.E7403116 = None
 
-        if gebauede.garagen.has_garagen:
-            self.Garagen = EGaragen(gebauede.garagen_anzahl)
+        if gebaeude.garagen.has_garagen:
+            self.Garagen = EGaragen(gebaeude.garagen_anzahl)
         else:
             self.Garagen = None
 
-        self.Ang_Durchschn = EAngDurchschn(gebauede)
+        self.Ang_Durchschn = EAngDurchschn(gebaeude)
