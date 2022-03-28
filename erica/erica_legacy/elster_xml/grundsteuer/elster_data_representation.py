@@ -90,7 +90,7 @@ class EGW1:
             self.Mehrere_Gemeinden = None
         self.Gemarkungen = EGemarkungen(grundstueck.flurstueck)
 
-        if hasattr(eigentuemer, "empfangsbevollmaechtigter") and eigentuemer.empfangsbevollmaechtigter:
+        if eigentuemer.empfangsbevollmaechtigter:
             self.Empfangsv = EEmpfangsbevollmaechtigter(eigentuemer)
         else:
             self.Empfangsv = None

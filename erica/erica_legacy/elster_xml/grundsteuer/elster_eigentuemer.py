@@ -44,7 +44,7 @@ class EGesetzlicherVertreter:
         self.E7415603 = input_data.adresse.ort
 
         # input_data.telefonnummer might not be set -> handle specifically
-        if hasattr(input_data, "telefonnummer") and input_data.telefonnummer:
+        if input_data.telefonnummer:
             self.E7415604 = input_data.telefonnummer.telefonnummer
         else:
             self.E7415604 = None
@@ -84,7 +84,7 @@ class EPersonData:
         self.E7404522 = input_data.adresse.ort
 
         # input_data.telefonnummer might not be set -> handle specifically
-        if hasattr(input_data, "telefonnummer") and input_data.telefonnummer:
+        if input_data.telefonnummer:
             self.E7414601 = input_data.telefonnummer.telefonnummer
         else:
             self.E7414601 = None
@@ -93,7 +93,7 @@ class EPersonData:
         self.Anteil = EAnteil(input_data.anteil)
 
         # input_data.vertreter might not be set -> handle specifically
-        if hasattr(input_data, "vertreter") and input_data.vertreter:
+        if input_data.vertreter:
             self.Ges_Vertreter = EGesetzlicherVertreter(input_data.vertreter)
         else:
             self.Ges_Vertreter = None
@@ -136,7 +136,7 @@ class EEmpfangsbevollmaechtigter:
         self.E7404622 = empfangsbevollmaechtigter.adresse.ort
 
         # input_data.telefonnummer might not be set -> handle specifically
-        if hasattr(empfangsbevollmaechtigter, "telefonnummer") and empfangsbevollmaechtigter.telefonnummer:
+        if empfangsbevollmaechtigter.telefonnummer:
             self.E7412201 = empfangsbevollmaechtigter.telefonnummer.telefonnummer
         else:
             self.E7412201 = None
