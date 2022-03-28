@@ -19,7 +19,7 @@ from tests.application.job_service.test_job_service import MockEricaRequestRepos
     PickableMock
 from tests.utils import create_unlock_code_request, \
     create_unlock_code_activation, create_unlock_code_revocation, create_tax_number_validity, create_send_est, \
-    get_job_service_patch, get_erica_request_patch
+    get_job_service_patch_string, get_erica_request_patch_string
 
 
 @pytest.mark.asyncio
@@ -43,7 +43,7 @@ async def test_if_post_job_returns_location_with_uuid(api_method, input_data, re
     job_service_mock.add_to_queue = Mock(
         return_value=EricaAuftragDto(type=request_type, status=Status.new, payload="{}",
                                      request_id=request_id))
-    with patch(get_job_service_patch(endpoint_to_patch), MagicMock(return_value=job_service_mock)):
+    with patch(get_job_service_patch_string(endpoint_to_patch), MagicMock(return_value=job_service_mock)):
         response = await api_method(input_data)
         assert response == expected_location + str(request_id)
 
@@ -145,7 +145,7 @@ async def test_if_get_job_returns_failure_status(api_method, request_type, endpo
                                  error_code=error_code,
                                  error_message=error_message,
                                  request_id=request_id, creator_id="test")
-    with patch(get_erica_request_patch(endpoint_to_patch), MagicMock()) as mock_get_request:
+    with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await api_method(request_id)
         assert response.processStatus == JobState.FAILURE
@@ -168,7 +168,7 @@ async def test_if_get_job_returns_processing_status(mock_job_state, api_method, 
     request_id = uuid.uuid4()
     erica_request = EricaRequest(type=request_type, status=mock_job_state,
                                  request_id=request_id, creator_id="test")
-    with patch(get_erica_request_patch(endpoint_to_patch), MagicMock()) as mock_get_request:
+    with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await api_method(request_id)
         assert response.processStatus == JobState.PROCESSING
@@ -185,7 +185,7 @@ async def test_if_get_job_returns_processing_status(mock_job_state, api_method, 
                          ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
 async def test_if_get_job_returns_not_found(api_method, endpoint_to_patch):
     request_id = uuid.uuid4()
-    with patch(get_erica_request_patch(endpoint_to_patch), MagicMock()) as mock_get_request:
+    with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
         mock_get_request.side_effect = EntityNotFoundError
         response = await api_method(request_id)
         body = json.loads(response.body)

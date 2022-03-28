@@ -2,13 +2,13 @@ import logging
 
 from uuid import UUID
 from fastapi import status, APIRouter
-from starlette.responses import JSONResponse
-from erica.api.utils import map_status, generate_error_response, get_erica_request
+from starlette.responses import JSONResponse, RedirectResponse
+from erica.api.utils import map_status, generate_error_response, get_erica_request, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
     ErrorRequestQueue, ResultGetUnlockCodeRequestAndActivationFromQueue, \
-    SuccessResponseGetUnlockCodeRequestAndActivationFromQueue, JobState, \
-    SuccessResponseGetUnlockCodeRevocationFromQueue, TransferTicketAndIdnr
+    FreischaltcodeRequestAndActivationResponseDto, JobState, \
+    FreischaltcodeRevocationResponseDto, TransferTicketAndIdnr
 from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
 from erica.application.JobService.job_service_factory import get_job_service
@@ -29,7 +29,7 @@ async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto):
         result = get_job_service(RequestType.freischalt_code_request).add_to_queue(
             request_fsc_client_identifier.payload, request_fsc_client_identifier.clientIdentifier,
             RequestType.freischalt_code_request)
-        return 'fsc/request/' + str(result.request_id)
+        return RedirectResponse(url='fsc/request/' + str(result.request_id), status_code=201)
     # TODO specific exception?
     except Exception:
         logging.getLogger().info("Could not request unlock code", exc_info=True)
@@ -44,10 +44,11 @@ async def get_fsc_request_job(request_id: UUID):
     :param request_id: the id of the job.
     """
     try:
-        return get_request_and_activate_job_status(request_id)
+        erica_request = get_erica_request(request_id)
+        return create_request_activation_response(erica_request)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
-        logging.getLogger().info(create_log_message(request_id), exc_info=True)
+        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (unlock code request) job " + str(request_id),
@@ -81,10 +82,11 @@ async def get_fsc_activation_job(request_id: UUID):
     :param request_id: the id of the job.
     """
     try:
-        return get_request_and_activate_job_status(request_id)
+        erica_request = get_erica_request(request_id)
+        return create_request_activation_response(erica_request)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
-        logging.getLogger().info(create_log_message(request_id), exc_info=True)
+        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (unlock code activation) job " + str(request_id),
@@ -119,22 +121,9 @@ async def get_fsc_revocation_job(request_id: UUID):
     """
     try:
         erica_request = get_erica_request(request_id)
-        process_status = map_status(erica_request.status)
-        if process_status == JobState.SUCCESS:
-            result = TransferTicketAndIdnr(
-                transfer_ticket=erica_request.result["transfer_ticket"],
-                idnr=erica_request.payload.get("idnr"))
-            return SuccessResponseGetUnlockCodeRevocationFromQueue(
-                processStatus=map_status(erica_request.status), result=result)
-        elif process_status == JobState.FAILURE:
-            return SuccessResponseGetUnlockCodeRevocationFromQueue(
-                processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
-                errorMessage=erica_request.error_message)
-        else:
-            return SuccessResponseGetUnlockCodeRevocationFromQueue(
-                processStatus=map_status(erica_request.status))
+        return create_revocation_response(erica_request)
     except EntityNotFoundError as e:
-        logging.getLogger().info(create_log_message(request_id), exc_info=True)
+        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (unlock code revocation) job " + str(request_id),
@@ -142,24 +131,36 @@ async def get_fsc_revocation_job(request_id: UUID):
         return JSONResponse(status_code=500, content=generate_error_response(-1, e.__doc__))
 
 
-def get_request_and_activate_job_status(request_id: UUID):
-    erica_request = get_erica_request(request_id)
+def create_request_activation_response(erica_request):
     process_status = map_status(erica_request.status)
     if process_status == JobState.SUCCESS:
         result = ResultGetUnlockCodeRequestAndActivationFromQueue(
             elster_request_id=erica_request.result["elster_request_id"],
             transfer_ticket=erica_request.result["transfer_ticket"],
             idnr=erica_request.payload.get("idnr"))
-        return SuccessResponseGetUnlockCodeRequestAndActivationFromQueue(
+        return FreischaltcodeRequestAndActivationResponseDto(
             processStatus=map_status(erica_request.status), result=result)
     elif process_status == JobState.FAILURE:
-        return SuccessResponseGetUnlockCodeRequestAndActivationFromQueue(
+        return FreischaltcodeRequestAndActivationResponseDto(
             processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
             errorMessage=erica_request.error_message)
     else:
-        return SuccessResponseGetUnlockCodeRequestAndActivationFromQueue(
+        return FreischaltcodeRequestAndActivationResponseDto(
             processStatus=map_status(erica_request.status))
 
 
-def create_log_message(request_id: UUID):
-    return "Job with id " + str(request_id) + " not present in the queue."
+def create_revocation_response(erica_request):
+    process_status = map_status(erica_request.status)
+    if process_status == JobState.SUCCESS:
+        result = TransferTicketAndIdnr(
+            transfer_ticket=erica_request.result["transfer_ticket"],
+            idnr=erica_request.payload.get("idnr"))
+        return FreischaltcodeRevocationResponseDto(
+            processStatus=map_status(erica_request.status), result=result)
+    elif process_status == JobState.FAILURE:
+        return FreischaltcodeRevocationResponseDto(
+            processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
+            errorMessage=erica_request.error_message)
+    else:
+        return FreischaltcodeRevocationResponseDto(
+            processStatus=map_status(erica_request.status))

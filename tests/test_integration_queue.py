@@ -18,7 +18,7 @@ class TestV2Ping:
 class TestV2UnlockCodeRequest:
     endpoint = "/v2/fsc/request"
 
-    def test_if_post_with_full_data_then_return_201(self):
+    def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_unlock_code_request(), default=json_default))
         assert response.status_code == 201
@@ -33,7 +33,7 @@ class TestV2UnlockCodeRequest:
                                  data=json.dumps(request_payload, default=json_default))
         assert response.status_code == 422
 
-    def test_if_get_existing_request(self):
+    def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_unlock_code_request(), default=json_default))
         assert response.status_code == 201
@@ -45,13 +45,13 @@ class TestV2UnlockCodeRequest:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_non_existing_request(self):
+    def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
         assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_request_with_invalid_uuid(self):
+    def test_if_get_request_with_invalid_uuid_then_return_422(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
         assert response.status_code == 422
 
@@ -59,7 +59,7 @@ class TestV2UnlockCodeRequest:
 class TestV2UnlockCodeActivation:
     endpoint = "/v2/fsc/activation"
 
-    def test_if_post_with_full_data_then_return_201(self):
+    def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_unlock_code_activation(), default=json_default))
         assert response.status_code == 201
@@ -74,7 +74,7 @@ class TestV2UnlockCodeActivation:
                                  data=json.dumps(request_payload, default=json_default))
         assert response.status_code == 422
 
-    def test_if_get_existing_request(self):
+    def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_unlock_code_activation(), default=json_default))
         assert response.status_code == 201
@@ -86,13 +86,13 @@ class TestV2UnlockCodeActivation:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_non_existing_request(self):
+    def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
         assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_request_with_invalid_uuid(self):
+    def test_if_get_request_with_invalid_uuid_then_return_422(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
         assert response.status_code == 422
 
@@ -100,7 +100,7 @@ class TestV2UnlockCodeActivation:
 class TestV2UnlockCodeRevocation:
     endpoint = "/v2/fsc/revocation"
 
-    def test_if_post_with_full_data_then_return_201(self):
+    def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_unlock_code_revocation(), default=json_default))
         assert response.status_code == 201
@@ -115,7 +115,7 @@ class TestV2UnlockCodeRevocation:
                                  data=json.dumps(request_payload, default=json_default))
         assert response.status_code == 422
 
-    def test_if_get_existing_request(self):
+    def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_unlock_code_revocation(), default=json_default))
         assert response.status_code == 201
@@ -127,13 +127,13 @@ class TestV2UnlockCodeRevocation:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_non_existing_request(self):
+    def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
         assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_request_with_invalid_uuid(self):
+    def test_if_get_request_with_invalid_uuid_then_return_422(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
         assert response.status_code == 422
 
@@ -141,7 +141,7 @@ class TestV2UnlockCodeRevocation:
 class TestV2TaxNumberValidity:
     endpoint = "/v2/tax_number_validity"
 
-    def test_if_post_with_full_data_then_return_201(self):
+    def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_tax_number_validity(), default=json_default))
         assert response.status_code == 201
@@ -156,7 +156,7 @@ class TestV2TaxNumberValidity:
                                  data=json.dumps(request_payload, default=json_default))
         assert response.status_code == 422
 
-    def test_if_get_existing_request(self):
+    def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_tax_number_validity(), default=json_default))
         assert response.status_code == 201
@@ -168,13 +168,13 @@ class TestV2TaxNumberValidity:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_non_existing_request(self):
+    def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
         assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_request_with_invalid_uuid(self):
+    def test_if_get_request_with_invalid_uuid_then_return_422(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
         assert response.status_code == 422
 
@@ -182,7 +182,7 @@ class TestV2TaxNumberValidity:
 class TestV2SendEst:
     endpoint = "/v2/ests"
 
-    def test_if_post_with_full_data_then_return_201(self):
+    def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_send_est(), default=json_default))
         assert response.status_code == 201
@@ -197,7 +197,7 @@ class TestV2SendEst:
                                  data=json.dumps(request_payload, default=json_default))
         assert response.status_code == 422
 
-    def test_if_get_existing_request(self):
+    def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_send_est(), default=json_default))
         assert response.status_code == 201
@@ -209,12 +209,12 @@ class TestV2SendEst:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_non_existing_request(self):
+    def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
         assert response.status_code == 404
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
-    def test_if_get_request_with_invalid_uuid(self):
+    def test_if_get_request_with_invalid_uuid_then_return_422(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
         assert response.status_code == 422

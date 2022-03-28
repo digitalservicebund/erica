@@ -4,9 +4,9 @@ from uuid import UUID
 from fastapi import status, APIRouter
 from starlette.responses import JSONResponse
 
-from erica.api.utils import generate_error_response, get_erica_request, map_status
+from erica.api.utils import generate_error_response, get_erica_request, map_status, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_post_to_queue, response_model_get_est_validation_from_queue, \
-    response_model_get_send_est_from_queue, JobState, SuccessResponseGetSendEstFromQueue, ResultGetSendEstFromQueue, \
+    response_model_get_send_est_from_queue, JobState, EstResponseDto, ResultGetSendEstFromQueue, \
     ErrorRequestQueue
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
@@ -69,26 +69,29 @@ async def get_send_est_job(request_id: UUID):
     """
     try:
         erica_request = get_erica_request(request_id)
-        process_status = map_status(erica_request.status)
-        if process_status == JobState.SUCCESS:
-            result = ResultGetSendEstFromQueue(
-                transfer_ticket=erica_request.result["transfer_ticket"],
-                pdf=erica_request.result["pdf"])
-            return SuccessResponseGetSendEstFromQueue(
-                processStatus=map_status(erica_request.status), result=result)
-        elif process_status == JobState.FAILURE:
-            return SuccessResponseGetSendEstFromQueue(
-                processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
-                errorMessage=erica_request.error_message)
-        else:
-            return SuccessResponseGetSendEstFromQueue(
-                processStatus=map_status(erica_request.status))
+        return create_response(erica_request)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
-        logging.getLogger().info("Job with id " + str(request_id) + " not present in the queue.",
-                                 exc_info=True)
+        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (send tax declaration) job " + str(request_id),
                                  exc_info=True)
         return JSONResponse(status_code=500, content=generate_error_response(-1, e.__doc__))
+
+
+def create_response(erica_request):
+    process_status = map_status(erica_request.status)
+    if process_status == JobState.SUCCESS:
+        result = ResultGetSendEstFromQueue(
+            transfer_ticket=erica_request.result["transfer_ticket"],
+            pdf=erica_request.result["pdf"])
+        return EstResponseDto(
+            processStatus=map_status(erica_request.status), result=result)
+    elif process_status == JobState.FAILURE:
+        return EstResponseDto(
+            processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
+            errorMessage=erica_request.error_message)
+    else:
+        return EstResponseDto(
+            processStatus=map_status(erica_request.status))

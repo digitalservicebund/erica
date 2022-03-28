@@ -46,6 +46,10 @@ injector = Injector([
 ])
 
 
-def get_erica_request(job_id: UUID):
+def get_erica_request(request_id: UUID):
     freischalt_code_service: EricaAuftragServiceInterface = injector.inject(EricaAuftragServiceInterface)
-    return freischalt_code_service.get_status(job_id)
+    return freischalt_code_service.get_request(request_id)
+
+
+def get_entity_not_found_log_message(request_id: UUID):
+    return "Job with id " + str(request_id) + " not present in the queue."

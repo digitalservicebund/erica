@@ -4,9 +4,9 @@ from uuid import UUID
 from fastapi import status, APIRouter
 from starlette.responses import FileResponse, JSONResponse
 
-from erica.api.utils import generate_error_response, get_erica_request, map_status
+from erica.api.utils import generate_error_response, get_erica_request, map_status, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_get_tax_number_validity_from_queue, ErrorRequestQueue, JobState, \
-    SuccessResponseGetTaxNumberValidityFromQueue, ResultGetTaxNumberValidityFromQueue
+    TaxResponseDto, ResultGetTaxNumberValidityFromQueue
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
 from erica.domain.Shared.EricaAuftrag import RequestType
@@ -42,23 +42,10 @@ async def get_valid_tax_number_job(request_id: UUID):
     """
     try:
         erica_request = get_erica_request(request_id)
-        process_status = map_status(erica_request.status)
-        if process_status == JobState.SUCCESS:
-            result = ResultGetTaxNumberValidityFromQueue(
-                is_valid=erica_request.result["is_valid"])
-            return SuccessResponseGetTaxNumberValidityFromQueue(
-                processStatus=map_status(erica_request.status), result=result)
-        elif process_status == JobState.FAILURE:
-            return SuccessResponseGetTaxNumberValidityFromQueue(
-                processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
-                errorMessage=erica_request.error_message)
-        else:
-            return SuccessResponseGetTaxNumberValidityFromQueue(
-                processStatus=map_status(erica_request.status))
+        return create_response(erica_request)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
-        logging.getLogger().info("Job with id " + str(request_id) + " not present in the queue.",
-                                 exc_info=True)
+        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
     except Exception as e:
         logging.getLogger().info("Could not retrieve status of (tax number validity) job " + str(request_id),
@@ -72,3 +59,19 @@ def get_tax_offices():
     The list of tax offices for all states is requested and returned.
     """
     return FileResponse("../../infrastructure/static/tax_offices.json")
+
+
+def create_response(erica_request):
+    process_status = map_status(erica_request.status)
+    if process_status == JobState.SUCCESS:
+        result = ResultGetTaxNumberValidityFromQueue(
+            is_valid=erica_request.result["is_valid"])
+        return TaxResponseDto(
+            processStatus=map_status(erica_request.status), result=result)
+    elif process_status == JobState.FAILURE:
+        return TaxResponseDto(
+            processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
+            errorMessage=erica_request.error_message)
+    else:
+        return TaxResponseDto(
+            processStatus=map_status(erica_request.status))
