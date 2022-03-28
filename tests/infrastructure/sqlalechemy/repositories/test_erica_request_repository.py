@@ -1,17 +1,11 @@
 import datetime
 from unittest.mock import MagicMock, call
 from uuid import uuid4, UUID
-
 import pytest
 import pytest_pgsql
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy_utils import database_exists, create_database
-from testing import postgresql
-
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
-from erica.infrastructure.sqlalchemy.database import get_engine, run_migrations
 from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository

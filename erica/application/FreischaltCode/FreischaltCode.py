@@ -1,19 +1,18 @@
-from datetime import date
-
 from erica.application.base_dto import BaseDto
+from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeRevocatePayload, \
+    FreischaltCodeActivatePayload
 
 
 class FreischaltCodeRequestDto(BaseDto):
-    idnr: str
-    date_of_birth: date
-
-
-class FreischaltCodeRevocateDto(BaseDto):
-    idnr: str
-    elster_request_id: str
+    payload: FreischaltCodeRequestPayload
+    clientIdentifier: str
 
 
 class FreischaltCodeActivateDto(BaseDto):
-    idnr: str
-    freischalt_code: str
-    elster_request_id: str
+    payload: FreischaltCodeActivatePayload
+    clientIdentifier: str
+
+
+class FreischaltCodeRevocateDto(BaseDto):
+    payload: FreischaltCodeRevocatePayload
+    clientIdentifier: str

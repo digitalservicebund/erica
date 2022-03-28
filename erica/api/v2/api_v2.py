@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from erica.erica_legacy.api.v2.endpoints import ping, est, fsc, tax, grundsteuer
+from erica.api.v2.endpoints import ping, est, grundsteuer, tax, fsc, management
 
 api_router_02 = APIRouter()
 api_router_02.prefix = '/v2'
@@ -10,6 +10,7 @@ api_router_02.include_router(est.router, tags=["Steuererklärung"])
 api_router_02.include_router(grundsteuer.router, tags=["Grundsteuererklärung"])
 api_router_02.include_router(tax.router, tags=["Finanzverwaltung"])
 api_router_02.include_router(fsc.router, prefix="/fsc", tags=["Freischaltcode"])
+api_router_02.include_router(management.router, prefix="/management", tags=["Management"])
 
 
 

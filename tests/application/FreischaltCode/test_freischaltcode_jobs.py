@@ -6,7 +6,7 @@ import pytest
 from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code, activate_freischalt_code, \
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 
 
 class TestRequestFreischaltcode:
@@ -23,7 +23,7 @@ class TestRequestFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        dto=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type)]
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
@@ -69,7 +69,7 @@ class TestActivateFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        dto=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type)]
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
@@ -115,7 +115,7 @@ class TestRevocateFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        dto=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type)]
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):

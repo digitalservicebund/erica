@@ -1,5 +1,3 @@
-import base64
-import io
 import json
 import unittest
 from unittest.mock import patch, MagicMock
@@ -7,7 +5,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 from fastapi.exceptions import HTTPException
 
-from erica.application.tax_number_validation.check_tax_number_dto import StateAbbreviation
+from erica.domain.tax_number_validation.check_tax_number import StateAbbreviation
 from erica.erica_legacy.api.v1.endpoints.est import validate_est, send_est
 from erica.erica_legacy.api.v1.endpoints.grundsteuer import send_grundsteuer
 from erica.erica_legacy.api.v1.endpoints.tax import is_valid_tax_number, get_tax_offices
@@ -17,7 +15,8 @@ from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 
-from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, create_unlock_revocation, \
+from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
+    create_unlock_revocation, \
     missing_cert, missing_pyeric_lib
 
 
@@ -287,7 +286,7 @@ class TestIsTaxNumberValid:
         assert result == {'is_valid': False}
 
 
-class TestGetTaxOffices(unittest.TestCase):
+class TestGetTaxOffices:
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_get_tax_offices_returns_same_as_request_controller_process(self):
@@ -297,4 +296,4 @@ class TestGetTaxOffices(unittest.TestCase):
 
         erica_response = GetTaxOfficesPyericController().get_eric_response()
 
-        self.assertEqual(erica_response, response_content)
+        assert erica_response == response_content

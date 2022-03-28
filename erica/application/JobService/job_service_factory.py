@@ -1,17 +1,17 @@
 
 from typing import Callable, Type
-
 from opyoid import Injector
 from erica.application.ApplicationModule import ApplicationModule
-
-from erica.application.FreischaltCode.FreischaltCode import BaseDto, FreischaltCodeActivateDto, FreischaltCodeRequestDto, FreischaltCodeRevocateDto
 from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, request_freischalt_code, revocate_freischalt_code
 from erica.application.JobService.job_service import JobService, JobServiceInterface
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
-from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
-from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
 from erica.application.tax_number_validation.jobs import check_tax_number
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
+    FreischaltCodeRevocatePayload
+from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
+from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
     CheckTaxNumberRequestController, EstRequestController
@@ -20,7 +20,7 @@ from erica.erica_legacy.request_processing.requests_controller import UnlockCode
 def _freischalt_code_request_injector():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=UnlockCodeRequestController)
-    module.bind(Type[BaseDto], to_instance=FreischaltCodeRequestDto)
+    module.bind(Type[BasePayload], to_instance=FreischaltCodeRequestPayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=request_freischalt_code)
 
@@ -32,7 +32,7 @@ def _freischalt_code_request_injector():
 def _freischalt_code_activation_injector() :
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=UnlockCodeActivationRequestController)
-    module.bind(Type[BaseDto], to_instance=FreischaltCodeActivateDto)
+    module.bind(Type[BasePayload], to_instance=FreischaltCodeActivatePayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=activate_freischalt_code)
     
@@ -44,7 +44,7 @@ def _freischalt_code_activation_injector() :
 def _freischalt_code_revocation_injector():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=UnlockCodeRevocationRequestController)
-    module.bind(Type[BaseDto], to_instance=FreischaltCodeRevocateDto)
+    module.bind(Type[BasePayload], to_instance=FreischaltCodeRevocatePayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=revocate_freischalt_code)
 
@@ -56,7 +56,7 @@ def _freischalt_code_revocation_injector():
 def _check_tax_number_injector():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=CheckTaxNumberRequestController)
-    module.bind(Type[BaseDto], to_instance=CheckTaxNumberDto)
+    module.bind(Type[BasePayload], to_instance=CheckTaxNumberPayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=check_tax_number)
 
@@ -68,7 +68,7 @@ def _check_tax_number_injector():
 def _send_est_injector():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=EstRequestController)
-    module.bind(Type[BaseDto], to_instance=TaxDeclarationDto)
+    module.bind(Type[BasePayload], to_instance=TaxDeclarationPayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=send_est)
 
