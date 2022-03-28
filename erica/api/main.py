@@ -5,9 +5,9 @@ from fastapi_versioning import VersionedFastAPI, version
 from opyoid import Injector
 
 from erica.api.ApiModule import ApiModule
-from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
-from erica.application.EricaAuftrag.EricaAuftragService import \
-    EricaAuftragServiceInterface
+from erica.application.erica_request.erica_request import EricaAuftragDto
+from erica.application.erica_request.erica_request_service import \
+    EricaRequestServiceInterface
 from erica.application.FreischaltCode.FreischaltCode import (FreischaltCodeActivateDto, FreischaltCodeRequestDto)
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaAuftrag import RequestType
@@ -40,7 +40,7 @@ async def get_erica_auftrag_status_list(skip: int, limit: int):
 @app.get("/erica_auftraege/{id}")
 @version(1, 0)
 async def get_erica_auftrag_status(auftrag_id: UUID):
-    freischalt_code_service: EricaAuftragServiceInterface = injector.inject(EricaAuftragServiceInterface)
+    freischalt_code_service: EricaRequestServiceInterface = injector.inject(EricaRequestServiceInterface)
     return freischalt_code_service.get_status(auftrag_id)
 
 

@@ -10,7 +10,7 @@ from erica.infrastructure.sqlalchemy.repositories.erica_request_repository impor
 injector = Injector([InfrastructureModule(), RqModule()])
 
 
-class EricaAuftragServiceInterface:
+class EricaRequestServiceInterface:
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -18,7 +18,7 @@ class EricaAuftragServiceInterface:
         pass
 
 
-class EricaAuftragService(EricaAuftragServiceInterface):
+class EricaRequestService(EricaRequestServiceInterface):
     erica_auftrag_repository: EricaRequestRepository
 
     def __init__(self, repository: EricaRequestRepository) -> None:
@@ -29,6 +29,6 @@ class EricaAuftragService(EricaAuftragServiceInterface):
         return self.erica_auftrag_repository.get_by_job_request_id(request_id)
 
 
-class EricaAuftragServiceModule(Module):
+class EricaRequestServiceModule(Module):
     def configure(self) -> None:
-        self.bind(EricaAuftragServiceInterface, to_class=EricaAuftragService)
+        self.bind(EricaRequestServiceInterface, to_class=EricaRequestService)

@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from rq import Retry
 
-from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
+from erica.application.erica_request.erica_request import EricaAuftragDto
 from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
