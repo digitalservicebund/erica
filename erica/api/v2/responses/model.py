@@ -63,11 +63,6 @@ response_model_post_to_queue = {
     201: {"description": "Job was successfully submitted to the queue and the job id was returned."},
     422: {"model": ErrorRequestQueue, "description": "Job could not be submitted to the queue."}}
 
-response_model_get_est_validation_from_queue = {
-    200: {"model": ResponseGetFromQueue,
-          "description": "Job status of an est validation was successfully retrieved from the queue."},
-    500: model_error_request_queue}
-
 response_model_get_send_est_from_queue = {
     200: {"model": EstResponseDto,
           "description": "Job status of a sent est was successfully retrieved from the queue."},

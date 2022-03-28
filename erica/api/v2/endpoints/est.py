@@ -5,42 +5,14 @@ from fastapi import status, APIRouter
 from starlette.responses import JSONResponse, RedirectResponse
 
 from erica.api.utils import generate_error_response, get_erica_request, map_status, get_entity_not_found_log_message
-from erica.api.v2.responses.model import response_model_post_to_queue, response_model_get_est_validation_from_queue, \
-    response_model_get_send_est_from_queue, JobState, EstResponseDto, ResultGetSendEstFromQueue, \
-    ErrorRequestQueue
+from erica.api.v2.responses.model import response_model_get_send_est_from_queue, JobState, EstResponseDto, \
+    ResultGetSendEstFromQueue, ErrorRequestQueue
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 router = APIRouter()
-
-
-@router.post('/est_validations', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-async def validate_est(est_data_client_identifier: TaxDeclarationDto):
-    """
-    Route for validation of a tax declaration using the job queue.
-    :param est_data_client_identifier: payload with client identifier and the JSON input data for the tax declaration.
-    """
-    try:
-        raise NotImplementedError()
-    except NotImplementedError:
-        logging.getLogger().info("Could not validate est", exc_info=True)
-        return JSONResponse(status_code=422, content=generate_error_response())
-
-
-@router.get('/est_validations/{request_id}', status_code=status.HTTP_200_OK,
-            responses=response_model_get_est_validation_from_queue)
-async def get_validate_est_job(request_id: str):
-    """
-    Route for retrieving job status of a tax declaration validation from the queue.
-    :param request_id: the id of the job.
-    """
-    try:
-        raise NotImplementedError()
-    except NotImplementedError:
-        logging.getLogger().info("Could not retrieve status of job " + request_id, exc_info=True)
-        return JSONResponse(status_code=500, content=generate_error_response())
 
 
 @router.post('/ests', status_code=status.HTTP_201_CREATED,
