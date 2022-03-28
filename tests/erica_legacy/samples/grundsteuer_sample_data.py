@@ -286,16 +286,15 @@ class SampleVertreter(Builder):
 
 
 class SampleBruchteilsgemeinschaft(Builder):
-    name: str
     adresse: SampleAdresse
 
     def __init__(self):
         super().__init__()
-        self.name = "Bruchteilsgemeinschaft Hogsmeade"
+        self.dict["name"] = "Bruchteilsgemeinschaft Hogsmeade"
         self.adresse = SampleAdresse().plz("08642").ort("Hogsmeade")
 
-    def with_name(self, name: str):
-        self.name = name
+    def name(self, name: str):
+        self.dict["name"] = name
         return self
 
     def with_strasse(self):
@@ -310,7 +309,6 @@ class SampleBruchteilsgemeinschaft(Builder):
         return self.with_strasse().with_postfach()
 
     def build(self):
-        self.dict["name"] = self.name
         self.dict["adresse"] = self.adresse.build()
         return super().build()
 

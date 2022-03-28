@@ -46,7 +46,7 @@ class TestEErgAngaben:
 
 class TestEAngGemeinschaften:
     def test_if_strasse_adresse_then_set_fields_correctly(self):
-        bruchteilsgemeinschaft_input = SampleBruchteilsgemeinschaft().with_name("BTG").with_strasse().parse()
+        bruchteilsgemeinschaft_input = SampleBruchteilsgemeinschaft().name("BTG").with_strasse().parse()
         result = EAngGemeinschaften(bruchteilsgemeinschaft_input)
 
         assert result.E7403301 == "01"
@@ -61,7 +61,7 @@ class TestEAngGemeinschaften:
         assert len(vars(result)) == 9
 
     def test_if_postfach_adresse_then_set_fields_correctly(self):
-        bruchteilsgemeinschaft_input = SampleBruchteilsgemeinschaft().with_name("BTG").with_postfach().parse()
+        bruchteilsgemeinschaft_input = SampleBruchteilsgemeinschaft().name("BTG").with_postfach().parse()
         result = EAngGemeinschaften(bruchteilsgemeinschaft_input)
 
         assert result.E7403301 == "01"
@@ -75,7 +75,7 @@ class TestEAngGemeinschaften:
         assert result.E7413703 == bruchteilsgemeinschaft_input.adresse.ort
 
     def test_if_name_over_25_letters_then_split_name(self):
-        bruchteilsgemeinschaft_input = SampleBruchteilsgemeinschaft().with_name(
+        bruchteilsgemeinschaft_input = SampleBruchteilsgemeinschaft().name(
             "Bruchteilsgemeinschaft With Long Name").with_postfach().parse()
         result = EAngGemeinschaften(bruchteilsgemeinschaft_input)
 
