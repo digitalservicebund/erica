@@ -9,7 +9,7 @@ from erica.api.v2.responses.model import response_model_get_tax_number_validity_
     TaxResponseDto, ResultGetTaxNumberValidityFromQueue
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 router = APIRouter()

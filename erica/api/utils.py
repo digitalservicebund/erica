@@ -4,7 +4,7 @@ from opyoid import Injector
 
 from erica.api.ApiModule import ApiModule
 from erica.api.v2.responses.model import JobState
-from erica.application.EricaAuftrag.EricaAuftragService import EricaAuftragServiceInterface
+from erica.application.EricaRequest.EricaRequestService import EricaRequestServiceInterface
 from erica.domain.Shared.Status import Status
 
 
@@ -47,7 +47,7 @@ injector = Injector([
 
 
 def get_erica_request(request_id: UUID):
-    freischalt_code_service: EricaAuftragServiceInterface = injector.inject(EricaAuftragServiceInterface)
+    freischalt_code_service: EricaRequestServiceInterface = injector.inject(EricaRequestServiceInterface)
     return freischalt_code_service.get_request(request_id)
 
 

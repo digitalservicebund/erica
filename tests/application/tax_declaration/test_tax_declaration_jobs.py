@@ -5,7 +5,7 @@ import pytest
 
 from erica.application.JobService.job_service import JobService
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 
 
 class TestTaxDeclarationJob:

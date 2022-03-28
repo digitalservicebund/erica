@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from erica.application.JobService.job_service import JobService
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository

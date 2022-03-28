@@ -9,7 +9,7 @@ from erica.application.tax_number_validation.jobs import check_tax_number
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
 from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \

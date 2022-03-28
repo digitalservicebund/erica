@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, call
 from uuid import uuid4, UUID
 import pytest
 import pytest_pgsql
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema

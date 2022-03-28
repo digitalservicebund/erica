@@ -1,7 +1,7 @@
 import logging
 
 from erica.application.JobService.job import perform_job
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 
 
 async def request_freischalt_code(request_id):

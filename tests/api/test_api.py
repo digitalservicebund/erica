@@ -9,9 +9,9 @@ from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activat
     revocate_fsc, get_fsc_revocation_job
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
 from erica.api.v2.responses.model import JobState
-from erica.application.EricaAuftrag.EricaAuftrag import EricaAuftragDto
+from erica.application.EricaRequest.EricaRequest import EricaRequestDto
 from erica.application.JobService.job_service import JobService
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
@@ -41,7 +41,7 @@ async def test_if_post_job_returns_location_with_uuid(api_method, input_data, re
                                   request_controller=MockRequestController, payload_type=MockDto,
                                   job_method=PickableMock())
     job_service_mock.add_to_queue = Mock(
-        return_value=EricaAuftragDto(type=request_type, status=Status.new, payload="{}",
+        return_value=EricaRequestDto(type=request_type, status=Status.new, payload="{}",
                                      request_id=request_id))
     with patch(get_job_service_patch_string(endpoint_to_patch), MagicMock(return_value=job_service_mock)):
         response = await api_method(input_data)
