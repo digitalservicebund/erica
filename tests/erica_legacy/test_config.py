@@ -20,7 +20,7 @@ class TestGetCertPath(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_using_stick_and_platform_darwin_then_return_correct_cert_path(self):
-        with patch('erica.erica_legacy.config.platform', 'darwin'):
+        with patch('erica.config.platform', 'darwin'):
             settings = Settings()
             settings.using_stick = True
             actual_cert_path = settings.get_cert_path()
@@ -29,7 +29,7 @@ class TestGetCertPath(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_using_stick_and_platform_not_darwin_then_return_correct_cert_path(self):
-        with patch('erica.erica_legacy.config.platform', 'not_darwin'):
+        with patch('erica.config.platform', 'not_darwin'):
             settings = Settings()
             settings.using_stick = True
             actual_cert_path = settings.get_cert_path()
@@ -38,7 +38,7 @@ class TestGetCertPath(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_not_using_stick_and_platform_darwin_then_return_correct_cert_path(self):
-        with patch('erica.erica_legacy.config.platform', 'darwin'):
+        with patch('erica.config.platform', 'darwin'):
             settings = Settings()
             settings.using_stick = False
             actual_cert_path = settings.get_cert_path()
@@ -47,7 +47,7 @@ class TestGetCertPath(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_not_using_stick_and_platform_not_darwin_then_return_correct_cert_path(self):
-        with patch('erica.erica_legacy.config.platform', 'not_darwin'):
+        with patch('erica.config.platform', 'not_darwin'):
             settings = Settings()
             settings.using_stick = False
             actual_cert_path = settings.get_cert_path()
@@ -65,14 +65,14 @@ class TestGetEricDll(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_platform_darwin_then_return_correct_library(self):
-        with patch('erica.erica_legacy.config.platform', 'darwin'):
+        with patch('erica.config.platform', 'darwin'):
             actual_dll_path = Settings.get_eric_dll_path()
             self.assertEqual(self.darwin_dll_path, actual_dll_path)
 
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_platform_not_darwin_then_return_linux_library(self):
-        with patch('erica.erica_legacy.config.platform', 'not_darwin'):
+        with patch('erica.config.platform', 'not_darwin'):
             actual_dll_path = Settings.get_eric_dll_path()
             self.assertEqual(self.linux_dll_path, actual_dll_path)
 
