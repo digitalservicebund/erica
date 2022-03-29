@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     hersteller_id: str = Field("74931", env='ELSTER_HERSTELLER_ID')
     queue_host: str = Field("localhost", env='QUEUE_HOST')
     queue_port: int = Field(6379, env='QUEUE_PORT')
-    default_queues: List[str] = ['dongle', 'cert', 'common']
+    default_queues: str = 'dongle, cert, common'
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
     only_api: bool = Field(False, env="RUN_ONLY_API")
     dongle_connected: bool = Field(True, env="DONGLE_CONNECTED")
