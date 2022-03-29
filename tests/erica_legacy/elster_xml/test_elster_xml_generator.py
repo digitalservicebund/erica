@@ -7,7 +7,7 @@ from xml.etree.ElementTree import XML, ParseError, Element, SubElement, tostring
 import pytest
 from freezegun import freeze_time
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.elster_xml_generator import _pretty, _add_xml_nutzdaten_header, get_belege_xml, \
     _generate_transfer_header, _add_if_not_empty, _add_sterkl_fields, \
     _add_person_specific_sterkl_fields, Vorsatz, _add_xml_vorsatz, _add_xml_fields, _add_est_xml_nutzdaten, \

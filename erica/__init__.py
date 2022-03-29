@@ -6,7 +6,7 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from erica.api.v2.api_v2 import api_router_02
 from erica.erica_legacy.api.api import api_router
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.pyeric.eric import verify_using_stick
 
 app = FastAPI(

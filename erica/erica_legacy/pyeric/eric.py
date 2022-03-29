@@ -6,7 +6,7 @@ from ctypes import Structure, c_int, c_uint32, c_char_p, c_void_p, pointer, CDLL
 from dataclasses import dataclass
 from typing import ByteString
 
-from erica.erica_legacy.config import get_settings, Settings
+from erica.config import get_settings, Settings
 from erica.erica_legacy.pyeric.eric_errors import check_result, check_handle, check_xml, EricWrongTaxNumberError
 
 logger = logging.getLogger('eric')

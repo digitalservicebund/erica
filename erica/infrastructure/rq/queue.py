@@ -1,7 +1,7 @@
 from redis import Redis
 from rq import Queue, Connection
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 
 _ALLOWED_QUEUE_NAMES = ['dongle', 'cert', 'common']
 

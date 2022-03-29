@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
-from erica.erica_legacy.config import Settings, DevelopmentSettings, StagingSettings, TestingSettings, get_settings, UnknownEricaEnvironment
+from erica.config import Settings, DevelopmentSettings, StagingSettings, TestingSettings, get_settings, UnknownEricaEnvironment
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
 
 

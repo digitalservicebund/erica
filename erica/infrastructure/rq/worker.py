@@ -3,7 +3,7 @@ import sys
 from redis import Redis
 from rq import Connection, Worker, Queue
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 
 
 def run_worker():

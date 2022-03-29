@@ -1,4 +1,4 @@
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.bufa_numbers import VALID_BUFA_NUMBERS, VALID_TEST_BUFA_NUMBERS
 
 
