@@ -139,6 +139,7 @@ jobs:
 
     - name: Run deployment
       env:
+        NAMESPACE: erica-staging
         IMAGE_TAG: ${{ github.run_number }}
       run: |
         docker run \
@@ -147,6 +148,10 @@ jobs:
         -e ERICA_HOST='${{ env.ERICA_HOST }}' \
         -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
         -e CERT_PIN='${{ secrets.CERT_PIN_STAGING }}' \
+        -e QUEUE_HOST='${{ secrets.QUEUE_HOST_PRODUCTION }}' \
+        -e QUEUE_PORT='${{ secrets.QUEUE_PORT_PRODUCTION }}' \
+        -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL_PRODUCTION }}' \
+        -e NAMESPACE='${{ env.NAMESPACE }}' \
         -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
         ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica
       shell: bash
