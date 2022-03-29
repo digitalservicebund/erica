@@ -313,7 +313,7 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
 class TestUnlockCodeRequestGenerateFullXml(unittest.TestCase):
 
     def test_if_dob_date_given_then_call_generate_full_xml_with_unlock_code_eric_mapping(self):
-        unlock_code_eric_mapping = UnlockCodeRequestEricMapper(idnr="09952417688", dob=date(1969, 7, 20))
+        unlock_code_eric_mapping = UnlockCodeRequestEricMapper(idnr="09952417688", date_of_birth=date(1969, 7, 20))
 
         created_request = UnlockCodeRequestController(UnlockCodeRequestData(idnr="09952417688", dob=date(1969, 7, 20)))
 
