@@ -1,30 +1,5 @@
 from uuid import UUID
 
-from opyoid import Injector
-
-from erica.api.ApiModule import ApiModule
-from erica.api.v2.responses.model import JobState
-from erica.application.EricaRequest.EricaRequestService import EricaRequestServiceInterface
-from erica.domain.Shared.Status import Status
-
-
-def map_status(status: Status):
-    """
-    Mapper from internal rq job state to API job state.
-            Parameters:
-                    status (Status): the internal rq job state.
-            Returns:
-                    (JobState): the corresponding API job state.
-    """
-    switcher = {
-        Status.new: JobState.PROCESSING,
-        Status.scheduled: JobState.PROCESSING,
-        Status.processing: JobState.PROCESSING,
-        Status.failed: JobState.FAILURE,
-        Status.success: JobState.SUCCESS
-    }
-    return switcher.get(status)
-
 
 def generate_error_response(errorcode=-1, errormessage="API resource not yet implemented."):
     """
@@ -39,16 +14,6 @@ def generate_error_response(errorcode=-1, errormessage="API resource not yet imp
                       "errorMessage": errormessage
                       }
     return error_response
-
-
-injector = Injector([
-    ApiModule(),
-])
-
-
-def get_erica_request(request_id: UUID):
-    erica_request_service: EricaRequestServiceInterface = injector.inject(EricaRequestServiceInterface)
-    return erica_request_service.get_request_by_request_id(request_id)
 
 
 def get_entity_not_found_log_message(request_id: UUID):

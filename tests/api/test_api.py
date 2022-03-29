@@ -8,9 +8,10 @@ from erica.api.v2.endpoints.est import send_est, get_send_est_job
 from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activate_fsc, get_fsc_activation_job, \
     revocate_fsc, get_fsc_revocation_job
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
-from erica.api.v2.responses.model import JobState
 from erica.application.EricaRequest.EricaRequest import EricaRequestDto
+from erica.application.EricaRequest.EricaRequestService import EricaRequestService
 from erica.application.JobService.job_service import JobService
+from erica.application.Shared.response_dto import JobState
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
@@ -19,7 +20,7 @@ from tests.application.job_service.test_job_service import MockEricaRequestRepos
     PickableMock
 from tests.utils import create_unlock_code_request, \
     create_unlock_code_activation, create_unlock_code_revocation, create_tax_number_validity, create_send_est, \
-    get_job_service_patch_string, get_erica_request_patch_string
+    get_job_service_patch_string
 
 
 @pytest.mark.asyncio
@@ -62,7 +63,7 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
                                  result={"elster_request_id": elster_request_id,
                                          "transfer_ticket": transfer_ticket},
                                  request_id=request_id, creator_id="test")
-    with patch("erica.api.v2.endpoints.fsc.get_erica_request", MagicMock()) as mock_get_request:
+    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await api_method(request_id)
         assert response.processStatus == JobState.SUCCESS
@@ -82,7 +83,7 @@ async def test_if_get_fsc_revocation_job_returns_success_status_with_result():
                                  payload={"idnr": idnr},
                                  result={"transfer_ticket": transfer_ticket, "idnr": idnr},
                                  request_id=request_id, creator_id="test")
-    with patch("erica.api.v2.endpoints.fsc.get_erica_request", MagicMock()) as mock_get_request:
+    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await get_fsc_revocation_job(request_id)
         assert response.processStatus == JobState.SUCCESS
@@ -100,7 +101,7 @@ async def test_if_get_tax_validity_job_returns_success_status_with_result():
                                  payload={},
                                  result={"is_valid": is_valid},
                                  request_id=request_id, creator_id="test")
-    with patch("erica.api.v2.endpoints.tax.get_erica_request", MagicMock()) as mock_get_request:
+    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await get_valid_tax_number_job(request_id)
         assert response.processStatus == JobState.SUCCESS
@@ -118,7 +119,7 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
                                  payload={},
                                  result={"transfer_ticket": transfer_ticket, "pdf": pdf},
                                  request_id=request_id, creator_id="test")
-    with patch("erica.api.v2.endpoints.est.get_erica_request", MagicMock()) as mock_get_request:
+    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await get_send_est_job(request_id)
         assert response.processStatus == JobState.SUCCESS
@@ -129,14 +130,14 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("api_method, request_type, endpoint_to_patch",
-                         [(get_fsc_request_job, RequestType.freischalt_code_request, "fsc"),
-                          (get_fsc_activation_job, RequestType.freischalt_code_activate, "fsc"),
-                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate, "fsc"),
-                          (get_valid_tax_number_job, RequestType.check_tax_number, "tax"),
-                          (get_send_est_job, RequestType.send_est, "est")],
+@pytest.mark.parametrize("api_method, request_type",
+                         [(get_fsc_request_job, RequestType.freischalt_code_request),
+                          (get_fsc_activation_job, RequestType.freischalt_code_activate),
+                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate),
+                          (get_valid_tax_number_job, RequestType.check_tax_number),
+                          (get_send_est_job, RequestType.send_est)],
                          ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
-async def test_if_get_job_returns_failure_status(api_method, request_type, endpoint_to_patch):
+async def test_if_get_job_returns_failure_status(api_method, request_type):
     request_id = uuid.uuid4()
     error_code = "1"
     error_message = "wingardium leviosa"
@@ -145,7 +146,7 @@ async def test_if_get_job_returns_failure_status(api_method, request_type, endpo
                                  error_code=error_code,
                                  error_message=error_message,
                                  request_id=request_id, creator_id="test")
-    with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
+    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await api_method(request_id)
         assert response.processStatus == JobState.FAILURE
@@ -156,19 +157,18 @@ async def test_if_get_job_returns_failure_status(api_method, request_type, endpo
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("mock_job_state", [Status.new, Status.scheduled, Status.processing])
-@pytest.mark.parametrize("api_method, request_type, endpoint_to_patch",
-                         [(get_fsc_request_job, RequestType.freischalt_code_request, "fsc"),
-                          (get_fsc_activation_job, RequestType.freischalt_code_activate, "fsc"),
-                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate, "fsc"),
-                          (get_valid_tax_number_job, RequestType.check_tax_number, "tax"),
-                          (get_send_est_job, RequestType.send_est, "est")],
+@pytest.mark.parametrize("api_method, request_type",
+                         [(get_fsc_request_job, RequestType.freischalt_code_request),
+                          (get_fsc_activation_job, RequestType.freischalt_code_activate),
+                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate),
+                          (get_valid_tax_number_job, RequestType.check_tax_number),
+                          (get_send_est_job, RequestType.send_est)],
                          ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
-async def test_if_get_job_returns_processing_status(mock_job_state, api_method, request_type,
-                                                    endpoint_to_patch):
+async def test_if_get_job_returns_processing_status(mock_job_state, api_method, request_type):
     request_id = uuid.uuid4()
     erica_request = EricaRequest(type=request_type, status=mock_job_state,
                                  request_id=request_id, creator_id="test")
-    with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
+    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
         mock_get_request.return_value = erica_request
         response = await api_method(request_id)
         assert response.processStatus == JobState.PROCESSING
@@ -178,14 +178,13 @@ async def test_if_get_job_returns_processing_status(mock_job_state, api_method, 
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("api_method, endpoint_to_patch",
-                         [(get_fsc_request_job, "fsc"), (get_fsc_activation_job, "fsc"),
-                          (get_fsc_revocation_job, "fsc"), (get_valid_tax_number_job, "tax"),
-                          (get_send_est_job, "est")],
+@pytest.mark.parametrize("api_method",
+                         [get_fsc_request_job, get_fsc_activation_job, get_fsc_revocation_job, get_valid_tax_number_job,
+                          get_send_est_job],
                          ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
-async def test_if_get_job_returns_not_found(api_method, endpoint_to_patch):
+async def test_if_get_job_returns_not_found(api_method):
     request_id = uuid.uuid4()
-    with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
+    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
         mock_get_request.side_effect = EntityNotFoundError
         response = await api_method(request_id)
         body = json.loads(response.body)
