@@ -9,7 +9,13 @@ from erica.erica_legacy.api.api import api_router
 from erica.erica_legacy.config import get_settings
 from erica.erica_legacy.pyeric.eric import verify_using_stick
 
-app = FastAPI()
+app = FastAPI(
+    title="Erica Service",
+    version="2.0.0",
+    license_info={
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    })
 
 
 class DongleStatus:
