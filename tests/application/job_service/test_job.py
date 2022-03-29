@@ -110,7 +110,7 @@ class TestJob:
         service = MagicMock(apply_to_elster=mock_apply_to_elster)
 
         await perform_job(request_id=uuid4(), repository=mock_repository, service=service,
-                          payload_type=MagicMock(parse_obj=dto_parse_obj), logger=MagicMock())
+                          payload_type=MagicMock(parse_obj=payload_type_parse_obj), logger=MagicMock())
 
         assert mock_apply_to_elster.mock_calls[0] == call(payload_type_parse_obj(mock_entity), True)
 
