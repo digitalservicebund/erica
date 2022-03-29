@@ -2,7 +2,7 @@ from rq import Queue
 from rq.job import Job
 
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.infrastructure.rq.queue import get_queue
+from erica.infrastructure.rq.get_queue import get_queue
 
 
 class BackgroundJobRq(BackgroundJobInterface):
