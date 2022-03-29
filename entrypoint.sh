@@ -3,5 +3,12 @@ set -ex
 
 service pcscd start
 
-# Hand off to the CMD
-exec pipenv run "$@"
+
+if [[ -z "${RUN_ONLY_API}" ]]; then
+  exec pipenv run "$@"
+elif [[ -z "${RUN_ONLY_WORKER}" ]]; then
+  pipenv run python -m erica.infrastructure.rq.worker&
+else
+  pipenv run python -m erica.infrastructure.rq.worker&
+  exec pipenv run "$@"
+fi
