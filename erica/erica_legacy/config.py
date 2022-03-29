@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     queue_port: int = Field(6379, env='QUEUE_PORT')
     default_queues: List[str] = ['dongle', 'cert', 'common']
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
+    only_api: bool = Field(False, env="API_MODE")
+    dongle_connected: bool = Field(True, env="DONGLE_CONNECTED")
 
     class Config:
         dir = os.path.dirname(__file__)
