@@ -1,3 +1,4 @@
+import base64
 import unittest
 from datetime import date
 from unittest.mock import patch, MagicMock, call
@@ -205,7 +206,8 @@ class TestEstRequestGenerateJson(unittest.TestCase):
 
     def setUp(self):
         self.expected_transfer_ticket = 'J-KLAPAUCIUS'
-        self.expected_pdf = b"Our lives begin the day we become silent about things that matter"
+        self.pdf_bytes = b"Our lives begin the day we become silent about things that matter"
+        self.expected_pdf = base64.b64encode(self.pdf_bytes).decode('utf-8')
         self.expected_eric_response = "We are now faced with the fact that tomorrow is today."
         response_with_correct_transfer_ticket = replace_text_in_xml(
             read_text_from_sample('sample_est_response_server.xml'),
@@ -222,10 +224,8 @@ class TestEstRequestGenerateJson(unittest.TestCase):
         est_request = EstRequestController(create_est(correct_form_data=True), include_elster_responses=True)
         pyeric_response = PyericResponse(self.expected_eric_response,
                                          self.expected_server_response,
-                                         self.expected_pdf)
-        with patch('erica.erica_legacy.request_processing.requests_controller.base64.b64encode',
-                   MagicMock(side_effect=lambda x: x)):
-            actual_response = est_request.generate_json(pyeric_response)
+                                         self.pdf_bytes)
+        actual_response = est_request.generate_json(pyeric_response)
 
         self.assertEqual(expected_output, actual_response)
 
@@ -236,10 +236,9 @@ class TestEstRequestGenerateJson(unittest.TestCase):
         }
         est_request = EstRequestController(create_est(correct_form_data=True), include_elster_responses=False)
         pyeric_response = PyericResponse(self.expected_eric_response, self.expected_server_response,
-                                         self.expected_pdf)
-        with patch('erica.erica_legacy.request_processing.requests_controller.base64.b64encode',
-                   MagicMock(side_effect=lambda x: x)):
-            actual_response = est_request.generate_json(pyeric_response)
+                                         self.pdf_bytes)
+
+        actual_response = est_request.generate_json(pyeric_response)
 
         self.assertEqual(expected_output, actual_response)
 
