@@ -8,7 +8,7 @@ def test_integration(c):
 
 @task
 def test(c):
-    c.run("pytest -n auto")
+    c.run("pytest -n 3")
 
 
 @task
