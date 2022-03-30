@@ -139,7 +139,7 @@ jobs:
 
     - name: Run deployment
       env:
-        NAMESPACE: staging
+        NAMESPACE: erica-staging
         IMAGE_TAG: ${{ github.run_number }}
       run: |
         docker run \

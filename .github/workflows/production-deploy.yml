@@ -31,7 +31,7 @@ jobs:
 
     - name: Run deployment
       env:
-        NAMESPACE: staging
+        NAMESPACE: erica-production
         IMAGE_TAG: ${{ github.event.inputs.imageTag }}
       run: |
         docker run \
