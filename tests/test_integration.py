@@ -7,7 +7,7 @@ from decimal import Decimal
 import pytest
 import requests
 
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 
 ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://0.0.0.0:8000")
 
@@ -80,7 +80,7 @@ def full_est_data():
 
 @pytest.fixture()
 def full_grundsteuer_data():
-    return get_grundsteuer_sample_data().dict()
+    return SampleGrundsteuerData().build().dict()
 
 
 class TestV1Ping:
@@ -226,11 +226,3 @@ class TestV1Grundsteuer:
 
         assert response.status_code == 422
         assert response.json()['detail']["message"] == 'ERIC_GLOBAL_PRUEF_FEHLER'
-
-
-class TestV2Ping:
-
-    def test_if_get_from_ping_then_return_pong(self):
-        response = requests.get(ERICA_TESTING_URL + "/v2/ping")
-
-        assert response.text == '"pong"'

@@ -1,10 +1,11 @@
+from unittest.mock import patch, MagicMock
+
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
-    EEigentumsverh, EAngFeststellung, EEmpfangsbevollmaechtigter
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
-    Person, Eigentuemer, Empfangsbevollmaechtigter
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_sample_vertreter_dict, get_sample_single_person_dict, \
-    get_sample_empfangsbevollmaechtigter_dict
+    EEigentumsverh, EEmpfangsbevollmaechtigter
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleVertreter, SampleBevollmaechtigter, SamplePerson, \
+    SampleEigentuemer, DefaultSampleEigentuemer
 
 
 class TestEAnteil:
@@ -19,7 +20,7 @@ class TestEAnteil:
 
 class TestEGesetzlicherVertreter:
     def test_attributes_set_correctly(self):
-        full_vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict())
+        full_vertreter_obj = SampleVertreter().complete().parse()
 
         result = EGesetzlicherVertreter(full_vertreter_obj)
 
@@ -37,7 +38,7 @@ class TestEGesetzlicherVertreter:
         assert len(vars(result)) == 11
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=False))
+        vertreter_obj = SampleVertreter().parse()
 
         result = EGesetzlicherVertreter(vertreter_obj)
 
@@ -54,30 +55,10 @@ class TestEGesetzlicherVertreter:
         assert result.E7415604 is None
         assert len(vars(result)) == 11
 
-    def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
-        vertreter_obj = Vertreter.parse_obj(get_sample_vertreter_dict(complete=True))
-        vertreter_obj.name.titel = None
-        vertreter_obj.adresse.strasse = None
-
-        result = EGesetzlicherVertreter(vertreter_obj)
-
-        assert result.E7415101 == elsterify_anrede(vertreter_obj.name.anrede)
-        assert result.E7415102 is None
-        assert result.E7415201 == vertreter_obj.name.vorname
-        assert result.E7415301 == vertreter_obj.name.name
-        assert result.E7415401 is None
-        assert result.E7415501 == vertreter_obj.adresse.hausnummer
-        assert result.E7415502 == vertreter_obj.adresse.hausnummerzusatz
-        assert result.E7415601 == vertreter_obj.adresse.plz
-        assert result.E7415602 == vertreter_obj.adresse.postfach
-        assert result.E7415603 == vertreter_obj.adresse.ort
-        assert result.E7415604 == vertreter_obj.telefonnummer.telefonnummer
-        assert len(vars(result)) == 11
-
 
 class TestEPersonData:
     def test_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_sample_single_person_dict())
+        person_obj = SamplePerson().with_telefonnummer().with_vertreter().parse()
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
@@ -101,7 +82,7 @@ class TestEPersonData:
         assert len(vars(result)) == 16
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_sample_single_person_dict(complete=False, with_vertreter=False))
+        person_obj = SamplePerson().parse()
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
@@ -125,7 +106,7 @@ class TestEPersonData:
         assert len(vars(result)) == 16
 
     def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
-        person_obj = Person.parse_obj(get_sample_single_person_dict())
+        person_obj = SamplePerson().with_vertreter().with_telefonnummer().parse()
         person_obj.persoenlicheAngaben.titel = None
         person_index = 2
 
@@ -152,7 +133,7 @@ class TestEPersonData:
 
 class TestEEigentumsverh:
     def test_if_one_person_then_attributes_set_correctly(self):
-        person = get_sample_single_person_dict()
+        person = SamplePerson().parse()
         eigentuemer_obj = Eigentuemer.parse_obj({"person": [person]})
 
         result = EEigentumsverh(eigentuemer_obj)
@@ -160,8 +141,8 @@ class TestEEigentumsverh:
         assert result.E7401340 == "0"
 
     def test_if_two_married_persons_then_attributes_set_correctly(self):
-        person1 = get_sample_single_person_dict()
-        person2 = get_sample_single_person_dict()
+        person1 = SamplePerson().parse()
+        person2 = SamplePerson().parse()
         eigentuemer_obj = Eigentuemer.parse_obj(
             {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}})
 
@@ -170,86 +151,82 @@ class TestEEigentumsverh:
         assert result.E7401340 == "4"
 
     def test_if_two_not_married_persons_then_attributes_set_correctly(self):
-        person1 = get_sample_single_person_dict()
-        person2 = get_sample_single_person_dict()
-        eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}})
+        person1 = SamplePerson().build()
+        person2 = SamplePerson().build()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).verheiratet(False).parse()
 
         result = EEigentumsverh(eigentuemer_obj)
 
         assert result.E7401340 == "6"
 
     def test_if_three_persons_then_attributes_set_correctly(self):
-        person1 = get_sample_single_person_dict()
-        person2 = get_sample_single_person_dict()
-        person3 = get_sample_single_person_dict()
-        eigentuemer_obj = Eigentuemer.parse_obj({"person": [person1, person2, person3]})
+        person1 = SamplePerson().build()
+        person2 = SamplePerson().build()
+        person3 = SamplePerson().build()
+        eigentuemer_obj = SampleEigentuemer().person(person1).person(person2).person(person3).parse()
 
         result = EEigentumsverh(eigentuemer_obj)
 
         assert result.E7401340 == "6"
 
 
-class TestEAngFeststellung:
-    def test_sets_attributes_correctly(self):
-        result = EAngFeststellung()
-
-        assert result.E7401311 == "1"
-        assert len(vars(result)) == 1
-
-
 class TestEEmpfangsbevollmaechtigter:
     def test_attributes_set_correctly(self):
-        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict())
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
+        
+        result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
 
-        result = EEmpfangsbevollmaechtigter(input_data)
-
-        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
-        assert result.E7404614 == input_data.name.titel
-        assert result.E7404613 == input_data.name.vorname
-        assert result.E7404611 == input_data.name.name
-        assert result.E7404624 == input_data.adresse.strasse
-        assert result.E7404625 == input_data.adresse.hausnummer
-        assert result.E7404626 == input_data.adresse.hausnummerzusatz
-        assert result.E7404640 == input_data.adresse.plz
-        assert result.E7404627 == input_data.adresse.postfach
-        assert result.E7404622 == input_data.adresse.ort
-        assert result.E7412201 == input_data.telefonnummer.telefonnummer
-        assert len(vars(result)) == 11
+        assert result.E7404610 == elsterify_anrede(eigentuemer_obj.empfangsbevollmaechtigter.name.anrede)
+        assert result.E7404614 == eigentuemer_obj.empfangsbevollmaechtigter.name.titel
+        assert result.E7404613 == eigentuemer_obj.empfangsbevollmaechtigter.name.vorname
+        assert result.E7404611 == eigentuemer_obj.empfangsbevollmaechtigter.name.name
+        assert result.E7404624 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.strasse
+        assert result.E7404625 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.hausnummer
+        assert result.E7404626 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.hausnummerzusatz
+        assert result.E7404640 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.plz
+        assert result.E7404627 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.postfach
+        assert result.E7404622 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.ort
+        assert result.E7412201 == eigentuemer_obj.empfangsbevollmaechtigter.telefonnummer.telefonnummer
+        assert result.E7412901 is None
+        assert len(vars(result)) == 12
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
-        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict(complete=False))
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().build()).parse()
 
-        result = EEmpfangsbevollmaechtigter(input_data)
+        result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
 
-        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
+        assert result.E7404610 == elsterify_anrede(eigentuemer_obj.empfangsbevollmaechtigter.name.anrede)
         assert result.E7404614 is None
-        assert result.E7404613 == input_data.name.vorname
-        assert result.E7404611 == input_data.name.name
+        assert result.E7404613 == eigentuemer_obj.empfangsbevollmaechtigter.name.vorname
+        assert result.E7404611 == eigentuemer_obj.empfangsbevollmaechtigter.name.name
         assert result.E7404624 is None
         assert result.E7404625 is None
         assert result.E7404626 is None
-        assert result.E7404640 == input_data.adresse.plz
+        assert result.E7404640 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.plz
         assert result.E7404627 is None
-        assert result.E7404622 == input_data.adresse.ort
+        assert result.E7404622 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.ort
         assert result.E7412201 is None
-        assert len(vars(result)) == 11
+        assert result.E7412901 is None
+        assert len(vars(result)) == 12
 
-    def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
-        input_data = Empfangsbevollmaechtigter.parse_obj(get_sample_empfangsbevollmaechtigter_dict())
-        input_data.name.titel = None
+    def test_if_no_bruchteilsgemeinschaft_set_flag_to_none(self):
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
 
-        result = EEmpfangsbevollmaechtigter(input_data)
+        with patch('erica.erica_legacy.elster_xml.common.elsterify_fields.elsterify_eigentumsverhaeltnis',
+                   MagicMock(return_value="1")):
+            result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
 
-        assert result.E7404610 == elsterify_anrede(input_data.name.anrede)
-        assert result.E7404614 is None
-        assert result.E7404613 == input_data.name.vorname
-        assert result.E7404611 == input_data.name.name
-        assert result.E7404624 == input_data.adresse.strasse
-        assert result.E7404625 == input_data.adresse.hausnummer
-        assert result.E7404626 == input_data.adresse.hausnummerzusatz
-        assert result.E7404640 == input_data.adresse.plz
-        assert result.E7404627 == input_data.adresse.postfach
-        assert result.E7404622 == input_data.adresse.ort
-        assert result.E7412201 == input_data.telefonnummer.telefonnummer
-        assert len(vars(result)) == 11
+        assert result.E7412901 is None
+
+    def test_if_bruchteilsgemeinschaft_set_flag_to_1(self):
+        eigentuemer_obj = DefaultSampleEigentuemer().empfangsbevollmaechtigter(
+            SampleBevollmaechtigter().complete().build()).parse()
+
+        with patch('erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer.elsterify_eigentumsverhaeltnis',
+                   MagicMock(return_value="6")):
+            result = EEmpfangsbevollmaechtigter(eigentuemer_obj)
+
+        assert result.E7412901 == 1

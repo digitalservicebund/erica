@@ -1,4 +1,49 @@
 {
+  "grundstueck": {
+    "adresse": {
+      "strasse": "Madeupstr",
+      "hausnummer": "22",
+      "hausnummerzusatz": "a",
+      "zusatzangaben": "hinterhaus",
+      "plz": "33333",
+      "ort": "Bielefeld",
+      "bundesland": "NW"
+    },
+    "steuernummer": "2080353038893",
+    "typ": "einfamilienhaus",
+    "innerhalb_einer_gemeinde": true,
+    "bodenrichtwert": "41,99",
+    "flurstueck": [
+      {
+        "angaben": {
+          "grundbuchblattnummer": "1A",
+          "gemarkung": "some gemarkung"
+        },
+        "flur": {
+          "flur": "1",
+          "flurstueck_zaehler": 7,
+          "flurstueck_nenner": "14",
+          "wirtschaftliche_einheit_zaehler": "1.0000",
+          "wirtschaftliche_einheit_nenner": "2"
+        },
+        "groesse_qm": 42
+      },
+      {
+        "angaben": {
+          "grundbuchblattnummer": "2C",
+          "gemarkung": "another gemarkung"
+        },
+        "flur": {
+          "flur": "2",
+          "flurstueck_zaehler": 6,
+          "flurstueck_nenner": "12",
+          "wirtschaftliche_einheit_zaehler": "2.0000",
+          "wirtschaftliche_einheit_nenner": "4"
+        },
+        "groesse_qm": 100000000
+      }
+    ]
+  },
   "gebaeude": {
     "ab1949": {
       "isAb1949": "true"
@@ -96,5 +141,6 @@
         "telefonnummer": "123-456"
       }
     }
-  }
+  },
+  "freitext": "lorem ipsum"
 }

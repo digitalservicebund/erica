@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -8,7 +8,7 @@ click = "==8.0.4"
 fastapi = "~=0.75.0"
 freezegun = "*"
 pydantic = "~=1.9.0"
-pytest = "==7.1.0"
+pytest = "==7.1.1"
 uvicorn = "~=0.17.5"
 babel = "*"
 python-dotenv = "*"
@@ -28,13 +28,18 @@ redis = "*"
 opyoid = "*"
 injector = "*"
 orjson = "*"
+alembic = "*"
 
 [dev-packages]
 pytest = "*"
+fakeredis = "*"
 flake8 = "*"
 invoke = "*"
 xmldiff = "*"
 requests = "*"
+pytest-frozen-uuids = "*"
+pytest-pgsql = "*"
+pytest-asyncio = "*"
 pytest-xdist = "*"
 
 [requires]

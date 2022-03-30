@@ -1,27 +1,8 @@
-from abc import ABCMeta, ABC
-from uuid import UUID
-
-from pydantic import BaseModel
-
-from erica.domain.Repositories.BaseRepositoryInterface import BaseRepositoryInterface
-from erica.domain.Shared.BaseDomainModel import BaseDomainModel
-from erica.domain.Shared.Status import Status
+from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst, MetaDataEst
 
 
-class TaxDeclarationPayload(BaseModel):
-    name: str
-    last_name: str
-    tax_ident: str
+class TaxDeclarationPayload(BasePayload):
+    est_data: FormDataEst
+    meta_data: MetaDataEst
 
-
-class TaxDeclaration(BaseDomainModel[UUID]):
-    status: Status = Status.new
-    payload: TaxDeclarationPayload
-    user_id: UUID
-
-    class Config:
-        orm_mode = True
-
-
-class TaxDeclarationRepositoryInterface(BaseRepositoryInterface[TaxDeclaration], ABC):
-    __metaclass__ = ABCMeta

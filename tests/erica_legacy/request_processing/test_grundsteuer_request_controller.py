@@ -9,13 +9,13 @@ from xmldiff import main
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
-from tests.erica_legacy.samples.grundsteuer_sample_data import get_grundsteuer_sample_data
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
 
 
 @pytest.fixture
 def valid_grundsteuer_request_controller():
-    grundsteuer_input = get_grundsteuer_sample_data()
+    grundsteuer_input = SampleGrundsteuerData().parse()
     return GrundsteuerRequestController(grundsteuer_input)
 
 
@@ -54,6 +54,18 @@ class TestGenerateFullXml:
             request_controller = GrundsteuerRequestController(parsed_input)
             resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
             with open('tests/erica_legacy/samples/grundsteuer_sample_xml.xml') as f:
+                expected_xml = f.read()
+                diff = main.diff_texts(bytes(bytearray(resulting_xml, "utf8")),
+                                       expected_xml.encode())
+                assert diff == []
+
+    def test_returns_full_expected_xml_for_given_input_bruchteilsgemeinschaft(self):
+        with open('tests/erica_legacy/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json') as json_file:
+            payload = json.loads(json_file.read())
+            parsed_input = GrundsteuerData.parse_obj(payload)
+            request_controller = GrundsteuerRequestController(parsed_input)
+            resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
+            with open('tests/erica_legacy/samples/grundsteuer_sample_xml_bruchteilsgemeinschaft.xml') as f:
                 expected_xml = f.read()
                 diff = main.diff_texts(bytes(bytearray(resulting_xml, "utf8")),
                                        expected_xml.encode())
