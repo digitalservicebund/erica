@@ -26,8 +26,7 @@ class Settings(BaseSettings):
     testing_email_address: str = 'steuerlotse_testing@4germany.org'  # always set, but not evaluated at Elster's
     elster_datenlieferant: str = Field("PLACEHOLDER_DATENLIEFERANT", env='ELSTER_DATENLIEFERANT')
     hersteller_id: str = Field("74931", env='ELSTER_HERSTELLER_ID')
-    queue_host: str = Field("localhost", env='QUEUE_HOST')
-    queue_port: int = Field(6379, env='QUEUE_PORT')
+    queue_url: str = Field("redis://default@localhost:6379/0", env='QUEUE_URL')
     default_queues: List[str] = ['dongle', 'cert', 'common']
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
 
