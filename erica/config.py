@@ -1,7 +1,6 @@
 import os
 from sys import platform
 from functools import lru_cache
-from typing import List
 
 from pydantic import Field
 from pydantic.env_settings import BaseSettings
