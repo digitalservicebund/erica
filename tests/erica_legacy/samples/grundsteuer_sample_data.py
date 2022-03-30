@@ -1,8 +1,9 @@
 import datetime
+from typing import Optional
 
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Vertreter, \
-    Empfangsbevollmaechtigter, Person, Eigentuemer
+    Empfangsbevollmaechtigter, Person, Eigentuemer, Bruchteilsgemeinschaft
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck, Flurstueck
 
@@ -44,6 +45,10 @@ class SampleAdresse(Builder):
 
     def ort(self, ort):
         self.dict["ort"] = ort
+        return self
+
+    def bundesland(self, bundesland):
+        self.dict["bundesland"] = bundesland
         return self
 
 
@@ -127,9 +132,9 @@ class SampleGrundstueck(Builder):
     def __init__(self):
         super().__init__()
         self.adresse = SampleAdresse().strasse("Madeupstr").hausnummer("22").hausnummerzusatz("b").plz("33333").ort(
-            "Bielefeld")
+            "Bielefeld").bundesland("BE")
         self.dict = {
-            "steuernummer": "1121081508150",
+            "steuernummer": "2181508150",
             "typ": "einfamilienhaus",
             "innerhalb_einer_gemeinde": True,
             "bodenrichtwert": "41,99",
@@ -145,6 +150,10 @@ class SampleGrundstueck(Builder):
         self.adresse.hausnummer(hausnummer)
         return self
 
+    def hausnummerzusatz(self, hausnummerzusatz):
+        self.adresse.hausnummerzusatz(hausnummerzusatz)
+        return self
+
     def zusatzangaben(self, zusatzangaben):
         self.adresse.zusatzangaben(zusatzangaben)
         return self
@@ -155,6 +164,14 @@ class SampleGrundstueck(Builder):
 
     def ort(self, ort):
         self.adresse.ort(ort)
+        return self
+
+    def bundesland(self, bundesland):
+        self.adresse.dict['bundesland'] = bundesland
+        return self
+
+    def steuernummer(self, steuernummer):
+        self.dict["steuernummer"] = steuernummer
         return self
 
     def typ(self, typ):
@@ -268,25 +285,56 @@ class SampleVertreter(Builder):
         return Vertreter.parse_obj(self.build())
 
 
+class SampleBruchteilsgemeinschaft(Builder):
+    adresse: SampleAdresse
+
+    def __init__(self):
+        super().__init__()
+        self.dict["name"] = "Bruchteilsgemeinschaft Hogsmeade"
+        self.adresse = SampleAdresse().plz("08642").ort("Hogsmeade")
+
+    def name(self, name: str):
+        self.dict["name"] = name
+        return self
+
+    def with_strasse(self):
+        self.adresse.strasse("Diagon Alley").hausnummer(3).hausnummerzusatz("c")
+        return self
+
+    def with_postfach(self):
+        self.adresse.postfach("34567")
+        return self
+
+    def complete(self):
+        return self.with_strasse().with_postfach()
+
+    def build(self):
+        self.dict["adresse"] = self.adresse.build()
+        return super().build()
+
+    def parse(self):
+        return Bruchteilsgemeinschaft.parse_obj(self.build())
+
+
 class SampleBevollmaechtigter(Builder):
     name: SampleName
-    adressse: SampleAdresse
+    adresse: SampleAdresse
 
     def __init__(self):
         super().__init__()
         self.name = SampleName().anrede("frau").name("McGonagall").vorname("Minerva")
-        self.adressse = SampleAdresse().plz("08642").ort("Hogsmeade")
+        self.adresse = SampleAdresse().plz("08642").ort("Hogsmeade")
 
     def with_title(self):
         self.name.titel("Prof.")
         return self
 
     def with_strasse(self):
-        self.adressse.strasse("Diagon Alley").hausnummer("3").hausnummerzusatz("c")
+        self.adresse.strasse("Diagon Alley").hausnummer(3).hausnummerzusatz("c")
         return self
 
     def with_postfach(self):
-        self.adressse.postfach("34567")
+        self.adresse.postfach("34567")
         return self
 
     def with_telefonnummer(self):
@@ -298,7 +346,7 @@ class SampleBevollmaechtigter(Builder):
 
     def build(self):
         self.dict["name"] = self.name.build()
-        self.dict["adresse"] = self.adressse.build()
+        self.dict["adresse"] = self.adresse.build()
         return super().build()
 
     def parse(self):
@@ -363,6 +411,10 @@ class SampleEigentuemer(Builder):
         self.dict["verheiratet"] = {"are_verheiratet": are_verheiretet}
         return self
 
+    def bruchteilsgemeinschaft(self, bruchteilsgemeinschaft):
+        self.dict["bruchteilsgemeinschaft"] = bruchteilsgemeinschaft
+        return self
+
     def empfangsbevollmaechtigter(self, empfangsbevollmaechtigter):
         self.dict["empfangsbevollmaechtigter"] = empfangsbevollmaechtigter
         return self
@@ -379,7 +431,7 @@ class DefaultSampleEigentuemer(SampleEigentuemer):
 
 class SampleGrundsteuerData(Builder):
     grundstueck: SampleGrundstueck
-    gebaeude: SampleGebaeude
+    gebaeude: Optional[SampleGebaeude]
     eigentuemer: SampleEigentuemer
 
     def __init__(self):
@@ -396,9 +448,18 @@ class SampleGrundsteuerData(Builder):
         self.eigentuemer.empfangsbevollmaechtigter(SampleBevollmaechtigter().build())
         return self
 
+    def with_grundstueck(self, grundstueck: SampleGrundstueck):
+        self.grundstueck = grundstueck
+        return self
+
+    def without_gebaeude(self):
+        self.gebaeude = None
+        return self
+
     def build(self):
         self.dict["grundstueck"] = self.grundstueck.build()
-        self.dict["gebaeude"] = self.gebaeude.build()
+        if self.gebaeude:
+            self.dict["gebaeude"] = self.gebaeude.build()
         self.dict["eigentuemer"] = self.eigentuemer.build()
         return super().build()
 

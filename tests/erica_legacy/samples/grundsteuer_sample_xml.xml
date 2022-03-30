@@ -28,7 +28,7 @@
         <Nutzdatenblock>
             <NutzdatenHeader version="11">
                 <NutzdatenTicket>1</NutzdatenTicket>
-                <Empfaenger id="F">1121</Empfaenger>
+                <Empfaenger id="F">5208</Empfaenger>
             </NutzdatenHeader>
             <Nutzdaten>
                 <E88 version="2" xmlns="http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2">
@@ -53,7 +53,7 @@
                                 <E7401144>7</E7401144>
                                 <E7401145>14</E7401145>
                                 <E7411001>42</E7411001>
-                                <E7410702>1.0000</E7410702>
+                                <E7410702>1,0000</E7410702>
                                 <E7410703>2</E7410703>
                                 <E7410704>1</E7410704>
                             </Einz>
@@ -63,43 +63,12 @@
                                 <E7401143>2</E7401143>
                                 <E7401144>6</E7401144>
                                 <E7401145>12</E7401145>
-                                <E7411001>100000000000000</E7411001>
-                                <E7410702>2.0000</E7410702>
+                                <E7411001>100000000</E7411001>
+                                <E7410702>2,0000</E7410702>
                                 <E7410703>4</E7410703>
                                 <E7410704>1</E7410704>
                             </Einz>
                         </Gemarkungen>
-                        <Eigentuemer>
-                            <Beteiligter>1</Beteiligter>
-                            <E7404510>03</E7404510>
-                            <E7404513>Hermione</E7404513>
-                            <E7404511>Granger</E7404511>
-                            <E7404524>Grimmauld Place</E7404524>
-                            <E7404540>77777</E7404540>
-                            <E7404522>London</E7404522>
-                            <E7404519>04452317681</E7404519>
-                            <Anteil>
-                                <E7404570>1</E7404570>
-                                <E7404571>1</E7404571>
-                            </Anteil>
-                            <Ges_Vertreter>
-                                <E7415101>01</E7415101>
-                                <E7415201>Kingsley</E7415201>
-                                <E7415301>Shacklebolt</E7415301>
-                                <E7415601>98765</E7415601>
-                                <E7415603>Godric's Hollow</E7415603>
-                                <E7415102>Prof.</E7415102>
-                                <E7415602>32263</E7415602>
-                                <E7415604>030-32168</E7415604>
-                            </Ges_Vertreter>
-                            <E7404525>12</E7404525>
-                            <E7404526>a</E7404526>
-                            <E7404514>Dr</E7404514>
-                            <E7404518>19.09.1979</E7404518>
-                        </Eigentuemer>
-                        <Eigentumsverh>
-                            <E7401340>0</E7401340>
-                        </Eigentumsverh>
                         <Empfangsv>
                             <E7404610>03</E7404610>
                             <E7404614>Prof.</E7404614>
@@ -116,6 +85,37 @@
                             <E7413001>1</E7413001>
                             <E7411702>lorem ipsum</E7411702>
                         </Erg_Angaben>
+                        <Eigentumsverh>
+                            <E7401340>0</E7401340>
+                        </Eigentumsverh>
+                        <Eigentuemer>
+                            <Beteiligter>1</Beteiligter>
+                            <E7404510>03</E7404510>
+                            <E7404514>Dr</E7404514>
+                            <E7404518>19.09.1979</E7404518>
+                            <E7404513>Hermione</E7404513>
+                            <E7404511>Granger</E7404511>
+                            <E7404524>Grimmauld Place</E7404524>
+                            <E7404525>12</E7404525>
+                            <E7404526>a</E7404526>
+                            <E7404540>77777</E7404540>
+                            <E7404522>London</E7404522>
+                            <E7404519>04452317681</E7404519>
+                            <Anteil>
+                                <E7404570>1</E7404570>
+                                <E7404571>1</E7404571>
+                            </Anteil>
+                            <Ges_Vertreter>
+                                <E7415101>01</E7415101>
+                                <E7415102>Prof.</E7415102>
+                                <E7415201>Kingsley</E7415201>
+                                <E7415301>Shacklebolt</E7415301>
+                                <E7415601>98765</E7415601>
+                                <E7415602>32263</E7415602>
+                                <E7415603>Godric's Hollow</E7415603>
+                                <E7415604>030-32168</E7415604>
+                            </Ges_Vertreter>
+                        </Eigentuemer>
                     </GW1>
                     <GW2>
                         <Ang_Grundstuecksart>
@@ -123,7 +123,7 @@
                         </Ang_Grundstuecksart>
                         <Ang_Grund>
                             <Ang_Flaeche>
-                                <E7403010>50000000000021</E7403010>
+                                <E7403010>50000021</E7403010>
                                 <E7403011>41,99</E7403011>
                             </Ang_Flaeche>
                         </Ang_Grund>
@@ -135,10 +135,10 @@
                                 <E7403171>2</E7403171>
                             </Garagen>
                             <Ang_Durchschn>
-                                <Wohn_Unter60>
+                                <Wohn_unter60>
                                     <E7403131>1</E7403131>
                                     <E7403132>42</E7403132>
-                                </Wohn_Unter60>
+                                </Wohn_unter60>
                                 <Wohn_60bis100>
                                     <E7403141>1</E7403141>
                                     <E7403142>99</E7403142>
@@ -153,14 +153,14 @@
                     <Vorsatz>
                         <Unterfallart>88</Unterfallart>
                         <Vorgang>01</Vorgang>
-                        <StNr>1121081508150</StNr>
+                        <Aktenzeichen>520850353038893</Aktenzeichen>
                         <Zeitraum>2022</Zeitraum>
                         <AbsName>Hermione Granger</AbsName>
                         <AbsStr>Grimmauld Place</AbsStr>
                         <AbsPlz>77777</AbsPlz>
                         <AbsOrt>London</AbsOrt>
                         <Copyright>(C) 2022 DigitalService4Germany</Copyright>
-                        <OrdNrArt>S</OrdNrArt>
+                        <OrdNrArt>A</OrdNrArt>
                         <Rueckuebermittlung>
                             <Bescheid>2</Bescheid>
                         </Rueckuebermittlung>

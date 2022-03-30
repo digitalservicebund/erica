@@ -7,8 +7,6 @@ from decimal import Decimal
 import pytest
 import requests
 
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
-
 ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://0.0.0.0:8000")
 
 
@@ -80,7 +78,8 @@ def full_est_data():
 
 @pytest.fixture()
 def full_grundsteuer_data():
-    return SampleGrundsteuerData().build().dict()
+    grundsteuer_data = {'freitext': '', 'grundstueck': {'steuernummer': '2181508150', 'typ': 'einfamilienhaus', 'innerhalb_einer_gemeinde': True, 'bodenrichtwert': '41,99', 'flurstueck': [], 'adresse': {'strasse': 'Madeupstr', 'hausnummer': '22', 'hausnummerzusatz': 'b', 'plz': '33333', 'ort': 'Bielefeld', 'bundesland': 'BE'}}, 'gebaeude': {'ab1949': {'is_ab1949': False}, 'kernsaniert': {'is_kernsaniert': False}, 'abbruchverpflichtung': {'has_abbruchverpflichtung': False}, 'weitere_wohnraeume': {'has_weitere_wohnraeume': False}, 'garagen': {'has_garagen': False}, 'wohnflaechen': [42]}, 'eigentuemer': {'person': [{'steuer_id': {'steuer_id': '04452317681'}, 'anteil': {'zaehler': 1, 'nenner': 1}, 'persoenlicheAngaben': {'anrede': 'frau', 'name': 'Granger', 'vorname': 'Hermione'}, 'adresse': {'plz': '7777', 'ort': 'London'}}]}}
+    return grundsteuer_data
 
 
 class TestV1Ping:
@@ -143,7 +142,7 @@ class TestV1ValidTaxNumber:
 class TestV1TaxOfficeList:
 
     def test_if_get_list_then_return_json_list_of_tax_offices(self):
-        with open("erica/erica_legacy/static/tax_offices.json", "r") as response_file:
+        with open("erica/infrastructure/static/tax_offices.json", "r") as response_file:
             response_content = json.load(response_file)
 
         response = requests.get(ERICA_TESTING_URL + f"/01/tax_offices",)
@@ -226,11 +225,3 @@ class TestV1Grundsteuer:
 
         assert response.status_code == 422
         assert response.json()['detail']["message"] == 'ERIC_GLOBAL_PRUEF_FEHLER'
-
-
-class TestV2Ping:
-
-    def test_if_get_from_ping_then_return_pong(self):
-        response = requests.get(ERICA_TESTING_URL + "/v2/ping")
-
-        assert response.text == '"pong"'

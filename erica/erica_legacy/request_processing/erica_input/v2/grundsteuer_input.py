@@ -8,7 +8,7 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grun
 
 class GrundsteuerData(CamelCaseInput):
     grundstueck: Grundstueck
-    gebaeude: Gebaeude
+    gebaeude: Optional[Gebaeude]
     eigentuemer: Eigentuemer
     freitext: Optional[str]
 

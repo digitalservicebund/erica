@@ -120,7 +120,7 @@ class TestEAngDurchschn:
 
         result = EAngDurchschn(gebaeude)
 
-        assert result.Wohn_Unter60 == EWohnUnter60([59])
+        assert result.Wohn_unter60 == EWohnUnter60([59])
         assert result.Wohn_60bis100 is None
         assert result.Wohn_ab100 is None
 
@@ -129,7 +129,7 @@ class TestEAngDurchschn:
 
         result = EAngDurchschn(gebaeude)
 
-        assert result.Wohn_Unter60 is None
+        assert result.Wohn_unter60 is None
         assert result.Wohn_60bis100 == EWohn60bis100([99])
         assert result.Wohn_ab100 is None
 
@@ -138,7 +138,7 @@ class TestEAngDurchschn:
 
         result = EAngDurchschn(gebaeude)
 
-        assert result.Wohn_Unter60 is None
+        assert result.Wohn_unter60 is None
         assert result.Wohn_60bis100 is None
         assert result.Wohn_ab100 == EWohnAb100([100])
 
@@ -147,7 +147,7 @@ class TestEAngDurchschn:
 
         result = EAngDurchschn(gebaeude)
 
-        assert result.Wohn_Unter60 == EWohnUnter60([59])
+        assert result.Wohn_unter60 == EWohnUnter60([59])
         assert result.Wohn_60bis100 == EWohn60bis100([99])
         assert result.Wohn_ab100 == EWohnAb100([100])
 

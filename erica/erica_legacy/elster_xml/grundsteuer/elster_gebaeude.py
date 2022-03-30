@@ -58,7 +58,7 @@ class EWeitereWohn:
 
 @dataclass
 class EAngDurchschn:
-    Wohn_Unter60: Optional[EWohnUnter60]
+    Wohn_unter60: Optional[EWohnUnter60]
     Wohn_60bis100: Optional[EWohn60bis100]
     Wohn_ab100: Optional[EWohnAb100]
     Weitere_Wohn: Optional[EWeitereWohn]
@@ -70,7 +70,7 @@ class EAngDurchschn:
         flaechen_60bis100 = list(filter(lambda f: 60 <= f < 100, flaechen))
         flaechen_ab100 = list(filter(lambda f: f >= 100, flaechen))
 
-        self.Wohn_Unter60 = EWohnUnter60(flaechen_unter60) if flaechen_unter60 else None
+        self.Wohn_unter60 = EWohnUnter60(flaechen_unter60) if flaechen_unter60 else None
         self.Wohn_60bis100 = EWohn60bis100(flaechen_60bis100) if flaechen_60bis100 else None
         self.Wohn_ab100 = EWohnAb100(flaechen_ab100) if flaechen_ab100 else None
 
@@ -89,27 +89,27 @@ class EAngWohn:
     Garagen: Optional[EGaragen]
     Ang_Durchschn: EAngDurchschn
 
-    def __init__(self, gebauede: GebaeudeInput):
-        if gebauede.ab1949.is_ab1949:
+    def __init__(self, gebaeude: GebaeudeInput):
+        if gebaeude.ab1949.is_ab1949:
             self.E7403113 = None
-            self.E7403114 = gebauede.baujahr.baujahr
+            self.E7403114 = gebaeude.baujahr.baujahr
         else:
             self.E7403113 = 1
             self.E7403114 = None
 
-        if gebauede.kernsaniert.is_kernsaniert:
-            self.E7403115 = gebauede.kernsanierungsjahr.kernsanierungsjahr
+        if gebaeude.kernsaniert.is_kernsaniert:
+            self.E7403115 = gebaeude.kernsanierungsjahr.kernsanierungsjahr
         else:
             self.E7403115 = None
 
-        if gebauede.abbruchverpflichtung.has_abbruchverpflichtung:
-            self.E7403116 = gebauede.abbruchverpflichtungsjahr.abbruchverpflichtungsjahr
+        if gebaeude.abbruchverpflichtung.has_abbruchverpflichtung:
+            self.E7403116 = gebaeude.abbruchverpflichtungsjahr.abbruchverpflichtungsjahr
         else:
             self.E7403116 = None
 
-        if gebauede.garagen.has_garagen:
-            self.Garagen = EGaragen(gebauede.garagen_anzahl)
+        if gebaeude.garagen.has_garagen:
+            self.Garagen = EGaragen(gebaeude.garagen_anzahl)
         else:
             self.Garagen = None
 
-        self.Ang_Durchschn = EAngDurchschn(gebauede)
+        self.Ang_Durchschn = EAngDurchschn(gebaeude)

@@ -3,25 +3,10 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Optional, List
 
-from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart
+from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart, \
+    elsterify_wirtschaftliche_einheit_zaehler
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck, \
     Flurstueck, Grundstuecksart
-
-
-@dataclass
-class Hausnummer:
-    """
-    Parses a combined hausnumer+hausnummerzusatz into separate components. The input must either be None or adhere
-    to the format 1-4 digits followed by 0 or more alphanumeric characters.
-    """
-    nummer: Optional[str] = None
-    zusatz: Optional[str] = None
-
-    def __init__(self, combined_hausnummer: str):
-        if combined_hausnummer:
-            parsed = re.match(r"([0-9]{1,4})([a-zA-Z0-9]*)", combined_hausnummer).groups()
-            self.nummer = parsed[0]
-            self.zusatz = parsed[1] if parsed[1] else None
 
 
 @dataclass
@@ -35,11 +20,8 @@ class ELage:
 
     def __init__(self, adresse: Adresse):
         self.E7401124 = adresse.strasse
-
-        hausnummer = Hausnummer(adresse.hausnummer)
-        self.E7401125 = hausnummer.nummer
-        self.E7401126 = hausnummer.zusatz
-
+        self.E7401125 = adresse.hausnummer
+        self.E7401126 = adresse.hausnummerzusatz
         self.E7401131 = adresse.zusatzangaben
         self.E7401121 = adresse.plz
         self.E7401122 = adresse.ort
@@ -80,7 +62,7 @@ class EFlurstueck:
         self.E7401144 = flurstueck.flur.flurstueck_zaehler
         self.E7401145 = flurstueck.flur.flurstueck_nenner
         self.E7411001 = flurstueck.groesse_qm
-        self.E7410702 = flurstueck.flur.wirtschaftliche_einheit_zaehler
+        self.E7410702 = elsterify_wirtschaftliche_einheit_zaehler(flurstueck.flur.wirtschaftliche_einheit_zaehler)
         self.E7410703 = flurstueck.flur.wirtschaftliche_einheit_nenner
         self.E7410704 = 1  # "erste Flaeche"
 

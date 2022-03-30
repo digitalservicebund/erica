@@ -11,7 +11,9 @@ from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code, 
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService
 from erica.application.JobService.job_service_factory import get_job_service
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload, FreischaltCodeRequestPayload, \
+    FreischaltCodeRevocatePayload
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
     get_transfer_ticket_from_xml
@@ -33,7 +35,7 @@ class TestRequestFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        dto=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type)]
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
@@ -69,7 +71,7 @@ class TestIntegrationWithDatabaseAndRequestFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
-        payload = FreischaltCodeRequestDto(idnr='04452397687', date_of_birth=date(1950, 8, 16))
+        payload = FreischaltCodeRequestPayload(idnr='04452397687', date_of_birth=date(1950, 8, 16))
         service = get_job_service(RequestType.freischalt_code_request)
         entity = service.repository.create(EricaRequest(
             request_id=uuid4(),
@@ -105,7 +107,7 @@ class TestActivateFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        dto=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type)]
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
@@ -141,7 +143,7 @@ class TestIntegrationWithDatabaseAndActivateFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
-        payload = FreischaltCodeActivateDto(idnr='04452397687', freischalt_code='Alohomora', elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
+        payload = FreischaltCodeActivatePayload(idnr='04452397687', freischalt_code='Alohomora', elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
         service = get_job_service(RequestType.freischalt_code_activate)
         entity = service.repository.create(EricaRequest(
             request_id=uuid4(),
@@ -177,7 +179,7 @@ class TestRevocateFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        dto=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type)]
 
     @pytest.mark.asyncio
     async def test_get_job_service_called_with_correct_param(self):
@@ -213,7 +215,7 @@ class TestIntegrationWithDatabaseAndRevocateFreischaltcode:
 
     @pytest.mark.asyncio
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
-        payload = FreischaltCodeRevocateDto(idnr='04452397687', dob=date(1950, 8, 16), elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
+        payload = FreischaltCodeRevocatePayload(idnr='04452397687', dob=date(1950, 8, 16), elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
         service = get_job_service(RequestType.freischalt_code_revocate)
         entity = service.repository.create(EricaRequest(
             request_id=uuid4(),

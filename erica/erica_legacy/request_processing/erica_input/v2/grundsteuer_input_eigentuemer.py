@@ -65,6 +65,11 @@ class Person(CamelCaseInput):
     anteil: Anteil
 
 
+class Bruchteilsgemeinschaft(CamelCaseInput):
+    name: str
+    adresse: Adresse
+
+
 class Empfangsbevollmaechtigter(CamelCaseInput):
     name: Name
     adresse: Adresse
@@ -74,6 +79,7 @@ class Empfangsbevollmaechtigter(CamelCaseInput):
 class Eigentuemer(CamelCaseInput):
     person: List[Person]
     verheiratet: Optional[Verheiratet]
+    bruchteilsgemeinschaft: Optional[Bruchteilsgemeinschaft]
     empfangsbevollmaechtigter: Optional[Empfangsbevollmaechtigter]
 
     @validator("verheiratet", always=True)

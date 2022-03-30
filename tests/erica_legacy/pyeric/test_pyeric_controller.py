@@ -127,14 +127,14 @@ class TestEstValidationPyericControllerRunPyEric(unittest.TestCase):
 
 class TestGrundsteuerPyericProcessControllerRunPyEric(unittest.TestCase):
 
-    def test_if_pyeric_initialised_then_call_process_verfahren_with_correct_verfahren(self):
+    def test_if_pyeric_initialised_then_call_validate_and_send_with_correct_verfahren(self):
         xml = "<xml></xml>"
         pyeric_controller = GrundsteuerPyericProcessController(xml)
         mock_eric_wrapper = MagicMock()
 
         pyeric_controller.run_eric(mock_eric_wrapper)
 
-        mock_eric_wrapper.process_verfahren.assert_called_once_with(xml, "Grundsteuerwert_2")
+        mock_eric_wrapper.validate_and_send.assert_called_once_with(xml, "Grundsteuerwert_2")
 
 
 class TestUnlockCodeRequestPyericControllerRunPyEric(unittest.TestCase):

@@ -1101,6 +1101,36 @@ class TestGetstateIdList(unittest.TestCase):
         self.assertEqual(buffer.decode(), result)
 
 
+@pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
+class TestGetElectronicAktenzeichen(unittest.TestCase):
+    def setUp(self):
+        self.eric_api_with_mocked_binaries = EricWrapper()
+        self.mock_eric = MagicMock()
+        self.mock_fun_make_aktenzeichen_successful = MagicMock(__name__="EricMtMakeElsterEWAz", return_value=0)
+        self.mock_fun_make_aktenzeichen_unsuccessful = MagicMock(__name__="EricMtMakeElsterEWAz", return_value=-1)
+        self.mock_fun_close_buffer_successful = MagicMock(__name__="EricMtRueckgabepufferFreigeben", return_value=0)
+        self.mock_eric.EricMtMakeElsterEWAz = self.mock_fun_make_aktenzeichen_successful
+        self.mock_eric.EricMtRueckgabepufferFreigeben = self.mock_fun_close_buffer_successful
+        self.eric_api_with_mocked_binaries.eric = self.mock_eric
+        self.eric_api_with_mocked_binaries.read_buffer = MagicMock(return_value=b'')
+
+    def test_correct_library_is_called(self):
+        self.eric_api_with_mocked_binaries.get_electronic_aktenzeichen("2080353038893", "NW")
+
+        self.mock_fun_make_aktenzeichen_successful.assert_called_once()
+
+    def test_if_eric_returns_unsuccessful_res_code_error_is_thrown(self):
+        self.mock_eric.EricMtMakeElsterEWAz = self.mock_fun_make_aktenzeichen_unsuccessful
+
+        with pytest.raises(EricProcessNotSuccessful):
+            self.eric_api_with_mocked_binaries.get_electronic_aktenzeichen("2080353038893", "NW")
+
+    def test_if_eric_returns_code_zero_then_raise_no_exception(self):
+        self.mock_fun_make_aktenzeichen_successful.reset_mock()
+
+        self.eric_api_with_mocked_binaries.get_electronic_aktenzeichen("2080353038893", "NW")
+
+
 class TestGetErrorMessageFromXml(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")

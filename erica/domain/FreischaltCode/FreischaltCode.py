@@ -1,27 +1,20 @@
 from abc import ABC
 from datetime import date
 
-from erica.domain.erica_request.erica_request import BasePayload
+from erica.domain.Shared.BaseDomainModel import BasePayload
 
 
 class FreischaltCodeRequestPayload(BasePayload, ABC):
-    tax_ident: str
-    dob: date
-
-    class Config:
-        orm_mode = True
+    idnr: str
+    date_of_birth: date
 
 
 class FreischaltCodeActivatePayload(BasePayload, ABC):
-    tax_ident: str
+    idnr: str
     freischalt_code: str
-
-    class Config:
-        orm_mode = True
+    elster_request_id: str
 
 
 class FreischaltCodeRevocatePayload(BasePayload, ABC):
-    tax_ident: str
-
-    class Config:
-        orm_mode = True
+    idnr: str
+    elster_request_id: str

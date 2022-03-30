@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Elster xmlns="http://www.elster.de/elsterxml/schema/v11">
+    <TransferHeader version="11">
+        <Verfahren>ElsterErklaerung</Verfahren>
+        <DatenArt>Grundsteuerwert</DatenArt>
+        <Vorgang>send-Auth</Vorgang>
+        <Testmerker>700000004</Testmerker>
+        <SigUser>
+            <Sig/>
+        </SigUser>
+        <Empfaenger id="L">
+            <Ziel>CS</Ziel>
+        </Empfaenger>
+        <HerstellerID>74931</HerstellerID>
+        <DatenLieferant>PLACEHOLDER_DATENLIEFERANT</DatenLieferant>
+        <Datei>
+            <Verschluesselung>CMSEncryptedData</Verschluesselung>
+            <Kompression>GZIP</Kompression>
+            <Erstellung>
+                <Eric>
+                    <Version></Version>
+                </Eric>
+            </Erstellung>
+        </Datei>
+        <VersionClient>1</VersionClient>
+    </TransferHeader>
+    <DatenTeil>
+        <Nutzdatenblock>
+            <NutzdatenHeader version="11">
+                <NutzdatenTicket>1</NutzdatenTicket>
+                <Empfaenger id="F">5208</Empfaenger>
+            </NutzdatenHeader>
+            <Nutzdaten>
+                <E88 version="2" xmlns="http://finkonsens.de/elster/elstererklaerung/grundsteuerwert/e88/v2">
+                    <GW1>
+                        <Ang_Feststellung>
+                            <E7401311>1</E7401311>
+                            <E7401310>1</E7401310>
+                        </Ang_Feststellung>
+                        <Lage>
+                            <E7401124>Madeupstr</E7401124>
+                            <E7401125>22</E7401125>
+                            <E7401126>a</E7401126>
+                            <E7401131>hinterhaus</E7401131>
+                            <E7401121>33333</E7401121>
+                            <E7401122>Bielefeld</E7401122>
+                        </Lage>
+                        <Gemarkungen>
+                            <Einz>
+                                <E7401141>some gemarkung</E7401141>
+                                <E7401142>1A</E7401142>
+                                <E7401143>1</E7401143>
+                                <E7401144>7</E7401144>
+                                <E7401145>14</E7401145>
+                                <E7411001>42</E7411001>
+                                <E7410702>1,0000</E7410702>
+                                <E7410703>2</E7410703>
+                                <E7410704>1</E7410704>
+                            </Einz>
+                            <Einz>
+                                <E7401141>another gemarkung</E7401141>
+                                <E7401142>2C</E7401142>
+                                <E7401143>2</E7401143>
+                                <E7401144>6</E7401144>
+                                <E7401145>12</E7401145>
+                                <E7411001>100000000</E7411001>
+                                <E7410702>2,0000</E7410702>
+                                <E7410703>4</E7410703>
+                                <E7410704>1</E7410704>
+                            </Einz>
+                        </Gemarkungen>
+                        <Empfangsv>
+                            <E7404610>03</E7404610>
+                            <E7404614>Prof.</E7404614>
+                            <E7404613>Minerva</E7404613>
+                            <E7404611>McGonagall</E7404611>
+                            <E7404624>Three Brooms</E7404624>
+                            <E7404625>3</E7404625>
+                            <E7404626>c</E7404626>
+                            <E7404640>08642</E7404640>
+                            <E7404622>Hogsmeade</E7404622>
+                            <E7412201>123-456</E7412201>
+                            <E7412901>1</E7412901>
+                        </Empfangsv>
+                        <Erg_Angaben>
+                            <E7413001>1</E7413001>
+                            <E7411702>lorem ipsum</E7411702>
+                        </Erg_Angaben>
+                        <Eigentumsverh>
+                            <E7401340>6</E7401340>
+                        </Eigentumsverh>
+                        <Ang_Gemeinschaften>
+                            <E7403301>01</E7403301>
+                            <E7404591>Bruchteilsgemeinschaft Gr</E7404591>
+                            <E7404592>immauldplace 12</E7404592>
+                            <E7413501>Three Brooms</E7413501>
+                            <E7413601>3</E7413601>
+                            <E7414526>c</E7414526>
+                            <E7413701>08642</E7413701>
+                            <E7413703>Hogsmeade</E7413703>
+                        </Ang_Gemeinschaften>
+                        <Eigentuemer>
+                            <Beteiligter>1</Beteiligter>
+                            <E7404510>03</E7404510>
+                            <E7404514>Dr</E7404514>
+                            <E7404518>19.09.1979</E7404518>
+                            <E7404513>Hermione</E7404513>
+                            <E7404511>Granger</E7404511>
+                            <E7404524>Grimmauld Place</E7404524>
+                            <E7404525>12</E7404525>
+                            <E7404526>a</E7404526>
+                            <E7404540>77777</E7404540>
+                            <E7404522>London</E7404522>
+                            <E7404519>04452317681</E7404519>
+                            <Anteil>
+                                <E7404570>2</E7404570>
+                                <E7404571>3</E7404571>
+                            </Anteil>
+                            <Ges_Vertreter>
+                                <E7415101>01</E7415101>
+                                <E7415102>Prof.</E7415102>
+                                <E7415201>Kingsley</E7415201>
+                                <E7415301>Shacklebolt</E7415301>
+                                <E7415601>98765</E7415601>
+                                <E7415602>32263</E7415602>
+                                <E7415603>Godric's Hollow</E7415603>
+                                <E7415604>030-32168</E7415604>
+                            </Ges_Vertreter>
+                        </Eigentuemer>
+                        <Eigentuemer>
+                            <Beteiligter>2</Beteiligter>
+                            <E7404510>02</E7404510>
+                            <E7404518>01.03.1980</E7404518>
+                            <E7404513>Ronald Arthur</E7404513>
+                            <E7404511>Weasley</E7404511>
+                            <E7404524>Grimmauld Place</E7404524>
+                            <E7404525>12</E7404525>
+                            <E7404526>a</E7404526>
+                            <E7404540>77777</E7404540>
+                            <E7404522>London</E7404522>
+                            <E7404519>02259674819</E7404519>
+                            <Anteil>
+                                <E7404570>1</E7404570>
+                                <E7404571>3</E7404571>
+                            </Anteil>
+                        </Eigentuemer>
+                    </GW1>
+                    <GW2>
+                        <Ang_Grundstuecksart>
+                            <E7401322>1</E7401322>
+                        </Ang_Grundstuecksart>
+                        <Ang_Grund>
+                            <Ang_Flaeche>
+                                <E7403010>50000021</E7403010>
+                                <E7403011>41,99</E7403011>
+                            </Ang_Flaeche>
+                        </Ang_Grund>
+                    </GW2>
+                    <Vorsatz>
+                        <Unterfallart>88</Unterfallart>
+                        <Vorgang>01</Vorgang>
+                        <Aktenzeichen>520850353038893</Aktenzeichen>
+                        <Zeitraum>2022</Zeitraum>
+                        <AbsName>Hermione Granger</AbsName>
+                        <AbsStr>Grimmauld Place</AbsStr>
+                        <AbsPlz>77777</AbsPlz>
+                        <AbsOrt>London</AbsOrt>
+                        <Copyright>(C) 2022 DigitalService4Germany</Copyright>
+                        <OrdNrArt>A</OrdNrArt>
+                        <Rueckuebermittlung>
+                            <Bescheid>2</Bescheid>
+                        </Rueckuebermittlung>
+                    </Vorsatz>
+                </E88>
+            </Nutzdaten>
+        </Nutzdatenblock>
+    </DatenTeil>
+</Elster>

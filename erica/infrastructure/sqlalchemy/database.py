@@ -20,7 +20,8 @@ def orjson_deserializer(json):
 
 
 def get_engine():
-    return create_engine(get_settings().database_url, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
+    return create_engine(
+        get_settings().database_url, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
 
 
 def run_migrations():
