@@ -148,6 +148,8 @@ jobs:
         -e ERICA_HOST='${{ env.ERICA_HOST }}' \
         -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
         -e CERT_PIN='${{ secrets.CERT_PIN_STAGING }}' \
+        -e QUEUE_URL ='${{ secrets.QUEUE_URL_STAGING }}' \
+        -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL_STAGING }}' \
         -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
         -e NAMESPACE='${{ env.NAMESPACE }}' \
         -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
