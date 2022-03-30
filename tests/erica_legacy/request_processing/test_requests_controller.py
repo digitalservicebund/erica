@@ -239,7 +239,7 @@ class TestUnlockCodeRequestInit(unittest.TestCase):
         expected_idnr = "09952417688"
         created_request = UnlockCodeRequestController(UnlockCodeRequestData(idnr=expected_idnr, dob=date(1969, 7, 20)))
 
-        self.assertEqual(expected_idnr, created_request.input_data.idnr)
+        self.assertEqual(expected_idnr, created_request.input_data.tax_id_number)
 
     def test_if_no_include_param_given_then_set_include_false(self):
         created_request = UnlockCodeRequestController(UnlockCodeRequestData(idnr="09952417688", dob=date(1969, 7, 20)))
@@ -313,7 +313,7 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
 class TestUnlockCodeRequestGenerateFullXml(unittest.TestCase):
 
     def test_if_dob_date_given_then_call_generate_full_xml_with_unlock_code_eric_mapping(self):
-        unlock_code_eric_mapping = UnlockCodeRequestEricMapper(idnr="09952417688", date_of_birth=date(1969, 7, 20))
+        unlock_code_eric_mapping = UnlockCodeRequestEricMapper(tax_id_number="09952417688", date_of_birth=date(1969, 7, 20))
 
         created_request = UnlockCodeRequestController(UnlockCodeRequestData(idnr="09952417688", dob=date(1969, 7, 20)))
 

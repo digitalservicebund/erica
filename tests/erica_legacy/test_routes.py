@@ -147,7 +147,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("request_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_request_include.idnr, response['idnr'])
+        self.assertEqual(correct_request_include.tax_id_number, response['idnr'])
         self.assertIn('eric_response', response)
         self.assertIn('server_response', response)
 
@@ -163,7 +163,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("request_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_request_no_include.idnr, response['idnr'])
+        self.assertEqual(correct_request_no_include.tax_id_number, response['idnr'])
         self.assertNotIn('eric_response', response)
         self.assertNotIn('server_response', response)
 
@@ -199,7 +199,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("activate_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_activation_include.idnr, response['idnr'])
+        self.assertEqual(correct_activation_include.tax_id_number, response['idnr'])
         self.assertIn('eric_response', response)
         self.assertIn('server_response', response)
 
@@ -217,7 +217,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("activate_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_activation_no_include.idnr, response['idnr'])
+        self.assertEqual(correct_activation_no_include.tax_id_number, response['idnr'])
         self.assertNotIn('eric_response', response)
         self.assertNotIn('server_response', response)
 

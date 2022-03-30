@@ -266,7 +266,7 @@ def _add_vast_request_xml_nutzdaten(xml_top, user_data):
     nutzdaten_xml = SubElement(xml_top, 'Nutzdaten')
     spez_recht_antrag_xml = SubElement(nutzdaten_xml, 'SpezRechtAntrag')
     spez_recht_antrag_xml.set('version', '3')
-    SubElement(spez_recht_antrag_xml, 'DateninhaberIdNr').text = user_data['idnr']
+    SubElement(spez_recht_antrag_xml, 'DateninhaberIdNr').text = user_data['tax_id_number']
     SubElement(spez_recht_antrag_xml, 'DateninhaberGeburtstag').text = user_data['date_of_birth']
     SubElement(spez_recht_antrag_xml, 'Recht').text = 'AbrufEBelege'
     SubElement(spez_recht_antrag_xml, 'GueltigBis').text = _compute_valid_until_date()
