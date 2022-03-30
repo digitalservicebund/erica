@@ -42,6 +42,7 @@ jobs:
         -e CERT_PIN='${{ secrets.CERT_PIN_PRODUCTION }}' \
         -e QUEUE_URL ='${{ secrets.QUEUE_URL_PRODUCTION }}' \
         -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL_PRODUCTION }}' \
+        -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
         -e NAMESPACE='${{ env.NAMESPACE }}' \
         -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
         ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica
