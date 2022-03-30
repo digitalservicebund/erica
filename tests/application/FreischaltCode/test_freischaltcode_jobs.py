@@ -5,8 +5,6 @@ from uuid import uuid4
 
 import pytest
 
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
-    FreischaltCodeRevocateDto
 from erica.application.FreischaltCode.Jobs.jobs import request_freischalt_code, activate_freischalt_code, \
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService
@@ -87,8 +85,6 @@ class TestIntegrationWithDatabaseAndRequestFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'server_response': None,
-                                         'eric_response': None,
                                          'idnr': payload.idnr,
                                          'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
 
@@ -159,8 +155,6 @@ class TestIntegrationWithDatabaseAndActivateFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'server_response': None,
-                                         'eric_response': None,
                                          'idnr': payload.idnr,
                                          'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
 
@@ -231,7 +225,5 @@ class TestIntegrationWithDatabaseAndRevocateFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'server_response': None,
-                                         'eric_response': None,
                                          'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
 

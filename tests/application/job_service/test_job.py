@@ -126,7 +126,7 @@ class TestJob:
         await perform_job(request_id=uuid4(), repository=mock_repository, service=service, payload_type=MagicMock(),
                           logger=MagicMock())
 
-        assert mock_entity.result == {**mock_result, 'server_response': None, 'eric_response': None}
+        assert mock_entity.result == {**mock_result}
         assert mock_entity.status == Status.success
         assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
 
