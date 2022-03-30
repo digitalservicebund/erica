@@ -13,7 +13,7 @@ class TestQueue:
             get_queue("NOT_ALLOWED_NAME")
 
     def test_if_no_queue_name_then_return_dongle_queue_with_correct_connection(self):
-        expected_queue = Queue("dongle", connection=Redis(get_settings().queue_host, get_settings().queue_port))
+        expected_queue = Queue("dongle", connection=Redis.from_url(get_settings().queue_url))
 
         returned_queue = get_queue()
 
@@ -21,21 +21,21 @@ class TestQueue:
 
 
     def test_if_queue_name_dongle_allowed_then_return_dongle_queue_with_correct_connection(self):
-        expected_queue = Queue("dongle", connection=Redis(get_settings().queue_host, get_settings().queue_port))
+        expected_queue = Queue("dongle", connection=Redis.from_url(get_settings().queue_url))
 
         returned_queue = get_queue("dongle")
 
         assert returned_queue == expected_queue
 
     def test_if_queue_name_cert_allowed_then_return_cert_queue_with_correct_connection(self):
-        expected_queue = Queue("cert", connection=Redis(get_settings().queue_host, get_settings().queue_port))
+        expected_queue = Queue("cert", connection=Redis.from_url(get_settings().queue_url))
 
         returned_queue = get_queue("cert")
 
         assert returned_queue == expected_queue
 
     def test_if_queue_name_common_allowed_then_return_common_queue_with_correct_connection(self):
-        expected_queue = Queue("common", connection=Redis(get_settings().queue_host, get_settings().queue_port))
+        expected_queue = Queue("common", connection=Redis.from_url(get_settings().queue_url))
 
         returned_queue = get_queue("common")
 
