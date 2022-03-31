@@ -1,5 +1,10 @@
 import os
 import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+os.environ["ERICA_ENV"] = 'testing'
+
+
 from datetime import date
 
 import pytest
@@ -41,6 +46,3 @@ def standard_est_input_data():
             confirm_send=True
         )
 
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-os.environ["ERICA_ENV"] = 'testing'
