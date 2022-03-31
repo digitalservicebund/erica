@@ -1,3 +1,4 @@
+import logging
 from abc import abstractmethod, ABCMeta
 from typing import Type, Callable
 from uuid import uuid4
@@ -49,11 +50,13 @@ class JobService(JobServiceInterface):
                                       )
 
         created = self.repository.create(request_entity)
+        logging.getLogger().info(f"EricaRequest created with id: {created.request_id}")
 
-        self.background_worker.enqueue(
+        job = self.background_worker.enqueue(
             self.job_method,
             created.request_id
         )
+        logging.getLogger().info(f"Job created with id {job.id} for EricaRequest with id {created.request_id}")
 
         return EricaRequestDto.parse_obj(created)
 
