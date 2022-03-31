@@ -6,9 +6,6 @@ import pytest
 
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-os.environ["ERICA_ENV"] = 'testing'
-
 
 @pytest.fixture
 def standard_est_input_data():
@@ -43,3 +40,7 @@ def standard_est_input_data():
             confirm_complete_correct=True,
             confirm_send=True
         )
+
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+os.environ["ERICA_ENV"] = 'testing'
