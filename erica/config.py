@@ -28,7 +28,6 @@ class Settings(BaseSettings):
     queue_url: str = Field("redis://default@localhost:6379/0", env='QUEUE_URL')
     default_queues: str = 'dongle, cert, common'
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
-    only_api: bool = Field(False, env="RUN_ONLY_API")
     dongle_connected: bool = Field(True, env="DONGLE_CONNECTED")
 
     class Config:
