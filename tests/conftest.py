@@ -1,6 +1,15 @@
 import os
 import sys
 
+import pytest_asyncio
+from opyoid import Injector
+
+from erica.api.ApiModule import ApiModule
+from erica.application.EricaRequest.EricaRequestService import EricaRequestServiceInterface
+from erica.erica_legacy.config import get_settings
+from erica.infrastructure.sqlalchemy.database import run_migrations
+from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockSchema
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 os.environ["ERICA_ENV"] = 'testing'
 
@@ -45,4 +54,43 @@ def standard_est_input_data():
             confirm_complete_correct=True,
             confirm_send=True
         )
+
+
+@pytest.fixture()
+def fake_db_connection_in_settings(database_uri):
+    postgresql_url = database_uri
+    original_db_url = get_settings().database_url
+    get_settings().database_url = postgresql_url
+
+    yield postgresql_url
+
+    get_settings().database_url = original_db_url
+
+
+@pytest.fixture
+def transactional_session_with_mock_schema(transacted_postgresql_db):
+    if not transacted_postgresql_db.has_table(MockSchema.__tablename__):
+        transacted_postgresql_db.create_table(MockSchema)
+
+    yield transacted_postgresql_db.session
+
+    transacted_postgresql_db.reset_db()
+
+
+@pytest_asyncio.fixture()
+async def async_fake_db_connection_with_erica_table_in_settings(database_uri):
+    postgresql_url =database_uri
+    original_db_url = get_settings().database_url
+    get_settings().database_url = postgresql_url
+    run_migrations()
+
+    yield postgresql_url
+
+    repository = Injector([ApiModule()]).inject(EricaRequestServiceInterface)
+    entities = repository.erica_request_repository.get()
+
+    for entity in entities:
+        repository.erica_request_repository.db_connection.delete(entity)
+    get_settings().database_url = original_db_url
+
 

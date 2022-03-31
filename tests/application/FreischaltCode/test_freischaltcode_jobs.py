@@ -68,6 +68,7 @@ class TestRequestFreischaltcode:
 class TestIntegrationWithDatabaseAndRequestFreischaltcode:
 
     @pytest.mark.asyncio
+    @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
         payload = FreischaltCodeRequestPayload(idnr='04452397687', date_of_birth=date(1950, 8, 16))
         service = get_job_service(RequestType.freischalt_code_request)
@@ -138,6 +139,7 @@ class TestActivateFreischaltcode:
 class TestIntegrationWithDatabaseAndActivateFreischaltcode:
 
     @pytest.mark.asyncio
+    @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
         payload = FreischaltCodeActivatePayload(idnr='04452397687', freischalt_code='Alohomora', elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
         service = get_job_service(RequestType.freischalt_code_activate)
@@ -208,6 +210,7 @@ class TestRevocateFreischaltcode:
 class TestIntegrationWithDatabaseAndRevocateFreischaltcode:
 
     @pytest.mark.asyncio
+    @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
         payload = FreischaltCodeRevocatePayload(idnr='04452397687', dob=date(1950, 8, 16), elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
         service = get_job_service(RequestType.freischalt_code_revocate)
