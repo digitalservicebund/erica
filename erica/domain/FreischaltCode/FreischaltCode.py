@@ -6,12 +6,12 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 
 class FreischaltCodeRequestPayload(BasePayload, ABC):
     idnr: str
-    dob: date
+    date_of_birth: date
 
 
 class FreischaltCodeActivatePayload(BasePayload, ABC):
     idnr: str
-    unlock_code: str
+    freischalt_code: str
     elster_request_id: str
 
 

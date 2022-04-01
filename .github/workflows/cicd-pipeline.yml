@@ -62,7 +62,6 @@ jobs:
 
     - name: Test
       run: |
-        docker-compose up -d
         pipenv run invoke --echo test | tee erica-test-report.log
       shell: bash
 
@@ -154,6 +153,43 @@ jobs:
         -e NAMESPACE='${{ env.NAMESPACE }}' \
         -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
         ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica
+      shell: bash
+
+    - name: Logout of docker container
+      run: docker logout ${{ env.DOCKER_REGISTRY }}
+
+  contract-tests:
+    needs: [deploy-staging]
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to container repository
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.DOCKER_REGISTRY }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_PWD }}
+
+    - name: Pull deploy image
+      run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
+      shell: bash
+
+    - name: Run contract tests
+      env:
+        NAMESPACE: erica-staging
+        IMAGE_TAG: 378
+      run: |
+        docker run \
+        -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
+        -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
+        -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
+        -e NAMESPACE='${{ env.NAMESPACE }}' \
+        -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
+        -e ERICA_TESTING_URL='${{ secrets.ERICA_TESTING_URL }}' \
+        ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica-contract-tests
       shell: bash
 
     - name: Logout of docker container

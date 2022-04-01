@@ -131,7 +131,7 @@ class EstRequestController(EstValidationRequestController):
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
-        response['pdf'] = base64.b64encode(pyeric_response.pdf)
+        response['pdf'] = (base64.b64encode(pyeric_response.pdf)).decode('utf-8')
         return response
 
 

@@ -24,6 +24,7 @@ from erica.erica_legacy.pyeric.eric import get_eric_wrapper
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.erica_legacy.elster_xml.transfer_header_fields import TransferHeaderFields
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib, use_testmerker_env_set_false, TEST_EST_VERANLAGUNGSJAHR
+from tests.utils import read_text_from_sample
 
 _BEANTRAGUNGSJAHR = TEST_EST_VERANLAGUNGSJAHR + 1
 
@@ -213,8 +214,7 @@ class TestGenerateTransferHeader(unittest.TestCase):
             datenLieferant='Softwaretester ERiC',
         )
 
-        with open('tests/erica_legacy/samples/sample_vast_request.xml', 'r') as f:
-            self.correct_input_xml_string = f.read()
+        self.correct_input_xml_string = read_text_from_sample('sample_vast_request.xml')
         self.correct_input_xml = remove_declaration_and_namespace(self.correct_input_xml_string)
         self.incorrect_input_xml = remove_declaration_and_namespace("<xml/>")
 
@@ -958,7 +958,7 @@ class TestVastRequest(unittest.TestCase):
         self.expected_antrag_version = '3'
         self.valid_user_data = {
             'idnr': '04452397687',
-            'dob': '1985-01-01'
+            'date_of_birth': '1985-01-01'
         }
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
@@ -1033,7 +1033,7 @@ class TestVastActivation(unittest.TestCase):
         self.expected_freischaltung_version = '1'
         self.valid_user_data = {
             'idnr': '04452397687',
-            'unlock_code': '1985-G456-T23L',
+            'freischalt_code': '1985-G456-T23L',
             'elster_request_id': '1234567890'
         }
 

@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-click = "==8.0.4"
+click = "==8.1.1"
 fastapi = "~=0.75.0"
 freezegun = "*"
 pydantic = "~=1.9.0"
@@ -40,6 +40,7 @@ requests = "*"
 pytest-frozen-uuids = "*"
 pytest-pgsql = "*"
 pytest-asyncio = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.9"
