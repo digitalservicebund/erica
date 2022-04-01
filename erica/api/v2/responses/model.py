@@ -26,6 +26,9 @@ class ResultGetSendEstFromQueue(BaseModel):
     transfer_ticket: str
     pdf: str
 
+class ResultGrundsteuerFromQueue(BaseModel):
+    transfer_ticket: str
+    pdf: str
 
 class EstResponseDto(ResponseGetFromQueue):
     result: Optional[ResultGetSendEstFromQueue]
@@ -54,6 +57,9 @@ class FreischaltcodeRequestAndActivationResponseDto(ResponseGetFromQueue):
 
 class FreischaltcodeRevocationResponseDto(ResponseGetFromQueue):
     result: Optional[TransferTicketAndIdnr]
+    
+class GrundsteuerResponseDto(ResponseGetFromQueue):
+    result: Optional[ResultGrundsteuerFromQueue]
 
 
 model_error_request_queue = {"model": ErrorRequestQueue,

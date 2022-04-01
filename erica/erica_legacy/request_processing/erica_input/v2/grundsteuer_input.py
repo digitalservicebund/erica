@@ -5,8 +5,11 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_geba
 from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input import CamelCaseInput
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck
 
+from abc import ABC
+from erica.domain.Shared.BaseDomainModel import BasePayload
 
-class GrundsteuerData(CamelCaseInput):
+
+class GrundsteuerData(BasePayload, ABC, CamelCaseInput):
     grundstueck: Grundstueck
     gebaeude: Optional[Gebaeude]
     eigentuemer: Eigentuemer
