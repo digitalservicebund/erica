@@ -62,13 +62,14 @@ class EricaRequestRepository(
         self.db_connection.commit()
         return deleted.rowcount
 
-    def set_processing_entities_to_failed(self, ttl) -> bool:
+    def update_status_not_finished_entities_to_failed(self, ttl) -> bool:
+        # TODO errorcode errormessage change?
         stmt = self.DatabaseEntity.__table__.update() \
             .where(or_(self.DatabaseEntity.status == Status.new, self.DatabaseEntity.status == Status.scheduled,
                        self.DatabaseEntity.status == Status.processing),
                    self.DatabaseEntity.updated_at < dt.datetime.now() - dt.timedelta(
                        minutes=ttl)).values(
-            status=Status.failed)
+            status=Status.failed, error_code="999", error_message="Request could not be processed within 2 minutes.")
         updated = self.db_connection.execute(stmt)
         self.db_connection.commit()
         return updated.rowcount

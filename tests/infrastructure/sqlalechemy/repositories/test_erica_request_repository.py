@@ -22,12 +22,12 @@ class MockEricaRequestRepository(
         self.DomainModel = MockDomainModel
 
 
-
 @pytest.fixture
 def transactional_erica_postgresql_db(transacted_postgresql_db):
     if not transacted_postgresql_db.has_table(EricaRequestSchema.__tablename__):
         transacted_postgresql_db.create_table(EricaRequestSchema)
     yield transacted_postgresql_db
+
 
 @pytest.fixture
 def transactional_erica_request_session(transactional_erica_postgresql_db):
@@ -40,14 +40,15 @@ class TestEricaRepositoryCreate:
     def test_if_create_object_then_set_timestamps_to_now(self, transactional_erica_postgresql_db):
         request_id = uuid4()
         mock_object = EricaRequest(request_id=request_id,
-                                       payload={'endboss': 'Melkor'},
-                                       creator_id="api",
-                                       type=RequestType.freischalt_code_request,
-                                       status=Status.new)
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=Status.new)
 
         EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
 
-        found_entity = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.request_id == request_id).first()
+        found_entity = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
 
         assert found_entity.created_at.timestamp() == datetime.datetime.utcnow().timestamp()
         assert found_entity.updated_at.timestamp() == datetime.datetime.utcnow().timestamp()
@@ -63,7 +64,8 @@ class TestEricaRepositoryGetByJobId:
         transactional_session_with_mock_schema.add(schema_object)
         transactional_session_with_mock_schema.commit()
 
-        found_entity = MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
+        found_entity = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
 
         assert found_entity == mock_object
 
@@ -72,19 +74,23 @@ class TestEricaRepositoryGetByJobId:
         request_id = uuid4()
 
         with pytest.raises(EntityNotFoundError):
-            MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
+            MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).get_by_job_request_id(
+                request_id)
 
 
 class TestEricaRepositoryUpdateByJobId:
 
-    def test_if_entity_in_database_then_return_updated_domain_representation(self, transactional_session_with_mock_schema):
+    def test_if_entity_in_database_then_return_updated_domain_representation(self,
+                                                                             transactional_session_with_mock_schema):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
         schema_object = MockSchema(**mock_object.dict())
         transactional_session_with_mock_schema.add(schema_object)
         transactional_session_with_mock_schema.commit()
         updated_object = MockDomainModel(payload={'endboss': 'Sauron'})
 
-        updated_entity = MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).update_by_job_request_id(schema_object.request_id, updated_object)
+        updated_entity = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).update_by_job_request_id(schema_object.request_id,
+                                                                                           updated_object)
 
         assert updated_entity == updated_object
 
@@ -95,9 +101,11 @@ class TestEricaRepositoryUpdateByJobId:
         transactional_session_with_mock_schema.commit()
         updated_object = MockDomainModel(payload={'endboss': 'Sauron'})
 
-        MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).update_by_job_request_id(schema_object.request_id, updated_object)
+        MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).update_by_job_request_id(
+            schema_object.request_id, updated_object)
 
-        updated_entry_in_db = transactional_session_with_mock_schema.query(MockSchema).filter(MockSchema.request_id == schema_object.request_id).first()
+        updated_entry_in_db = transactional_session_with_mock_schema.query(MockSchema).filter(
+            MockSchema.request_id == schema_object.request_id).first()
         assert updated_entry_in_db.request_id == schema_object.request_id
         assert updated_entry_in_db.payload == {'endboss': 'Sauron'}
 
@@ -107,7 +115,8 @@ class TestEricaRepositoryUpdateByJobId:
         updated_object = MockDomainModel(payload={'endboss': 'Sauron'})
 
         with pytest.raises(EntityNotFoundError):
-            MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).update_by_job_request_id(schema_object.request_id, updated_object)
+            MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).update_by_job_request_id(
+                schema_object.request_id, updated_object)
 
     @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
     def test_if_update_object_then_set_only_updated_at_timestamp(self, transacted_postgresql_db):
@@ -119,22 +128,26 @@ class TestEricaRepositoryUpdateByJobId:
                                        type=RequestType.freischalt_code_request,
                                        status=Status.new)
             created_object = EricaRequestRepository(db_connection=transacted_postgresql_db.session).create(mock_object)
-            found_entity_before_update = transacted_postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.request_id == request_id).first()
+            found_entity_before_update = transacted_postgresql_db.session.query(EricaRequestSchema).filter(
+                EricaRequestSchema.request_id == request_id).first()
             before_update_created_at_timestamp = found_entity_before_update.created_at
             before_update_updated_at_timestamp = found_entity_before_update.updated_at
             created_object.payload = {'endboss': 'Sauron'}
 
             freezer.tick()
 
-            EricaRequestRepository(db_connection=transacted_postgresql_db.session).update_by_job_request_id(request_id, created_object)
+            EricaRequestRepository(db_connection=transacted_postgresql_db.session).update_by_job_request_id(request_id,
+                                                                                                            created_object)
 
-            found_entity = transacted_postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.request_id==request_id).first()
+            found_entity = transacted_postgresql_db.session.query(EricaRequestSchema).filter(
+                EricaRequestSchema.request_id == request_id).first()
 
         assert found_entity.created_at == before_update_created_at_timestamp
         assert found_entity.updated_at > before_update_updated_at_timestamp
 
     @pytest.mark.freeze_uuids
-    def test_if_only_request_id_changed_then_only_call_update_with_changed_attributes(self, transactional_session_with_mock_schema):
+    def test_if_only_request_id_changed_then_only_call_update_with_changed_attributes(self,
+                                                                                      transactional_session_with_mock_schema):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
         schema_object = MockSchema(**mock_object.dict())
         transactional_session_with_mock_schema.add(schema_object)
@@ -146,7 +159,8 @@ class TestEricaRepositoryUpdateByJobId:
         repo = MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema)
         update_mock = MagicMock()
         mocked_get_by_job_request_id = MagicMock(side_effect=lambda request_id: MagicMock(
-            first=MagicMock(return_value=MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema)._get_by_job_request_id(request_id).first()),
+            first=MagicMock(return_value=MockEricaRequestRepository(
+                db_connection=transactional_session_with_mock_schema)._get_by_job_request_id(request_id).first()),
             update=update_mock))
         repo._get_by_job_request_id = mocked_get_by_job_request_id
 
@@ -163,9 +177,11 @@ class TestEricaRepositoryDeleteByJobId:
         transactional_session_with_mock_schema.add(schema_object)
         transactional_session_with_mock_schema.commit()
 
-        MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).delete_by_job_request_id(schema_object.request_id)
+        MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).delete_by_job_request_id(
+            schema_object.request_id)
 
-        not_found_entry = transactional_session_with_mock_schema.query(MockSchema).filter(MockSchema.request_id == schema_object.request_id).first()
+        not_found_entry = transactional_session_with_mock_schema.query(MockSchema).filter(
+            MockSchema.request_id == schema_object.request_id).first()
         assert not_found_entry is None
 
     def test_if_entity_not_in_database_then_raise_error(self, transactional_session_with_mock_schema):
@@ -173,94 +189,106 @@ class TestEricaRepositoryDeleteByJobId:
         schema_object = MockSchema(**mock_object.dict())
 
         with pytest.raises(EntityNotFoundError):
-            MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).delete_by_job_request_id(schema_object.request_id)
+            MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).delete_by_job_request_id(
+                schema_object.request_id)
 
 
 class TestEricaRepositoryDeleteSuccessFail:
 
     @pytest.mark.parametrize("status", [Status.success, Status.failed], ids=["success", "failed"])
     def test_if_success_or_failed_entity_older_than_ttl_in_database_then_delete_from_database(self,
-                                                                                              transactional_session,
+                                                                                              transactional_session_with_mock_schema,
                                                                                               status):
         request_id = uuid.uuid4()
         mock_object = MockDomainModel(request_id=request_id, payload={'endboss': 'Melkor'}, status=status,
                                       updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
         schema_object = MockSchema(**mock_object.dict())
-        transactional_session.add(schema_object)
-        transactional_session.commit()
+        transactional_session_with_mock_schema.add(schema_object)
+        transactional_session_with_mock_schema.commit()
 
-        deleted = MockEricaRequestRepository(db_connection=transactional_session).delete_success_fail_old_entities(1)
+        deleted = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).delete_success_fail_old_entities(1)
         assert deleted == 1
         with pytest.raises(EntityNotFoundError):
-            MockEricaRequestRepository(db_connection=transactional_session).get_by_job_request_id(
+            MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).get_by_job_request_id(
                 request_id)
 
     @pytest.mark.parametrize("status", [Status.success, Status.failed], ids=["success", "failed"])
     def test_if_success_or_failed_entity_not_older_than_ttl_in_database_then_delete_from_database(self,
-                                                                                                  transactional_session,
+                                                                                                  transactional_session_with_mock_schema,
                                                                                                   status):
         request_id = uuid.uuid4()
         mock_object = MockDomainModel(request_id=request_id, payload={'endboss': 'Melkor'}, status=status,
                                       updated_at=datetime.datetime.now())
         schema_object = MockSchema(**mock_object.dict())
-        transactional_session.add(schema_object)
-        transactional_session.commit()
+        transactional_session_with_mock_schema.add(schema_object)
+        transactional_session_with_mock_schema.commit()
 
-        deleted = MockEricaRequestRepository(db_connection=transactional_session).delete_success_fail_old_entities(1)
+        deleted = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).delete_success_fail_old_entities(1)
         assert deleted == 0
-        entity_found = MockEricaRequestRepository(db_connection=transactional_session).get_by_job_request_id(request_id)
+        entity_found = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
         assert entity_found is not None
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing],
                              ids=["new", "scheduled", "processing"])
     def test_if_not_success_nor_failed_entity_older_than_ttl_in_database_then_not_delete_from_database(self,
-                                                                                                       transactional_session,
+                                                                                                       transactional_session_with_mock_schema,
                                                                                                        status):
         request_id = uuid.uuid4()
         mock_object = MockDomainModel(request_id=request_id, payload={'endboss': 'Melkor'}, status=status,
                                       updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
         schema_object = MockSchema(**mock_object.dict())
-        transactional_session.add(schema_object)
-        transactional_session.commit()
+        transactional_session_with_mock_schema.add(schema_object)
+        transactional_session_with_mock_schema.commit()
 
-        deleted = MockEricaRequestRepository(db_connection=transactional_session).delete_success_fail_old_entities(1)
+        deleted = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).delete_success_fail_old_entities(1)
         assert deleted == 0
-        entity_found = MockEricaRequestRepository(db_connection=transactional_session).get_by_job_request_id(request_id)
+        entity_found = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
         assert entity_found is not None
 
 
 class TestEricaRepositoryUpdateProcessing:
 
-    @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing], ids=["new", "scheduled", "processing"])
+    @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing],
+                             ids=["new", "scheduled", "processing"])
     def test_if_new_scheduled_processing_entity_older_than_ttl_in_database_then_update_to_failed(self,
-                                                                                                 transactional_session,
+                                                                                                 transactional_session_with_mock_schema,
                                                                                                  status):
         request_id = uuid.uuid4()
         mock_object = MockDomainModel(request_id=request_id, payload={'endboss': 'Melkor'}, status=status,
                                       updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
         schema_object = MockSchema(**mock_object.dict())
-        transactional_session.add(schema_object)
-        transactional_session.commit()
+        transactional_session_with_mock_schema.add(schema_object)
+        transactional_session_with_mock_schema.commit()
 
-        updated = MockEricaRequestRepository(db_connection=transactional_session).set_processing_entities_to_failed(1)
+        updated = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).update_status_not_finished_entities_to_failed(1)
         assert updated == 1
-        entity_found = MockEricaRequestRepository(db_connection=transactional_session).get_by_job_request_id(request_id)
+        entity_found = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
         assert entity_found is not None
         assert entity_found.status == Status.failed
 
-    @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing], ids=["new", "scheduled", "processing"])
+    @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing],
+                             ids=["new", "scheduled", "processing"])
     def test_if_new_scheduled_processing_entity_not_older_than_ttl_in_database_then_not_update_to_failed(self,
-                                                                                                         transactional_session,
+                                                                                                         transactional_session_with_mock_schema,
                                                                                                          status):
         request_id = uuid.uuid4()
         mock_object = MockDomainModel(request_id=request_id, payload={'endboss': 'Melkor'}, status=status,
                                       updated_at=datetime.datetime.now())
         schema_object = MockSchema(**mock_object.dict())
-        transactional_session.add(schema_object)
-        transactional_session.commit()
+        transactional_session_with_mock_schema.add(schema_object)
+        transactional_session_with_mock_schema.commit()
 
-        updated = MockEricaRequestRepository(db_connection=transactional_session).set_processing_entities_to_failed(1)
+        updated = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).update_status_not_finished_entities_to_failed(1)
         assert updated == 0
-        entity_found = MockEricaRequestRepository(db_connection=transactional_session).get_by_job_request_id(request_id)
+        entity_found = MockEricaRequestRepository(
+            db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
         assert entity_found is not None
         assert entity_found.status == status

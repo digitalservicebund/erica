@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     default_queues: str = 'dongle, cert, common'
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
     dongle_connected: bool = Field(True, env="DONGLE_CONNECTED")
-    ttl_queuing_job_in_min: int = 1
+    ttl_queuing_job_in_sec: int = 60
     ttl_processing_entities_in_min: int = 2
     ttl_success_fail_entities_in_min: int = 10
 

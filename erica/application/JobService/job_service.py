@@ -6,7 +6,7 @@ from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInte
 from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.Shared.EricaRequest import RequestType
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
 from erica.domain.erica_request.erica_request import EricaRequest
@@ -54,7 +54,7 @@ class JobService(JobServiceInterface):
         self.background_worker.enqueue(
             self.job_method,
             created.request_id,
-            ttl=get_settings().ttl_queuing_job_in_min
+            ttl=get_settings().ttl_queuing_job_in_sec
         )
 
         return EricaRequestDto.parse_obj(created)
