@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-addopts = "--durations=10 --verbose --ignore=tests/test_integration.py --ignore=tests/test_integration_queue.py"
+addopts = "--durations=10 --verbose --ignore=tests/test_integration_queue.py"
 asyncio_mode="auto"
 testpaths = [
     "tests",
