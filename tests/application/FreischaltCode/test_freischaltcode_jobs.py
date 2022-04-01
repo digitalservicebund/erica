@@ -86,7 +86,7 @@ class TestIntegrationWithDatabaseAndRequestFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'idnr': payload.idnr,
+                                         'idnr': payload.tax_id_number,
                                          'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
 
 
@@ -157,7 +157,7 @@ class TestIntegrationWithDatabaseAndActivateFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'idnr': payload.idnr,
+                                         'idnr': payload.tax_id_number,
                                          'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
 
 
