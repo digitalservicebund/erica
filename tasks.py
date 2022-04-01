@@ -3,7 +3,7 @@ from invoke import task
 
 @task
 def test_integration(c):
-    c.run("pytest ./tests/test_integration.py")
+    c.run("pytest ./contract_tests/test_integration.py")
 
 
 @task

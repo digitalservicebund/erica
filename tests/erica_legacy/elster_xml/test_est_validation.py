@@ -1,6 +1,6 @@
 import unittest
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.est_validation import is_valid_bufa
 
 
