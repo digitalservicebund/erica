@@ -4,7 +4,7 @@ from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
 
 
@@ -26,6 +26,10 @@ def get_engine():
 
 def run_migrations():
     __create_tables_if_not_exists()
+
+
+def delete_all_tables():
+    EricaRequestSchema.metadata.drop_all(bind=get_engine())
 
 
 def __create_tables_if_not_exists():

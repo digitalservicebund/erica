@@ -5,7 +5,7 @@ from xml.dom import minidom
 
 import xml.etree.ElementTree as ET
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.elster_xml_tree import TOP_ELEMENT_ESTA1A, TOP_ELEMENT_SA, TOP_ELEMENT_AGB, TOP_ELEMENT_HA35A, \
     TOP_ELEMENT_VOR, ElsterXmlTreeNode
 from erica.erica_legacy.elster_xml.est_mapping import PersonSpecificFieldId
@@ -267,7 +267,7 @@ def _add_vast_request_xml_nutzdaten(xml_top, user_data):
     spez_recht_antrag_xml = SubElement(nutzdaten_xml, 'SpezRechtAntrag')
     spez_recht_antrag_xml.set('version', '3')
     SubElement(spez_recht_antrag_xml, 'DateninhaberIdNr').text = user_data['idnr']
-    SubElement(spez_recht_antrag_xml, 'DateninhaberGeburtstag').text = user_data['dob']
+    SubElement(spez_recht_antrag_xml, 'DateninhaberGeburtstag').text = user_data['date_of_birth']
     SubElement(spez_recht_antrag_xml, 'Recht').text = 'AbrufEBelege'
     SubElement(spez_recht_antrag_xml, 'GueltigBis').text = _compute_valid_until_date()
     SubElement(spez_recht_antrag_xml, 'DatenabruferMail').text = get_settings().testing_email_address
@@ -284,7 +284,7 @@ def _add_vast_activation_xml_nutzdaten(xml_top, user_data):
     spez_recht_antrag_xml.set('version', '1')
 
     SubElement(spez_recht_antrag_xml, 'AntragsID').text = user_data['elster_request_id']
-    SubElement(spez_recht_antrag_xml, 'Freischaltcode').text = user_data['unlock_code']
+    SubElement(spez_recht_antrag_xml, 'Freischaltcode').text = user_data['freischalt_code']
 
 
 def _add_vast_revocation_xml_nutzdaten(xml_top, user_data):
