@@ -7,7 +7,7 @@ from erica.erica_legacy.config import get_settings
 
 
 def run_worker():
-    with Connection(Redis(get_settings().queue_host, get_settings().queue_port)):
+    with Connection(Redis.from_url(get_settings().queue_url)):
         qs = map(Queue, sys.argv[1:]) or [Queue(get_settings().default_queues)]
         worker = Worker(qs)
         worker.work(with_scheduler=True)
