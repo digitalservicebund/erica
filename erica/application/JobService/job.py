@@ -1,5 +1,5 @@
+import logging
 from datetime import datetime
-from logging import Logger
 from typing import Type
 from uuid import UUID
 
@@ -23,14 +23,14 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
     try:
         entity: EricaRequest = repository.get_by_job_request_id(request_id)
     except EntityNotFoundError:
-        logger.warning(f"Entity not found for request_id {request_id}", exc_info=True)
+        logging.getLogger().warning(f"Entity not found for request_id {request_id}", exc_info=True)
         raise
 
     request_payload: payload_type = payload_type.parse_obj(entity.payload)
     start_time = datetime.now()
 
     try:
-        logger.info(f"Job started: {entity}", exc_info=True)
+        logging.getLogger().info(f"Job started: {entity}", exc_info=True)
 
         try:
             response = await service.apply_to_elster(request_payload, True)
@@ -41,7 +41,7 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
             entity.status = Status.success
             repository.update(entity.id, entity)
         except EricProcessNotSuccessful as e:
-            logger.warning(
+            logging.getLogger().warning(
                 f"Job failed: {entity}. Got Error Message: {e.generate_error_response(True).__str__()}",
                 exc_info=True
             )
@@ -51,8 +51,8 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
             repository.update(entity.id, entity)
             raise
 
-        logger.info(f"Job finished: {entity}", exc_info=True)
+        logging.getLogger().info(f"Job finished: {entity}", exc_info=True)
     finally:
         end_time = datetime.now()
         elapsed_time = end_time - start_time
-        logger.info(f"Job running time for {entity}: {elapsed_time}")
+        logging.getLogger().info(f"Job running time for {entity}: {elapsed_time}")
