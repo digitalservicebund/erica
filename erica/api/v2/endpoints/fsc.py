@@ -1,9 +1,9 @@
-import logging
-
 from uuid import UUID
+
 from fastapi import status, APIRouter
-from starlette.responses import JSONResponse, RedirectResponse
-from erica.api.utils import map_status, generate_error_response, get_erica_request, get_entity_not_found_log_message
+from starlette.responses import RedirectResponse
+
+from erica.api.utils import map_status, get_erica_request
 from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
     ErrorRequestQueue, ResultGetUnlockCodeRequestAndActivationFromQueue, \
@@ -13,7 +13,6 @@ from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeReques
     FreischaltCodeRevocateDto
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaRequest import RequestType
-from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 router = APIRouter()
 
@@ -25,15 +24,10 @@ async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto):
     Route for requesting a new fsc for the sent id_nr using the job queue.
     :param request_fsc_client_identifier: payload with client identifier and the JSON input data for the request.
     """
-    try:
-        result = get_job_service(RequestType.freischalt_code_request).add_to_queue(
-            request_fsc_client_identifier.payload, request_fsc_client_identifier.clientIdentifier,
-            RequestType.freischalt_code_request)
-        return RedirectResponse(url='fsc/request/' + str(result.request_id), status_code=201)
-    # TODO specific exception?
-    except Exception:
-        logging.getLogger().info("Could not request unlock code", exc_info=True)
-        return JSONResponse(status_code=422, content=generate_error_response())
+    result = get_job_service(RequestType.freischalt_code_request).add_to_queue(
+        request_fsc_client_identifier.payload, request_fsc_client_identifier.clientIdentifier,
+        RequestType.freischalt_code_request)
+    return RedirectResponse(url='fsc/request/' + str(result.request_id), status_code=201)
 
 
 @router.get('/request/{request_id}', status_code=status.HTTP_200_OK,
@@ -43,17 +37,8 @@ async def get_fsc_request_job(request_id: UUID):
     Route for retrieving job status from an fsc request from the queue.
     :param request_id: the id of the job.
     """
-    try:
-        erica_request = get_erica_request(request_id)
-        return create_request_activation_response(erica_request)
-    # TODO specific exception and correct mapping to JSON error response?
-    except EntityNotFoundError as e:
-        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
-        return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
-    except Exception as e:
-        logging.getLogger().info("Could not retrieve status of (unlock code request) job " + str(request_id),
-                                 exc_info=True)
-        return JSONResponse(status_code=500, content=generate_error_response(-1, e.__doc__))
+    erica_request = get_erica_request(request_id)
+    return create_request_activation_response(erica_request)
 
 
 @router.post('/activation', status_code=status.HTTP_201_CREATED,
@@ -63,15 +48,10 @@ async def activate_fsc(activation_fsc_client_identifier: FreischaltCodeActivateD
     Route for requesting activation of an fsc for the sent id_nr using the job queue.
     :param activation_fsc_client_identifier: payload with client identifier and the JSON input data for the activation.
     """
-    try:
-        result = get_job_service(RequestType.freischalt_code_activate).add_to_queue(
-            activation_fsc_client_identifier.payload, activation_fsc_client_identifier.clientIdentifier,
-            RequestType.freischalt_code_activate)
-        return RedirectResponse(url='fsc/activation/' + str(result.request_id), status_code=201)
-    # TODO specific exception and correct mapping to JSON error response?
-    except Exception:
-        logging.getLogger().info("Could not activate unlock code", exc_info=True)
-        return JSONResponse(status_code=422, content=generate_error_response())
+    result = get_job_service(RequestType.freischalt_code_activate).add_to_queue(
+        activation_fsc_client_identifier.payload, activation_fsc_client_identifier.clientIdentifier,
+        RequestType.freischalt_code_activate)
+    return RedirectResponse(url='fsc/activation/' + str(result.request_id), status_code=201)
 
 
 @router.get('/activation/{request_id}', status_code=status.HTTP_200_OK,
@@ -81,17 +61,8 @@ async def get_fsc_activation_job(request_id: UUID):
     Route for retrieving job status from an fsc activation from the queue.
     :param request_id: the id of the job.
     """
-    try:
-        erica_request = get_erica_request(request_id)
-        return create_request_activation_response(erica_request)
-    # TODO specific exception and correct mapping to JSON error response?
-    except EntityNotFoundError as e:
-        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
-        return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
-    except Exception as e:
-        logging.getLogger().info("Could not retrieve status of (unlock code activation) job " + str(request_id),
-                                 exc_info=True)
-        return JSONResponse(status_code=500, content=generate_error_response(-1, e.__doc__))
+    erica_request = get_erica_request(request_id)
+    return create_request_activation_response(erica_request)
 
 
 @router.post('/revocation', status_code=status.HTTP_201_CREATED,
@@ -101,15 +72,10 @@ async def revocate_fsc(revocation_fsc_client_identifier: FreischaltCodeRevocateD
     Route for requesting revocation of an fsc for the sent id_nr using the job queue.
     :param revocation_fsc_client_identifier: payload with client identifier and the JSON input data for the revocation.
     """
-    try:
-        result = get_job_service(RequestType.freischalt_code_revocate).add_to_queue(
-            revocation_fsc_client_identifier.payload, revocation_fsc_client_identifier.clientIdentifier,
-            RequestType.freischalt_code_revocate)
-        return RedirectResponse(url='fsc/revocation/' + str(result.request_id), status_code=201)
-    # TODO specific exception and correct mapping to JSON error response?
-    except Exception:
-        logging.getLogger().info("Could not revoke unlock code", exc_info=True)
-        return JSONResponse(status_code=422, content=generate_error_response())
+    result = get_job_service(RequestType.freischalt_code_revocate).add_to_queue(
+        revocation_fsc_client_identifier.payload, revocation_fsc_client_identifier.clientIdentifier,
+        RequestType.freischalt_code_revocate)
+    return RedirectResponse(url='fsc/revocation/' + str(result.request_id), status_code=201)
 
 
 @router.get('/revocation/{request_id}', status_code=status.HTTP_200_OK,
@@ -119,16 +85,8 @@ async def get_fsc_revocation_job(request_id: UUID):
     Route for retrieving job status from an fsc revocation from the queue.
     :param request_id: the id of the job.
     """
-    try:
-        erica_request = get_erica_request(request_id)
-        return create_revocation_response(erica_request)
-    except EntityNotFoundError as e:
-        logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
-        return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
-    except Exception as e:
-        logging.getLogger().info("Could not retrieve status of (unlock code revocation) job " + str(request_id),
-                                 exc_info=True)
-        return JSONResponse(status_code=500, content=generate_error_response(-1, e.__doc__))
+    erica_request = get_erica_request(request_id)
+    return create_revocation_response(erica_request)
 
 
 def create_request_activation_response(erica_request):
