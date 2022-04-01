@@ -159,6 +159,9 @@ jobs:
       run: docker logout ${{ env.DOCKER_REGISTRY }}
 
   contract-tests:
+    needs: [deploy-staging]
+
+
     runs-on: ubuntu-latest
 
     steps:
