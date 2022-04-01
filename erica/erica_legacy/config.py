@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     queue_url: str = Field("redis://default@localhost:6379/0", env='QUEUE_URL')
     default_queues: List[str] = ['dongle', 'cert', 'common']
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
+    ttl_queuing_job_in_min: int = 1
+    ttl_processing_entities_in_min: int = 2
+    ttl_success_fail_entities_in_min: int = 10
 
     class Config:
         dir = os.path.dirname(__file__)
