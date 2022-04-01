@@ -3,7 +3,7 @@ from logging.config import dictConfig
 
 import uvicorn
 
-from erica.erica_legacy.config import get_settings
+from erica import get_settings
 
 debug = get_settings().debug
 log_eric_debug_info = get_settings().log_eric_debug_info
@@ -37,4 +37,4 @@ dictConfig({
     "disable_existing_loggers": False
 })
 
-uvicorn.run("erica.erica_legacy:app", host="0.0.0.0", port=8000, log_config=None)
+uvicorn.run("erica:app", host="0.0.0.0", port=8000, log_config=None)

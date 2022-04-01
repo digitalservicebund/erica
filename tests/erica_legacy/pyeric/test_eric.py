@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock, mock_open
 
 import pytest
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from tests.erica_legacy.utils import gen_random_key, missing_cert, missing_pyeric_lib
 from erica.erica_legacy.pyeric.eric import EricWrapper, EricDruckParameterT, EricVerschluesselungsParameterT, EricResponse, \
     get_eric_wrapper

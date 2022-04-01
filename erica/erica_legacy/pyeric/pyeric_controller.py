@@ -1,7 +1,7 @@
 import os
 from ctypes import pointer, c_int
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_state_ids, get_tax_offices
 from erica.erica_legacy.pyeric.eric import EricWrapper, EricResponse
 from erica.erica_legacy.pyeric.eric import get_eric_wrapper

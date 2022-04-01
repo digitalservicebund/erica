@@ -2,8 +2,8 @@ import pytest
 from redis import Redis
 from rq import Queue
 
-from erica.erica_legacy.config import get_settings
-from erica.infrastructure.rq.queue import get_queue, QueueNotAvailableError
+from erica.config import get_settings
+from erica.infrastructure.rq.get_queue import get_queue, QueueNotAvailableError
 
 
 class TestQueue:

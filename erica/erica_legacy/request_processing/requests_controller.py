@@ -1,6 +1,6 @@
 import base64
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_steuernummer
 from erica.erica_legacy.elster_xml.elster_xml_generator import get_belege_xml, generate_vorsatz_without_tax_number, \
     generate_vorsatz_with_tax_number

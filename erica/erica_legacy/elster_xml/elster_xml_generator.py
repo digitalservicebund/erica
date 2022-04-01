@@ -5,7 +5,7 @@ from xml.dom import minidom
 
 import xml.etree.ElementTree as ET
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.elster_xml_tree import TOP_ELEMENT_ESTA1A, TOP_ELEMENT_SA, TOP_ELEMENT_AGB, TOP_ELEMENT_HA35A, \
     TOP_ELEMENT_VOR, ElsterXmlTreeNode
 from erica.erica_legacy.elster_xml.est_mapping import PersonSpecificFieldId
