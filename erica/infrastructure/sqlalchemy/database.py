@@ -28,6 +28,10 @@ def run_migrations():
     __create_tables_if_not_exists()
 
 
+def delete_all_tables():
+    EricaRequestSchema.metadata.drop_all(bind=get_engine())
+
+
 def __create_tables_if_not_exists():
     # NOTE:  use Alembic for migrations (https://alembic.sqlalchemy.org/en/latest/)
     EricaRequestSchema.metadata.create_all(bind=get_engine())

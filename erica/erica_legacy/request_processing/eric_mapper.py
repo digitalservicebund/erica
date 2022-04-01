@@ -163,8 +163,8 @@ class EstEricMapping(Stmind):
 
 class UnlockCodeRequestEricMapper(BaseModel):
     idnr: str
-    dob: str
+    date_of_birth: str
 
-    @validator('dob', pre=True)
+    @validator('date_of_birth', pre=True)
     def convert_datetime_to_y_m_d(cls, v):
         return v.strftime('%Y-%m-%d') if v else None

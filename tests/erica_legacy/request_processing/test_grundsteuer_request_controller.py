@@ -11,6 +11,7 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input impo
 from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
+from tests.utils import read_text_from_sample
 
 
 @pytest.fixture
@@ -48,16 +49,14 @@ class TestGenerateFullXml:
         assert "<NutzdatenHeader" in resulting_xml
 
     def test_returns_full_expected_xml_for_given_input(self):
-        with open('tests/erica_legacy/samples/grundsteuer_sample_input.json') as json_file:
-            payload = json.loads(json_file.read())
-            parsed_input = GrundsteuerData.parse_obj(payload)
-            request_controller = GrundsteuerRequestController(parsed_input)
-            resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
-            with open('tests/erica_legacy/samples/grundsteuer_sample_xml.xml') as f:
-                expected_xml = f.read()
-                diff = main.diff_texts(bytes(bytearray(resulting_xml, "utf8")),
-                                       expected_xml.encode())
-                assert diff == []
+        payload = json.loads(read_text_from_sample('grundsteuer_sample_input.json'))
+        parsed_input = GrundsteuerData.parse_obj(payload)
+        request_controller = GrundsteuerRequestController(parsed_input)
+        resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
+        expected_xml = read_text_from_sample('grundsteuer_sample_xml.xml')
+        diff = main.diff_texts(bytes(bytearray(resulting_xml, "utf8")),
+                               expected_xml.encode())
+        assert diff == []
 
     def test_returns_full_expected_xml_for_given_input_bruchteilsgemeinschaft(self):
         with open('tests/erica_legacy/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json') as json_file:
