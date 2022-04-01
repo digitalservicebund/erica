@@ -11,7 +11,7 @@ from datetime import date
 
 from erica.api.ApiModule import ApiModule
 from erica.application.EricaRequest.EricaRequestService import EricaRequestServiceInterface
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.infrastructure.sqlalchemy.database import run_migrations
 from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockSchema
 
