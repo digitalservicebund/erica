@@ -4,6 +4,7 @@ from erica.erica_legacy.pyeric.eric_errors import EricGlobalError, EricProcessNo
     EricGlobalInitialisationError, EricTransferError, EricCryptError, EricIOError, EricPrintError, \
     EricNullReturnedError, EricAlreadyRequestedError, EricAntragNotFoundError, check_result, EricUnknownError, \
     check_xml, EricInvalidXmlReturnedError, EricAlreadyRevokedError, check_handle, EricWrongTaxNumberError
+from tests.utils import read_text_from_sample
 
 _VALIDATION_ERROR_CODE = 610001002
 _INITIALISATION_ERROR_CODES = [610001081, 610001082, 610001083]
@@ -42,8 +43,7 @@ class TestGenerateErrorResponse(unittest.TestCase):
         expected_response = {"code": 2, "message": EricProcessNotSuccessful.get_eric_error_code_message(-1),
                              "validation_problems": ['Das Geburtsjahr liegt nach dem Veranlagungszeitraum '
                                                      '(steuerpflichtige Person / Ehemann / Person A).']}
-        with open('tests/erica_legacy/samples/sample_est_validation_error_response.xml') as val_file:
-            eric_response = val_file.read().encode()
+        eric_response = read_text_from_sample('sample_est_validation_error_response.xml', 'rb')
         error = EricGlobalValidationError(-1, eric_response=eric_response)  # Use -1/Unknown error because the actual error code does not matter
 
         actual_response = error.generate_error_response()

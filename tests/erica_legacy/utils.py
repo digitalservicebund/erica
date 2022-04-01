@@ -5,7 +5,7 @@ from datetime import date
 from decimal import Decimal
 from xml.etree import ElementTree as ET
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import EstData, FormDataEst, MetaDataEst, UnlockCodeRequestData, \
     UnlockCodeActivationData, UnlockCodeRevocationData
     

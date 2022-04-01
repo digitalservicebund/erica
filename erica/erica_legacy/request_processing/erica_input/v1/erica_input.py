@@ -225,7 +225,7 @@ class UnlockCodeRequestData(BaseModel):
 
 class UnlockCodeActivationData(BaseModel):
     tax_id_number: str = Field(alias='idnr')
-    unlock_code: str
+    freischalt_code: str = Field(alias='unlock_code')
     elster_request_id: str
 
 

@@ -1,4 +1,5 @@
 import uuid
+import os
 from datetime import date
 
 from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, FreischaltCodeRevocateDto
@@ -10,6 +11,12 @@ from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
 from tests.erica_legacy.utils import create_meta_data, create_form_data
 
+samples_folder = os.path.join(os.path.dirname(__file__), 'erica_legacy/samples')
+
+
+def read_text_from_sample(sample_name, read_type='r'):
+    with open(os.path.join(samples_folder, sample_name), read_type) as sample_xml:
+        return sample_xml.read()
 
 def create_unlock_code_request(correct=True):
     if correct:

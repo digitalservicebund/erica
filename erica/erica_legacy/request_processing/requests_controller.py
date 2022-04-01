@@ -1,6 +1,6 @@
 import base64
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_steuernummer
 from erica.erica_legacy.elster_xml.elster_xml_generator import get_belege_xml, generate_vorsatz_without_tax_number, \
     generate_vorsatz_with_tax_number
@@ -131,7 +131,7 @@ class EstRequestController(EstValidationRequestController):
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
-        response['pdf'] = base64.b64encode(pyeric_response.pdf)
+        response['pdf'] = (base64.b64encode(pyeric_response.pdf)).decode('utf-8')
         return response
 
 
