@@ -161,7 +161,6 @@ jobs:
   contract-tests:
     needs: [deploy-staging]
 
-
     runs-on: ubuntu-latest
 
     steps:
