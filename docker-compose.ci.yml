@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
   web:
-    image: erica_app:${DOCKER_TAG:-latest}
+    image: erica_api:${DOCKER_TAG:-latest}
     build:
       context: .
       target: erica

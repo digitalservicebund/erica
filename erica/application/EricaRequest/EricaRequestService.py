@@ -24,7 +24,6 @@ class EricaRequestServiceInterface:
 
 class EricaRequestService(EricaRequestServiceInterface):
     erica_request_repository: EricaRequestRepository
-    scheduler = None
 
     def __init__(self, repository: EricaRequestRepository) -> None:
         super().__init__()

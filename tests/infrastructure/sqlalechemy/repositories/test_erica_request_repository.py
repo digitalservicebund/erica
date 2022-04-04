@@ -256,20 +256,22 @@ class TestEricaRepositoryUpdateProcessing:
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing],
                              ids=["new", "scheduled", "processing"])
     def test_if_new_scheduled_processing_entity_older_than_ttl_in_database_then_update_to_failed(self,
-                                                                                                 transactional_session_with_mock_schema,
+                                                                                                 transactional_erica_postgresql_db,
                                                                                                  status):
         request_id = uuid.uuid4()
-        mock_object = MockDomainModel(request_id=request_id, payload={'endboss': 'Melkor'}, status=status,
-                                      updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
-        schema_object = MockSchema(**mock_object.dict())
-        transactional_session_with_mock_schema.add(schema_object)
-        transactional_session_with_mock_schema.commit()
+        mock_object = EricaRequest(request_id=request_id,
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=status,
+                                   updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
+        EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
 
-        updated = MockEricaRequestRepository(
-            db_connection=transactional_session_with_mock_schema).update_status_not_finished_entities_to_failed(1)
+        updated = EricaRequestRepository(
+            db_connection=transactional_erica_postgresql_db).update_status_not_finished_entities_to_failed(1)
         assert updated == 1
-        entity_found = MockEricaRequestRepository(
-            db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
+        entity_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
         assert entity_found is not None
         assert entity_found.status == Status.failed
 
