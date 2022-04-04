@@ -19,7 +19,7 @@ def send_grundsteuer(grundsteuer: GrundsteuerData, include_elster_responses: boo
     or a 400 repsonse for other client errors and a 500 response for server errors with
     {‘code’ : int,‘message’: str,‘description’: str}
 
-    :param grundsteuer: the JSON input data for the land tax declaration
+    :param grundsteuer: the JSON input data for the grundsteuer tax declaration
     :param include_elster_responses: query parameter which indicates whether the ERiC/Server response are returned
     """
     try:

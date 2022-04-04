@@ -23,7 +23,7 @@ async def send_grundsteuer(grundsteuer_ttl: GrundsteuerDto):
     Route for sending a grundsteuer tax declaration using the job queue.
     :param grundsteuer_ttl: payload with TTL, JSON input data for the grundsteuer declaration.
     """
-    try:        
+    try:
         result = get_job_service(RequestType.grundsteuer).add_to_queue(
             grundsteuer_ttl.payload, grundsteuer_ttl.clientIdentifier, RequestType.grundsteuer)
         return RedirectResponse(url='grundsteuer/request/' + str(result.request_id), status_code=201)
@@ -37,7 +37,7 @@ async def get_grundsteuer_job(request_id: uuid.UUID):
     """
     Route for retrieving job status of a grundsteuer tax declaration validation from the queue.
     :param request_id: the id of the job.
-    """    
+    """
     try:
         erica_request = get_erica_request(request_id)
         return create_request_grundsteuer_response(erica_request)
@@ -48,7 +48,7 @@ async def get_grundsteuer_job(request_id: uuid.UUID):
         logging.getLogger().info("Could not retrieve status of (grundsteuer) job " + str(request_id),
                                  exc_info=True)
         return JSONResponse(status_code=500, content=generate_error_response(-1, e.__doc__))
-    
+
 def create_request_grundsteuer_response(erica_request):
     process_status = map_status(erica_request.status)
     if process_status == JobState.SUCCESS:
