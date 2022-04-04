@@ -175,19 +175,3 @@ async def test_if_get_job_returns_processing_status(mock_job_state, api_method, 
         assert response.result is None
         assert response.errorCode is None
         assert response.errorMessage is None
-
-
-@pytest.mark.asyncio
-@pytest.mark.parametrize("api_method, endpoint_to_patch",
-                         [(get_fsc_request_job, "fsc"), (get_fsc_activation_job, "fsc"),
-                          (get_fsc_revocation_job, "fsc"), (get_valid_tax_number_job, "tax"),
-                          (get_send_est_job, "est")],
-                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
-async def test_if_get_job_returns_not_found(api_method, endpoint_to_patch):
-    request_id = uuid.uuid4()
-    with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
-        mock_get_request.side_effect = EntityNotFoundError
-        response = await api_method(request_id)
-        body = json.loads(response.body)
-        assert body['errorCode'] == -1
-        assert body['errorMessage'] == "Raised in case an entity could not be found in the database"

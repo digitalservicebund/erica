@@ -54,23 +54,22 @@ def standard_est_input_data():
 
 @pytest.fixture()
 def fake_db_connection_in_settings(database_uri):
-    postgresql_url = database_uri
     original_db_url = get_settings().database_url
-    get_settings().database_url = postgresql_url
+    get_settings().database_url = database_uri
 
-    yield postgresql_url
+    yield database_uri
 
     get_settings().database_url = original_db_url
 
 
 @pytest.fixture
-def transactional_session_with_mock_schema(transacted_postgresql_db):
-    if not transacted_postgresql_db.has_table(MockSchema.__tablename__):
-        transacted_postgresql_db.create_table(MockSchema)
+def transactional_session_with_mock_schema(postgresql_db):
+    if not postgresql_db.has_table(MockSchema.__tablename__):
+        postgresql_db.create_table(MockSchema)
 
-    yield transacted_postgresql_db.session
+    yield postgresql_db.session
 
-    transacted_postgresql_db.reset_db()
+    postgresql_db.reset_db()
 
 
 @pytest_asyncio.fixture()

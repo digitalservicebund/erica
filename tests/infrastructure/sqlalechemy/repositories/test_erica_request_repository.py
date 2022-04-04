@@ -21,12 +21,11 @@ class MockEricaRequestRepository(
         self.DomainModel = MockDomainModel
 
 
-
 @pytest.fixture
-def transactional_erica_postgresql_db(transacted_postgresql_db):
-    if not transacted_postgresql_db.has_table(EricaRequestSchema.__tablename__):
-        transacted_postgresql_db.create_table(EricaRequestSchema)
-    yield transacted_postgresql_db
+def transactional_erica_postgresql_db(postgresql_db):
+    if not postgresql_db.has_table(EricaRequestSchema.__tablename__):
+        postgresql_db.create_table(EricaRequestSchema)
+    yield postgresql_db
 
 @pytest.fixture
 def transactional_erica_request_session(transactional_erica_postgresql_db):
@@ -109,25 +108,25 @@ class TestEricaRepositoryUpdateByJobId:
             MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).update_by_job_request_id(schema_object.request_id, updated_object)
 
     @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
-    def test_if_update_object_then_set_only_updated_at_timestamp(self, transacted_postgresql_db):
-        with transacted_postgresql_db.time.freeze('December 31st 1999 11:59:59 PM') as freezer:
+    def test_if_update_object_then_set_only_updated_at_timestamp(self, postgresql_db):
+        with postgresql_db.time.freeze('December 31st 1999 11:59:59 PM') as freezer:
             request_id = uuid4()
             mock_object = EricaRequest(request_id=request_id,
                                        payload={'endboss': 'Melkor'},
                                        creator_id="api",
                                        type=RequestType.freischalt_code_request,
                                        status=Status.new)
-            created_object = EricaRequestRepository(db_connection=transacted_postgresql_db.session).create(mock_object)
-            found_entity_before_update = transacted_postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.request_id == request_id).first()
+            created_object = EricaRequestRepository(db_connection=postgresql_db.session).create(mock_object)
+            found_entity_before_update = postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.request_id == request_id).first()
             before_update_created_at_timestamp = found_entity_before_update.created_at
             before_update_updated_at_timestamp = found_entity_before_update.updated_at
             created_object.payload = {'endboss': 'Sauron'}
 
             freezer.tick()
 
-            EricaRequestRepository(db_connection=transacted_postgresql_db.session).update_by_job_request_id(request_id, created_object)
+            EricaRequestRepository(db_connection=postgresql_db.session).update_by_job_request_id(request_id, created_object)
 
-            found_entity = transacted_postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.request_id==request_id).first()
+            found_entity = postgresql_db.session.query(EricaRequestSchema).filter(EricaRequestSchema.request_id==request_id).first()
 
         assert found_entity.created_at == before_update_created_at_timestamp
         assert found_entity.updated_at > before_update_updated_at_timestamp
