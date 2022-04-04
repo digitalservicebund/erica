@@ -6,29 +6,27 @@ from xml.etree.ElementTree import tostring, ParseError, Element, SubElement
 from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace, \
     get_elements_from_xml_element, get_elements_from_xml, get_elements_text_from_xml, \
     get_elements_text_from_xml_element, get_elements_key_value_from_xml
+from tests.utils import read_text_from_sample
 
 
 class TestRemoveDeclarationAndNamespace(unittest.TestCase):
     def test_namespace_is_removed(self):
-        with open('tests/erica_legacy/samples/sample_vast_request_response.xml') as sample_xml:
-            xml_string = sample_xml.read()
-            resulting_tree = remove_declaration_and_namespace(xml_string)
-            self.assertNotIn('xmlns=', tostring(resulting_tree).decode())
-            self.assertNotIn('"http://www.elster.de/elsterxml/schema/v11"', tostring(resulting_tree).decode())
+        xml_string = read_text_from_sample('sample_vast_request_response.xml')
+        resulting_tree = remove_declaration_and_namespace(xml_string)
+        self.assertNotIn('xmlns=', tostring(resulting_tree).decode())
+        self.assertNotIn('"http://www.elster.de/elsterxml/schema/v11"', tostring(resulting_tree).decode())
 
     def test_declaration_is_removed(self):
-        with open('tests/erica_legacy/samples/sample_vast_request_response.xml') as sample_xml:
-            xml_string = sample_xml.read()
-            resulting_tree = remove_declaration_and_namespace(xml_string)
-            self.assertNotIn('<?xml', tostring(resulting_tree).decode())
+        xml_string = read_text_from_sample('sample_vast_request_response.xml')
+        resulting_tree = remove_declaration_and_namespace(xml_string)
+        self.assertNotIn('<?xml', tostring(resulting_tree).decode())
 
     def test_nothing_else_is_removed(self):
-        with open('tests/erica_legacy/samples/sample_vast_request_response.xml') as sample_xml:
-            xml_string = sample_xml.read()
-            resulting_tree = remove_declaration_and_namespace(xml_string)
-            self.assertIn('<Elster', tostring(resulting_tree).decode())
-            self.assertIn('<TransferHeader', tostring(resulting_tree).decode())
-            self.assertIn('ElsterBRM', tostring(resulting_tree).decode())
+        xml_string = read_text_from_sample('sample_vast_request_response.xml')
+        resulting_tree = remove_declaration_and_namespace(xml_string)
+        self.assertIn('<Elster', tostring(resulting_tree).decode())
+        self.assertIn('<TransferHeader', tostring(resulting_tree).decode())
+        self.assertIn('ElsterBRM', tostring(resulting_tree).decode())
 
 
 class TestGetElementsFromXmlElement(unittest.TestCase):

@@ -7,6 +7,7 @@ from erica.erica_legacy.elster_xml.common.transfer_header import add_transfer_he
 from erica.erica_legacy.elster_xml.transfer_header_fields import TransferHeaderFields
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib, remove_declaration_and_namespace
+from tests.utils import read_text_from_sample
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
@@ -15,10 +16,9 @@ class TestGenerateTransferHeader:
 
     @pytest.fixture
     def correct_input_xml(self):
-        with open('tests/erica_legacy/samples/sample_vast_request.xml', 'r') as f:
-            correct_input_xml_string = f.read()
-            from xml.etree.ElementTree import tostring
-            return tostring(remove_declaration_and_namespace(correct_input_xml_string)).decode()
+        correct_input_xml_string = read_text_from_sample('sample_vast_request_response.xml')
+        from xml.etree.ElementTree import tostring
+        return tostring(remove_declaration_and_namespace(correct_input_xml_string)).decode()
 
     @pytest.fixture
     def incorrect_input_xml(self):

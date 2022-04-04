@@ -27,6 +27,7 @@ class TestJobServiceFactory:
         with pytest.raises(NotImplementedError):
             get_job_service(NotFoundDto)
 
+    @pytest.mark.usefixtures('fake_db_connection_in_settings')
     def test_if_fsc_request_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.freischalt_code_request)
 
@@ -36,6 +37,7 @@ class TestJobServiceFactory:
         assert issubclass(job_service.request_controller, UnlockCodeRequestController)
         assert job_service.job_method == request_freischalt_code
 
+    @pytest.mark.usefixtures('fake_db_connection_in_settings')
     def test_if_fsc_activate_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.freischalt_code_activate)
 
@@ -45,6 +47,7 @@ class TestJobServiceFactory:
         assert issubclass(job_service.request_controller, UnlockCodeActivationRequestController)
         assert job_service.job_method == activate_freischalt_code
 
+    @pytest.mark.usefixtures('fake_db_connection_in_settings')
     def test_if_fsc_revocate_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.freischalt_code_revocate)
 
@@ -54,6 +57,7 @@ class TestJobServiceFactory:
         assert issubclass(job_service.request_controller, UnlockCodeRevocationRequestController)
         assert job_service.job_method == revocate_freischalt_code
 
+    @pytest.mark.usefixtures('fake_db_connection_in_settings')
     def test_if_check_tax_number_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.check_tax_number)
 
@@ -63,6 +67,7 @@ class TestJobServiceFactory:
         assert issubclass(job_service.request_controller, CheckTaxNumberRequestController)
         assert job_service.job_method == check_tax_number
 
+    @pytest.mark.usefixtures('fake_db_connection_in_settings')
     def test_if_send_est_type_then_return_correctly_configured_service(self):
         job_service = get_job_service(RequestType.send_est)
 
