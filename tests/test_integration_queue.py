@@ -2,7 +2,6 @@ import json
 import os
 import requests
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerDto
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 
 from tests.utils import create_send_grundsteuer, json_default, create_unlock_code_request, is_valid_uuid, create_unlock_code_activation, \
     generate_uuid, create_unlock_code_revocation, create_tax_number_validity, create_send_est
@@ -252,8 +251,9 @@ class TestV2GrundsteuerRequest:
         assert response.status_code == 422
 
     def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
+        request = create_send_grundsteuer()
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
-                                 data=json.dumps(GrundsteuerDto(payload=SampleGrundsteuerData().parse(), clientIdentifier="steuerlotse"), default=json_default))
+                                 data=json.dumps(request, default=json_default))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
