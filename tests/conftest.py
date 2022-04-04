@@ -63,13 +63,13 @@ def fake_db_connection_in_settings(database_uri):
 
 
 @pytest_asyncio.fixture()
-async def transactional_session_with_mock_schema(postgresql_db):
-    if not postgresql_db.has_table(MockSchema.__tablename__):
-        postgresql_db.create_table(MockSchema)
+async def transactional_session_with_mock_schema(transacted_postgresql_db):
+    if not transacted_postgresql_db.has_table(MockSchema.__tablename__):
+        transacted_postgresql_db.create_table(MockSchema)
 
-    yield postgresql_db.session
+    yield transacted_postgresql_db.session
 
-    postgresql_db.reset_db()
+    transacted_postgresql_db.reset_db()
 
 
 @pytest_asyncio.fixture()
