@@ -1,6 +1,7 @@
+import logging
 import time
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
 
@@ -53,6 +54,20 @@ if get_settings().dongle_connected:
 
 app.include_router(api_router_02)
 
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    # TODO Remove the split once v1 is no longer in use
+    #  Split after tax_number_validity to not log any tax number information contained in the URL
+    if len(request.url.path.split("tax_number_validity", 1)) > 1:
+        stripped_request_url_path = request.url.path.replace(request.url.path.split("tax_number_validity", 1)[1], "")
+    else:
+        stripped_request_url_path = request.url.path
+    logging.getLogger().info(f"Erica got request at request path={stripped_request_url_path}")
+
+    response = await call_next(request)
+
+    return response
 
 # Add default metrics and expose endpoint.
 Instrumentator().instrument(app).expose(app)

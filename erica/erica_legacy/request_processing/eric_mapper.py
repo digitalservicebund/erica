@@ -162,7 +162,7 @@ class EstEricMapping(Stmind):
 
 
 class UnlockCodeRequestEricMapper(BaseModel):
-    idnr: str
+    tax_id_number: str
     date_of_birth: str
 
     @validator('date_of_birth', pre=True)

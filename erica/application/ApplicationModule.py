@@ -1,6 +1,6 @@
 from opyoid import Module
 
-from erica.application.EricaRequest.EricaRequestService import EricaRequestServiceInterface, EricaRequestService
+from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface, EricaRequestService
 from erica.infrastructure.infrastructure_module import InfrastructureModule
 from erica.infrastructure.rq.RqModule import RqModule
 
