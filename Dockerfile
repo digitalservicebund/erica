@@ -48,7 +48,7 @@ CMD ["/usr/sbin/cron", "-f"]
 #########
 
 #########
-### webapp target
+### app target
 ######
 FROM base AS erica
 

@@ -104,8 +104,10 @@ jobs:
 
     - name: Push images
       run: |
-        docker tag ${{ env.IMAGE }} ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
-        docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
+        for IMAGE in app cron; do
+          docker tag erica_${IMAGE}:${{ github.run_number }} ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:${{ github.run_number }}
+          docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:${{ github.run_number }}
+        done
       shell: bash
 
   deploy-staging:
