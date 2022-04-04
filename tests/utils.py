@@ -20,27 +20,27 @@ def read_text_from_sample(sample_name, read_type='r'):
 
 def create_unlock_code_request(correct=True):
     if correct:
-        payload = FreischaltCodeRequestPayload(idnr="04531972802", date_of_birth=date(1957, 7, 14))
+        payload = FreischaltCodeRequestPayload(tax_id_number="04531972802", date_of_birth=date(1957, 7, 14))
     else:
-        payload = FreischaltCodeRequestPayload(idnr="123456789", date_of_birth=date(1969, 7, 20))
+        payload = FreischaltCodeRequestPayload(tax_id_number="123456789", date_of_birth=date(1969, 7, 20))
 
     return FreischaltCodeRequestDto(payload=payload, clientIdentifier="steuerlotse")
 
 
 def create_unlock_code_activation(correct=True):
     if correct:
-        payload = FreischaltCodeActivatePayload(idnr="09952417688", freischalt_code="42", elster_request_id="CORRECT")
+        payload = FreischaltCodeActivatePayload(tax_id_number="09952417688", freischalt_code="42", elster_request_id="CORRECT")
     else:
-        payload = FreischaltCodeActivatePayload(idnr="123456789", freischalt_code="INCORRECT", elster_request_id="INCORRECT")
+        payload = FreischaltCodeActivatePayload(tax_id_number="123456789", freischalt_code="INCORRECT", elster_request_id="INCORRECT")
 
     return FreischaltCodeActivateDto(payload=payload, clientIdentifier="steuerlotse")
 
 
 def create_unlock_code_revocation(correct=True):
     if correct:
-        payload = FreischaltCodeRevocatePayload(idnr="04531972802", elster_request_id="CORRECT")
+        payload = FreischaltCodeRevocatePayload(tax_id_number="04531972802", elster_request_id="CORRECT")
     else:
-        payload = FreischaltCodeRevocatePayload(idnr="123456789", elster_request_id="INCORRECT")
+        payload = FreischaltCodeRevocatePayload(tax_id_number="123456789", elster_request_id="INCORRECT")
 
     return FreischaltCodeRevocateDto(payload=payload, clientIdentifier="steuerlotse")
 
