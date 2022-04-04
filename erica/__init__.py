@@ -1,15 +1,13 @@
-import logging
 import time
 
 from fastapi import FastAPI
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
-from starlette.requests import Request
-from starlette.responses import JSONResponse
 
+from erica.api.exception_handling import generate_exception_handlers
 from erica.api.v2.api_v2 import api_router_02
-from erica.erica_legacy.api.api import api_router
 from erica.config import get_settings
+from erica.erica_legacy.api.api import api_router
 from erica.erica_legacy.pyeric.eric import verify_using_stick
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
@@ -19,7 +17,9 @@ app = FastAPI(
     license_info={
         "name": "Apache 2.0",
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
-    })
+    },
+    exception_handlers=generate_exception_handlers(),
+)
 
 
 class DongleStatus:
@@ -52,18 +52,6 @@ if get_settings().dongle_connected:
     app.include_router(api_router)
 
 app.include_router(api_router_02)
-
-
-@app.exception_handler(EntityNotFoundError)
-async def entity_not_found_error(request: Request, exc: EntityNotFoundError):
-    request_id = request.path_params.get('request_id')
-    logging.getLogger().info(f"The requested entity {request_id} is not present in the database.")
-
-    return JSONResponse(
-        {"errorCode": "entity_not_found",
-         "errorMessage": "The requested entity with id {request_id} was not found."},
-        status_code=404,
-    )
 
 
 # Add default metrics and expose endpoint.

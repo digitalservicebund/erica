@@ -2,7 +2,7 @@ import logging
 
 from fastapi import APIRouter
 from starlette import status
-from starlette.responses import JSONResponse
+from fastapi.responses import JSONResponse
 
 from erica.api.utils import generate_error_response
 from erica.api.v2.responses.model import response_model_post_to_queue
