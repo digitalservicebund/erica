@@ -10,8 +10,8 @@ from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activat
 from erica.api.v2.endpoints.grundsteuer import get_grundsteuer_job, send_grundsteuer
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
 from erica.api.v2.responses.model import JobState
-from erica.application.EricaRequest.EricaRequest import EricaRequestDto
 from erica.application.JobService.job_service import JobService
+from erica.application.erica_request.erica_request import EricaRequestDto
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest

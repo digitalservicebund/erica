@@ -1,16 +1,9 @@
-from abc import ABCMeta
 from typing import Optional
 from uuid import UUID
-
-from pydantic.main import BaseModel
 
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
-
-
-class BasePayload(BaseModel):
-    __metaclass__ = ABCMeta
 
 
 class EricaRequest(BaseDomainModel[UUID]):

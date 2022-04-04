@@ -8,6 +8,7 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
+from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 

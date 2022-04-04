@@ -957,7 +957,7 @@ class TestVastRequest(unittest.TestCase):
         self.expected_header_version = '11'
         self.expected_antrag_version = '3'
         self.valid_user_data = {
-            'idnr': '04452397687',
+            'tax_id_number': '04452397687',
             'date_of_birth': '1985-01-01'
         }
 

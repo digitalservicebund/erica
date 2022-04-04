@@ -70,7 +70,7 @@ class TestIntegrationWithDatabaseAndRequestFreischaltcode:
     @pytest.mark.asyncio
     @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
-        payload = FreischaltCodeRequestPayload(idnr='04452397687', date_of_birth=date(1950, 8, 16))
+        payload = FreischaltCodeRequestPayload(tax_id_number='04452397687', date_of_birth=date(1950, 8, 16))
         service = get_job_service(RequestType.freischalt_code_request)
         entity = service.repository.create(EricaRequest(
             request_id=uuid4(),
@@ -86,7 +86,7 @@ class TestIntegrationWithDatabaseAndRequestFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'idnr': payload.idnr,
+                                         'idnr': payload.tax_id_number,
                                          'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
 
 
@@ -141,7 +141,7 @@ class TestIntegrationWithDatabaseAndActivateFreischaltcode:
     @pytest.mark.asyncio
     @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
-        payload = FreischaltCodeActivatePayload(idnr='04452397687', freischalt_code='Alohomora', elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
+        payload = FreischaltCodeActivatePayload(tax_id_number='04452397687', freischalt_code='Alohomora', elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
         service = get_job_service(RequestType.freischalt_code_activate)
         entity = service.repository.create(EricaRequest(
             request_id=uuid4(),
@@ -157,7 +157,7 @@ class TestIntegrationWithDatabaseAndActivateFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'idnr': payload.idnr,
+                                         'idnr': payload.tax_id_number,
                                          'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
 
 
@@ -212,7 +212,7 @@ class TestIntegrationWithDatabaseAndRevocateFreischaltcode:
     @pytest.mark.asyncio
     @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
-        payload = FreischaltCodeRevocatePayload(idnr='04452397687', dob=date(1950, 8, 16), elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
+        payload = FreischaltCodeRevocatePayload(tax_id_number='04452397687', dob=date(1950, 8, 16), elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
         service = get_job_service(RequestType.freischalt_code_revocate)
         entity = service.repository.create(EricaRequest(
             request_id=uuid4(),
