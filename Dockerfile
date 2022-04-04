@@ -1,4 +1,4 @@
-FROM python:3.9.10-slim-buster
+FROM python:3.9.10-slim-buster AS base
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -15,7 +15,10 @@ ENV ELSTER_HERSTELLER_ID=$elster_hersteller_id
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y pcsc-tools pcscd procps unzip && rm -rf /var/lib/apt/lists/\*
-
+RUN apt-get update && apt-get install --no-install-recommends --yes curl cron procps && rm -rf /var/lib/apt/lists/\*
+# Set up log forwarding to docker log collector (used by cron jobs)
+RUN ln -sf /proc/1/fd/1 /app/cronjob_success_fail_output
+RUN ln -sf /proc/1/fd/1 /app/cronjob_not_finished_output
 # Install debugging tools
 # RUN apt-get update && \
 #  apt-get install -y vim telnet coreutils less strace lsof rsyslog usbutils && \
@@ -24,6 +27,8 @@ RUN apt-get update && apt-get install -y pcsc-tools pcscd procps unzip && rm -rf
 RUN pip install --upgrade pip pipenv
 COPY ./Pipfile ./Pipfile.lock ./
 RUN pipenv install
+
+COPY ./erica/cron.d/* /etc/cron.d/
 
 COPY ./entrypoint.sh /entrypoint.sh
 
@@ -36,5 +41,15 @@ RUN env ERICA_ENV=testing pipenv run python scripts/create_tax_office_lists.py c
 EXPOSE 8000
 
 ENTRYPOINT [ "/entrypoint.sh" ]
+
+######## cron target
+FROM base AS cron
+CMD ["/usr/sbin/cron", "-f"]
+#########
+
+#########
+### webapp target
+######
+FROM base AS erica
 
 CMD [ "python", "-m", "erica" ]

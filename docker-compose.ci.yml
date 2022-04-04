@@ -1,0 +1,31 @@
+# Note: this docker-compose file is used for building staging/production images on GitHub Actions.
+version: '3.8'
+
+services:
+  web:
+    image: erica_app:${DOCKER_TAG:-latest}
+    build:
+      context: .
+      target: erica
+      args:
+        bucket_name: ${{ secrets.BUCKET_NAME }}
+        access_key_id: ${{ secrets.S3_ACCESS_KEY_ID }}
+        access_key: ${{ secrets.S3_ACCESS_KEY }}
+        endpoint_url: ${{ secrets.S3_ENDPOINT_URL }}
+        elster_datenlieferant: ${{ secrets.ELSTER_DATENLIEFERANT }}
+        elster_hersteller_id: ${{ secrets.ELSTER_HERSTELLER_ID }}
+    expose:
+      - 8000
+
+  cron:
+    image: erica_cron:${DOCKER_TAG:-latest}
+    build:
+      context: .
+      target: cron
+      args:
+        bucket_name: ${{ secrets.BUCKET_NAME }}
+        access_key_id: ${{ secrets.S3_ACCESS_KEY_ID }}
+        access_key: ${{ secrets.S3_ACCESS_KEY }}
+        endpoint_url: ${{ secrets.S3_ENDPOINT_URL }}
+        elster_datenlieferant: ${{ secrets.ELSTER_DATENLIEFERANT }}
+        elster_hersteller_id: ${{ secrets.ELSTER_HERSTELLER_ID }}
