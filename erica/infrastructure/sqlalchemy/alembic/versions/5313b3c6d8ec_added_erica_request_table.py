@@ -16,7 +16,9 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade():    
+    op.execute('DROP TYPE IF EXISTS requesttype')
+    op.execute('DROP TYPE IF EXISTS status')
     op.create_table('erica_request',
                     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
                     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
@@ -38,3 +40,5 @@ def upgrade():
 
 def downgrade():
     op.drop_table('erica_request')
+    op.execute('DROP TYPE requesttype')
+    op.execute('DROP TYPE status')

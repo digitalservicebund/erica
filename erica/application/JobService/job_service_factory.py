@@ -12,9 +12,12 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
+from erica.erica_legacy.api.v1.endpoints.grundsteuer import send_grundsteuer
+from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
     CheckTaxNumberRequestController, EstRequestController
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
 
 
 def _freischalt_code_request_injector():
@@ -76,6 +79,16 @@ def _send_est_injector():
         module
     ])
 
+def _send_grundsteuer():
+    module = ApplicationModule()
+    module.bind(Type[EricaRequestController], to_instance=GrundsteuerRequestController)
+    module.bind(Type[BasePayload], to_instance=GrundsteuerData)
+    module.bind(JobServiceInterface, to_class=JobService)
+    module.bind(Callable, to_instance=send_grundsteuer)
+
+    return Injector([
+        module
+    ])
 
 # Register injector
 injectors = {
@@ -84,6 +97,7 @@ injectors = {
     RequestType.freischalt_code_revocate: _freischalt_code_revocation_injector,
     RequestType.check_tax_number: _check_tax_number_injector,
     RequestType.send_est: _send_est_injector,
+    RequestType.grundsteuer: _send_grundsteuer,
 }
 
 

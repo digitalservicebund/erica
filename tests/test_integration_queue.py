@@ -1,9 +1,10 @@
 import json
 import os
 import requests
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerDto
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 
-from tests.utils import json_default, create_unlock_code_request, is_valid_uuid, create_unlock_code_activation, \
+from tests.utils import create_send_grundsteuer, json_default, create_unlock_code_request, is_valid_uuid, create_unlock_code_activation, \
     generate_uuid, create_unlock_code_revocation, create_tax_number_validity, create_send_est
 
 ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://localhost:8000")
@@ -237,22 +238,22 @@ class TestV2GrundsteuerRequest:
 
     def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
-                                 data=json.dumps(SampleGrundsteuerData().parse(), default=json_default))
+                                 data=json.dumps(create_send_grundsteuer(), default=json_default))
         assert response.status_code == 201
         location = response.headers['Location'].split("/")
         assert location[0] + "/" + location[1] == "grundsteuer/request"
         assert is_valid_uuid(location[2])
 
     def test_if_post_without_clientIdentifier_then_return_422(self):
-        request_payload = SampleGrundsteuerData().parse()
-        request_payload.clientIdentifier = None
+        request = create_send_grundsteuer()
+        request.clientIdentifier = None
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
-                                 data=json.dumps(request_payload, default=json_default))
+                                 data=json.dumps(request, default=json_default))
         assert response.status_code == 422
 
     def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
-                                 data=json.dumps(SampleGrundsteuerData().parse(), default=json_default))
+                                 data=json.dumps(GrundsteuerDto(payload=SampleGrundsteuerData().parse(), clientIdentifier="steuerlotse"), default=json_default))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)

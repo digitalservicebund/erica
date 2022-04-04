@@ -27,13 +27,13 @@ async def send_grundsteuer(grundsteuer_ttl: GrundsteuerDto):
         result = get_job_service(RequestType.grundsteuer).add_to_queue(
             grundsteuer_ttl.payload, grundsteuer_ttl.clientIdentifier, RequestType.grundsteuer)
         return RedirectResponse(url='grundsteuer/request/' + str(result.request_id), status_code=201)
-    except NotImplementedError:
+    except Exception as e:
         logging.getLogger().info("Could not send est", exc_info=True)
         return JSONResponse(status_code=422, content=generate_error_response())
 
 
-@router.get('/request/{request_id}', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-async def get_grundsteuer_job(request_id: str):
+@router.get('/request/{request_id}', status_code=status.HTTP_200_OK, responses=response_model_post_to_queue)
+async def get_grundsteuer_job(request_id: uuid.UUID):
     """
     Route for retrieving job status of a grundsteuer tax declaration validation from the queue.
     :param request_id: the id of the job.
