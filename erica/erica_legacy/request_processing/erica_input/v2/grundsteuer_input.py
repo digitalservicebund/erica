@@ -15,11 +15,6 @@ class GrundsteuerData(BasePayload, ABC, CamelCaseInput):
     eigentuemer: Eigentuemer
     freitext: Optional[str]
 
-
-class GrundsteuerWithTtl(CamelCaseInput):
-    ttlInMinutes: int
-    payload: GrundsteuerData
-
 class GrundsteuerDto(CamelCaseInput):    
     payload: GrundsteuerData
     clientIdentifier: str

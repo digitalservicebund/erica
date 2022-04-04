@@ -18,14 +18,14 @@ router = APIRouter()
 @router.post('/request', status_code=status.HTTP_201_CREATED, responses={
         422: {"model": ErrorRequestQueue}, 500: {"model": ErrorRequestQueue}
     })
-async def send_grundsteuer(grundsteuer_ttl: GrundsteuerDto):
+async def send_grundsteuer(grundsteuer: GrundsteuerDto):
     """
     Route for sending a grundsteuer tax declaration using the job queue.
     :param grundsteuer_ttl: payload with TTL, JSON input data for the grundsteuer declaration.
     """
     try:
         result = get_job_service(RequestType.grundsteuer).add_to_queue(
-            grundsteuer_ttl.payload, grundsteuer_ttl.clientIdentifier, RequestType.grundsteuer)
+            grundsteuer.payload, grundsteuer.clientIdentifier, RequestType.grundsteuer)
         return RedirectResponse(url='grundsteuer/request/' + str(result.request_id), status_code=201)
     except Exception as e:
         logging.getLogger().info("Could not send est", exc_info=True)
