@@ -2,7 +2,8 @@ import pytest
 
 from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, revocate_freischalt_code, \
     request_freischalt_code
-from erica.application.JobService.job_service_factory import _send_grundsteuer, get_job_service
+from erica.application.JobService.job_service_factory import get_job_service
+from erica.application.grundsteuer.grundsteuer_jobs import send_grundsteuer
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.application.tax_number_validation.jobs import check_tax_number
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
@@ -17,7 +18,7 @@ from erica.erica_legacy.request_processing.requests_controller import UnlockCode
     EstRequestController
 from erica.infrastructure.rq.BackgroundJobRq import BackgroundJobRq
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
-from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
+from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
 
 
 class TestJobServiceFactory:
@@ -82,10 +83,10 @@ class TestJobServiceFactory:
 
     @pytest.mark.usefixtures('fake_db_connection_in_settings')
     def test_if_send_grundsteuer_type_then_return_correctly_configured_service(self):
-        job_service = get_job_service(RequestType.send_est)
+        job_service = get_job_service(RequestType.grundsteuer)
 
         assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
         assert issubclass(job_service.payload_type, GrundsteuerData)
         assert issubclass(job_service.request_controller, GrundsteuerRequestController)
-        assert job_service.job_method == _send_grundsteuer
+        assert job_service.job_method == send_grundsteuer

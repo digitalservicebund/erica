@@ -6,9 +6,9 @@ from xml.etree import ElementTree
 import pytest
 from xmldiff import main
 
+from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
-from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
 from tests.utils import read_text_from_sample
@@ -75,10 +75,10 @@ class TestGenerateJson:
     def test_result_includes_all_relevant_aspects(self, valid_grundsteuer_request_controller):
         valid_grundsteuer_request_controller.include_elster_responses = True
         example_pyeric_response = PyericResponse("eric response", "server response", "pdf content".encode())
-        with patch('erica.erica_legacy.request_processing.requests_controller.get_transfer_ticket_from_xml',
+        with patch('erica.application.EricRequestProcessing.requests_controller.get_transfer_ticket_from_xml',
                    MagicMock(return_value='transfer ticket')):
             result = valid_grundsteuer_request_controller.generate_json(example_pyeric_response)
-            assert result['pdf'] == base64.b64encode("pdf content".encode())
+            assert result['pdf'] == base64.b64encode(b"pdf content").decode('utf-8')
             assert result['transfer_ticket'] == 'transfer ticket'
             assert result['eric_response'] == 'eric response'
             assert result['server_response'] == 'server response'
