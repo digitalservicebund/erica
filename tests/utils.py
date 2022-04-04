@@ -1,4 +1,3 @@
-import uuid
 import os
 from datetime import date
 
@@ -57,25 +56,6 @@ def create_tax_number_validity(correct=True):
 def create_send_est():
     payload = TaxDeclarationPayload(est_data=create_form_data(), meta_data=create_meta_data())
     return TaxDeclarationDto(payload=payload, clientIdentifier="steuerlotse")
-
-
-def json_default(value):
-    if isinstance(value, date):
-        return value.isoformat()
-    else:
-        return value.__dict__
-
-
-def is_valid_uuid(value):
-    try:
-        uuid.UUID(value)
-        return True
-    except ValueError:
-        return False
-
-
-def generate_uuid():
-    return uuid.uuid4()
 
 
 def get_job_service_patch_string(endpoint):
