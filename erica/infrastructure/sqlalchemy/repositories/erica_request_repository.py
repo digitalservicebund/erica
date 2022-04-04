@@ -54,7 +54,7 @@ class EricaRequestRepository(
         self.db_connection.delete(entity)
         self.db_connection.commit()
 
-    def delete_success_fail_old_entities(self, ttl) -> bool:
+    def delete_success_fail_old_entities(self, ttl) -> int:
         stmt = self.DatabaseEntity.__table__.delete().where(
             or_(self.DatabaseEntity.status == Status.success, self.DatabaseEntity.status == Status.failed),
             self.DatabaseEntity.updated_at < dt.datetime.now() - dt.timedelta(minutes=ttl))
@@ -62,8 +62,7 @@ class EricaRequestRepository(
         self.db_connection.commit()
         return deleted.rowcount
 
-    def update_status_not_finished_entities_to_failed(self, ttl) -> bool:
-        # TODO errorcode errormessage change?
+    def update_status_not_finished_entities_to_failed(self, ttl) -> int:
         stmt = self.DatabaseEntity.__table__.update() \
             .where(or_(self.DatabaseEntity.status == Status.new, self.DatabaseEntity.status == Status.scheduled,
                        self.DatabaseEntity.status == Status.processing),
