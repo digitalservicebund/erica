@@ -62,8 +62,8 @@ def fake_db_connection_in_settings(database_uri):
     get_settings().database_url = original_db_url
 
 
-@pytest.fixture
-def transactional_session_with_mock_schema(postgresql_db):
+@pytest_asyncio.fixture()
+async def transactional_session_with_mock_schema(postgresql_db):
     if not postgresql_db.has_table(MockSchema.__tablename__):
         postgresql_db.create_table(MockSchema)
 
