@@ -75,7 +75,7 @@ class TestGenerateJson:
     def test_result_includes_all_relevant_aspects(self, valid_grundsteuer_request_controller):
         valid_grundsteuer_request_controller.include_elster_responses = True
         example_pyeric_response = PyericResponse("eric response", "server response", "pdf content".encode())
-        with patch('erica.application.EricRequestProcessing.requests_controller.get_transfer_ticket_from_xml',
+        with patch('erica.erica_legacy.request_processing.requests_controller.get_transfer_ticket_from_xml',
                    MagicMock(return_value='transfer ticket')):
             result = valid_grundsteuer_request_controller.generate_json(example_pyeric_response)
             assert result['pdf'] == base64.b64encode(b"pdf content").decode('utf-8')
