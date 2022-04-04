@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from fastapi import APIRouter
 from starlette import status
@@ -17,7 +18,7 @@ router = APIRouter()
 @router.post('/request', status_code=status.HTTP_201_CREATED, responses={
         422: {"model": ErrorRequestQueue}, 500: {"model": ErrorRequestQueue}
     })
-def send_grundsteuer(grundsteuer_ttl: GrundsteuerDto):
+async def send_grundsteuer(grundsteuer_ttl: GrundsteuerDto):
     """
     Route for sending a grundsteuer tax declaration using the job queue.
     :param grundsteuer_ttl: payload with TTL, JSON input data for the grundsteuer declaration.
@@ -32,15 +33,14 @@ def send_grundsteuer(grundsteuer_ttl: GrundsteuerDto):
 
 
 @router.get('/request/{request_id}', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-def get_grundsteuer(request_id: str):
+async def get_grundsteuer_job(request_id: str):
     """
     Route for retrieving job status of a grundsteuer tax declaration validation from the queue.
     :param request_id: the id of the job.
-    """
+    """    
     try:
         erica_request = get_erica_request(request_id)
         return create_request_grundsteuer_response(erica_request)
-    # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
         logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))

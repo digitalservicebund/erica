@@ -31,7 +31,7 @@ async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto):
             RequestType.freischalt_code_request)
         return RedirectResponse(url='fsc/request/' + str(result.request_id), status_code=201)
     # TODO specific exception?
-    except Exception:
+    except Exception as e:
         logging.getLogger().info("Could not request unlock code", exc_info=True)
         return JSONResponse(status_code=422, content=generate_error_response())
 
