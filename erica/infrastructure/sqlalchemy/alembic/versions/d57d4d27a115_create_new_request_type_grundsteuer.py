@@ -22,6 +22,4 @@ def upgrade():
 
 
 def downgrade():
-    with op.get_context().autocommit_block():
-        op.execute("DROP TYPE IF EXISTS requesttype")
-        op.execute("CREATE TYPE requesttype AS ENUM('freischalt_code_request', 'freischalt_code_activate', 'freischalt_code_revocate', 'check_tax_number', 'send_est')")
+    pass
