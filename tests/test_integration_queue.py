@@ -1,7 +1,7 @@
 import json
 import os
 import requests
-from erica.application.grundsteuer.grundsteuer_input.grundsteuer_input import GrundsteuerDto
+from erica.application.grundsteuer.grundsteuer_input import GrundsteuerDto
 
 from tests.utils import create_send_grundsteuer, json_default, create_unlock_code_request, is_valid_uuid, create_unlock_code_activation, \
     generate_uuid, create_unlock_code_revocation, create_tax_number_validity, create_send_est

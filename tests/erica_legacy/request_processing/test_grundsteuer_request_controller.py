@@ -8,7 +8,7 @@ from xmldiff import main
 
 from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.application.grundsteuer.grundsteuer_input.grundsteuer_input import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_input import GrundsteuerPayload
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
 from tests.utils import read_text_from_sample
