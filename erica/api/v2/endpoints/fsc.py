@@ -49,7 +49,7 @@ async def get_fsc_request_job(request_id: UUID):
     """
     try:
         freischaltcode_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
-        return freischaltcode_service.get_response_freischaltcode_request_and_activation(request_id)
+        return freischaltcode_service.get_response_freischaltcode_request(request_id)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
         logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
@@ -86,7 +86,7 @@ async def get_fsc_activation_job(request_id: UUID):
     """
     try:
         freischaltcode_service: FreischaltCodeService = injector.inject(FreischaltCodeService)
-        return freischaltcode_service.get_response_freischaltcode_request_and_activation(request_id)
+        return freischaltcode_service.get_response_freischaltcode_activation(request_id)
     # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
         logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)

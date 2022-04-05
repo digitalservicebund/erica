@@ -2,9 +2,9 @@ from abc import ABCMeta, abstractmethod
 from uuid import UUID
 
 from opyoid import Module
-from erica.application.EricaRequest.EricaRequestService import EricaRequestService
 from erica.application.Shared.response_dto import JobState
 from erica.application.Shared.response_state_mapper import map_status
+from erica.application.erica_request.erica_request_service import EricaRequestService
 from erica.application.tax_declaration.tax_declaration_dto import EstResponseDto, ResultEstResponseDto
 
 

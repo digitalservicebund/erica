@@ -8,10 +8,10 @@ from erica.api.v2.endpoints.est import send_est, get_send_est_job
 from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activate_fsc, get_fsc_activation_job, \
     revocate_fsc, get_fsc_revocation_job
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
-from erica.application.EricaRequest.EricaRequest import EricaRequestDto
-from erica.application.EricaRequest.EricaRequestService import EricaRequestService
 from erica.application.JobService.job_service import JobService
 from erica.application.Shared.response_dto import JobState
+from erica.application.erica_request.erica_request import EricaRequestDto
+from erica.application.erica_request.erica_request_service import EricaRequestService
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest

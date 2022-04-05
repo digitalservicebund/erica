@@ -1,7 +1,7 @@
 from opyoid import Module
 
-from erica.application.EricaRequest.EricaRequestService import EricaRequestServiceInterface, EricaRequestService
 from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeServiceInterface, FreischaltCodeService
+from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface, EricaRequestService
 from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarationServiceInterface, \
     TaxDeclarationService
 from erica.application.tax_number_validation.TaxNumberValidityService import TaxNumberValidityServiceInterface, \

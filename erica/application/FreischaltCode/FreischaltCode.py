@@ -5,6 +5,7 @@ from typing import Optional
 from erica.application.Shared.response_dto import ResponseBaseDto
 from erica.application.base_dto import BaseDto
 
+
 # Input
 
 class FreischaltCodeRequestPayloadDto(BaseDto):
@@ -37,20 +38,21 @@ class FreischaltCodeRevocateDto(BaseDto):
     payload: FreischaltCodeRevocatePayloadDto
     clientIdentifier: str
 
+
 # Output
 
-class TransferTicketAndIdnr(BaseDto):
+class TransferTicketAndIdnrResponseDto(BaseDto):
     transfer_ticket: str
     idnr: str
 
 
-class ResultFreischaltcodeRequestAndActivation(TransferTicketAndIdnr):
+class ResultFreischaltcodeRequestAndActivationDto(TransferTicketAndIdnrResponseDto):
     elster_request_id: str
 
 
 class FreischaltcodeRequestAndActivationResponseDto(ResponseBaseDto):
-    result: Optional[ResultFreischaltcodeRequestAndActivation]
+    result: Optional[ResultFreischaltcodeRequestAndActivationDto]
 
 
 class FreischaltcodeRevocationResponseDto(ResponseBaseDto):
-    result: Optional[TransferTicketAndIdnr]
+    result: Optional[TransferTicketAndIdnrResponseDto]
