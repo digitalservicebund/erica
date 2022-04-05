@@ -8,7 +8,7 @@ It was originally [developed as part of the Tech4Germany Fellowship 2020](https:
 The fellowship is organized by [DigitalService4Germany GmbH](https://digitalservice4germany.com).
 
 🇩🇪
-Erica ist ein Service um Steuererklärungen an ELSTER zu senden.
+Erica ist ein Service, um Steuererklärungen an ELSTER zu senden.
 Es dient als Wrapper um die Funktionalität von EriC, ELSTERs eigener Client um die APIs zu verwenden.
 Es stellt Funktionalität zum Absenden von Steuererklärungen sowie dem Beantragen, Freischalten und Stornieren von Freischaltcodes bereit.
 
