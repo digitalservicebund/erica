@@ -5,12 +5,12 @@ from opyoid import Module
 
 from erica.application.FreischaltCode.FreischaltCode import FreischaltcodeRequestAndActivationResponseDto, \
     ResultFreischaltcodeRequestAndActivationDto, FreischaltcodeRevocationResponseDto, TransferTicketAndIdnrResponseDto
+from erica.application.Shared.base_service import BaseService
 from erica.application.Shared.response_dto import JobState
 from erica.application.Shared.response_state_mapper import map_status
-from erica.application.erica_request.erica_request_service import EricaRequestService
 
 
-class FreischaltCodeServiceInterface:
+class FreischaltCodeServiceInterface(BaseService):
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -29,11 +29,6 @@ class FreischaltCodeServiceInterface:
 
 
 class FreischaltCodeService(FreischaltCodeServiceInterface):
-    erica_request_service: EricaRequestService
-
-    def __init__(self, service: EricaRequestService) -> None:
-        super().__init__()
-        self.erica_request_service = service
 
     def get_response_freischaltcode_request(self, request_id: UUID):
         return self._get_base_response_freischaltcode(request_id)
@@ -42,7 +37,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         return self._get_base_response_freischaltcode(request_id)
 
     def _get_base_response_freischaltcode(self, request_id: UUID):
-        erica_request = self.erica_request_service.get_request_by_request_id(request_id)
+        erica_request = self.get_erica_request(request_id)
         process_status = map_status(erica_request.status)
         if process_status == JobState.SUCCESS:
             result = ResultFreischaltcodeRequestAndActivationDto(
@@ -60,7 +55,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
                 processStatus=map_status(erica_request.status))
 
     def get_response_freischaltcode_revocation(self, request_id: UUID):
-        erica_request = self.erica_request_service.get_request_by_request_id(request_id)
+        erica_request = self.get_erica_request(request_id)
         process_status = map_status(erica_request.status)
         if process_status == JobState.SUCCESS:
             result = TransferTicketAndIdnrResponseDto(
