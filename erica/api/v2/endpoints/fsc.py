@@ -2,9 +2,7 @@ import logging
 
 from uuid import UUID
 from fastapi import status, APIRouter
-from opyoid import Injector
 from starlette.responses import JSONResponse, RedirectResponse
-from erica.api.ApiModule import ApiModule
 from erica.api.utils import generate_error_response, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
@@ -13,14 +11,11 @@ from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeReques
     FreischaltCodeRevocateDto
 from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService, FreischaltCodeServiceInterface
 from erica.application.JobService.job_service_factory import get_job_service
+from erica.application.Shared.service_injector import get_service
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 router = APIRouter()
-
-injector = Injector([
-    ApiModule()
-])
 
 
 @router.post('/request', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
@@ -34,7 +29,6 @@ async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto):
             request_fsc_client_identifier.payload, request_fsc_client_identifier.clientIdentifier,
             RequestType.freischalt_code_request)
         return RedirectResponse(url='fsc/request/' + str(result.request_id), status_code=201)
-    # TODO specific exception?
     except Exception:
         logging.getLogger().info("Could not request unlock code", exc_info=True)
         return JSONResponse(status_code=422, content=generate_error_response())
@@ -48,9 +42,8 @@ async def get_fsc_request_job(request_id: UUID):
     :param request_id: the id of the job.
     """
     try:
-        freischaltcode_service: FreischaltCodeServiceInterface = injector.inject(FreischaltCodeServiceInterface)
+        freischaltcode_service: FreischaltCodeServiceInterface = get_service(RequestType.freischalt_code_request)
         return freischaltcode_service.get_response_freischaltcode_request(request_id)
-    # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
         logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
@@ -71,7 +64,6 @@ async def activate_fsc(activation_fsc_client_identifier: FreischaltCodeActivateD
             activation_fsc_client_identifier.payload, activation_fsc_client_identifier.clientIdentifier,
             RequestType.freischalt_code_activate)
         return RedirectResponse(url='fsc/activation/' + str(result.request_id), status_code=201)
-    # TODO specific exception and correct mapping to JSON error response?
     except Exception:
         logging.getLogger().info("Could not activate unlock code", exc_info=True)
         return JSONResponse(status_code=422, content=generate_error_response())
@@ -85,9 +77,8 @@ async def get_fsc_activation_job(request_id: UUID):
     :param request_id: the id of the job.
     """
     try:
-        freischaltcode_service: FreischaltCodeService = injector.inject(FreischaltCodeService)
+        freischaltcode_service: FreischaltCodeService = get_service(RequestType.freischalt_code_activate)
         return freischaltcode_service.get_response_freischaltcode_activation(request_id)
-    # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
         logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))
@@ -108,7 +99,6 @@ async def revocate_fsc(revocation_fsc_client_identifier: FreischaltCodeRevocateD
             revocation_fsc_client_identifier.payload, revocation_fsc_client_identifier.clientIdentifier,
             RequestType.freischalt_code_revocate)
         return RedirectResponse(url='fsc/revocation/' + str(result.request_id), status_code=201)
-    # TODO specific exception and correct mapping to JSON error response?
     except Exception:
         logging.getLogger().info("Could not revoke unlock code", exc_info=True)
         return JSONResponse(status_code=422, content=generate_error_response())
@@ -122,9 +112,8 @@ async def get_fsc_revocation_job(request_id: UUID):
     :param request_id: the id of the job.
     """
     try:
-        freischaltcode_service: FreischaltCodeService = injector.inject(FreischaltCodeService)
+        freischaltcode_service: FreischaltCodeService = get_service(RequestType.freischalt_code_revocate)
         return freischaltcode_service.get_response_freischaltcode_revocation(request_id)
-    # TODO specific exception and correct mapping to JSON error response?
     except EntityNotFoundError as e:
         logging.getLogger().info(get_entity_not_found_log_message(request_id), exc_info=True)
         return JSONResponse(status_code=404, content=generate_error_response(-1, e.__doc__))

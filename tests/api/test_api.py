@@ -8,10 +8,12 @@ from erica.api.v2.endpoints.est import send_est, get_send_est_job
 from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activate_fsc, get_fsc_activation_job, \
     revocate_fsc, get_fsc_revocation_job
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
+from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService
 from erica.application.JobService.job_service import JobService
 from erica.application.Shared.response_dto import JobState
 from erica.application.erica_request.erica_request import EricaRequestDto
-from erica.application.erica_request.erica_request_service import EricaRequestService
+from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarationService
+from erica.application.tax_number_validation.TaxNumberValidityService import TaxNumberValidityService
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
@@ -63,8 +65,9 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
                                  result={"elster_request_id": elster_request_id,
                                          "transfer_ticket": transfer_ticket},
                                  request_id=request_id, creator_id="test")
-    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
-        mock_get_request.return_value = erica_request
+    with patch("erica.api.v2.endpoints.fsc.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await api_method(request_id)
         assert response.processStatus == JobState.SUCCESS
         assert response.result.idnr == idnr
@@ -83,8 +86,9 @@ async def test_if_get_fsc_revocation_job_returns_success_status_with_result():
                                  payload={"idnr": idnr},
                                  result={"transfer_ticket": transfer_ticket, "idnr": idnr},
                                  request_id=request_id, creator_id="test")
-    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
-        mock_get_request.return_value = erica_request
+    with patch("erica.api.v2.endpoints.fsc.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await get_fsc_revocation_job(request_id)
         assert response.processStatus == JobState.SUCCESS
         assert response.result.idnr == idnr
@@ -101,8 +105,9 @@ async def test_if_get_tax_validity_job_returns_success_status_with_result():
                                  payload={},
                                  result={"is_valid": is_valid},
                                  request_id=request_id, creator_id="test")
-    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
-        mock_get_request.return_value = erica_request
+    with patch("erica.api.v2.endpoints.tax.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = TaxNumberValidityService(service=mock_service)
         response = await get_valid_tax_number_job(request_id)
         assert response.processStatus == JobState.SUCCESS
         assert response.result.is_valid == is_valid
@@ -119,8 +124,9 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
                                  payload={},
                                  result={"transfer_ticket": transfer_ticket, "pdf": pdf},
                                  request_id=request_id, creator_id="test")
-    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
-        mock_get_request.return_value = erica_request
+    with patch("erica.api.v2.endpoints.est.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = TaxDeclarationService(service=mock_service)
         response = await get_send_est_job(request_id)
         assert response.processStatus == JobState.SUCCESS
         assert response.result.pdf == pdf
@@ -133,21 +139,59 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
 @pytest.mark.parametrize("api_method, request_type",
                          [(get_fsc_request_job, RequestType.freischalt_code_request),
                           (get_fsc_activation_job, RequestType.freischalt_code_activate),
-                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate),
-                          (get_valid_tax_number_job, RequestType.check_tax_number),
-                          (get_send_est_job, RequestType.send_est)],
-                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
-async def test_if_get_job_returns_failure_status(api_method, request_type):
+                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate)],
+                         ids=["request_fsc", "activate_fsc", "revocate_fsc"])
+async def test_if_get_fsc_job_returns_failure_status(api_method, request_type):
     request_id = uuid.uuid4()
     error_code = "1"
     error_message = "wingardium leviosa"
-
     erica_request = EricaRequest(type=request_type, status=Status.failed,
                                  error_code=error_code,
                                  error_message=error_message,
                                  request_id=request_id, creator_id="test")
-    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
-        mock_get_request.return_value = erica_request
+    with patch("erica.api.v2.endpoints.fsc.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = FreischaltCodeService(service=mock_service)
+        response = await api_method(request_id)
+        assert response.processStatus == JobState.FAILURE
+        assert response.errorCode == error_code
+        assert response.errorMessage == error_message
+        assert response.result is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("api_method, request_type",[(get_valid_tax_number_job, RequestType.check_tax_number)])
+async def test_if_get_tax_validity_job_returns_failure_status(api_method, request_type):
+    request_id = uuid.uuid4()
+    error_code = "1"
+    error_message = "wingardium leviosa"
+    erica_request = EricaRequest(type=request_type, status=Status.failed,
+                                 error_code=error_code,
+                                 error_message=error_message,
+                                 request_id=request_id, creator_id="test")
+    with patch("erica.api.v2.endpoints.tax.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = TaxNumberValidityService(service=mock_service)
+        response = await api_method(request_id)
+        assert response.processStatus == JobState.FAILURE
+        assert response.errorCode == error_code
+        assert response.errorMessage == error_message
+        assert response.result is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("api_method, request_type", [(get_send_est_job, RequestType.send_est)])
+async def test_if_get_est_job_returns_failure_status(api_method, request_type):
+    request_id = uuid.uuid4()
+    error_code = "1"
+    error_message = "wingardium leviosa"
+    erica_request = EricaRequest(type=request_type, status=Status.failed,
+                                 error_code=error_code,
+                                 error_message=error_message,
+                                 request_id=request_id, creator_id="test")
+    with patch("erica.api.v2.endpoints.est.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = TaxDeclarationService(service=mock_service)
         response = await api_method(request_id)
         assert response.processStatus == JobState.FAILURE
         assert response.errorCode == error_code
@@ -160,16 +204,49 @@ async def test_if_get_job_returns_failure_status(api_method, request_type):
 @pytest.mark.parametrize("api_method, request_type",
                          [(get_fsc_request_job, RequestType.freischalt_code_request),
                           (get_fsc_activation_job, RequestType.freischalt_code_activate),
-                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate),
-                          (get_valid_tax_number_job, RequestType.check_tax_number),
-                          (get_send_est_job, RequestType.send_est)],
-                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
-async def test_if_get_job_returns_processing_status(mock_job_state, api_method, request_type):
+                          (get_fsc_revocation_job, RequestType.freischalt_code_revocate)],
+                         ids=["request_fsc", "activate_fsc", "revocate_fsc"])
+async def test_if_get_fsc_job_returns_processing_status(mock_job_state, api_method, request_type):
     request_id = uuid.uuid4()
     erica_request = EricaRequest(type=request_type, status=mock_job_state,
                                  request_id=request_id, creator_id="test")
-    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
-        mock_get_request.return_value = erica_request
+    with patch("erica.api.v2.endpoints.fsc.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = FreischaltCodeService(service=mock_service)
+        response = await api_method(request_id)
+        assert response.processStatus == JobState.PROCESSING
+        assert response.result is None
+        assert response.errorCode is None
+        assert response.errorMessage is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("mock_job_state", [Status.new, Status.scheduled, Status.processing])
+@pytest.mark.parametrize("api_method, request_type",[(get_valid_tax_number_job, RequestType.check_tax_number)])
+async def test_if_get_tax_validity_job_returns_processing_status(mock_job_state, api_method, request_type):
+    request_id = uuid.uuid4()
+    erica_request = EricaRequest(type=request_type, status=mock_job_state,
+                                 request_id=request_id, creator_id="test")
+    with patch("erica.api.v2.endpoints.tax.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = TaxNumberValidityService(service=mock_service)
+        response = await api_method(request_id)
+        assert response.processStatus == JobState.PROCESSING
+        assert response.result is None
+        assert response.errorCode is None
+        assert response.errorMessage is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("mock_job_state", [Status.new, Status.scheduled, Status.processing])
+@pytest.mark.parametrize("api_method, request_type", [(get_send_est_job, RequestType.send_est)])
+async def test_if_get_est_job_returns_processing_status(mock_job_state, api_method, request_type):
+    request_id = uuid.uuid4()
+    erica_request = EricaRequest(type=request_type, status=mock_job_state,
+                                 request_id=request_id, creator_id="test")
+    with patch("erica.api.v2.endpoints.est.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
+        get_service_mock.return_value = TaxDeclarationService(service=mock_service)
         response = await api_method(request_id)
         assert response.processStatus == JobState.PROCESSING
         assert response.result is None
@@ -179,14 +256,38 @@ async def test_if_get_job_returns_processing_status(mock_job_state, api_method, 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("api_method",
-                         [get_fsc_request_job, get_fsc_activation_job, get_fsc_revocation_job, get_valid_tax_number_job,
-                          get_send_est_job],
-                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
-async def test_if_get_job_returns_not_found(api_method):
+                         [get_fsc_request_job, get_fsc_activation_job, get_fsc_revocation_job],
+                         ids=["request_fsc", "activate_fsc", "revocate_fsc"])
+async def test_if_get_fsc_job_returns_not_found(api_method):
     request_id = uuid.uuid4()
-    with patch.object(EricaRequestService, "get_request_by_request_id", MagicMock()) as mock_get_request:
-        mock_get_request.side_effect = EntityNotFoundError
+    with patch("erica.api.v2.endpoints.fsc.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(side_effect=EntityNotFoundError))
+        get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await api_method(request_id)
+        body = json.loads(response.body)
+        assert body['errorCode'] == -1
+        assert body['errorMessage'] == "Raised in case an entity could not be found in the database"
+
+
+@pytest.mark.asyncio
+async def test_if_get_tax_validity_job_returns_not_found():
+    request_id = uuid.uuid4()
+    with patch("erica.api.v2.endpoints.tax.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(side_effect=EntityNotFoundError))
+        get_service_mock.return_value = TaxNumberValidityService(service=mock_service)
+        response = await get_valid_tax_number_job(request_id)
+        body = json.loads(response.body)
+        assert body['errorCode'] == -1
+        assert body['errorMessage'] == "Raised in case an entity could not be found in the database"
+
+
+@pytest.mark.asyncio
+async def test_if_get_est_job_returns_not_found():
+    request_id = uuid.uuid4()
+    with patch("erica.api.v2.endpoints.est.get_service", MagicMock()) as get_service_mock:
+        mock_service = MagicMock(get_request_by_request_id=MagicMock(side_effect=EntityNotFoundError))
+        get_service_mock.return_value = TaxDeclarationService(service=mock_service)
+        response = await get_send_est_job(request_id)
         body = json.loads(response.body)
         assert body['errorCode'] == -1
         assert body['errorMessage'] == "Raised in case an entity could not be found in the database"
