@@ -27,7 +27,7 @@ async def send_grundsteuer(grundsteuer: GrundsteuerDto):
         result = get_job_service(RequestType.grundsteuer).add_to_queue(
             grundsteuer.payload, grundsteuer.clientIdentifier, RequestType.grundsteuer)
         return RedirectResponse(url='grundsteuer/request/' + str(result.request_id), status_code=201)
-    except Exception as e:
+    except Exception:
         logging.getLogger().info("Could not send grundsteuer", exc_info=True)
         return JSONResponse(status_code=422, content=generate_error_response())
 
