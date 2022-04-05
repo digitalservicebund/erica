@@ -3,6 +3,7 @@ import os
 import uuid
 from datetime import date
 from decimal import Decimal
+from time import sleep
 
 import pytest
 import requests
@@ -157,9 +158,12 @@ class TestV2UnlockCodeRequest:
                                  data=json.dumps(full_unlock_code_request_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
+
+        sleep(4)
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 200
-        assert "processStatus" in response.json()
+        assert response.json()["processStatus"] == "Failure"
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
@@ -197,10 +201,14 @@ class TestV2UnlockCodeActivation:
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(full_unlock_code_activation_data, default=str))
         assert response.status_code == 201
+
         uuid = response.headers['Location'].split("/")[2]
+        sleep(4)
+
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 200
-        assert "processStatus" in response.json()
+        assert response.json()["processStatus"] == "Failure"
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
@@ -238,10 +246,14 @@ class TestV2UnlockCodeRevocation:
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(full_unlock_code_revocation_data, default=str))
         assert response.status_code == 201
+
         uuid = response.headers['Location'].split("/")[2]
+        sleep(4)
+
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 200
-        assert "processStatus" in response.json()
+        assert response.json()["processStatus"] == "Failure"
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
@@ -279,10 +291,14 @@ class TestV2TaxNumberValidity:
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(tax_number_validity_data, default=str))
         assert response.status_code == 201
+
         uuid = response.headers['Location'].split("/")[1]
+        sleep(4)
+
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 200
-        assert "processStatus" in response.json()
+        assert response.json()["processStatus"] == "Success"
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
@@ -331,10 +347,14 @@ class TestV2SendEst:
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(full_est_data, default=str))
         assert response.status_code == 201
+
         uuid = response.headers['Location'].split("/")[1]
+        sleep(4)
+
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 200
-        assert "processStatus" in response.json()
+        assert response.json()["processStatus"] == "Success"
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
