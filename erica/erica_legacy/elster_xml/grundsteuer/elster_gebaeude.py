@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import GaragenAnzahl, \
+from erica.application.grundsteuer.grundsteuer_input_gebaeude import GaragenAnzahl, \
     WeitereWohnraeumeDetails, Gebaeude as GebaeudeInput
 
 

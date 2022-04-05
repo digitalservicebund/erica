@@ -7,3 +7,4 @@ class RequestType(int, Enum):
     freischalt_code_revocate = 2
     check_tax_number = 3
     send_est = 4
+    grundsteuer = 5

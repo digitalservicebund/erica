@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
     EEigentumsverh, EEmpfangsbevollmaechtigter
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleVertreter, SampleBevollmaechtigter, SamplePerson, \
     SampleEigentuemer, DefaultSampleEigentuemer
 

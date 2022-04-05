@@ -21,14 +21,13 @@ class ResponseGetFromQueue(BaseModel):
     errorCode: Optional[str]
     errorMessage: Optional[str]
 
-
-class ResultGetSendEstFromQueue(BaseModel):
+class TransferResultFromQueue(BaseModel):
     transfer_ticket: str
     pdf: str
 
 
 class EstResponseDto(ResponseGetFromQueue):
-    result: Optional[ResultGetSendEstFromQueue]
+    result: Optional[TransferResultFromQueue]
 
 
 class ResultGetTaxNumberValidityFromQueue(BaseModel):
@@ -54,6 +53,9 @@ class FreischaltcodeRequestAndActivationResponseDto(ResponseGetFromQueue):
 
 class FreischaltcodeRevocationResponseDto(ResponseGetFromQueue):
     result: Optional[TransferTicketAndIdnr]
+    
+class GrundsteuerResponseDto(ResponseGetFromQueue):
+    result: Optional[TransferResultFromQueue]
 
 
 model_error_request_queue = {"model": ErrorRequestQueue,
