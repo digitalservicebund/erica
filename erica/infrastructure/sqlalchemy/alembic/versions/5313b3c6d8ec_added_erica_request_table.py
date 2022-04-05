@@ -17,6 +17,7 @@ depends_on = None
 
 
 def upgrade():    
+    op.execute('DROP TABLE IF EXISTS erica_request')
     op.execute('DROP TYPE IF EXISTS requesttype')
     op.execute('DROP TYPE IF EXISTS status')
     op.create_table('erica_request',
@@ -40,5 +41,5 @@ def upgrade():
 
 def downgrade():
     op.drop_table('erica_request')
-    op.execute('DROP TYPE requesttype')
-    op.execute('DROP TYPE status')
+    op.execute('DROP TYPE IF EXISTS requesttype')
+    op.execute('DROP TYPE IF EXISTS status')

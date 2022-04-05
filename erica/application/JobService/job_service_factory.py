@@ -19,7 +19,7 @@ from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPa
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
     CheckTaxNumberRequestController, EstRequestController
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerPayload
 
 
 def _freischalt_code_request_injector():
@@ -84,7 +84,7 @@ def _send_est_injector():
 def _send_grundsteuer():
     module = ApplicationModule()
     module.bind(Type[EricaRequestController], to_instance=GrundsteuerRequestController)
-    module.bind(Type[BasePayload], to_instance=GrundsteuerData)
+    module.bind(Type[BasePayload], to_instance=GrundsteuerPayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=send_grundsteuer)
 

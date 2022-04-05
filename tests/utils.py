@@ -61,7 +61,7 @@ def create_send_est():
     return TaxDeclarationDto(payload=payload, clientIdentifier="steuerlotse")
 
 def create_send_grundsteuer():
-    return GrundsteuerDto(payload=SampleGrundsteuerData().parse(), clientIdentifier="steuerlotse")
+    return GrundsteuerDto(payload=SampleGrundsteuerData().parse(), clientIdentifier="grundsteuer")
 
 
 

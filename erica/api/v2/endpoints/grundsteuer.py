@@ -6,7 +6,7 @@ from starlette import status
 from starlette.responses import JSONResponse, RedirectResponse
 
 from erica.api.utils import map_status, generate_error_response, get_erica_request, get_entity_not_found_log_message
-from erica.api.v2.responses.model import GrundsteuerResponseDto, ResultGrundsteuerFromQueue, response_model_post_to_queue, ErrorRequestQueue, ErrorRequestQueue, JobState
+from erica.api.v2.responses.model import GrundsteuerResponseDto, TransferResultFromQueue, response_model_post_to_queue, ErrorRequestQueue, ErrorRequestQueue, JobState
 from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerDto
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.domain.Shared.EricaRequest import RequestType
@@ -21,14 +21,14 @@ router = APIRouter()
 async def send_grundsteuer(grundsteuer: GrundsteuerDto):
     """
     Route for sending a grundsteuer tax declaration using the job queue.
-    :param grundsteuer_ttl: payload with TTL, JSON input data for the grundsteuer declaration.
+    :param grundsteuer: payload with TTL, JSON input data for the grundsteuer declaration.
     """
     try:
         result = get_job_service(RequestType.grundsteuer).add_to_queue(
             grundsteuer.payload, grundsteuer.clientIdentifier, RequestType.grundsteuer)
         return RedirectResponse(url='grundsteuer/request/' + str(result.request_id), status_code=201)
     except Exception as e:
-        logging.getLogger().info("Could not send est", exc_info=True)
+        logging.getLogger().info("Could not send grundsteuer", exc_info=True)
         return JSONResponse(status_code=422, content=generate_error_response())
 
 
@@ -52,7 +52,7 @@ async def get_grundsteuer_job(request_id: uuid.UUID):
 def create_request_grundsteuer_response(erica_request):
     process_status = map_status(erica_request.status)
     if process_status == JobState.SUCCESS:
-        result = ResultGrundsteuerFromQueue(
+        result = TransferResultFromQueue(
             transfer_ticket=erica_request.result["transfer_ticket"],
             pdf=erica_request.result["pdf"])
         return GrundsteuerResponseDto(

@@ -12,7 +12,7 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \
     EstRequestController
@@ -87,6 +87,6 @@ class TestJobServiceFactory:
 
         assert isinstance(job_service.repository, EricaRequestRepository)
         assert isinstance(job_service.background_worker, BackgroundJobRq)
-        assert issubclass(job_service.payload_type, GrundsteuerData)
+        assert issubclass(job_service.payload_type, GrundsteuerPayload)
         assert issubclass(job_service.request_controller, GrundsteuerRequestController)
         assert job_service.job_method == send_grundsteuer

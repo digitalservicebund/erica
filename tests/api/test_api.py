@@ -11,6 +11,7 @@ from erica.api.v2.endpoints.grundsteuer import get_grundsteuer_job, send_grundst
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
 from erica.api.v2.responses.model import JobState
 from erica.application.JobService.job_service import JobService
+from erica.application.JobService.job_service_factory import _send_grundsteuer
 from erica.application.erica_request.erica_request import EricaRequestDto
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
@@ -137,8 +138,9 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
                           (get_fsc_activation_job, RequestType.freischalt_code_activate, "fsc"),
                           (get_fsc_revocation_job, RequestType.freischalt_code_revocate, "fsc"),
                           (get_valid_tax_number_job, RequestType.check_tax_number, "tax"),
-                          (get_send_est_job, RequestType.send_est, "est")],
-                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
+                          (get_send_est_job, RequestType.send_est, "est"),
+                          (_send_grundsteuer, RequestType.grundsteuer, "grundsteuer")],
+                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est", "grundsteuer"])
 async def test_if_get_job_returns_failure_status(api_method, request_type, endpoint_to_patch):
     request_id = uuid.uuid4()
     error_code = "1"
@@ -185,8 +187,9 @@ async def test_if_get_job_returns_processing_status(mock_job_state, api_method, 
 @pytest.mark.parametrize("api_method, endpoint_to_patch",
                          [(get_fsc_request_job, "fsc"), (get_fsc_activation_job, "fsc"),
                           (get_fsc_revocation_job, "fsc"), (get_valid_tax_number_job, "tax"),
-                          (get_send_est_job, "est")],
-                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est"])
+                          (get_send_est_job, "est"),
+                          (get_grundsteuer_job, "grundsteuer")],
+                         ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est", "grundsteuer"])
 async def test_if_get_job_returns_not_found(api_method, endpoint_to_patch):
     request_id = uuid.uuid4()
     with patch(get_erica_request_patch_string(endpoint_to_patch), MagicMock()) as mock_get_request:
@@ -199,7 +202,6 @@ async def test_if_get_job_returns_not_found(api_method, endpoint_to_patch):
 @pytest.mark.asyncio
 async def test_if_get_grundsteuer_job_returns_success_status_with_result():
     request_id = uuid.uuid4()
-    is_valid = True
     pdf = "pdf/path"
     transfer_ticket = "test_transfer_ticket"
     erica_request = EricaRequest(type=RequestType.grundsteuer, status=Status.success,

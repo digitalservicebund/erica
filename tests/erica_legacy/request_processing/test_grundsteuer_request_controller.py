@@ -8,7 +8,7 @@ from xmldiff import main
 
 from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerPayload
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import missing_cert, missing_pyeric_lib
 from tests.utils import read_text_from_sample
@@ -50,7 +50,7 @@ class TestGenerateFullXml:
 
     def test_returns_full_expected_xml_for_given_input(self):
         payload = json.loads(read_text_from_sample('grundsteuer_sample_input.json'))
-        parsed_input = GrundsteuerData.parse_obj(payload)
+        parsed_input = GrundsteuerPayload.parse_obj(payload)
         request_controller = GrundsteuerRequestController(parsed_input)
         resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
         expected_xml = read_text_from_sample('grundsteuer_sample_xml.xml')
@@ -61,7 +61,7 @@ class TestGenerateFullXml:
     def test_returns_full_expected_xml_for_given_input_bruchteilsgemeinschaft(self):
         with open('tests/erica_legacy/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json') as json_file:
             payload = json.loads(json_file.read())
-            parsed_input = GrundsteuerData.parse_obj(payload)
+            parsed_input = GrundsteuerPayload.parse_obj(payload)
             request_controller = GrundsteuerRequestController(parsed_input)
             resulting_xml = request_controller.generate_full_xml(use_testmerker=True)
             with open('tests/erica_legacy/samples/grundsteuer_sample_xml_bruchteilsgemeinschaft.xml') as f:

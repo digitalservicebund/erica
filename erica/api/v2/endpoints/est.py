@@ -6,7 +6,7 @@ from starlette.responses import JSONResponse, RedirectResponse
 
 from erica.api.utils import generate_error_response, get_erica_request, map_status, get_entity_not_found_log_message
 from erica.api.v2.responses.model import response_model_get_send_est_from_queue, JobState, EstResponseDto, \
-    ResultGetSendEstFromQueue, ErrorRequestQueue
+    TransferResultFromQueue, ErrorRequestQueue
 from erica.application.JobService.job_service_factory import get_job_service
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.domain.Shared.EricaRequest import RequestType
@@ -55,7 +55,7 @@ async def get_send_est_job(request_id: UUID):
 def create_response(erica_request):
     process_status = map_status(erica_request.status)
     if process_status == JobState.SUCCESS:
-        result = ResultGetSendEstFromQueue(
+        result = TransferResultFromQueue(
             transfer_ticket=erica_request.result["transfer_ticket"],
             pdf=erica_request.result["pdf"])
         return EstResponseDto(

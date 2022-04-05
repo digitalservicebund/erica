@@ -13,7 +13,7 @@ from erica.erica_legacy.api.v1.endpoints.unlock_code import request_unlock_code,
     revoke_unlock_code
 from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
+from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerPayload
 
 from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
     create_unlock_revocation, \
@@ -98,7 +98,7 @@ class TestSendGrundsteuer(unittest.TestCase):
     def test_if_request_correct_then_no_error_and_correct_response(self):
         with open("tests/erica_legacy/samples/grundsteuer_sample_input.json") as f:
             payload = json.loads(f.read())
-            parsed_input = GrundsteuerData.parse_obj(payload)
+            parsed_input = GrundsteuerPayload.parse_obj(payload)
             result = send_grundsteuer(parsed_input)
 
         assert result['transfer_ticket']
@@ -107,7 +107,7 @@ class TestSendGrundsteuer(unittest.TestCase):
     def test_if_request_correct_with_bruchteilsgemeinschaft_then_no_error_and_correct_response(self):
         with open("tests/erica_legacy/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json") as f:
             payload = json.loads(f.read())
-            parsed_input = GrundsteuerData.parse_obj(payload)
+            parsed_input = GrundsteuerPayload.parse_obj(payload)
             result = send_grundsteuer(parsed_input)
 
         assert result['transfer_ticket']
