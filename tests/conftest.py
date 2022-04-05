@@ -10,8 +10,8 @@ from opyoid import Injector
 from datetime import date
 
 from erica.api.ApiModule import ApiModule
-from erica.application.EricaRequest.EricaRequestService import EricaRequestServiceInterface
 from erica.config import get_settings
+from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface
 from erica.infrastructure.sqlalchemy.database import run_migrations
 from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockSchema
 

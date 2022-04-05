@@ -219,22 +219,22 @@ class EstData(BaseModel):
 
 
 class UnlockCodeRequestData(BaseModel):
-    idnr: str
+    tax_id_number: str = Field(alias='idnr')
     date_of_birth: date = Field(alias='dob')
 
 
 class UnlockCodeActivationData(BaseModel):
-    idnr: str
+    tax_id_number: str = Field(alias='idnr')
     freischalt_code: str = Field(alias='unlock_code')
     elster_request_id: str
 
 
 class UnlockCodeRevocationData(BaseModel):
-    idnr: str
+    tax_id_number: str = Field(alias='idnr')
     elster_request_id: str
 
 
 class GetAddressData(BaseModel):
-    idnr: str
+    tax_id_number: str = Field(alias='idnr')
 
 
