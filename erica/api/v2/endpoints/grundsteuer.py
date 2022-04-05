@@ -7,8 +7,8 @@ from starlette.responses import JSONResponse, RedirectResponse
 
 from erica.api.utils import map_status, generate_error_response, get_erica_request, get_entity_not_found_log_message
 from erica.api.v2.responses.model import GrundsteuerResponseDto, TransferResultFromQueue, response_model_post_to_queue, ErrorRequestQueue, ErrorRequestQueue, JobState
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerDto
 from erica.application.JobService.job_service_factory import get_job_service
+from erica.application.grundsteuer.grundsteuer_input import GrundsteuerDto
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 

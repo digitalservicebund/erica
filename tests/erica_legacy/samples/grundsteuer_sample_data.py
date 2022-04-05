@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_input.grundsteuer_input import GrundsteuerPayload
 from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Vertreter, \
     Empfangsbevollmaechtigter, Person, Eigentuemer, Bruchteilsgemeinschaft
 from erica.application.grundsteuer.grundsteuer_input_gebaeude import Gebaeude

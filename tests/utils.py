@@ -9,7 +9,7 @@ from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayl
     FreischaltCodeRevocatePayload
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerDto
+from erica.application.grundsteuer.grundsteuer_input.grundsteuer_input import GrundsteuerDto
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import create_meta_data, create_form_data
 

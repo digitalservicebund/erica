@@ -19,7 +19,7 @@ from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPa
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
     CheckTaxNumberRequestController, EstRequestController
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_input.grundsteuer_input import GrundsteuerPayload
 
 
 def _freischalt_code_request_injector():

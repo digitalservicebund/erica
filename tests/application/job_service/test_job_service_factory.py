@@ -12,7 +12,7 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_input.grundsteuer_input import GrundsteuerPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \
     EstRequestController
