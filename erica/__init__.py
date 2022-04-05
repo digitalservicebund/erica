@@ -10,7 +10,6 @@ from erica.api.v2.api_v2 import api_router_02
 from erica.config import get_settings
 from erica.erica_legacy.api.api import api_router
 from erica.erica_legacy.pyeric.eric import verify_using_stick
-from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 app = FastAPI(
     title="Erica Service",
