@@ -8,6 +8,7 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
+from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
@@ -34,6 +35,9 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
 
         try:
             response = await service.apply_to_elster(request_payload, True)
+            # We do not want to send the server_response or eric_response to the clients in the success case
+            response.pop('server_response', None)
+            response.pop('eric_response', None)
             entity.result = response
             entity.status = Status.success
             repository.update(entity.id, entity)

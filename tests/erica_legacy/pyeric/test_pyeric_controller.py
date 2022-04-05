@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch, call
 
 import pytest
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.bufa_numbers import VALID_BUFA_NUMBERS
 from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.eric_errors import EricGlobalValidationError, EricIOError

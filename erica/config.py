@@ -1,7 +1,6 @@
 import os
 from sys import platform
 from functools import lru_cache
-from typing import List
 
 from pydantic import Field
 from pydantic.env_settings import BaseSettings
@@ -26,10 +25,10 @@ class Settings(BaseSettings):
     testing_email_address: str = 'steuerlotse_testing@4germany.org'  # always set, but not evaluated at Elster's
     elster_datenlieferant: str = Field("PLACEHOLDER_DATENLIEFERANT", env='ELSTER_DATENLIEFERANT')
     hersteller_id: str = Field("74931", env='ELSTER_HERSTELLER_ID')
-    queue_host: str = Field("localhost", env='QUEUE_HOST')
-    queue_port: int = Field(6379, env='QUEUE_PORT')
-    default_queues: List[str] = ['dongle', 'cert', 'common']
+    queue_url: str = Field("redis://default@localhost:6379/0", env='QUEUE_URL')
+    default_queue: str = 'dongle'
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
+    dongle_connected: bool = Field(True, env="DONGLE_CONNECTED")
 
     class Config:
         dir = os.path.dirname(__file__)

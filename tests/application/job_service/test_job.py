@@ -105,14 +105,14 @@ class TestJob:
     async def test_if_entity_exists_then_call_service_with_parsed_entity_payload_and_include_elster_response_true(self):
         mock_entity = MagicMock(id="R2-D2", request_id="C3PO")
         mock_repository = MagicMock(get_by_job_request_id=MagicMock(return_value=mock_entity))
-        dto_parse_obj = MagicMock()
+        payload_type_parse_obj = MagicMock()
         mock_apply_to_elster = AsyncMock()
         service = MagicMock(apply_to_elster=mock_apply_to_elster)
 
         await perform_job(request_id=uuid4(), repository=mock_repository, service=service,
-                          payload_type=MagicMock(parse_obj=dto_parse_obj), logger=MagicMock())
+                          payload_type=MagicMock(parse_obj=payload_type_parse_obj), logger=MagicMock())
 
-        assert mock_apply_to_elster.mock_calls[0] == call(dto_parse_obj(mock_entity), True)
+        assert mock_apply_to_elster.mock_calls[0] == call(payload_type_parse_obj(mock_entity), True)
 
     @pytest.mark.asyncio
     async def test_if_job_ran_successful_then_update_entity_in_database_with_correct_values(self):
@@ -120,13 +120,13 @@ class TestJob:
         mock_get_by_job_request_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_request_id=mock_get_by_job_request_id, update=mock_update)
-        mock_result = "These are not the mocks you are looking for"
+        mock_result = {'msg': "These are not the mocks you are looking for"}
         service = MagicMock(apply_to_elster=AsyncMock(return_value=mock_result))
 
         await perform_job(request_id=uuid4(), repository=mock_repository, service=service, payload_type=MagicMock(),
                           logger=MagicMock())
 
-        assert mock_entity.result == mock_result
+        assert mock_entity.result == {**mock_result}
         assert mock_entity.status == Status.success
         assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
 
@@ -139,7 +139,7 @@ class TestJob:
         mock_get_by_job_request_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_request_id=mock_get_by_job_request_id, update=mock_update)
-        mock_result = "These are not the mocks you are looking for"
+        mock_result = {'msg': "These are not the mocks you are looking for"}
         service = MagicMock(apply_to_elster=AsyncMock(return_value=mock_result))
 
         await perform_job(request_id=uuid4(), repository=mock_repository, service=service, payload_type=MagicMock(),

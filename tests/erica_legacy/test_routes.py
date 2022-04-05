@@ -18,6 +18,7 @@ from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input impo
 from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
     create_unlock_revocation, \
     missing_cert, missing_pyeric_lib
+from tests.utils import read_text_from_sample
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
@@ -118,8 +119,7 @@ class TestSendGrundsteuer(unittest.TestCase):
 class TestRequestUnlockCode(unittest.TestCase):
 
     def setUp(self):
-        with open('tests/erica_legacy/samples/sample_vast_request_response.xml', 'rb') as server_response:
-            self.successful_response = server_response.read()
+        self.successful_response = read_text_from_sample('sample_vast_request_response.xml', 'rb')
 
     def test_correct_request_and_include_false_results_in_no_error_and_eric_elster_response_not_set(self):
         correct_request_no_include = create_unlock_request(correct=True)
@@ -147,7 +147,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("request_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_request_include.idnr, response['idnr'])
+        self.assertEqual(correct_request_include.tax_id_number, response['idnr'])
         self.assertIn('eric_response', response)
         self.assertIn('server_response', response)
 
@@ -163,7 +163,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("request_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_request_no_include.idnr, response['idnr'])
+        self.assertEqual(correct_request_no_include.tax_id_number, response['idnr'])
         self.assertNotIn('eric_response', response)
         self.assertNotIn('server_response', response)
 
@@ -171,8 +171,7 @@ class TestRequestUnlockCode(unittest.TestCase):
 class TestActivateUnlockCode(unittest.TestCase):
 
     def setUp(self):
-        with open('tests/erica_legacy/samples/sample_vast_activation_response.xml', 'rb') as server_response:
-            self.successful_response = server_response.read()
+        self.successful_response = read_text_from_sample('sample_vast_activation_response.xml', 'rb')
 
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
@@ -199,7 +198,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("activate_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_activation_include.idnr, response['idnr'])
+        self.assertEqual(correct_activation_include.tax_id_number, response['idnr'])
         self.assertIn('eric_response', response)
         self.assertIn('server_response', response)
 
@@ -217,7 +216,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         except HTTPException:
             self.fail("activate_unlock_code raise unexpected HTTP exception")
 
-        self.assertEqual(correct_activation_no_include.idnr, response['idnr'])
+        self.assertEqual(correct_activation_no_include.tax_id_number, response['idnr'])
         self.assertNotIn('eric_response', response)
         self.assertNotIn('server_response', response)
 
@@ -225,8 +224,7 @@ class TestActivateUnlockCode(unittest.TestCase):
 class TestRevokeUnlockCode(unittest.TestCase):
 
     def setUp(self):
-        with open('tests/erica_legacy/samples/sample_vast_revocation_response.xml', 'rb') as server_response:
-            self.successful_response = server_response.read()
+        self.successful_response = read_text_from_sample('sample_vast_revocation_response.xml', 'rb')
 
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
