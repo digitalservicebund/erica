@@ -26,7 +26,7 @@ def generate_exception_handlers():
 
         return JSONResponse(
             {"errorCode": "entity_not_found",
-             "errorMessage": "The requested entity with id {request_id} was not found."},
+             "errorMessage": f"The requested entity with id {request_id} was not found."},
             status_code=404,
         )
 
