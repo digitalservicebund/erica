@@ -9,6 +9,8 @@ from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayl
     FreischaltCodeRevocatePayload
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
+from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerDto
+from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import create_meta_data, create_form_data
 
 samples_folder = os.path.join(os.path.dirname(__file__), 'erica_legacy/samples')
@@ -17,6 +19,7 @@ samples_folder = os.path.join(os.path.dirname(__file__), 'erica_legacy/samples')
 def read_text_from_sample(sample_name, read_type='r'):
     with open(os.path.join(samples_folder, sample_name), read_type) as sample_xml:
         return sample_xml.read()
+
 
 def create_unlock_code_request(correct=True):
     if correct:
@@ -59,6 +62,10 @@ def create_send_est():
     return TaxDeclarationDto(payload=payload, clientIdentifier="steuerlotse")
 
 
+def create_send_grundsteuer():
+    return GrundsteuerDto(payload=SampleGrundsteuerData().parse(), clientIdentifier="grundsteuer")
+
+
 def json_default(value):
     if isinstance(value, date):
         return value.isoformat()
@@ -80,7 +87,3 @@ def generate_uuid():
 
 def get_job_service_patch_string(endpoint):
     return "erica.api.v2.endpoints." + endpoint + ".get_job_service"
-
-
-def get_erica_request_patch_string(endpoint):
-    return "erica.api.v2.endpoints." + endpoint + ".get_erica_request"

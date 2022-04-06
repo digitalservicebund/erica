@@ -11,6 +11,3 @@ api_router_02.include_router(grundsteuer.router, tags=["Grundsteuererklärung"])
 api_router_02.include_router(tax.router, tags=["Finanzverwaltung"])
 api_router_02.include_router(fsc.router, prefix="/fsc", tags=["Freischaltcode"])
 api_router_02.include_router(management.router, prefix="/management", tags=["Management"])
-
-
-

@@ -2,7 +2,8 @@ import json
 import os
 import requests
 
-from tests.utils import json_default, create_unlock_code_request, is_valid_uuid, create_unlock_code_activation, \
+from tests.utils import create_send_grundsteuer, json_default, create_unlock_code_request, is_valid_uuid, \
+    create_unlock_code_activation, \
     generate_uuid, create_unlock_code_revocation, create_tax_number_validity, create_send_est
 
 ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://localhost:8000")
@@ -211,6 +212,48 @@ class TestV2SendEst:
     def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_send_est(), default=json_default))
+        assert response.status_code == 201
+        uuid = response.headers['Location'].split("/")[1]
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        assert response.status_code == 200
+        assert "processStatus" in response.json()
+        assert "result" in response.json()
+        assert "errorCode" in response.json()
+        assert "errorMessage" in response.json()
+
+    def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
+        assert response.status_code == 404
+        assert "errorCode" in response.json()
+        assert "errorMessage" in response.json()
+
+    def test_if_get_request_with_invalid_uuid_then_return_422(self):
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + "INVALID_UUID")
+        assert response.status_code == 422
+
+
+class TestV2GrundsteuerRequest:
+    endpoint = "/v2/grundsteuer"
+
+    def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
+        response = requests.post(ERICA_TESTING_URL + self.endpoint,
+                                 data=json.dumps(create_send_grundsteuer(), default=json_default))
+        assert response.status_code == 201
+        location = response.headers['Location'].split("/")
+        assert location[0] == "grundsteuer"
+        assert is_valid_uuid(location[1])
+
+    def test_if_post_without_clientidentifier_then_return_422(self):
+        request = create_send_grundsteuer()
+        request.clientIdentifier = None
+        response = requests.post(ERICA_TESTING_URL + self.endpoint,
+                                 data=json.dumps(request, default=json_default))
+        assert response.status_code == 422
+
+    def test_if_get_existing_request_then_return_200_and_response_with_correct_params(self):
+        request = create_send_grundsteuer()
+        response = requests.post(ERICA_TESTING_URL + self.endpoint,
+                                 data=json.dumps(request, default=json_default))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[1]
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)

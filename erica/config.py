@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     elster_datenlieferant: str = Field("PLACEHOLDER_DATENLIEFERANT", env='ELSTER_DATENLIEFERANT')
     hersteller_id: str = Field("74931", env='ELSTER_HERSTELLER_ID')
     queue_url: str = Field("redis://default@localhost:6379/0", env='QUEUE_URL')
-    default_queues: str = 'dongle, cert, common'
+    default_queue: str = 'dongle'
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
     dongle_connected: bool = Field(True, env="DONGLE_CONNECTED")
 
