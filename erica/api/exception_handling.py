@@ -9,16 +9,16 @@ from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 job_type_to_endpoint = {
-    RequestType.freischalt_code_request: 'fsc/request/',
-    RequestType.freischalt_code_activate: 'fsc/activation/',
-    RequestType.freischalt_code_revocate: 'fsc/revocation/',
-    RequestType.send_est: 'tax_number_validity/',
-    RequestType.check_tax_number: 'ests/',
-    RequestType.grundsteuer: 'grundsteuer/',
+    RequestType.freischalt_code_request: 'get_fsc_request_job',
+    RequestType.freischalt_code_activate: 'get_fsc_activation_job',
+    RequestType.freischalt_code_revocate: 'get_fsc_revocation_job',
+    RequestType.send_est: 'get_send_est_job',
+    RequestType.check_tax_number: 'get_valid_tax_number_job',
+    RequestType.grundsteuer: 'get_grundsteuer_job',
 }
 
 
-def generate_exception_handlers():
+def generate_exception_handlers(app):
     async def entity_not_found_error(request: Request, exc: EntityNotFoundError):
         request_id = request.path_params.get('request_id')
         logging.getLogger().info(f"The requested entity {request_id} is not present in the database.")
@@ -31,10 +31,10 @@ def generate_exception_handlers():
 
     async def jop_type_mismatch_error(request: Request, exc: RequestTypeDoesNotMatchEndpointError) -> RedirectResponse:
         request_id = request.path_params.get('request_id')
-        redirection_url = job_type_to_endpoint[exc.actual_type] + request_id
+        redirection_url = app.url_path_for(job_type_to_endpoint[exc.actual_type], request_id=request_id)
         logging.getLogger().info(
             f"The requested entity {request_id} was requested with the incorrect type {exc.requested_type}. Redirect to {redirection_url}")
-        return RedirectResponse(url=redirection_url, status_code=309)
+        return RedirectResponse(url=redirection_url)
 
     async def internal_server_error(request: Request, exc: Exception):
         request_id = request.path_params.get('request_id')

@@ -18,8 +18,8 @@ app = FastAPI(
         "name": "Apache 2.0",
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
     },
-    exception_handlers=generate_exception_handlers(),
 )
+app.exception_handlers = generate_exception_handlers(app)
 
 
 class DongleStatus:
