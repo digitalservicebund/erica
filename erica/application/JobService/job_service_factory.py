@@ -7,7 +7,7 @@ from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code,
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService, JobServiceInterface
 from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
-from erica.application.grundsteuer.grundsteuer_input import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
 from erica.application.grundsteuer.grundsteuer_jobs import send_grundsteuer
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRevocatePayload, FreischaltCodeActivatePayload, \

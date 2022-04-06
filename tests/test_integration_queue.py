@@ -1,9 +1,9 @@
 import json
 import os
 import requests
-from erica.application.grundsteuer.grundsteuer_input import GrundsteuerDto
 
-from tests.utils import create_send_grundsteuer, json_default, create_unlock_code_request, is_valid_uuid, create_unlock_code_activation, \
+from tests.utils import create_send_grundsteuer, json_default, create_unlock_code_request, is_valid_uuid, \
+    create_unlock_code_activation, \
     generate_uuid, create_unlock_code_revocation, create_tax_number_validity, create_send_est
 
 ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://localhost:8000")
@@ -183,7 +183,7 @@ class TestV2TaxNumberValidity:
 class TestV2TaxOffices:
     endpoint = "/v2/tax_offices"
 
-    def test_if_get_from_ping_then_return_pong(self):
+    def test_if_get_tax_office_list_then_return_tax_office_list(self):
         with open("erica/infrastructure/static/tax_offices.json", "r") as response_file:
             response_content = json.load(response_file)
         response = requests.get(ERICA_TESTING_URL + self.endpoint)
@@ -233,17 +233,17 @@ class TestV2SendEst:
 
 
 class TestV2GrundsteuerRequest:
-    endpoint = "/v2/grundsteuer/request"
+    endpoint = "/v2/grundsteuer"
 
     def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(create_send_grundsteuer(), default=json_default))
         assert response.status_code == 201
         location = response.headers['Location'].split("/")
-        assert location[0] + "/" + location[1] == "grundsteuer/request"
-        assert is_valid_uuid(location[2])
+        assert location[0] == "grundsteuer"
+        assert is_valid_uuid(location[1])
 
-    def test_if_post_without_clientIdentifier_then_return_422(self):
+    def test_if_post_without_clientidentifier_then_return_422(self):
         request = create_send_grundsteuer()
         request.clientIdentifier = None
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
@@ -255,7 +255,7 @@ class TestV2GrundsteuerRequest:
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(request, default=json_default))
         assert response.status_code == 201
-        uuid = response.headers['Location'].split("/")[2]
+        uuid = response.headers['Location'].split("/")[1]
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
         assert response.status_code == 200
         assert "processStatus" in response.json()
