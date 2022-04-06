@@ -37,9 +37,17 @@ def generate_exception_handlers():
 
         return RedirectResponse(url=redirection_url)
 
+    async def internal_server_error(request: Request, exc: Exception):
+        return JSONResponse(
+            {"errorCode": "internal_server_error",
+             "errorMessage": "An unexpected error occurred."},
+            status_code=500,
+        )
+
     exception_handlers = {
         EntityNotFoundError: entity_not_found_error,
         RequestTypeDoesNotMatchEndpointError: jop_type_mismatch_error,
+        Exception: internal_server_error,
     }
 
     return exception_handlers
