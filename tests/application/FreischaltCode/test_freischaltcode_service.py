@@ -14,7 +14,7 @@ class TestFreischaltCodeService:
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing])
     def test_fsc_request_if_erica_request_found_and_not_finished_then_return_processing_response_dto(self, status):
-        erica_request = EricaRequest(type=RequestType.send_est, status=status,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_request, status=status,
                                      payload={},
                                      request_id=uuid.uuid4(),
                                      creator_id="test")
@@ -28,7 +28,7 @@ class TestFreischaltCodeService:
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing])
     def test_fsc_activate_if_erica_request_found_and_not_finished_then_return_processing_response_dto(self, status):
-        erica_request = EricaRequest(type=RequestType.send_est, status=status,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_activate, status=status,
                                      payload={},
                                      request_id=uuid.uuid4(),
                                      creator_id="test")
@@ -42,7 +42,7 @@ class TestFreischaltCodeService:
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing])
     def test_fsc_revocate_if_erica_request_found_and_not_finished_then_return_processing_response_dto(self, status):
-        erica_request = EricaRequest(type=RequestType.send_est, status=status,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_revocate, status=status,
                                      payload={},
                                      request_id=uuid.uuid4(),
                                      creator_id="test")
@@ -57,7 +57,7 @@ class TestFreischaltCodeService:
     def test_fsc_request_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
         error_code = "1"
         error_message = "wingardium leviosa"
-        erica_request = EricaRequest(type=RequestType.send_est, status=Status.failed,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_request, status=Status.failed,
                                      payload={},
                                      error_code=error_code,
                                      error_message=error_message,
@@ -74,7 +74,7 @@ class TestFreischaltCodeService:
     def test_fsc_activate_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
         error_code = "1"
         error_message = "wingardium leviosa"
-        erica_request = EricaRequest(type=RequestType.send_est, status=Status.failed,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_activate, status=Status.failed,
                                      payload={},
                                      error_code=error_code,
                                      error_message=error_message,
@@ -91,7 +91,7 @@ class TestFreischaltCodeService:
     def test_fsc_revocate_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
         error_code = "1"
         error_message = "wingardium leviosa"
-        erica_request = EricaRequest(type=RequestType.send_est, status=Status.failed,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_revocate, status=Status.failed,
                                      payload={},
                                      error_code=error_code,
                                      error_message=error_message,
@@ -109,7 +109,7 @@ class TestFreischaltCodeService:
         idnr = "test_idnr"
         elster_request_id = "test_elster_request_id"
         transfer_ticket = "test_transfer_ticket"
-        erica_request = EricaRequest(type=RequestType.send_est, status=Status.success,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_request, status=Status.success,
                                      payload={"idnr": idnr},
                                      result={"elster_request_id": elster_request_id,
                                              "transfer_ticket": transfer_ticket},
@@ -129,7 +129,7 @@ class TestFreischaltCodeService:
         idnr = "test_idnr"
         elster_request_id = "test_elster_request_id"
         transfer_ticket = "test_transfer_ticket"
-        erica_request = EricaRequest(type=RequestType.send_est, status=Status.success,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_activate, status=Status.success,
                                      payload={"idnr": idnr},
                                      result={"elster_request_id": elster_request_id,
                                              "transfer_ticket": transfer_ticket},
@@ -148,7 +148,7 @@ class TestFreischaltCodeService:
     def test_fsc_revocate_if_erica_request_found_and_success_then_return_success_response_dto(self):
         idnr = "test_idnr"
         transfer_ticket = "test_transfer_ticket"
-        erica_request = EricaRequest(type=RequestType.send_est, status=Status.success,
+        erica_request = EricaRequest(type=RequestType.freischalt_code_revocate, status=Status.success,
                                      payload={"idnr": idnr},
                                      result={"transfer_ticket": transfer_ticket, "idnr": idnr},
                                      request_id=uuid.uuid4(),

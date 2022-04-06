@@ -1,6 +1,7 @@
 from erica.application.FreischaltCode.FreischaltCode import FreischaltcodeRequestAndActivationResponseDto, \
     FreischaltcodeRevocationResponseDto
 from erica.application.Shared.response_dto import ResponseErrorDto
+from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerResponseDto
 from erica.application.tax_declaration.tax_declaration_dto import EstResponseDto
 from erica.application.tax_number_validation.check_tax_number_dto import TaxResponseDto
 
@@ -14,7 +15,7 @@ base_response_get_from_queue = {
 
 response_model_post_to_queue = {
     201: {"description": "Job was successfully submitted to the queue and the request id was returned."},
-    **base_response_get_from_queue}
+    500: model_error_get_from_queue}
 
 response_model_get_send_est_from_queue = {
     200: {"model": EstResponseDto,
@@ -22,7 +23,7 @@ response_model_get_send_est_from_queue = {
     **base_response_get_from_queue}
 
 response_model_get_send_grundsteuer_from_queue = {
-    200: {"model": EstResponseDto,
+    200: {"model": GrundsteuerResponseDto,
           "description": "Job status of a sent est was successfully retrieved from the queue."},
     **base_response_get_from_queue}
 

@@ -1,8 +1,7 @@
 from uuid import UUID
 
 from fastapi import status, APIRouter
-from starlette.responses import JSONResponse, RedirectResponse
-from erica.api.utils import generate_error_response, get_entity_not_found_log_message
+from starlette.responses import RedirectResponse
 from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
     response_model_post_to_queue

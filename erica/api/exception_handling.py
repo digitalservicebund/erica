@@ -19,7 +19,6 @@ job_type_to_endpoint = {
 
 
 def generate_exception_handlers():
-
     async def entity_not_found_error(request: Request, exc: EntityNotFoundError):
         request_id = request.path_params.get('request_id')
         logging.getLogger().info(f"The requested entity {request_id} is not present in the database.")
@@ -33,11 +32,14 @@ def generate_exception_handlers():
     async def jop_type_mismatch_error(request: Request, exc: RequestTypeDoesNotMatchEndpointError):
         request_id = request.path_params.get('request_id')
         redirection_url = job_type_to_endpoint[exc.requested_type]
-        logging.getLogger().info(f"The requested entity {request_id} was requested with the incorrect type {exc.requested_type}. Redirect to {redirection_url}")
+        logging.getLogger().info(
+            f"The requested entity {request_id} was requested with the incorrect type {exc.requested_type}. Redirect to {redirection_url}")
 
         return RedirectResponse(url=redirection_url)
 
     async def internal_server_error(request: Request, exc: Exception):
+        request_id = request.path_params.get('request_id')
+        logging.getLogger().error(f"Request for entity {request_id} producted unexpected error: {str(exc)}")
         return JSONResponse(
             {"errorCode": "internal_server_error",
              "errorMessage": "An unexpected error occurred."},
