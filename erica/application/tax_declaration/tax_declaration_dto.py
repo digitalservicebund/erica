@@ -1,6 +1,6 @@
 from typing import Optional
 
-from erica.application.Shared.response_dto import ResponseBaseDto
+from erica.application.Shared.response_dto import ResponseBaseDto, ResultTransferPdfResponseDto
 from erica.application.base_dto import BaseDto
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst, MetaDataEst
 
@@ -19,10 +19,5 @@ class TaxDeclarationDto(BaseDto):
 
 # Output
 
-class ResultEstResponseDto(BaseDto):
-    transfer_ticket: str
-    pdf: str
-
-
 class EstResponseDto(ResponseBaseDto):
-    result: Optional[ResultEstResponseDto]
+    result: Optional[ResultTransferPdfResponseDto]

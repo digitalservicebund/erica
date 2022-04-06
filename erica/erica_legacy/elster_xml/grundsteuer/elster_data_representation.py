@@ -8,7 +8,7 @@ from erica.erica_legacy.elster_xml.common.electronic_steuernummer import get_buf
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
-from erica.application.grundsteuer.grundsteuer_input import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
 from erica.application.grundsteuer.grundsteuer_input_eigentuemer import \
     Eigentuemer as EigentuemerInput, Bruchteilsgemeinschaft
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \

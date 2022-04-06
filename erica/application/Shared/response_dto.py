@@ -20,3 +20,8 @@ class ResponseBaseDto(BaseDto):
 class ResponseErrorDto(BaseDto):
     errorCode: str
     errorMessage: str
+
+
+class ResultTransferPdfResponseDto(BaseDto):
+    transfer_ticket: str
+    pdf: str
