@@ -13,6 +13,6 @@ class BaseService:
 
     def get_erica_request(self, request_id: UUID, request_type: RequestType):
         erica_request = self.erica_request_service.get_request_by_request_id(request_id)
-        if not erica_request.type == request_type:
+        if erica_request.type != request_type:
             raise RequestTypeDoesNotMatchEndpointError(erica_request.type, request_type)
         return erica_request
