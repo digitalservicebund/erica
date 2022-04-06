@@ -46,6 +46,15 @@ class TestV2UnlockCodeRequest:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
+    def test_if_get_existing_request_with_wrong_request_type_then_return_307_redirect_with_correct_location(self):
+        response = requests.post(ERICA_TESTING_URL + "/v2/fsc/activation",
+                                 data=json.dumps(create_unlock_code_activation(), default=json_default))
+        assert response.status_code == 201
+        uuid = response.headers['Location'].split("/")[2]
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        assert response.status_code == 309
+        assert response.headers['location'] == "fsc/activation/" + str(uuid)
+
     def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
         assert response.status_code == 404
@@ -86,6 +95,15 @@ class TestV2UnlockCodeActivation:
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
+
+    def test_if_get_existing_request_with_wrong_request_type_then_return_307_redirect_with_correct_location(self):
+        response = requests.post(ERICA_TESTING_URL + "/v2/fsc/request",
+                                 data=json.dumps(create_unlock_code_request(), default=json_default))
+        assert response.status_code == 201
+        uuid = response.headers['Location'].split("/")[2]
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        assert response.status_code == 309
+        assert response.headers['location'] == "fsc/request/" + str(uuid)
 
     def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
@@ -128,6 +146,15 @@ class TestV2UnlockCodeRevocation:
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
 
+    def test_if_get_existing_request_with_wrong_request_type_then_return_307_redirect_with_correct_location(self):
+        response = requests.post(ERICA_TESTING_URL + "/v2/fsc/activation",
+                                 data=json.dumps(create_unlock_code_activation(), default=json_default))
+        assert response.status_code == 201
+        uuid = response.headers['Location'].split("/")[2]
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        assert response.status_code == 309
+        assert response.headers['location'] == "fsc/activation/" + str(uuid)
+
     def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
         assert response.status_code == 404
@@ -168,6 +195,15 @@ class TestV2TaxNumberValidity:
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
+
+    def test_if_get_existing_request_with_wrong_request_type_then_return_307_redirect_with_correct_location(self):
+        response = requests.post(ERICA_TESTING_URL + "/v2/fsc/activation",
+                                 data=json.dumps(create_unlock_code_activation(), default=json_default))
+        assert response.status_code == 201
+        uuid = response.headers['Location'].split("/")[2]
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        assert response.status_code == 309
+        assert response.headers['location'] == "fsc/activation/" + str(uuid)
 
     def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))
@@ -220,6 +256,15 @@ class TestV2SendEst:
         assert "result" in response.json()
         assert "errorCode" in response.json()
         assert "errorMessage" in response.json()
+
+    def test_if_get_existing_request_with_wrong_request_type_then_return_307_redirect_with_correct_location(self):
+        response = requests.post(ERICA_TESTING_URL + "/v2/fsc/activation",
+                                 data=json.dumps(create_unlock_code_activation(), default=json_default))
+        assert response.status_code == 201
+        uuid = response.headers['Location'].split("/")[2]
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        assert response.status_code == 309
+        assert response.headers['location'] == "fsc/activation/" + str(uuid)
 
     def test_if_get_non_existing_request_then_return_404_and_response_with_error_code_and_message(self):
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + str(generate_uuid()))

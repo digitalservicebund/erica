@@ -5,17 +5,22 @@ from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerResponseDto
 from erica.application.tax_declaration.tax_declaration_dto import EstResponseDto
 from erica.application.tax_number_validation.check_tax_number_dto import TaxResponseDto
 
-model_error_get_from_queue = {"model": ResponseErrorDto,
-                              "description": "Request could not be retrieved."}
+model_404_error_get_from_queue = {"model": ResponseErrorDto,
+                                  "description": "The requested entity is not present in the database."}
+
+model_500_error_get_from_queue = {"model": ResponseErrorDto,
+                                  "description": "Unexpected internal server error."}
+
 
 base_response_get_from_queue = {
-    404: model_error_get_from_queue,
-    500: model_error_get_from_queue
+    309: {"description": "Entity requested through the wrong request type."},
+    404: model_404_error_get_from_queue,
+    500: model_500_error_get_from_queue
 }
 
 response_model_post_to_queue = {
     201: {"description": "Job was successfully submitted to the queue and the request id was returned."},
-    500: model_error_get_from_queue}
+    500: model_500_error_get_from_queue}
 
 response_model_get_send_est_from_queue = {
     200: {"model": EstResponseDto,
