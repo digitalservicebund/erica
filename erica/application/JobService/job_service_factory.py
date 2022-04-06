@@ -6,6 +6,9 @@ from erica.application.ApplicationModule import ApplicationModule
 from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, request_freischalt_code, \
     revocate_freischalt_code
 from erica.application.JobService.job_service import JobService, JobServiceInterface
+from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
+from erica.application.grundsteuer.grundsteuer_input import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_jobs import send_grundsteuer
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRevocatePayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRequestPayload
@@ -78,6 +81,16 @@ def _send_est_injector():
         module
     ])
 
+def _send_grundsteuer():
+    module = ApplicationModule()
+    module.bind(Type[EricaRequestController], to_instance=GrundsteuerRequestController)
+    module.bind(Type[BasePayload], to_instance=GrundsteuerPayload)
+    module.bind(JobServiceInterface, to_class=JobService)
+    module.bind(Callable, to_instance=send_grundsteuer)
+
+    return Injector([
+        module
+    ])
 
 # Register injector
 injectors = {
@@ -86,6 +99,7 @@ injectors = {
     RequestType.freischalt_code_revocate: _freischalt_code_revocation_injector,
     RequestType.check_tax_number: _check_tax_number_injector,
     RequestType.send_est: _send_est_injector,
+    RequestType.grundsteuer: _send_grundsteuer,
 }
 
 

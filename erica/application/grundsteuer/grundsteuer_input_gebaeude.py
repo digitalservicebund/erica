@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from pydantic import validator
 
-from erica.erica_legacy.request_processing.erica_input.v2.camel_case_input import CamelCaseInput
+from erica.application.grundsteuer.camel_case_input import CamelCaseInput
 
 
 class Ab1949(CamelCaseInput):

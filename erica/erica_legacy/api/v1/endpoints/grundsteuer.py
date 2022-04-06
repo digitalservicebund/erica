@@ -3,14 +3,14 @@ import logging
 from fastapi import status, APIRouter, HTTPException
 
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
-from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
+from erica.application.grundsteuer.grundsteuer_input import GrundsteuerPayload
+from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
 
 router = APIRouter()
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
-def send_grundsteuer(grundsteuer: GrundsteuerData, include_elster_responses: bool = False):
+def send_grundsteuer(grundsteuer: GrundsteuerPayload, include_elster_responses: bool = False):
     """
     The Grundsteuer data is validated and then send to ELSTER using ERiC. If it is successful, this should return a 201
     HTTP response with {'transfer_ticket': str, 'pdf': str}. The pdf is base64 encoded binary data of the pdf
@@ -19,7 +19,7 @@ def send_grundsteuer(grundsteuer: GrundsteuerData, include_elster_responses: boo
     or a 400 repsonse for other client errors and a 500 response for server errors with
     {‘code’ : int,‘message’: str,‘description’: str}
 
-    :param grundsteuer: the JSON input data for the land tax declaration
+    :param grundsteuer: the JSON input data for the grundsteuer tax declaration
     :param include_elster_responses: query parameter which indicates whether the ERiC/Server response are returned
     """
     try:

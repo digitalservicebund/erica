@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Ab1949, \
+from erica.application.grundsteuer.grundsteuer_input_gebaeude import Ab1949, \
     Abbruchverpflichtung, Garagen, GaragenAnzahl, Kernsaniert, WeitereWohnraeume, WeitereWohnraeumeDetails, Gebaeude
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGebaeude
 
