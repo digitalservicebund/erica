@@ -8,18 +8,21 @@ from erica.application.tax_number_validation.check_tax_number_dto import TaxResp
 model_404_error_get_from_queue = {"model": ResponseErrorDto,
                                   "description": "The requested entity is not present in the database."}
 
+model_422_validation_error_queue = {"model": ResponseErrorDto,
+                                  "description": "The request input payload is not valid."}
+
 model_500_error_get_from_queue = {"model": ResponseErrorDto,
                                   "description": "Unexpected internal server error."}
 
-
 base_response_get_from_queue = {
-    309: {"description": "Entity requested through the wrong request type."},
     404: model_404_error_get_from_queue,
+    422: model_422_validation_error_queue,
     500: model_500_error_get_from_queue
 }
 
 response_model_post_to_queue = {
     201: {"description": "Job was successfully submitted to the queue and the request id was returned."},
+    422: model_422_validation_error_queue,
     500: model_500_error_get_from_queue}
 
 response_model_get_send_est_from_queue = {

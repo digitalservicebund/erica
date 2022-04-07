@@ -1,5 +1,6 @@
 from uuid import UUID
 from fastapi import status, APIRouter
+from starlette.requests import Request
 from starlette.responses import FileResponse, RedirectResponse
 from erica.api.v2.responses.model import response_model_get_tax_number_validity_from_queue, response_model_post_to_queue
 from erica.application.JobService.job_service_factory import get_job_service
@@ -12,15 +13,18 @@ router = APIRouter()
 
 
 @router.post('/tax_number_validity', status_code=status.HTTP_201_CREATED, responses=response_model_post_to_queue)
-async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDto):
+async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDto, request: Request):
     """
     Route for validation of a tax number using the job queue.
+    :param request: API request object.
     :param tax_validity_client_identifier: payload with client identifier and the JSON input data for the tax number validity check.
     """
     result = get_job_service(RequestType.check_tax_number).add_to_queue(
         tax_validity_client_identifier.payload, tax_validity_client_identifier.clientIdentifier,
         RequestType.check_tax_number)
-    return RedirectResponse(url='tax_number_validity/' + str(result.request_id), status_code=201)
+    return RedirectResponse(
+        request.url_for("get_valid_tax_number_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),
+        status_code=201)
 
 
 @router.get('/tax_number_validity/{request_id}', status_code=status.HTTP_200_OK,

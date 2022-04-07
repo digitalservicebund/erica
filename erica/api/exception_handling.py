@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.responses import RedirectResponse
 
@@ -24,7 +25,7 @@ def generate_exception_handlers(app):
         logging.getLogger().info(f"The requested entity {request_id} is not present in the database.")
 
         return JSONResponse(
-            {"errorCode": "entity_not_found",
+            {"errorCode": exc.__class__.__name__,
              "errorMessage": f"The requested entity with id {request_id} was not found."},
             status_code=404,
         )
@@ -34,7 +35,11 @@ def generate_exception_handlers(app):
         redirection_url = app.url_path_for(job_type_to_endpoint[exc.actual_type], request_id=request_id)
         logging.getLogger().info(
             f"The requested entity {request_id} was requested with the incorrect type {exc.requested_type}. Redirect to {redirection_url}")
-        return RedirectResponse(url=redirection_url)
+        return JSONResponse(
+            {"errorCode": exc.__class__.__name__,
+             "errorMessage": f"The actual location of the request id {request_id} is {redirection_url}"},
+            status_code=404,
+        )
 
     async def internal_server_error(request: Request, exc: Exception):
         request_id = request.path_params.get('request_id')
@@ -45,7 +50,17 @@ def generate_exception_handlers(app):
             status_code=500,
         )
 
+    async def request_validation_error(request: Request, exc: RequestValidationError):
+        request_id = request.path_params.get('request_id')
+        logging.getLogger().error(f"Request for entity {request_id} producted unexpected error: {str(exc)}")
+        return JSONResponse(
+            {"errorCode": exc.__class__.__name__,
+             "errorMessage": exc.errors()},
+            status_code=422,
+        )
+
     exception_handlers = {
+        RequestValidationError: request_validation_error,
         EntityNotFoundError: entity_not_found_error,
         RequestTypeDoesNotMatchEndpointError: jop_type_mismatch_error,
         Exception: internal_server_error,

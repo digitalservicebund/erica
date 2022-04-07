@@ -1,9 +1,9 @@
-import json
 import uuid
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
+from erica import app
 from erica.api.v2.endpoints.est import send_est, get_send_est_job
 from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activate_fsc, get_fsc_activation_job, \
     revocate_fsc, get_fsc_revocation_job
@@ -19,7 +19,6 @@ from erica.application.tax_number_validation.TaxNumberValidityService import Tax
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
-from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 from tests.application.job_service.test_job_service import MockEricaRequestRepository, MockRequestController, MockDto, \
     PickableMock
 from tests.utils import create_unlock_code_request, \
@@ -30,16 +29,16 @@ from tests.utils import create_unlock_code_request, \
 @pytest.mark.asyncio
 @pytest.mark.parametrize("api_method, input_data, request_type, endpoint_to_patch, expected_location",
                          [(request_fsc, create_unlock_code_request(), RequestType.freischalt_code_request, "fsc",
-                           "fsc/request/"),
+                           "get_fsc_request_job"),
                           (activate_fsc, create_unlock_code_activation(), RequestType.freischalt_code_activate, "fsc",
-                           "fsc/activation/"),
+                           "get_fsc_activation_job"),
                           (revocate_fsc, create_unlock_code_revocation(), RequestType.freischalt_code_revocate, "fsc",
-                           "fsc/revocation/"),
+                           "get_fsc_revocation_job"),
                           (is_valid_tax_number, create_tax_number_validity(), RequestType.check_tax_number, "tax",
-                           "tax_number_validity/"),
-                          (send_est, create_send_est(), RequestType.send_est, "est", "ests/"),
+                           "get_valid_tax_number_job"),
+                          (send_est, create_send_est(), RequestType.send_est, "est", "get_send_est_job"),
                           (send_grundsteuer, create_send_grundsteuer(), RequestType.grundsteuer, "grundsteuer",
-                           "grundsteuer/")],
+                           "get_grundsteuer_job")],
                          ids=["request_fsc", "activate_fsc", "revocate_fsc", "is_valid_tax_number", "send_est",
                               "grundsteuer"])
 async def test_if_post_job_returns_location_with_uuid(api_method, input_data, request_type, endpoint_to_patch,
@@ -51,9 +50,11 @@ async def test_if_post_job_returns_location_with_uuid(api_method, input_data, re
     job_service_mock.add_to_queue = Mock(
         return_value=EricaRequestDto(type=request_type, status=Status.new, payload="{}",
                                      request_id=request_id))
+    mock_url = app.url_path_for(expected_location, request_id=str(request_id))
+    mock_request_object = MagicMock(url_for=MagicMock(return_value=str(mock_url)), base_url="lorem")
     with patch(get_job_service_patch_string(endpoint_to_patch), MagicMock(return_value=job_service_mock)):
-        response = await api_method(input_data)
-        assert response.headers['Location'] == expected_location + str(request_id)
+        response = await api_method(input_data, mock_request_object)
+        assert response.headers['Location'] == mock_url
 
 
 @pytest.mark.asyncio
