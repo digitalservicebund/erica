@@ -32,7 +32,7 @@ response_model_get_send_est_from_queue = {
 
 response_model_get_send_grundsteuer_from_queue = {
     200: {"model": GrundsteuerResponseDto,
-          "description": "Job status of a sent est was successfully retrieved from the queue."},
+          "description": "Job status of a sent grundsteuer was successfully retrieved from the queue."},
     **base_response_get_from_queue}
 
 response_model_get_tax_number_validity_from_queue = {
