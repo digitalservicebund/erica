@@ -9,7 +9,9 @@ concurrency:
 env:
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   ERICA_HOST: ${{ secrets.ERICA_HOST_STAGING }}
-  IMAGE: "steuerlotse_erica:${{ github.run_number }}"
+  IMAGE_NAME: "steuerlotse_erica"
+  IMAGE_TAG_LATEST: "steuerlotse_erica:latest"
+  IMAGE_TAG_GITHUB_RUN: "steuerlotse_erica:${{ github.run_number }}"
 
 jobs:
   test:
@@ -91,7 +93,8 @@ jobs:
           ELSTER_HERSTELLER_ID: ${{ secrets.ELSTER_HERSTELLER_ID }}
         run: |
           docker build \
-            -t "${{ env.IMAGE }}" \
+            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG_LATEST }}" \
+            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG_GITHUB_RUN }}" \
             --build-arg bucket_name="${ERICA_BUCKET_NAME}" \
             --build-arg access_key_id="${ACCESS_KEY_ID}" \
             --build-arg access_key="${ACCESS_KEY}" \
@@ -111,8 +114,7 @@ jobs:
 
       - name: Push images
         run: |
-          docker tag ${{ env.IMAGE }} ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
-          docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
+          docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }} --all-tags
         shell: bash
 
   deploy-staging:
@@ -190,7 +192,7 @@ jobs:
       - name: Run contract tests
         env:
           NAMESPACE: erica-staging
-          IMAGE_TAG: 460
+          IMAGE_TAG: ${{ github.run_number }}
         run: |
           docker run \
           -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
