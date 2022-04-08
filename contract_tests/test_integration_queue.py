@@ -8,7 +8,7 @@ from time import sleep
 import pytest
 import requests
 
-ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://localhost:8080")
+ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://localhost:8000")
 
 
 @pytest.fixture()
