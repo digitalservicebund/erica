@@ -2,7 +2,7 @@ import logging
 
 from fastapi import Request
 from fastapi.exception_handlers import request_validation_exception_handler
-from fastapi.exceptions import RequestValidationError
+from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.responses import RedirectResponse
 
@@ -47,9 +47,18 @@ def generate_exception_handlers(app):
         logging.getLogger().error(f"Request for entity {request_id} producted unexpected error: {str(exc)}")
         return JSONResponse(
             {"errorCode": "internal_server_error",
-             "errorMessage": "An unexpected error occurred."},
+            "errorMessage": "An unexpected error occurred."},
             status_code=500,
         )
+
+    async def request_http_error(request: Request, exc: HTTPException):
+        if str(request.url).removeprefix(str(request.base_url)).startswith("01"):
+            return JSONResponse(
+                status_code=exc.status_code,
+                content={"detail": exc.detail},
+            )
+        else:
+            raise exc
 
     # Re-using the default FastAPIs exception handler for RequestValidationError (needed for v1)
     # Needed because otherwise the handler "internal_server_error" would also catch these
@@ -58,6 +67,7 @@ def generate_exception_handlers(app):
 
     exception_handlers = {
         RequestValidationError: request_validation_error,
+        HTTPException: request_http_error,
         EntityNotFoundError: entity_not_found_error,
         RequestTypeDoesNotMatchEndpointError: jop_type_mismatch_error,
         Exception: internal_server_error,
