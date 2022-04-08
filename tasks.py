@@ -7,6 +7,11 @@ def test_integration(c):
 
 
 @task
+def test_integration_queue(c):
+    c.run("pytest ./contract_tests/test_integration_queue.py")
+
+
+@task
 def test(c):
     c.run("pytest -n 3")
 
