@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Flurstueck, Grundstueck, \
+from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Flurstueck, Grundstueck, \
     Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleFlurstueck, SampleGrundstueck
 

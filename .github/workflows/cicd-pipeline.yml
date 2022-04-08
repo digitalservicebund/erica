@@ -16,60 +16,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
-    - name: Install build requirements
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r ./requirements.build.txt
-      shell: bash
+      - name: Install build requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./requirements.build.txt
+        shell: bash
 
-    - name: Cache dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-erica-v${{ secrets.CACHE_VERSION }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-erica-v${{ secrets.CACHE_VERSION }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
 
-    - name: Install dependencies
-      run: |
-        pipenv install --dev
-      shell: bash
+      - name: Install dependencies
+        run: |
+          pipenv install --dev
+        shell: bash
 
-    - name: Get Eric binaries
-      env:
-        ERICA_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-        ENDPOINT_URL: ${{ secrets.S3_ENDPOINT_URL }}
-      run: |
-        pipenv run python scripts/load_eric_binaries.py download-eric-cert-and-binaries
+      - name: Get Eric binaries
+        env:
+          ERICA_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          ENDPOINT_URL: ${{ secrets.S3_ENDPOINT_URL }}
+        run: |
+          pipenv run python scripts/load_eric_binaries.py download-eric-cert-and-binaries
 
-    - name: Update tax office list
-      env:
-        ERICA_ENV: testing
-      run: |
-        pipenv run python scripts/create_tax_office_lists.py create
+      - name: Update tax office list
+        env:
+          ERICA_ENV: testing
+        run: |
+          pipenv run python scripts/create_tax_office_lists.py create
 
-    - name: Lint
-      run: |
-        pipenv run invoke --echo lint
-      shell: bash
+      - name: Lint
+        run: |
+          pipenv run invoke --echo lint
+        shell: bash
 
-    - name: Test
-      run: |
-        pipenv run invoke --echo test | tee erica-test-report.log
-      shell: bash
+      - name: Test
+        run: |
+          pipenv run invoke --echo test | tee erica-test-report.log
+        shell: bash
 
-    - name: Archive test logs
-      uses: actions/upload-artifact@v1
-      with:
-        name: erica-test-report.log
-        path: erica-test-report.log
+      - name: Archive test logs
+        uses: actions/upload-artifact@v1
+        with:
+          name: erica-test-report.log
+          path: erica-test-report.log
 
   build-staging:
     needs: [test]
@@ -79,41 +79,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Build docker image
-      env:
-        ERICA_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-        ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
-        ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-        ENDPOINT_URL: ${{ secrets.S3_ENDPOINT_URL }}
-        ELSTER_DATENLIEFERANT: ${{ secrets.ELSTER_DATENLIEFERANT }}
-        ELSTER_HERSTELLER_ID: ${{ secrets.ELSTER_HERSTELLER_ID }}
-      run: |
-        docker build \
-          -t "${{ env.IMAGE }}" \
-          --build-arg bucket_name="${ERICA_BUCKET_NAME}" \
-          --build-arg access_key_id="${ACCESS_KEY_ID}" \
-          --build-arg access_key="${ACCESS_KEY}" \
-          --build-arg endpoint_url="${ENDPOINT_URL}" \
-          --build-arg elster_datenlieferant="${ELSTER_DATENLIEFERANT}" \
-          --build-arg elster_hersteller_id="${ELSTER_HERSTELLER_ID}" \
-          -f Dockerfile .
-        docker image ls
-      shell: bash
+      - name: Build docker image
+        env:
+          ERICA_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          ENDPOINT_URL: ${{ secrets.S3_ENDPOINT_URL }}
+          ELSTER_DATENLIEFERANT: ${{ secrets.ELSTER_DATENLIEFERANT }}
+          ELSTER_HERSTELLER_ID: ${{ secrets.ELSTER_HERSTELLER_ID }}
+        run: |
+          docker build \
+            -t "${{ env.IMAGE }}" \
+            --build-arg bucket_name="${ERICA_BUCKET_NAME}" \
+            --build-arg access_key_id="${ACCESS_KEY_ID}" \
+            --build-arg access_key="${ACCESS_KEY}" \
+            --build-arg endpoint_url="${ENDPOINT_URL}" \
+            --build-arg elster_datenlieferant="${ELSTER_DATENLIEFERANT}" \
+            --build-arg elster_hersteller_id="${ELSTER_HERSTELLER_ID}" \
+            -f Dockerfile .
+          docker image ls
+        shell: bash
 
-    - name: Login to container repository
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.DOCKER_REGISTRY }}
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_PWD }}
+      - name: Login to container repository
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PWD }}
 
-    - name: Push images
-      run: |
-        docker tag ${{ env.IMAGE }} ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
-        docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
-      shell: bash
+      - name: Push images
+        run: |
+          docker tag ${{ env.IMAGE }} ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
+          docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
+        shell: bash
 
   deploy-staging:
     needs: [build-staging]
@@ -123,40 +123,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Login to container repository
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.DOCKER_REGISTRY }}
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_PWD }}
+      - name: Login to container repository
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PWD }}
 
-    - name: Pull deploy image
-      run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
-      shell: bash
+      - name: Pull deploy image
+        run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
+        shell: bash
 
-    - name: Run deployment
-      env:
-        NAMESPACE: erica-staging
-        IMAGE_TAG: ${{ github.run_number }}
-      run: |
-        docker run \
-        -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
-        -e ERICA_SSH_KEY='${{ secrets.CI_ERICA_SSH_KEY }}' \
-        -e ERICA_HOST='${{ env.ERICA_HOST }}' \
-        -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
-        -e CERT_PIN='${{ secrets.CERT_PIN_STAGING }}' \
-        -e QUEUE_URL='${{ secrets.QUEUE_URL_STAGING }}' \
-        -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL_STAGING }}' \
-        -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
-        -e NAMESPACE='${{ env.NAMESPACE }}' \
-        -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
-        ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica
-      shell: bash
+      - name: Run deployment
+        env:
+          NAMESPACE: erica-staging
+          IMAGE_TAG: ${{ github.run_number }}
+        run: |
+          docker run \
+          -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
+          -e ERICA_SSH_KEY='${{ secrets.CI_ERICA_SSH_KEY }}' \
+          -e ERICA_HOST='${{ env.ERICA_HOST }}' \
+          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
+          -e CERT_PIN='${{ secrets.CERT_PIN_STAGING }}' \
+          -e QUEUE_URL='${{ secrets.QUEUE_URL_STAGING }}' \
+          -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL_STAGING }}' \
+          -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
+          -e NAMESPACE='${{ env.NAMESPACE }}' \
+          -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
+          ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica
+        shell: bash
 
-    - name: Logout of docker container
-      run: docker logout ${{ env.DOCKER_REGISTRY }}
+      - name: Logout of docker container
+        run: docker logout ${{ env.DOCKER_REGISTRY }}
+
+      - name: Report Deployment
+        uses: satak/webrequest-action@v1.2.3
+        env:
+          IMAGE_TAG: ${{ github.run_number }}
+        with:
+          url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          method: POST
+          payload: '{"project": "Erica", "version_identifier": "${{ env.IMAGE_TAG }}", "environment": "staging", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
 
   contract-tests:
     needs: [deploy-staging]
@@ -164,33 +174,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Login to container repository
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.DOCKER_REGISTRY }}
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_PWD }}
+      - name: Login to container repository
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PWD }}
 
-    - name: Pull deploy image
-      run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
-      shell: bash
+      - name: Pull deploy image
+        run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
+        shell: bash
 
-    - name: Run contract tests
-      env:
-        NAMESPACE: erica-staging
-        IMAGE_TAG: 378
-      run: |
-        docker run \
-        -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
-        -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
-        -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
-        -e NAMESPACE='${{ env.NAMESPACE }}' \
-        -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
-        -e ERICA_TESTING_URL='${{ secrets.ERICA_TESTING_URL }}' \
-        ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica-contract-tests
-      shell: bash
+      - name: Run contract tests
+        env:
+          NAMESPACE: erica-staging
+          IMAGE_TAG: 460
+        run: |
+          docker run \
+          -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
+          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
+          -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
+          -e NAMESPACE='${{ env.NAMESPACE }}' \
+          -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
+          -e ERICA_TESTING_URL='${{ secrets.ERICA_TESTING_URL }}' \
+          ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica-contract-tests
+        shell: bash
 
-    - name: Logout of docker container
-      run: docker logout ${{ env.DOCKER_REGISTRY }}
+      - name: Logout of docker container
+        run: docker logout ${{ env.DOCKER_REGISTRY }}
