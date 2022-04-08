@@ -208,7 +208,7 @@ jobs:
       - name: Run contract tests v2
         env:
           NAMESPACE: erica-staging
-          IMAGE_TAG: 460
+          IMAGE_TAG: ${{ github.run_number }}
         run: |
           docker run \
           -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
