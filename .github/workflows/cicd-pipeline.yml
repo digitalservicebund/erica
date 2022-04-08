@@ -93,7 +93,7 @@ jobs:
           ELSTER_HERSTELLER_ID: ${{ secrets.ELSTER_HERSTELLER_ID }}
         run: |
           docker build \
-            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}" \
+            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG_LATEST }}" \
             -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG }}" \
             --build-arg bucket_name="${ERICA_BUCKET_NAME}" \
             --build-arg access_key_id="${ACCESS_KEY_ID}" \
