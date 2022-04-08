@@ -9,7 +9,8 @@ concurrency:
 env:
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   ERICA_HOST: ${{ secrets.ERICA_HOST_STAGING }}
-  IMAGE: "steuerlotse_erica:${{ github.run_number }}"
+  IMAGE: "steuerlotse_erica"
+  IMAGE_TAG: "{{ env.IMAGE }}:${{ github.run_number }}"
 
 jobs:
   test:
@@ -92,6 +93,7 @@ jobs:
         run: |
           docker build \
             -t "${{ env.IMAGE }}" \
+            -t "${{ env.IMAGE_TAG }}" \
             --build-arg bucket_name="${ERICA_BUCKET_NAME}" \
             --build-arg access_key_id="${ACCESS_KEY_ID}" \
             --build-arg access_key="${ACCESS_KEY}" \
@@ -111,8 +113,7 @@ jobs:
 
       - name: Push images
         run: |
-          docker tag ${{ env.IMAGE }} ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
-          docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
+          docker push -a ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE }}
         shell: bash
 
   deploy-staging:
