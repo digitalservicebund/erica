@@ -75,7 +75,7 @@ jobs:
   build-staging:
     needs: [test]
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # test if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     runs-on: ubuntu-latest
 
@@ -191,7 +191,7 @@ jobs:
       - name: Run contract tests
         env:
           NAMESPACE: erica-staging
-          IMAGE_TAG: 460
+          IMAGE_TAG: ${{ github.run_number }}
         run: |
           docker run \
           -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
