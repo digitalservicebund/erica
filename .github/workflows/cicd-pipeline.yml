@@ -190,7 +190,7 @@ jobs:
       - name: Run contract tests
         env:
           NAMESPACE: erica-staging
-          IMAGE_TAG: 378
+          IMAGE_TAG: 460
         run: |
           docker run \
           -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
