@@ -10,7 +10,7 @@ env:
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   ERICA_HOST: ${{ secrets.ERICA_HOST_STAGING }}
   IMAGE: "steuerlotse_erica"
-  IMAGE_TAG: "{{ env.IMAGE }}:${{ github.run_number }}"
+  IMAGE_TAG: "${{ env.IMAGE }}:${{ github.run_number }}"
 
 jobs:
   test:
