@@ -1,14 +1,14 @@
 import logging
 import time
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
-from starlette.requests import Request
 
+from erica.api.exception_handling import generate_exception_handlers
 from erica.api.v2.api_v2 import api_router_02
-from erica.erica_legacy.api.api import api_router
 from erica.config import get_settings
+from erica.erica_legacy.api.api import api_router
 from erica.erica_legacy.pyeric.eric import verify_using_stick
 
 app = FastAPI(
@@ -17,7 +17,9 @@ app = FastAPI(
     license_info={
         "name": "Apache 2.0",
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
-    })
+    },
+)
+app.exception_handlers = generate_exception_handlers(app)
 
 
 class DongleStatus:
@@ -68,5 +70,3 @@ async def log_requests(request: Request, call_next):
 
 # Add default metrics and expose endpoint.
 Instrumentator().instrument(app).expose(app)
-
-

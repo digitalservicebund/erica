@@ -7,6 +7,7 @@ from erica.application.Shared.base_service import BaseService
 from erica.application.Shared.response_dto import JobState, ResultTransferPdfResponseDto
 from erica.application.Shared.response_state_mapper import map_status
 from erica.application.tax_declaration.tax_declaration_dto import EstResponseDto
+from erica.domain.Shared.EricaRequest import RequestType
 
 
 class TaxDeclarationServiceInterface(BaseService):
@@ -20,7 +21,7 @@ class TaxDeclarationServiceInterface(BaseService):
 class TaxDeclarationService(TaxDeclarationServiceInterface):
 
     def get_response_send_est(self, request_id: UUID):
-        erica_request = self.get_erica_request(request_id)
+        erica_request = self.get_erica_request(request_id, RequestType.send_est)
         process_status = map_status(erica_request.status)
         if process_status == JobState.SUCCESS:
             result = ResultTransferPdfResponseDto(
