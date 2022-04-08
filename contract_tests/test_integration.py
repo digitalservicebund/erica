@@ -7,7 +7,7 @@ from decimal import Decimal
 import pytest
 import requests
 
-ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://0.0.0.0:8000")
+ERICA_TESTING_URL = os.environ.get("ERICA_TESTING_URL", "http://0.0.0.0:8080")
 
 
 @pytest.fixture()

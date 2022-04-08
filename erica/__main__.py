@@ -37,4 +37,4 @@ dictConfig({
     "disable_existing_loggers": False
 })
 
-uvicorn.run("erica:app", host="0.0.0.0", port=8000, log_config=None)
+uvicorn.run("erica:app", host="0.0.0.0", port=8080, log_config=None)
