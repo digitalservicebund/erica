@@ -12,6 +12,7 @@ env:
   IMAGE_NAME: "steuerlotse_erica"
   IMAGE_TAG_LATEST: "steuerlotse_erica:latest"
   IMAGE_TAG_GITHUB_RUN: "steuerlotse_erica:${{ github.run_number }}"
+  #IMAGE: "steuerlotse_erica:${{ github.run_number }}"
 
 jobs:
   test:
@@ -93,17 +94,7 @@ jobs:
           ELSTER_DATENLIEFERANT: ${{ secrets.ELSTER_DATENLIEFERANT }}
           ELSTER_HERSTELLER_ID: ${{ secrets.ELSTER_HERSTELLER_ID }}
         run: |
-          docker build \
-            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG_LATEST }}" \
-            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG_GITHUB_RUN }}" \
-            --build-arg bucket_name="${ERICA_BUCKET_NAME}" \
-            --build-arg access_key_id="${ACCESS_KEY_ID}" \
-            --build-arg access_key="${ACCESS_KEY}" \
-            --build-arg endpoint_url="${ENDPOINT_URL}" \
-            --build-arg elster_datenlieferant="${ELSTER_DATENLIEFERANT}" \
-            --build-arg elster_hersteller_id="${ELSTER_HERSTELLER_ID}" \
-            -f Dockerfile .
-          # docker-compose -f docker-compose.ci.yml build 
+          docker-compose -f docker-compose.ci.yml build 
           docker image ls
         shell: bash
 
@@ -117,8 +108,7 @@ jobs:
       - name: Push images
         run: |
           for IMAGE in api cron; do
-            docker tag erica_${IMAGE}:${{ github.run_number }} ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:${{ github.run_number }}
-            docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE_NAME} --all-tags
+            docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE} --all-tags
           done
         shell: bash
 
