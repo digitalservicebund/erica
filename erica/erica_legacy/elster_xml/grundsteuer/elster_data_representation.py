@@ -8,12 +8,12 @@ from erica.erica_legacy.elster_xml.common.electronic_steuernummer import get_buf
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import \
+from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import \
     Eigentuemer as EigentuemerInput, Bruchteilsgemeinschaft
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
     EGemarkungen, EAngGrund
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import \
+from erica.application.grundsteuer.grundsteuer_input_grundstueck  import \
     Grundstueck as GrundstueckInput, Grundstuecksart
 
 """
@@ -119,7 +119,7 @@ class EGW2:
     Ang_Grund: EAngGrund
     Ang_Wohn: Optional[EAngWohn]
 
-    def __init__(self, input_data: GrundsteuerData):
+    def __init__(self, input_data: GrundsteuerPayload):
         self.Ang_Grundstuecksart = EAngGrundstuecksart(input_data.grundstueck.typ)
         self.Ang_Grund = EAngGrund(input_data.grundstueck)
         if input_data.gebaeude:
@@ -151,7 +151,7 @@ class EVorsatz:
     OrdNrArt: str
     Rueckuebermittlung: ERueckuebermittlung
 
-    def __init__(self, input_data: GrundsteuerData):
+    def __init__(self, input_data: GrundsteuerPayload):
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
         self.Zeitraum = "2022"  # TODO require on input?
@@ -184,7 +184,7 @@ class EGrundsteuerSpecifics:
     xml_attr_version: str
     xml_attr_xmlns: str
 
-    def __init__(self, input_data: GrundsteuerData):
+    def __init__(self, input_data: GrundsteuerPayload):
         self.GW1 = EGW1(input_data.eigentuemer, input_data.grundstueck, input_data.freitext)
         self.GW2 = EGW2(input_data)
         self.Vorsatz = EVorsatz(input_data)
@@ -196,11 +196,11 @@ class EGrundsteuerSpecifics:
 class EGrundsteuerData(ENutzdaten):
     E88: EGrundsteuerSpecifics
 
-    def __init__(self, input_data: GrundsteuerData):
+    def __init__(self, input_data: GrundsteuerPayload):
         self.E88 = EGrundsteuerSpecifics(input_data)
 
 
-def get_full_grundsteuer_data_representation(input_data: GrundsteuerData):
+def get_full_grundsteuer_data_representation(input_data: GrundsteuerPayload):
     """ Returns the full data representation of an elster XML for the Grundsteuer use case. """
     bufa_nr = get_bufa_nr(input_data.grundstueck.steuernummer, input_data.grundstueck.adresse.bundesland)
 

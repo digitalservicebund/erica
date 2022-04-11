@@ -3,7 +3,7 @@ from uuid import UUID
 from opyoid import Injector
 
 from erica.api.ApiModule import ApiModule
-from erica.api.v2.responses.model import JobState
+from erica.application.Shared.response_dto import JobState
 from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface
 from erica.domain.Shared.Status import Status
 
@@ -49,7 +49,3 @@ injector = Injector([
 def get_erica_request(request_id: UUID):
     erica_request_service: EricaRequestServiceInterface = injector.inject(EricaRequestServiceInterface)
     return erica_request_service.get_request_by_request_id(request_id)
-
-
-def get_entity_not_found_log_message(request_id: UUID):
-    return "Job with id " + str(request_id) + " not present in the queue."

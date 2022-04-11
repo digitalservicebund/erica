@@ -3,7 +3,7 @@ from typing import Optional
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date, \
     elsterify_eigentumsverhaeltnis
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Anteil, Vertreter, \
     Person, Eigentuemer as EigentuemerInput, Empfangsbevollmaechtigter
 
 

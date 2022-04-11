@@ -1,6 +1,6 @@
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EWohnUnter60, EWohn60bis100, EWohnAb100, \
     EWeitereWohn, EGaragen, EAngDurchschn, EAngWohn
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import WeitereWohnraeumeDetails, \
+from erica.application.grundsteuer.grundsteuer_input_gebaeude import WeitereWohnraeumeDetails, \
     GaragenAnzahl
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGebaeude
 

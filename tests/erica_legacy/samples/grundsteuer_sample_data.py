@@ -1,11 +1,11 @@
 import datetime
 from typing import Optional
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input import GrundsteuerData
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Vertreter, \
+from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Vertreter, \
     Empfangsbevollmaechtigter, Person, Eigentuemer, Bruchteilsgemeinschaft
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_gebaeude import Gebaeude
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstueck, Flurstueck
+from erica.application.grundsteuer.grundsteuer_input_gebaeude import Gebaeude
+from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Grundstueck, Flurstueck
 
 
 class Builder:
@@ -464,4 +464,4 @@ class SampleGrundsteuerData(Builder):
         return super().build()
 
     def parse(self):
-        return GrundsteuerData.parse_obj(self.build())
+        return GrundsteuerPayload.parse_obj(self.build())

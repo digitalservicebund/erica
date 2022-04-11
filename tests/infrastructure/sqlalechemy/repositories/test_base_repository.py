@@ -47,7 +47,7 @@ class TestBaseRepositoryCreate:
 
 class TestBaseRepositoryGet:
 
-    def test_if_entity_of_type_domain_model_as_input_then_return_list_with_schema_repr_of_entities(self,transactional_session_with_mock_schema):
+    def test_if_entity_of_type_domain_model_as_input_then_return_list_with_schema_repr_of_entities(self, transactional_session_with_mock_schema):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
         list_of_schema_object = [MockSchema(**mock_object.dict()), MockSchema(**mock_object.dict()), MockSchema(**mock_object.dict())]
 

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       imageTag:
-        description: 'Image tag to deploy'
+        description: "Image tag to deploy"
         required: true
 
 env:
@@ -16,37 +16,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Login to container repository
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.DOCKER_REGISTRY }}
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_PWD }}
+      - name: Login to container repository
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PWD }}
 
-    - name: Pull deploy images
-      run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
-      shell: bash
+      - name: Pull deploy images
+        run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
+        shell: bash
 
-    - name: Run deployment
-      env:
-        NAMESPACE: erica-production
-        IMAGE_TAG: ${{ github.event.inputs.imageTag }}
-      run: |
-        docker run \
-        -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
-        -e ERICA_SSH_KEY='${{ secrets.CI_ERICA_SSH_KEY }}' \
-        -e ERICA_HOST='${{ env.ERICA_HOST }}' \
-        -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
-        -e CERT_PIN='${{ secrets.CERT_PIN_PRODUCTION }}' \
-        -e QUEUE_URL='${{ secrets.QUEUE_URL_PRODUCTION }}' \
-        -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL_PRODUCTION }}' \
-        -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
-        -e NAMESPACE='${{ env.NAMESPACE }}' \
-        -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
-        ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica
-      shell: bash
+      - name: Run deployment
+        env:
+          NAMESPACE: erica-production
+          IMAGE_TAG: ${{ github.event.inputs.imageTag }}
+        run: |
+          docker run \
+          -e DOCKER_REGISTRY='${{ env.DOCKER_REGISTRY }}' \
+          -e ERICA_SSH_KEY='${{ secrets.CI_ERICA_SSH_KEY }}' \
+          -e ERICA_HOST='${{ env.ERICA_HOST }}' \
+          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
+          -e CERT_PIN='${{ secrets.CERT_PIN_PRODUCTION }}' \
+          -e QUEUE_URL='${{ secrets.QUEUE_URL_PRODUCTION }}' \
+          -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL_PRODUCTION }}' \
+          -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
+          -e NAMESPACE='${{ env.NAMESPACE }}' \
+          -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
+          ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica
+        shell: bash
 
-    - name: Logout of docker container
-      run: docker logout ${{ env.DOCKER_REGISTRY }}
+      - name: Logout of docker container
+        run: docker logout ${{ env.DOCKER_REGISTRY }}
+
+      - name: Report Deployment
+        uses: satak/webrequest-action@v1.2.3
+        env:
+          IMAGE_TAG: ${{ github.event.inputs.imageTag }}
+        with:
+          url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          method: POST
+          payload: '{"project": "Erica", "version_identifier": "${{ env.IMAGE_TAG }}", "environment": "production", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'

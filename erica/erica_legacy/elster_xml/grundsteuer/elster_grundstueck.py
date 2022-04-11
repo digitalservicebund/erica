@@ -5,7 +5,7 @@ from typing import Optional, List
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart, \
     elsterify_wirtschaftliche_einheit_zaehler
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Adresse, Grundstueck, \
+from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Adresse, Grundstueck, \
     Flurstueck, Grundstuecksart
 
 
