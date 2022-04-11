@@ -64,6 +64,8 @@ def fake_db_connection_in_settings(database_uri):
 
 @pytest_asyncio.fixture()
 async def transactional_session_with_mock_schema(transacted_postgresql_db):
+    transacted_postgresql_db.session.execute('DROP TYPE IF EXISTS requesttype')
+    transacted_postgresql_db.session.execute('DROP TYPE IF EXISTS status')
     if not transacted_postgresql_db.has_table(MockSchema.__tablename__):
         transacted_postgresql_db.create_table(MockSchema)
 

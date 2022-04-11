@@ -24,6 +24,9 @@ class MockEricaRequestRepository(
 
 @pytest.fixture
 def transactional_erica_postgresql_db(postgresql_db):
+    postgresql_db.session.execute('DROP TYPE IF EXISTS requesttype')
+    postgresql_db.session.execute('DROP TYPE IF EXISTS status')
+    postgresql_db.session.commit()
     if not postgresql_db.has_table(EricaRequestSchema.__tablename__):
         postgresql_db.create_table(EricaRequestSchema)
     yield postgresql_db
