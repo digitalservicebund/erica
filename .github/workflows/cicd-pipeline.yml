@@ -12,7 +12,6 @@ env:
   IMAGE_NAME: "steuerlotse_erica"
   IMAGE_TAG_LATEST: "steuerlotse_erica:latest"
   IMAGE_TAG_GITHUB_RUN: "steuerlotse_erica:${{ github.run_number }}"
-  #IMAGE: "steuerlotse_erica:${{ github.run_number }}"
 
 jobs:
   test:
