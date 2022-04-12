@@ -9,9 +9,6 @@ concurrency:
 env:
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   ERICA_HOST: ${{ secrets.ERICA_HOST_STAGING }}
-  IMAGE_NAME: "steuerlotse_erica"
-  IMAGE_TAG_LATEST: "steuerlotse_erica:latest"
-  IMAGE_TAG_GITHUB_RUN: "steuerlotse_erica:${{ github.run_number }}"
 
 jobs:
   test:
@@ -107,6 +104,8 @@ jobs:
       - name: Push images
         run: |
           for IMAGE in api cron; do
+            docker tag erica_${IMAGE}:${{ github.run_number }} ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:${{ github.run_number }}
+            docker tag erica_${IMAGE}:latest ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:latest
             docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE} --all-tags
           done
         shell: bash
