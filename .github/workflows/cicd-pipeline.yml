@@ -83,8 +83,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build docker image
+      - name: Build docker images
         env:
+          DOCKER_TAG: ${{ github.run_number }}
           ERICA_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
@@ -92,16 +93,7 @@ jobs:
           ELSTER_DATENLIEFERANT: ${{ secrets.ELSTER_DATENLIEFERANT }}
           ELSTER_HERSTELLER_ID: ${{ secrets.ELSTER_HERSTELLER_ID }}
         run: |
-          docker build \
-            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG_LATEST }}" \
-            -t "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_TAG_GITHUB_RUN }}" \
-            --build-arg bucket_name="${ERICA_BUCKET_NAME}" \
-            --build-arg access_key_id="${ACCESS_KEY_ID}" \
-            --build-arg access_key="${ACCESS_KEY}" \
-            --build-arg endpoint_url="${ENDPOINT_URL}" \
-            --build-arg elster_datenlieferant="${ELSTER_DATENLIEFERANT}" \
-            --build-arg elster_hersteller_id="${ELSTER_HERSTELLER_ID}" \
-            -f Dockerfile .
+          docker-compose -f docker-compose.ci.yml build 
           docker image ls
         shell: bash
 
@@ -114,7 +106,9 @@ jobs:
 
       - name: Push images
         run: |
-          docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }} --all-tags
+          for IMAGE in api cron; do
+            docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE} --all-tags
+          done
         shell: bash
 
   deploy-staging:

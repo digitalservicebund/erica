@@ -1,4 +1,5 @@
 import datetime
+import uuid
 from unittest.mock import MagicMock, call
 from uuid import uuid4, UUID
 import pytest
@@ -27,6 +28,7 @@ def transactional_erica_postgresql_db(postgresql_db):
         postgresql_db.create_table(EricaRequestSchema)
     yield postgresql_db
 
+
 @pytest.fixture
 def transactional_erica_request_session(transactional_erica_postgresql_db):
     yield transactional_erica_postgresql_db.session
@@ -38,10 +40,10 @@ class TestEricaRepositoryCreate:
     def test_if_create_object_then_set_timestamps_to_now(self, transactional_erica_postgresql_db):
         request_id = uuid4()
         mock_object = EricaRequest(request_id=request_id,
-                                       payload={'endboss': 'Melkor'},
-                                       creator_id="api",
-                                       type=RequestType.freischalt_code_request,
-                                       status=Status.new)
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=Status.new)
 
         EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
 
@@ -171,3 +173,115 @@ class TestEricaRepositoryDeleteByJobId:
 
         with pytest.raises(EntityNotFoundError):
             MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).delete_by_job_request_id(schema_object.request_id)
+
+
+class TestEricaRepositoryDeleteSuccessFail:
+
+    @pytest.mark.parametrize("status", [Status.success, Status.failed], ids=["success", "failed"])
+    def test_if_success_or_failed_entity_older_than_ttl_in_database_then_delete_from_database(self,
+                                                                                              transactional_erica_postgresql_db,
+                                                                                              status):
+        transactional_erica_postgresql_db.session.query(EricaRequestSchema).delete()
+        request_id = uuid.uuid4()
+        mock_object = EricaRequest(request_id=request_id,
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=status,
+                                   updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
+        EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
+
+        deleted = EricaRequestRepository(
+            db_connection=transactional_erica_postgresql_db.session).delete_success_fail_old_entities(1)
+        assert deleted == 1
+        entity_not_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
+        assert entity_not_found is None
+
+    @pytest.mark.parametrize("status", [Status.success, Status.failed], ids=["success", "failed"])
+    def test_if_success_or_failed_entity_not_older_than_ttl_in_database_then_delete_from_database(self,
+                                                                                                  transactional_erica_postgresql_db,
+                                                                                                  status):
+        request_id = uuid.uuid4()
+        mock_object = EricaRequest(request_id=request_id,
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=status,
+                                   updated_at=datetime.datetime.now())
+        EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
+
+        deleted = EricaRequestRepository(
+            db_connection=transactional_erica_postgresql_db.session).delete_success_fail_old_entities(1)
+        assert deleted == 0
+        entity_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
+        assert entity_found is not None
+
+    @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing],
+                             ids=["new", "scheduled", "processing"])
+    def test_if_not_success_nor_failed_entity_older_than_ttl_in_database_then_not_delete_from_database(self,
+                                                                                                       transactional_erica_postgresql_db,
+                                                                                                       status):
+        request_id = uuid.uuid4()
+        mock_object = EricaRequest(request_id=request_id,
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=status,
+                                   updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
+        EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
+        deleted = EricaRequestRepository(
+            db_connection=transactional_erica_postgresql_db.session).delete_success_fail_old_entities(1)
+        assert deleted == 0
+        entity_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
+        assert entity_found is not None
+
+
+class TestEricaRepositoryUpdateProcessing:
+
+    @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing],
+                             ids=["new", "scheduled", "processing"])
+    def test_if_new_scheduled_processing_entity_older_than_ttl_in_database_then_update_to_failed(self,
+                                                                                                 transactional_erica_postgresql_db,
+                                                                                                 status):
+        transactional_erica_postgresql_db.session.query(EricaRequestSchema).delete()
+        request_id = uuid.uuid4()
+        mock_object = EricaRequest(request_id=request_id,
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=status,
+                                   updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
+        EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
+
+        updated = EricaRequestRepository(
+            db_connection=transactional_erica_postgresql_db.session).update_status_not_finished_entities_to_failed(1)
+        assert updated == 1
+        entity_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
+        assert entity_found is not None
+        assert entity_found.status == Status.failed
+
+    @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing],
+                             ids=["new", "scheduled", "processing"])
+    def test_if_new_scheduled_processing_entity_not_older_than_ttl_in_database_then_not_update_to_failed(self,
+                                                                                                         transactional_erica_postgresql_db,
+                                                                                                         status):
+        request_id = uuid.uuid4()
+        mock_object = EricaRequest(request_id=request_id,
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=status,
+                                   updated_at=datetime.datetime.now())
+        EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
+
+        updated = EricaRequestRepository(
+            db_connection=transactional_erica_postgresql_db.session).update_status_not_finished_entities_to_failed(1)
+        assert updated == 0
+        entity_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
+        assert entity_found is not None
+        assert entity_found.status == status

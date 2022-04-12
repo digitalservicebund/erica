@@ -7,9 +7,10 @@ from erica.application.base_dto import BaseDto
 from erica.application.erica_request.erica_request import EricaRequestDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
+from erica.domain.Shared.EricaRequest import RequestType
+from erica.config import get_settings
 from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
 
@@ -55,7 +56,8 @@ class JobService(JobServiceInterface):
 
         job = self.background_worker.enqueue(
             self.job_method,
-            created.request_id
+            created.request_id,
+            ttl=get_settings().ttl_queuing_job_in_sec
         )
         logging.getLogger().info(f"Job created with id {job.id} for EricaRequest with id {created.request_id}")
 

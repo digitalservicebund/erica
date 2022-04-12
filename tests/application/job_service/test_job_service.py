@@ -11,6 +11,7 @@ from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInte
 from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
+from erica.config import get_settings
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
@@ -99,7 +100,7 @@ class TestJobServiceQueue:
 
         service.add_to_queue(input_data, "steuerlotse", job_type=RequestType.freischalt_code_activate)
 
-        assert call(mock_job, UUID('00000000-0000-0000-0000-000000000000'))in mock_bg_worker.enqueue.mock_calls
+        assert call(mock_job, UUID('00000000-0000-0000-0000-000000000000'), ttl=get_settings().ttl_queuing_job_in_sec) in mock_bg_worker.enqueue.mock_calls
 
 
 class TestJobServiceRun:
