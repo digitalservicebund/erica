@@ -13,9 +13,9 @@ class QueueNotAvailableError(Exception):
 def get_queue(queue_name='dongle'):
     if queue_name not in _ALLOWED_QUEUE_NAMES:
         raise QueueNotAvailableError
-    with Connection(Redis.from_url(get_settings().queue_url),
+    with Connection(Redis.from_url(get_settings().queue_url,
                                    health_check_interval=10,
                                    socket_connect_timeout=5,
                                    socket_keepalive=True,
-                                   retry_on_timeout=True):
+                                   retry_on_timeout=True)):
         return Queue(queue_name)
