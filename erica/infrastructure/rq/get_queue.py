@@ -17,5 +17,10 @@ def get_queue(queue_name='dongle'):
                                    health_check_interval=10,
                                    socket_connect_timeout=5,
                                    socket_keepalive=True,
-                                   retry_on_timeout=True)):
+                                   retry_on_timeout=True,
+                                   socket_keepalive_options={
+                                    "socket.TCP_KEEPIDLE":120,
+                                    "socket.TCP_KEEPCNT":2,
+                                    "socket.TCP_KEEPINTVL":30
+                                   })):
         return Queue(queue_name)
