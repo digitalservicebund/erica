@@ -11,8 +11,8 @@ from datetime import date
 
 from erica.api.ApiModule import ApiModule
 from erica.config import get_settings
-from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface
-from erica.infrastructure.sqlalchemy.database import run_migrations
+from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface, EricaRequestService
+from erica.infrastructure.sqlalchemy.database import get_engine
 from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockSchema
 
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst
@@ -77,13 +77,15 @@ async def async_fake_db_connection_with_erica_table_in_settings(database_uri):
     postgresql_url = database_uri
     original_db_url = get_settings().database_url
     get_settings().database_url = postgresql_url
-    run_migrations()
+
+    from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
+    EricaRequestSchema.metadata.create_all(bind=get_engine())
 
     yield postgresql_url
 
-    repository = Injector([ApiModule()]).inject(EricaRequestServiceInterface)
-    entities = repository.erica_request_repository.get()
+    erica_request_service: EricaRequestService = Injector([ApiModule()]).inject(EricaRequestServiceInterface)
+    entities = erica_request_service.erica_request_repository.get()
 
     for entity in entities:
-        repository.erica_request_repository.db_connection.delete(entity)
+        erica_request_service.erica_request_repository.db_connection.delete(entity)
     get_settings().database_url = original_db_url
