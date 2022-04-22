@@ -37,7 +37,7 @@ RUN chmod -x /etc/cron.d/*
 
 COPY . .
 
-# Get tax office list and ERiC librariescd
+# Get tax office list and ERiC libraries
 RUN env ERICA_BUCKET_NAME=$bucket_name AWS_ACCESS_KEY_ID=$access_key_id AWS_SECRET_ACCESS_KEY=$access_key ENDPOINT_URL=$endpoint_url pipenv run python scripts/load_eric_binaries.py download-eric-cert-and-binaries
 RUN env ERICA_ENV=testing pipenv run python scripts/create_tax_office_lists.py create
 
