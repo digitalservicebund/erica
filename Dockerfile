@@ -24,17 +24,20 @@ RUN ln -sf /proc/1/fd/1 /app/cronjob_not_finished_output
 #  apt-get install -y vim telnet coreutils less strace lsof rsyslog usbutils && \
 #  rm -rf /var/lib/apt/lists/\*
 
+COPY ./entrypoint.sh /entrypoint.sh
+
 RUN pip install --upgrade pip pipenv
 COPY ./Pipfile ./Pipfile.lock ./
 RUN pipenv install
 
 COPY ./erica/cron.d/* /etc/cron.d/
-
-COPY ./entrypoint.sh /entrypoint.sh
+RUN chown root:root /etc/cron.d/*
+RUN chmod go-wx /etc/cron.d/*
+RUN chmod -x /etc/cron.d/*
 
 COPY . .
 
-# Get tax office list and ERiC libraries
+# Get tax office list and ERiC librariescd
 RUN env ERICA_BUCKET_NAME=$bucket_name AWS_ACCESS_KEY_ID=$access_key_id AWS_SECRET_ACCESS_KEY=$access_key ENDPOINT_URL=$endpoint_url pipenv run python scripts/load_eric_binaries.py download-eric-cert-and-binaries
 RUN env ERICA_ENV=testing pipenv run python scripts/create_tax_office_lists.py create
 

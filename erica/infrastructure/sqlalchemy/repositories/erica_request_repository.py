@@ -62,7 +62,7 @@ class EricaRequestRepository(
         self.db_connection.commit()
         return deleted.rowcount
 
-    def update_status_not_finished_entities_to_failed(self, ttl) -> int:
+    def set_not_processed_entities_to_failed(self, ttl) -> int:
         stmt = self.DatabaseEntity.__table__.update() \
             .where(or_(self.DatabaseEntity.status == Status.new, self.DatabaseEntity.status == Status.scheduled,
                        self.DatabaseEntity.status == Status.processing),

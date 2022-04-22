@@ -257,7 +257,7 @@ class TestEricaRepositoryUpdateProcessing:
         EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
 
         updated = EricaRequestRepository(
-            db_connection=transactional_erica_postgresql_db.session).update_status_not_finished_entities_to_failed(1)
+            db_connection=transactional_erica_postgresql_db.session).set_not_processed_entities_to_failed(1)
         assert updated == 1
         entity_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
             EricaRequestSchema.request_id == request_id).first()
@@ -279,7 +279,7 @@ class TestEricaRepositoryUpdateProcessing:
         EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
 
         updated = EricaRequestRepository(
-            db_connection=transactional_erica_postgresql_db.session).update_status_not_finished_entities_to_failed(1)
+            db_connection=transactional_erica_postgresql_db.session).set_not_processed_entities_to_failed(1)
         assert updated == 0
         entity_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
             EricaRequestSchema.request_id == request_id).first()
