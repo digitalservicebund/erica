@@ -24,13 +24,16 @@ RUN ln -sf /proc/1/fd/1 /app/cronjob_not_finished_output
 #  apt-get install -y vim telnet coreutils less strace lsof rsyslog usbutils && \
 #  rm -rf /var/lib/apt/lists/\*
 
+COPY ./entrypoint.sh /entrypoint.sh
+
 RUN pip install --upgrade pip pipenv
 COPY ./Pipfile ./Pipfile.lock ./
 RUN pipenv install
 
 COPY ./erica/cron.d/* /etc/cron.d/
-
-COPY ./entrypoint.sh /entrypoint.sh
+RUN chown root:root /etc/cron.d/*
+RUN chmod go-wx /etc/cron.d/*
+RUN chmod -x /etc/cron.d/*
 
 COPY . .
 

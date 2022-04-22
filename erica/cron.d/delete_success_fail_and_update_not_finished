@@ -1,3 +1,0 @@
-SHELL=/bin/bash
-*/5 * * * * root cd /erica && /usr/local/bin/env ERICA_ENV=development pipenv run python erica/infrastructure/sqlalchemy/cron/jobs.py delete-success-fail-entities &> /app/cronjob_success_fail_output
-*/5 * * * * root cd /erica && /usr/local/bin/env ERICA_ENV=development pipenv run python erica/infrastructure/sqlalchemy/cron/jobs.py update-status-not-finished-entities &> /app/cronjob_not_finished_output
