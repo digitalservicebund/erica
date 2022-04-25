@@ -44,6 +44,16 @@ MIT-Lizenz lizenziert sind.
 Bitte stelle sicher, dass deine Änderungen getestet wurden, bevor du einen Pull-Request sendest.
 
 # For Developers 👩‍💻 👨‍💻
+
+## Prerequisites
+
+The following prerequisites must be installed:
+
+- python 3.9
+- pipenv
+- postgresql
+- docker and docker-dompose
+
 ## Getting started 🛠
 
 ### Install Python dependencies
@@ -59,7 +69,8 @@ library and place the required library files in a `lib` folder.
 
  - Set the environment variable `ERICA_ENV` to `testing`, `development` or similar.
  - Download `ERiC-35.2.8.0-Linux-x86_64.jar` (or a newer version) from the [ELSTER developer portal](https://www.elster.de/elsterweb/infoseite/entwickler).
- - Place the following files into a `lib` folder in _this directory_ such that it matches the given structure:
+ - Unpack the downloaded jar file
+ - Copy the following library files into `erica/erica_legacy/lib` such that it matches the given structure:
 
 ```bash
 pyeric$ tree lib
@@ -78,10 +89,9 @@ _NOTE_: If you use a Mac, get the corresponding `*.dylib` files
 
 ### Obtain Certificate
 
-You also need to obtain a test certificate from ELSTER and place it under `erica/instances/blueprint/cert.pfx`.
+You also need to obtain a test certificate from ELSTER and place it under `erica/erica_legacy/instances/blueprint/cert.pfx`.
 
 ## Developing 👩‍💻 👨‍💻
-
 
 Start your docker:
 ```bash
@@ -90,11 +100,13 @@ docker-compose up
 
 ```bash
 export ERICA_ENV=development
-python -m erica 
+pipenv shell
+python3 -m erica 
 ```
 
 Start a worker:
 ```bash
+pipenv shell
 python3 -m erica.infrastructure.rq.worker [dongle|cert|common]
 ```
 
