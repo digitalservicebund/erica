@@ -98,9 +98,12 @@ Start your docker:
 docker-compose up
 ```
 
+Start the erica API:
 ```bash
-export ERICA_ENV=development
 pipenv shell
+export ERICA_ENV=development
+export SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost/db 
+alembic upgrade head
 python3 -m erica 
 ```
 
