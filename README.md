@@ -93,12 +93,12 @@ You also need to obtain a test certificate from ELSTER and place it under `erica
 
 ## Developing 👩‍💻 👨‍💻
 
-Start your docker:
+### Start your docker:
 ```bash
 docker-compose up
 ```
 
-Start the erica API:
+### Start the erica API:
 ```bash
 pipenv shell
 export ERICA_ENV=development
@@ -106,8 +106,9 @@ export SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost/db
 alembic upgrade head
 python3 -m erica 
 ```
+Note: Swagger UI will be available under: http://localhost:8000/docs 
 
-Start a worker:
+### Start a worker:
 ```bash
 pipenv shell
 python3 -m erica.infrastructure.rq.worker [dongle|cert|common]
