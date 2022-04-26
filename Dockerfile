@@ -13,12 +13,8 @@ ENV ELSTER_DATENLIEFERANT=$elster_datenlieferant
 ENV ELSTER_HERSTELLER_ID=$elster_hersteller_id
 
 WORKDIR /app
-
 RUN apt-get update && apt-get install -y pcsc-tools pcscd procps unzip && rm -rf /var/lib/apt/lists/\*
-RUN apt-get update && apt-get install --no-install-recommends --yes curl cron procps && rm -rf /var/lib/apt/lists/\*
-# Set up log forwarding to docker log collector (used by cron jobs)
-RUN ln -sf /proc/1/fd/1 /app/cronjob_success_fail_output
-RUN ln -sf /proc/1/fd/1 /app/cronjob_not_finished_output
+
 # Install debugging tools
 # RUN apt-get update && \
 #  apt-get install -y vim telnet coreutils less strace lsof rsyslog usbutils && \
@@ -29,11 +25,6 @@ COPY ./entrypoint.sh /entrypoint.sh
 RUN pip install --upgrade pip pipenv
 COPY ./Pipfile ./Pipfile.lock ./
 RUN pipenv install
-
-COPY ./erica/cron.d/* /etc/cron.d/
-RUN chown root:root /etc/cron.d/*
-RUN chmod go-wx /etc/cron.d/*
-RUN chmod -x /etc/cron.d/*
 
 COPY . .
 
@@ -47,12 +38,30 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 
 ######## cron target
 FROM base AS cron
+RUN apt-get update && apt-get install --no-install-recommends --yes curl cron procps && rm -rf /var/lib/apt/lists/\*
+# Set up log forwarding to docker log collector (used by cron jobs)
+RUN ln -sf /proc/1/fd/1 /app/cronjob_success_fail_output
+RUN ln -sf /proc/1/fd/1 /app/cronjob_not_processed_output
+COPY ./erica/cron.d/* /etc/cron.d/
+RUN chown root:root /etc/cron.d/*
+RUN chmod go-wx /etc/cron.d/*
+RUN chmod -x /etc/cron.d/*
 CMD ["/usr/sbin/cron", "-f"]
 #########
 
 #########
-### api target
+### api target for k8s
 ######
 FROM base AS erica
-
 CMD [ "python", "-m", "erica" ]
+#########
+
+#########
+### api target (with worker) for VM (using supervisord)
+######
+FROM base AS worker
+RUN apt-get update && apt-get install -y supervisor
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+#########
