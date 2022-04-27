@@ -37,13 +37,14 @@ def set_not_processed_entities_to_failed():
     log_message = str(
         entities_updated) + " new/scheduled/processing entities  set to failed at " + datetime.now().strftime(
         "%H:%M:%S")
+    logging.config.dictConfig(LOGGIN_CONFIG)
     if entities_updated > 0:
         logging.getLogger().error(log_message)
     else:
         logging.getLogger().debug(log_message)
 
 
-dictConfig({
+LOGGIN_CONFIG = {
     "version": 1,
     "formatters": {
         "default": {
@@ -63,7 +64,7 @@ dictConfig({
         "handlers": ["stderr"]
     },
     "disable_existing_loggers": False
-})
+}
 
 if __name__ == "__main__":
     cli()
