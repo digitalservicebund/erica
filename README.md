@@ -51,7 +51,7 @@ The following prerequisites must be installed:
 
 - python 3.9
 - pipenv
-- postgresql
+- postgresql client >9.1
 - docker and docker-dompose
 
 ## Getting started 🛠
@@ -98,13 +98,16 @@ You also need to obtain a test certificate from ELSTER and place it under `erica
 docker-compose up
 ```
 
+### Run Alembic migration on database:
+```
+env ERICA_ENV=development SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost/db alembic upgrade head
+```
+
 ### Start the erica API:
 ```bash
 pipenv shell
 export ERICA_ENV=development
-export SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost/db 
-alembic upgrade head
-python3 -m erica 
+python3 -m erica
 ```
 Note: Swagger UI will be available under: http://localhost:8000/docs 
 
