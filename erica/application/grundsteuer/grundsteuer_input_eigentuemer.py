@@ -36,10 +36,6 @@ class Telefonnummer(CamelCaseInput):
     telefonnummer: str
 
 
-class SteuerId(CamelCaseInput):
-    steuer_id: str
-
-
 class Vertreter(CamelCaseInput):
     name: Name
     adresse: Adresse
@@ -54,8 +50,8 @@ class Anteil(CamelCaseInput):
 class Person(CamelCaseInput):
     persoenlicheAngaben: PersoenlicheAngaben
     adresse: Adresse
-    telefonnummer: Optional[Telefonnummer]
-    steuer_id: Optional[SteuerId]
+    telefonnummer: Optional[str]
+    steuer_id: Optional[str]
     vertreter: Optional[Vertreter]
     anteil: Anteil
 

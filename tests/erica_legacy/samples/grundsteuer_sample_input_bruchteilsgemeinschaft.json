@@ -77,9 +77,7 @@
             "telefonnummer": "030-32168"
           }
         },
-        "steuer_id": {
-          "steuer_id": "04452317681"
-        },
+        "steuer_id": "04452317681",
         "anteil": {
           "zaehler": 2,
           "nenner": 3
@@ -99,9 +97,7 @@
           "plz": "77777",
           "ort": "London"
         },
-        "steuer_id": {
-          "steuer_id": "02259674819"
-        },
+        "steuer_id": "02259674819",
         "anteil": {
           "zaehler": 1,
           "nenner": 3

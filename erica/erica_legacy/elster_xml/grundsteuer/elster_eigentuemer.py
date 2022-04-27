@@ -82,14 +82,9 @@ class EPersonData:
         self.E7404540 = input_data.adresse.plz
         self.E7404527 = input_data.adresse.postfach
         self.E7404522 = input_data.adresse.ort
+        self.E7414601 = input_data.telefonnummer
 
-        # input_data.telefonnummer might not be set -> handle specifically
-        if input_data.telefonnummer:
-            self.E7414601 = input_data.telefonnummer.telefonnummer
-        else:
-            self.E7414601 = None
-
-        self.E7404519 = input_data.steuer_id.steuer_id
+        self.E7404519 = input_data.steuer_id
         self.Anteil = EAnteil(input_data.anteil)
 
         # input_data.vertreter might not be set -> handle specifically

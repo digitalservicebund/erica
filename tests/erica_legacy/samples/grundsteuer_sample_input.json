@@ -114,9 +114,7 @@
             "telefonnummer": "030-32168"
           }
         },
-        "steuer_id": {
-          "steuer_id": "04452317681"
-        },
+        "steuer_id": "04452317681",
         "anteil": {
           "zaehler": 1,
           "nenner": 1

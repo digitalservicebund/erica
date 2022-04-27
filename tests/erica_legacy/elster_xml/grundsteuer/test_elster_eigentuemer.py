@@ -75,8 +75,8 @@ class TestEPersonData:
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 == person_obj.adresse.postfach
         assert result.E7404522 == person_obj.adresse.ort
-        assert result.E7414601 == person_obj.telefonnummer.telefonnummer
-        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.E7414601 == person_obj.telefonnummer
+        assert result.E7404519 == person_obj.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
         assert len(vars(result)) == 16
@@ -100,7 +100,7 @@ class TestEPersonData:
         assert result.E7404527 is None
         assert result.E7404522 == person_obj.adresse.ort
         assert result.E7414601 is None
-        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.E7404519 == person_obj.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter is None
         assert len(vars(result)) == 16
@@ -124,8 +124,8 @@ class TestEPersonData:
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 == person_obj.adresse.postfach
         assert result.E7404522 == person_obj.adresse.ort
-        assert result.E7414601 == person_obj.telefonnummer.telefonnummer
-        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.E7414601 == person_obj.telefonnummer
+        assert result.E7404519 == person_obj.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
         assert len(vars(result)) == 16

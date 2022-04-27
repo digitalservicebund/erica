@@ -362,9 +362,7 @@ class SamplePerson(Builder):
         self.name = SampleName().anrede("frau").name("Granger").vorname("Hermione")
         self.adresse = SampleAdresse().plz("7777").ort("London")
         self.dict = {
-            "steuer_id": {
-                "steuer_id": "04452317681",
-            },
+            "steuer_id": "04452317681",
             "anteil": {
                 "zaehler": 1,
                 "nenner": 1,
@@ -376,7 +374,7 @@ class SamplePerson(Builder):
         return self
 
     def with_telefonnummer(self):
-        self.dict["telefonnummer"] = {"telefonnummer": "123"}
+        self.dict["telefonnummer"] = "123"
         return self
 
     def with_vertreter(self):
