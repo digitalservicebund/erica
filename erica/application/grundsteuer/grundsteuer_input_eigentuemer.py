@@ -32,14 +32,10 @@ class Adresse(CamelCaseInput):
     ort: str
 
 
-class Telefonnummer(CamelCaseInput):
-    telefonnummer: str
-
-
 class Vertreter(CamelCaseInput):
     name: Name
     adresse: Adresse
-    telefonnummer: Optional[Telefonnummer]
+    telefonnummer: Optional[str]
 
 
 class Anteil(CamelCaseInput):
@@ -64,7 +60,7 @@ class Bruchteilsgemeinschaft(CamelCaseInput):
 class Empfangsbevollmaechtigter(CamelCaseInput):
     name: Name
     adresse: Adresse
-    telefonnummer: Optional[Telefonnummer]
+    telefonnummer: Optional[str]
 
 
 class Eigentuemer(CamelCaseInput):

@@ -34,7 +34,7 @@ class TestEGesetzlicherVertreter:
         assert result.E7415601 == full_vertreter_obj.adresse.plz
         assert result.E7415602 == full_vertreter_obj.adresse.postfach
         assert result.E7415603 == full_vertreter_obj.adresse.ort
-        assert result.E7415604 == full_vertreter_obj.telefonnummer.telefonnummer
+        assert result.E7415604 == full_vertreter_obj.telefonnummer
         assert len(vars(result)) == 11
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
@@ -187,7 +187,7 @@ class TestEEmpfangsbevollmaechtigter:
         assert result.E7404640 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.plz
         assert result.E7404627 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.postfach
         assert result.E7404622 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.ort
-        assert result.E7412201 == eigentuemer_obj.empfangsbevollmaechtigter.telefonnummer.telefonnummer
+        assert result.E7412201 == eigentuemer_obj.empfangsbevollmaechtigter.telefonnummer
         assert result.E7412901 is None
         assert len(vars(result)) == 12
 

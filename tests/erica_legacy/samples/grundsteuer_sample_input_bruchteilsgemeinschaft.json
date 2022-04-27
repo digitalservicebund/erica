@@ -73,9 +73,7 @@
             "plz": "98765",
             "ort": "Godric's Hollow"
           },
-          "telefonnummer": {
-            "telefonnummer": "030-32168"
-          }
+          "telefonnummer": "030-32168"
         },
         "steuer_id": "04452317681",
         "anteil": {
@@ -129,9 +127,7 @@
         "hausnummer": "3",
         "hausnummerzusatz": "c"
       },
-      "telefonnummer": {
-        "telefonnummer": "123-456"
-      }
+      "telefonnummer": "123-456"
     }
   },
   "freitext": "lorem ipsum"

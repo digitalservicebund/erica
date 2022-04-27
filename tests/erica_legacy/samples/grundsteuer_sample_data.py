@@ -272,7 +272,7 @@ class SampleVertreter(Builder):
 
     def complete(self):
         self.name.titel("Prof.")
-        self.dict["telefonnummer"] = {"telefonnummer": "32168"}
+        self.dict["telefonnummer"] = "32168"
         self.adresse.postfach("32263").strasse("Diagon Alley").hausnummer("04").hausnummerzusatz("b")
         return self
 
@@ -338,7 +338,7 @@ class SampleBevollmaechtigter(Builder):
         return self
 
     def with_telefonnummer(self):
-        self.dict["telefonnummer"] = {"telefonnummer": "123-456"}
+        self.dict["telefonnummer"] = "123-456"
         return self
 
     def complete(self):
