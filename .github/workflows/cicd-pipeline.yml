@@ -103,7 +103,7 @@ jobs:
 
       - name: Push images
         run: |
-          for IMAGE in api cron; do
+          for IMAGE in api cron worker; do
             docker tag erica_${IMAGE}:${{ github.run_number }} ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:${{ github.run_number }}
             docker tag erica_${IMAGE}:latest ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:latest
             docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE} --all-tags
