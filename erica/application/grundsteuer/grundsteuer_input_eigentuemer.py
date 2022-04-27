@@ -51,10 +51,6 @@ class Anteil(CamelCaseInput):
     nenner: str
 
 
-class Verheiratet(CamelCaseInput):
-    are_verheiratet: bool
-
-
 class Person(CamelCaseInput):
     persoenlicheAngaben: PersoenlicheAngaben
     adresse: Adresse
@@ -77,14 +73,14 @@ class Empfangsbevollmaechtigter(CamelCaseInput):
 
 class Eigentuemer(CamelCaseInput):
     person: List[Person]
-    verheiratet: Optional[Verheiratet]
+    verheiratet: Optional[bool]
     bruchteilsgemeinschaft: Optional[Bruchteilsgemeinschaft]
     empfangsbevollmaechtigter: Optional[Empfangsbevollmaechtigter]
 
     @validator("verheiratet", always=True)
     def must_be_set_only_if_two_persons(cls, v, values):
-        if values.get('person') and len(values.get('person')) == 2 and not v:
+        if values.get('person') and len(values.get('person')) == 2 and v is None:
             raise ValueError('has to be set if two persons')
-        if values.get('person') and len(values.get('person')) != 2 and v:
+        if values.get('person') and len(values.get('person')) != 2 and v is not None:
             raise ValueError('must not be set if other than two persons')
         return v

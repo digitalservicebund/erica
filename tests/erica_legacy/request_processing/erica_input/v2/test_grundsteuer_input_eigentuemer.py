@@ -1,26 +1,9 @@
 import pytest
 from pydantic import ValidationError
 
-from erica.application.grundsteuer.grundsteuer_input_eigentuemer import SteuerId, Verheiratet, \
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import SteuerId, \
     Person, Eigentuemer
 from tests.erica_legacy.samples.grundsteuer_sample_data import SamplePerson
-
-
-class TestVerheiratet:
-    def test_if_snake_case_given_then_include_in_resulting_object(self):
-        input_data = {"are_verheiratet": True}
-
-        result = Verheiratet.parse_obj(input_data)
-
-        assert result.are_verheiratet is True
-
-    def test_if_camel_case_given_then_include_in_resulting_object(self):
-        input_data = {"areVerheiratet": True}
-
-        result = Verheiratet.parse_obj(input_data)
-
-        assert result.are_verheiratet is True
-
 
 class TestSteuerId:
     def test_if_snake_case_given_then_include_in_resulting_object(self):
@@ -74,26 +57,26 @@ class TestEigentuemer:
 
     def test_if_one_person_and_verheiratet_true_then_raise_error(self):
         person = SamplePerson().build()
-        input_data = {"person": [person], "verheiratet": {"are_verheiratet": True}}
+        input_data = {"person": [person], "verheiratet": True}
         with pytest.raises(ValidationError):
             Eigentuemer.parse_obj(input_data)
 
     def test_if_one_person_and_verheiratet_false_then_raise_error(self):
         person = SamplePerson().build()
-        input_data = {"person": [person], "verheiratet": {"are_verheiratet": False}}
+        input_data = {"person": [person], "verheiratet": False}
         with pytest.raises(ValidationError):
             Eigentuemer.parse_obj(input_data)
 
     def test_if_two_persons_and_verheiratet_true_then_do_not_raise_error(self):
         person1 = SamplePerson().build()
         person2 = SamplePerson().build()
-        input_data = {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}}
+        input_data = {"person": [person1, person2], "verheiratet": True}
         Eigentuemer.parse_obj(input_data)
 
     def test_if_two_persons_and_verheiratet_false_then_do_not_raise_error(self):
         person1 = SamplePerson().build()
         person2 = SamplePerson().build()
-        input_data = {"person": [person1, person2], "verheiratet": {"are_verheiratet": False}}
+        input_data = {"person": [person1, person2], "verheiratet": False}
         Eigentuemer.parse_obj(input_data)
 
     def test_if_two_persons_and_verheiratet_not_given_then_raise_error(self):
@@ -114,7 +97,7 @@ class TestEigentuemer:
         person1 = SamplePerson().build()
         person2 = SamplePerson().build()
         person3 = SamplePerson().build()
-        input_data = {"person": [person1, person2, person3], "verheiratet": {"are_verheiratet": True}}
+        input_data = {"person": [person1, person2, person3], "verheiratet": True}
         with pytest.raises(ValidationError):
             Eigentuemer.parse_obj(input_data)
 
@@ -122,6 +105,6 @@ class TestEigentuemer:
         person1 = SamplePerson().build()
         person2 = SamplePerson().build()
         person3 = SamplePerson().build()
-        input_data = {"person": [person1, person2, person3], "verheiratet": {"are_verheiratet": False}}
+        input_data = {"person": [person1, person2, person3], "verheiratet": False}
         with pytest.raises(ValidationError):
             Eigentuemer.parse_obj(input_data)

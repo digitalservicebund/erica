@@ -108,9 +108,7 @@
         }
       }
     ],
-    "verheiratet": {
-      "areVerheiratet": false
-    },
+    "verheiratet": false,
     "bruchteilsgemeinschaft": {
       "name": "Bruchteilsgemeinschaft Grimmauldplace 12",
       "adresse": {

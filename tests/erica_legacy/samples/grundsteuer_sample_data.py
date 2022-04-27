@@ -408,7 +408,7 @@ class SampleEigentuemer(Builder):
         return self
 
     def verheiratet(self, are_verheiretet: bool):
-        self.dict["verheiratet"] = {"are_verheiratet": are_verheiretet}
+        self.dict["verheiratet"] = are_verheiretet
         return self
 
     def bruchteilsgemeinschaft(self, bruchteilsgemeinschaft):

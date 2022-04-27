@@ -144,7 +144,7 @@ class TestEEigentumsverh:
         person1 = SamplePerson().parse()
         person2 = SamplePerson().parse()
         eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}})
+            {"person": [person1, person2], "verheiratet": True})
 
         result = EEigentumsverh(eigentuemer_obj)
 
