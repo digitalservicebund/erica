@@ -1,13 +1,30 @@
 # Note: this docker-compose file is used for building staging/production images on GitHub Actions.
 version: '3.8'
 
-# Define common behavior of web
-x-web:
-  &default-web
+# Define common behavior of api
+x-api:
+  &default-api
   image: erica_api:latest
   build:
     context: .
     target: erica
+    args:
+      bucket_name: ${ERICA_BUCKET_NAME}
+      access_key_id: ${ACCESS_KEY_ID}
+      access_key: ${ACCESS_KEY}
+      endpoint_url: ${ENDPOINT_URL}
+      elster_datenlieferant: ${ELSTER_DATENLIEFERANT}
+      elster_hersteller_id: ${ELSTER_HERSTELLER_ID}
+  expose:
+    - 8000
+
+# Define common behavior of worker
+x-worker:
+  &default-worker
+  image: erica_worker:latest
+  build:
+    context: .
+    target: worker
     args:
       bucket_name: ${ERICA_BUCKET_NAME}
       access_key_id: ${ACCESS_KEY_ID}
@@ -34,14 +51,23 @@ x-cron:
       elster_hersteller_id: ${ELSTER_HERSTELLER_ID}
 
 services:
-  # Web latest
-  web_latest:
-    *default-web
+  # api latest
+  api_latest:
+    *default-api
 
-  # Web github run
-  web_github_run:
-    << : *default-web
+  # api github run
+  api_github_run:
+    << : *default-api
     image: erica_api:${DOCKER_TAG}
+
+  # worker latest
+  worker_latest:
+    *default-worker
+
+  # worker github run
+  worker_github_run:
+    << : *default-worker
+    image: erica_worker:${DOCKER_TAG}
 
   # Cron latest
   cron_latest:
