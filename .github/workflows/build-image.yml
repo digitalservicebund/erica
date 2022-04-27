@@ -47,7 +47,7 @@ jobs:
 
     - name: Push images
       run: |
-        for IMAGE in api cron; do
+        for IMAGE in api cron worker; do
           docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE} --all-tags
         done
       shell: bash
