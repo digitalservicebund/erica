@@ -89,7 +89,7 @@ def full_grundsteuer_data():
                                         'abbruchverpflichtung': {'has_abbruchverpflichtung': False},
                                         'weitere_wohnraeume': {'has_weitere_wohnraeume': False},
                                         'garagen': {'has_garagen': False}, 'wohnflaechen': [42]}, 'eigentuemer': {
-            'person': [{'steuer_id': {'steuer_id': '04452317681'}, 'anteil': {'zaehler': 1, 'nenner': 1},
+            'person': [{'steuer_id': '04452317681', 'anteil': {'zaehler': 1, 'nenner': 1},
                         'persoenlicheAngaben': {'anrede': 'frau', 'name': 'Granger', 'vorname': 'Hermione'},
                         'adresse': {'plz': '7777', 'ort': 'London'}}]}}
     return build_request_data(grundsteuer_payload)

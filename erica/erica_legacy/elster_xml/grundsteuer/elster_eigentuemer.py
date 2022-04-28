@@ -42,12 +42,7 @@ class EGesetzlicherVertreter:
         self.E7415601 = input_data.adresse.plz
         self.E7415602 = input_data.adresse.postfach
         self.E7415603 = input_data.adresse.ort
-
-        # input_data.telefonnummer might not be set -> handle specifically
-        if input_data.telefonnummer:
-            self.E7415604 = input_data.telefonnummer.telefonnummer
-        else:
-            self.E7415604 = None
+        self.E7415604 = input_data.telefonnummer
 
 
 @dataclass
@@ -82,14 +77,9 @@ class EPersonData:
         self.E7404540 = input_data.adresse.plz
         self.E7404527 = input_data.adresse.postfach
         self.E7404522 = input_data.adresse.ort
+        self.E7414601 = input_data.telefonnummer
 
-        # input_data.telefonnummer might not be set -> handle specifically
-        if input_data.telefonnummer:
-            self.E7414601 = input_data.telefonnummer.telefonnummer
-        else:
-            self.E7414601 = None
-
-        self.E7404519 = input_data.steuer_id.steuer_id
+        self.E7404519 = input_data.steuer_id
         self.Anteil = EAnteil(input_data.anteil)
 
         # input_data.vertreter might not be set -> handle specifically
@@ -134,12 +124,7 @@ class EEmpfangsbevollmaechtigter:
         self.E7404640 = empfangsbevollmaechtigter.adresse.plz
         self.E7404627 = empfangsbevollmaechtigter.adresse.postfach
         self.E7404622 = empfangsbevollmaechtigter.adresse.ort
-
-        # input_data.telefonnummer might not be set -> handle specifically
-        if empfangsbevollmaechtigter.telefonnummer:
-            self.E7412201 = empfangsbevollmaechtigter.telefonnummer.telefonnummer
-        else:
-            self.E7412201 = None
+        self.E7412201 = empfangsbevollmaechtigter.telefonnummer
 
         if elsterify_eigentumsverhaeltnis(eigentuemer) == "6":  # Bruchteilsgemeinschaft
             self.E7412901 = 1

@@ -73,13 +73,9 @@
             "plz": "98765",
             "ort": "Godric's Hollow"
           },
-          "telefonnummer": {
-            "telefonnummer": "030-32168"
-          }
+          "telefonnummer": "030-32168"
         },
-        "steuer_id": {
-          "steuer_id": "04452317681"
-        },
+        "steuer_id": "04452317681",
         "anteil": {
           "zaehler": 2,
           "nenner": 3
@@ -99,18 +95,14 @@
           "plz": "77777",
           "ort": "London"
         },
-        "steuer_id": {
-          "steuer_id": "02259674819"
-        },
+        "steuer_id": "02259674819",
         "anteil": {
           "zaehler": 1,
           "nenner": 3
         }
       }
     ],
-    "verheiratet": {
-      "areVerheiratet": false
-    },
+    "verheiratet": false,
     "bruchteilsgemeinschaft": {
       "name": "Bruchteilsgemeinschaft Grimmauldplace 12",
       "adresse": {
@@ -135,9 +127,7 @@
         "hausnummer": "3",
         "hausnummerzusatz": "c"
       },
-      "telefonnummer": {
-        "telefonnummer": "123-456"
-      }
+      "telefonnummer": "123-456"
     }
   },
   "freitext": "lorem ipsum"

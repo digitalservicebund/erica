@@ -272,7 +272,7 @@ class SampleVertreter(Builder):
 
     def complete(self):
         self.name.titel("Prof.")
-        self.dict["telefonnummer"] = {"telefonnummer": "32168"}
+        self.dict["telefonnummer"] = "32168"
         self.adresse.postfach("32263").strasse("Diagon Alley").hausnummer("04").hausnummerzusatz("b")
         return self
 
@@ -338,7 +338,7 @@ class SampleBevollmaechtigter(Builder):
         return self
 
     def with_telefonnummer(self):
-        self.dict["telefonnummer"] = {"telefonnummer": "123-456"}
+        self.dict["telefonnummer"] = "123-456"
         return self
 
     def complete(self):
@@ -362,9 +362,7 @@ class SamplePerson(Builder):
         self.name = SampleName().anrede("frau").name("Granger").vorname("Hermione")
         self.adresse = SampleAdresse().plz("7777").ort("London")
         self.dict = {
-            "steuer_id": {
-                "steuer_id": "04452317681",
-            },
+            "steuer_id": "04452317681",
             "anteil": {
                 "zaehler": 1,
                 "nenner": 1,
@@ -376,7 +374,7 @@ class SamplePerson(Builder):
         return self
 
     def with_telefonnummer(self):
-        self.dict["telefonnummer"] = {"telefonnummer": "123"}
+        self.dict["telefonnummer"] = "123"
         return self
 
     def with_vertreter(self):
@@ -408,7 +406,7 @@ class SampleEigentuemer(Builder):
         return self
 
     def verheiratet(self, are_verheiretet: bool):
-        self.dict["verheiratet"] = {"are_verheiratet": are_verheiretet}
+        self.dict["verheiratet"] = are_verheiretet
         return self
 
     def bruchteilsgemeinschaft(self, bruchteilsgemeinschaft):

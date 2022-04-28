@@ -27,15 +27,8 @@ class Adresse(CamelCaseInput):
     ort: Optional[str]
     bundesland: str
 
-    @validator("strasse", always=True)
-    def strasse_mus_be_present_if_hausnummer_given(cls, v, values):
-        if values.get("hausnummer") and not v:
-            raise ValueError("has to be set if hausnummer is set")
-        return v
-
 
 class FlurstueckAngaben(CamelCaseInput):
-    # TODO determine if this is mandatory (only in NRW?)
     grundbuchblattnummer: Optional[str]
     gemarkung: str
 
