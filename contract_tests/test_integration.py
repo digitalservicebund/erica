@@ -78,7 +78,178 @@ def full_est_data():
 
 @pytest.fixture()
 def full_grundsteuer_data():
-    grundsteuer_data = {'freitext': '', 'grundstueck': {'steuernummer': '2181508150', 'typ': 'einfamilienhaus', 'innerhalb_einer_gemeinde': True, 'bodenrichtwert': '41,99', 'flurstueck': [], 'adresse': {'strasse': 'Madeupstr', 'hausnummer': '22', 'hausnummerzusatz': 'b', 'plz': '33333', 'ort': 'Bielefeld', 'bundesland': 'BE'}}, 'gebaeude': {'ab1949': {'is_ab1949': False}, 'kernsaniert': {'is_kernsaniert': False}, 'abbruchverpflichtung': {'has_abbruchverpflichtung': False}, 'weitere_wohnraeume': {'has_weitere_wohnraeume': False}, 'garagen': {'has_garagen': False}, 'wohnflaechen': [42]}, 'eigentuemer': {'person': [{'steuer_id': '04452317681', 'anteil': {'zaehler': 1, 'nenner': 1}, 'persoenlicheAngaben': {'anrede': 'frau', 'name': 'Granger', 'vorname': 'Hermione'}, 'adresse': {'plz': '7777', 'ort': 'London'}}]}}
+    grundsteuer_data = {
+        "grundstueck": {
+            "typ": "einfamilienhaus",
+            "adresse": {
+                "strasse": "GST Strasse",
+                "hausnummer": "2",
+                "hausnummerzusatz": "GST",
+                "zusatzangaben": "GST Zusatzangaben",
+                "plz": "12345",
+                "ort": "GST Ort",
+                "bundesland": "BB"
+            },
+            "steuernummer": "09841275756757579",
+            "innerhalbEinerGemeinde": "true",
+            "bodenrichtwert": "123,00",
+            "flurstueck": [
+                {
+                    "angaben": {
+                        "grundbuchblattnummer": "1",
+                        "gemarkung": "2"
+                    },
+                    "flur": {
+                        "flur": "1",
+                        "flurstueckZaehler": "23",
+                        "flurstueckNenner": "45",
+                        "wirtschaftlicheEinheitZaehler": "67.1000",
+                        "wirtschaftlicheEinheitNenner": "89"
+                    },
+                    "groesseQm": "1234"
+                },
+                {
+                    "angaben": {
+                        "grundbuchblattnummer": "2",
+                        "gemarkung": "3"
+                    },
+                    "flur": {
+                        "flur": "2",
+                        "flurstueckZaehler": "34",
+                        "flurstueckNenner": "56",
+                        "wirtschaftlicheEinheitZaehler": "78.0000",
+                        "wirtschaftlicheEinheitNenner": "90"
+                    },
+                    "groesseQm": "12345"
+                }
+            ]
+        },
+        "gebaeude": {
+            "ab1949": {
+                "isAb1949": "true"
+            },
+            "baujahr": {
+                "baujahr": "2000"
+            },
+            "kernsaniert": {
+                "isKernsaniert": "true"
+            },
+            "kernsanierungsjahr": {
+                "kernsanierungsjahr": "2001"
+            },
+            "abbruchverpflichtung": {
+                "hasAbbruchverpflichtung": "true"
+            },
+            "abbruchverpflichtungsjahr": {
+                "abbruchverpflichtungsjahr": "2032"
+            },
+            "wohnflaechen": [
+                "100"
+            ],
+            "weitereWohnraeume": {
+                "hasWeitereWohnraeume": "true"
+            },
+            "weitereWohnraeumeDetails": {
+                "anzahl": "2",
+                "flaeche": "200"
+            },
+            "garagen": {
+                "hasGaragen": "true"
+            },
+            "garagenAnzahl": {
+                "anzahlGaragen": "3"
+            }
+        },
+        "eigentuemer": {
+            "person": [
+                {
+                    "persoenlicheAngaben": {
+                        "anrede": "frau",
+                        "titel": "1 Titel",
+                        "vorname": "1 Vorname",
+                        "name": "1 Name",
+                        "geburtsdatum": "1980-01-31"
+                    },
+                    "adresse": {
+                        "strasse": "1 Strasse",
+                        "hausnummer": "1",
+                        "hausnummerzusatz": "Hausnummer",
+                        "plz": "12345",
+                        "ort": "1 Ort"
+                    },
+                    "telefonnummer": "111111",
+                    "steuerId": "04452397687",
+                    "anteil": {
+                        "zaehler": "1",
+                        "nenner": "2"
+                    }
+                },
+                {
+                    "persoenlicheAngaben": {
+                        "anrede": "herr",
+                        "titel": "2 Titel",
+                        "vorname": "2 Vorname",
+                        "name": "2 Name",
+                        "geburtsdatum": "1990-02-02"
+                    },
+                    "adresse": {
+                        "strasse": "2 Strasse",
+                        "hausnummer": "2",
+                        "hausnummerzusatz": "Hausnummer",
+                        "plz": "12345",
+                        "ort": "2 Ort"
+                    },
+                    "telefonnummer": "222222",
+                    "steuerId": "03352417692",
+                    "vertreter": {
+                        "name": {
+                            "anrede": "herr",
+                            "titel": "VERT Titel",
+                            "vorname": "VERT Vorname",
+                            "name": "VERT Name"
+                        },
+                        "adresse": {
+                            "strasse": "VERT Strasse",
+                            "hausnummer": "3",
+                            "hausnummerzusatz": "VERT",
+                            "plz": "12345",
+                            "ort": "VERT Ort"
+                        },
+                        "telefonnummer": "333333"
+                    },
+                    "anteil": {
+                        "zaehler": "3",
+                        "nenner": "4"
+                    }
+                }
+            ],
+            "verheiratet": "false",
+            "bruchteilsgemeinschaft": {
+                "name": "BTG Name",
+                "adresse": {
+                    "strasse": "BTG Strasse",
+                    "hausnummer": "1",
+                    "hausnummerzusatz": "BTG",
+                    "plz": "12345",
+                    "ort": "BTG Ort"
+                }
+            },
+            "empfangsbevollmaechtigter": {
+                "name": {
+                    "anrede": "no_anrede",
+                    "titel": "EMP Titel",
+                    "vorname": "EMP Vorname",
+                    "name": "EMP Name"
+                },
+                "adresse": {
+                    "postfach": "654321",
+                    "plz": "12345",
+                    "ort": "EMP Ort"
+                },
+                "telefonnummer": "12345"
+            }
+        }
+    }
     return grundsteuer_data
 
 
@@ -220,8 +391,9 @@ class TestV1Grundsteuer:
 
         assert response.status_code == 422
 
-    def test_if_post_with_data_then_return_422(self, full_grundsteuer_data):
+    def test_if_post_with_full_data_then_return_201(self, full_grundsteuer_data):
         response = requests.post(ERICA_TESTING_URL + "/01/grundsteuer",  data=json.dumps(full_grundsteuer_data, default=str))
 
-        assert response.status_code == 422
-        assert response.json()['detail']["message"] == 'ERIC_GLOBAL_PRUEF_FEHLER'
+        assert response.status_code == 201
+        assert 'pdf' in response.json()
+        assert 'transfer_ticket' in response.json()
