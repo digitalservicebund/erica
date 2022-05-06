@@ -162,16 +162,16 @@ class EVorsatz:
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
         self.Copyright = "(C) 2022 DigitalService4Germany"
 
+        steuernummer_aktenzeichen = generate_electronic_aktenzeichen(input_data.grundstueck.steuernummer,
+                                                                     input_data.grundstueck.adresse.bundesland)
         if input_data.grundstueck.adresse.bundesland in BUNDESLAENDER_WITH_STEUERNUMMER:
             self.OrdNrArt = "S"
-            self.StNr = generate_electronic_steuernummer(input_data.grundstueck.steuernummer,
-                                                         input_data.grundstueck.adresse.bundesland)
+            self.StNr = steuernummer_aktenzeichen
             self.Aktenzeichen = None
         else:
             self.OrdNrArt = "A"
             self.StNr = None
-            self.Aktenzeichen = generate_electronic_aktenzeichen(input_data.grundstueck.steuernummer,
-                                                                 input_data.grundstueck.adresse.bundesland)
+            self.Aktenzeichen = steuernummer_aktenzeichen
 
         self.Rueckuebermittlung = ERueckuebermittlung()
 
