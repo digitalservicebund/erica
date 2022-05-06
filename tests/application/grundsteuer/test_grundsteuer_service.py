@@ -45,10 +45,10 @@ class TestGrundsteuerService:
 
     def test_if_erica_request_found_and_success_then_return_success_response_dto(self):
         pdf = "test_pdf"
-        transfer_ticket = "test_transfer_ticket"
+        transferticket = "test_transfer_ticket"
         erica_request = EricaRequest(type=RequestType.grundsteuer, status=Status.success,
                                      payload={},
-                                     result={"transfer_ticket": transfer_ticket, "pdf": pdf},
+                                     result={"transfer_ticket": transferticket, "pdf": pdf},
                                      request_id=uuid.uuid4(),
                                      creator_id="test")
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
@@ -56,6 +56,6 @@ class TestGrundsteuerService:
         response = GrundsteuerService(service=mock_service).get_response_grundsteuer("test")
         assert response.processStatus == JobState.SUCCESS
         assert response.result.pdf == pdf
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None

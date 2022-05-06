@@ -42,7 +42,7 @@ class FreischaltCodeRevocateDto(BaseDto):
 # Output
 
 class TransferTicketAndIdnrResponseDto(BaseDto):
-    transfer_ticket: str
+    transferticket: str
     idnr: str
 
 

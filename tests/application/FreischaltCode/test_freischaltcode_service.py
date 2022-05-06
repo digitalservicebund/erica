@@ -108,11 +108,11 @@ class TestFreischaltCodeService:
     def test_fsc_request_if_erica_request_found_and_success_then_return_success_response_dto(self):
         tax_id_number = "test_idnr"
         elster_request_id = "test_elster_request_id"
-        transfer_ticket = "test_transfer_ticket"
+        transferticket = "test_transfer_ticket"
         erica_request = EricaRequest(type=RequestType.freischalt_code_request, status=Status.success,
                                      payload={"tax_id_number": tax_id_number},
                                      result={"elster_request_id": elster_request_id,
-                                             "transfer_ticket": transfer_ticket},
+                                             "transfer_ticket": transferticket},
                                      request_id=uuid.uuid4(),
                                      creator_id="test")
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
@@ -121,18 +121,18 @@ class TestFreischaltCodeService:
         assert response.processStatus == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
         assert response.result.elster_request_id == elster_request_id
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None
 
     def test_fsc_activate_if_erica_request_found_and_success_then_return_success_response_dto(self):
         tax_id_number = "test_idnr"
         elster_request_id = "test_elster_request_id"
-        transfer_ticket = "test_transfer_ticket"
+        transferticket = "test_transfer_ticket"
         erica_request = EricaRequest(type=RequestType.freischalt_code_activate, status=Status.success,
                                      payload={"tax_id_number": tax_id_number},
                                      result={"elster_request_id": elster_request_id,
-                                             "transfer_ticket": transfer_ticket},
+                                             "transfer_ticket": transferticket},
                                      request_id=uuid.uuid4(),
                                      creator_id="test")
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
@@ -141,16 +141,16 @@ class TestFreischaltCodeService:
         assert response.processStatus == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
         assert response.result.elster_request_id == elster_request_id
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None
 
     def test_fsc_revocate_if_erica_request_found_and_success_then_return_success_response_dto(self):
         tax_id_number = "test_idnr"
-        transfer_ticket = "test_transfer_ticket"
+        transferticket = "test_transfer_ticket"
         erica_request = EricaRequest(type=RequestType.freischalt_code_revocate, status=Status.success,
                                      payload={"tax_id_number": tax_id_number},
-                                     result={"transfer_ticket": transfer_ticket, "idnr": tax_id_number},
+                                     result={"transfer_ticket": transferticket, "idnr": tax_id_number},
                                      request_id=uuid.uuid4(),
                                      creator_id="test")
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
@@ -158,6 +158,6 @@ class TestFreischaltCodeService:
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
         assert response.processStatus == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None
