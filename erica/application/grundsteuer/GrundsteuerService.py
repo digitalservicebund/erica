@@ -25,7 +25,7 @@ class GrundsteuerService(GrundsteuerServiceInterface):
         process_status = map_status(erica_request.status)
         if process_status == JobState.SUCCESS:
             result = ResultTransferPdfResponseDto(
-                transferticket=erica_request.result["transfer_ticket"],
+                transferticket=erica_request.result["transferticket"],
                 pdf=erica_request.result["pdf"])
             return GrundsteuerResponseDto(
                 processStatus=map_status(erica_request.status), result=result)

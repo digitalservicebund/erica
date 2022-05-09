@@ -4,7 +4,7 @@ from uuid import UUID
 from opyoid import Module
 
 from erica.application.FreischaltCode.FreischaltCode import FreischaltcodeRequestAndActivationResponseDto, \
-    ResultFreischaltcodeRequestAndActivationDto, FreischaltcodeRevocationResponseDto, TransferTicketAndIdnrResponseDto
+    ResultFreischaltcodeRequestAndActivationDto, FreischaltcodeRevocationResponseDto, TransferticketAndIdnrResponseDto
 from erica.application.Shared.base_service import BaseService
 from erica.application.Shared.response_dto import JobState
 from erica.application.Shared.response_state_mapper import map_status
@@ -43,7 +43,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         if process_status == JobState.SUCCESS:
             result = ResultFreischaltcodeRequestAndActivationDto(
                 elster_request_id=erica_request.result["elster_request_id"],
-                transferticket=erica_request.result["transfer_ticket"],
+                transferticket=erica_request.result["transferticket"],
                 idnr=erica_request.payload.get("tax_id_number"))
             return FreischaltcodeRequestAndActivationResponseDto(
                 processStatus=map_status(erica_request.status), result=result)
@@ -59,8 +59,8 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         erica_request = self.get_erica_request(request_id, RequestType.freischalt_code_revocate)
         process_status = map_status(erica_request.status)
         if process_status == JobState.SUCCESS:
-            result = TransferTicketAndIdnrResponseDto(
-                transferticket=erica_request.result["transfer_ticket"],
+            result = TransferticketAndIdnrResponseDto(
+                transferticket=erica_request.result["transferticket"],
                 idnr=erica_request.payload.get("tax_id_number"))
             return FreischaltcodeRevocationResponseDto(
                 processStatus=map_status(erica_request.status), result=result)

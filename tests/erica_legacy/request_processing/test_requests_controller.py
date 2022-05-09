@@ -182,7 +182,7 @@ class TestEstRequestProcess(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_full_form_and_include_elster_responses_then_return_response_only_with_correct_keys(self):
-        expected_keys = ['transfer_ticket', 'pdf', 'eric_response', 'server_response']
+        expected_keys = ['transferticket', 'pdf', 'eric_response', 'server_response']
 
         est_request = EstRequestController(create_est(correct_form_data=True), include_elster_responses=True)
 
@@ -193,7 +193,7 @@ class TestEstRequestProcess(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_if_full_form_and_not_include_elster_responses_then_return_response_with_correct_keys(self):
-        expected_keys = ['transfer_ticket', 'pdf']
+        expected_keys = ['transferticket', 'pdf']
 
         est_request = EstRequestController(create_est(correct_form_data=True), include_elster_responses=False)
 
@@ -205,18 +205,18 @@ class TestEstRequestProcess(unittest.TestCase):
 class TestEstRequestGenerateJson(unittest.TestCase):
 
     def setUp(self):
-        self.expected_transfer_ticket = 'J-KLAPAUCIUS'
+        self.expected_transferticket = 'J-KLAPAUCIUS'
         self.pdf_bytes = b"Our lives begin the day we become silent about things that matter"
         self.expected_pdf = base64.b64encode(self.pdf_bytes).decode('utf-8')
         self.expected_eric_response = "We are now faced with the fact that tomorrow is today."
-        response_with_correct_transfer_ticket = replace_text_in_xml(
+        response_with_correct_transferticket = replace_text_in_xml(
             read_text_from_sample('sample_est_response_server.xml'),
-            'TransferTicket', self.expected_transfer_ticket)
-        self.expected_server_response = response_with_correct_transfer_ticket
+            'TransferTicket', self.expected_transferticket)
+        self.expected_server_response = response_with_correct_transferticket
 
     def test_if_id_given_and_include_true_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'pdf': self.expected_pdf,
             'eric_response': self.expected_eric_response,
             'server_response': self.expected_server_response
@@ -231,7 +231,7 @@ class TestEstRequestGenerateJson(unittest.TestCase):
 
     def test_if_id_given_and_include_false_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'pdf': self.expected_pdf
         }
         est_request = EstRequestController(create_est(correct_form_data=True), include_elster_responses=False)
@@ -348,17 +348,17 @@ class TestUnlockCodeRequestGenerateJson(unittest.TestCase):
 
     def setUp(self):
         self.expected_request_id = 'J-KLAPAUCIUS'
-        self.expected_transfer_ticket = 'Transferiato'
+        self.expected_transferticket = 'Transferiato'
         self.expected_idnr = "123456789"
         self.expected_eric_response = "We are now faced with the fact that tomorrow is today."
-        response_with_correct_transfer_ticket = replace_text_in_xml(
+        response_with_correct_transferticket = replace_text_in_xml(
             read_text_from_sample('sample_vast_request_response.xml'),
-            'TransferTicket', self.expected_transfer_ticket)
-        self.expected_server_response = response_with_correct_transfer_ticket
+            'TransferTicket', self.expected_transferticket)
+        self.expected_server_response = response_with_correct_transferticket
 
     def test_if_id_given_and_include_true_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'elster_request_id': self.expected_request_id,
             'idnr': self.expected_idnr,
             'eric_response': self.expected_eric_response,
@@ -377,7 +377,7 @@ class TestUnlockCodeRequestGenerateJson(unittest.TestCase):
 
     def test_if_id_given_and_include_false_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'elster_request_id': self.expected_request_id,
             'idnr': self.expected_idnr,
         }
@@ -406,19 +406,19 @@ class TestUnlockCodeRequestGenerateJson(unittest.TestCase):
 
         self.assertEqual(expected_elster_request_id, actual_response['elster_request_id'])
 
-    def test_if_eric_process_successful_then_return_correct_transfer_ticket(self):
+    def test_if_eric_process_successful_then_return_correct_transferticket(self):
         unlock_code_request = UnlockCodeRequestController(UnlockCodeRequestData(
             idnr=self.expected_idnr,
             dob=date(1985, 1, 1)), include_elster_responses=False)
-        expected_transfer_ticket = "PizzaAndNutCake"
+        expected_transferticket = "PizzaAndNutCake"
 
         successful_server_response = replace_text_in_xml(read_text_from_sample('sample_vast_request_response.xml', 'r'),
-                                                         "TransferTicket", expected_transfer_ticket)
+                                                         "TransferTicket", expected_transferticket)
 
         pyeric_response = PyericResponse('eric_response', successful_server_response)
         actual_response = unlock_code_request.generate_json(pyeric_response)
 
-        self.assertEqual(expected_transfer_ticket, actual_response['transfer_ticket'])
+        self.assertEqual(expected_transferticket, actual_response['transferticket'])
 
 
 class TestUnlockCodeActivationProcess(unittest.TestCase):
@@ -501,16 +501,16 @@ class TestUnlockCodeActivationGenerateJson(unittest.TestCase):
     def setUp(self):
         self.expected_idnr = "123456789"
         self.expected_request_id = 'J-KLAPAUCIUS'
-        self.expected_transfer_ticket = 'Transfiguration'
+        self.expected_transferticket = 'Transfiguration'
         self.expected_eric_response = "We are now faced with the fact that tomorrow is today."
-        response_with_correct_transfer_ticket = replace_text_in_xml(
+        response_with_correct_transferticket = replace_text_in_xml(
             read_text_from_sample('sample_vast_activation_response.xml'),
-            'TransferTicket', self.expected_transfer_ticket)
-        self.expected_server_response = response_with_correct_transfer_ticket
+            'TransferTicket', self.expected_transferticket)
+        self.expected_server_response = response_with_correct_transferticket
 
     def test_if_id_given_and_include_true_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'elster_request_id': self.expected_request_id,
             'idnr': self.expected_idnr,
             'eric_response': self.expected_eric_response,
@@ -530,7 +530,7 @@ class TestUnlockCodeActivationGenerateJson(unittest.TestCase):
 
     def test_if_id_given_and_include_false_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'elster_request_id': self.expected_request_id,
             'idnr': self.expected_idnr,
         }
@@ -545,20 +545,20 @@ class TestUnlockCodeActivationGenerateJson(unittest.TestCase):
 
         self.assertEqual(expected_output, actual_response)
 
-    def test_if_eric_process_successful_then_return_correct_transfer_ticket(self):
-        expected_transfer_ticket = "PizzaAndNutCake"
+    def test_if_eric_process_successful_then_return_correct_transferticket(self):
+        expected_transferticket = "PizzaAndNutCake"
         unlock_code_activation = UnlockCodeActivationRequestController(UnlockCodeActivationData(
             idnr=self.expected_idnr,
             unlock_code='1985-T67D-K89O',
             elster_request_id='42'), include_elster_responses=False)
 
         successful_server_response = replace_text_in_xml(read_text_from_sample('sample_vast_activation_response.xml'),
-                                                         "TransferTicket", expected_transfer_ticket)
+                                                         "TransferTicket", expected_transferticket)
 
         pyeric_response = PyericResponse('eric_response', successful_server_response)
         actual_response = unlock_code_activation.generate_json(pyeric_response)
 
-        self.assertEqual(expected_transfer_ticket, actual_response['transfer_ticket'])
+        self.assertEqual(expected_transferticket, actual_response['transferticket'])
 
 
 class TestUnlockCodeRevocationProcess(unittest.TestCase):
@@ -638,16 +638,16 @@ class TestUnlockCodeRevocationGenerateJson(unittest.TestCase):
     def setUp(self):
         self.expected_idnr = "123456789"
         self.expected_request_id = 'J-KLAPAUCIUS'
-        self.expected_transfer_ticket = 'The time is always right to do what is right.'
+        self.expected_transferticket = 'The time is always right to do what is right.'
         self.expected_eric_response = "We are now faced with the fact that tomorrow is today."
-        response_with_correct_transfer_ticket = replace_text_in_xml(
+        response_with_correct_transferticket = replace_text_in_xml(
             read_text_from_sample('sample_vast_revocation_response.xml'),
-            'TransferTicket', self.expected_transfer_ticket)
-        self.expected_server_response = response_with_correct_transfer_ticket
+            'TransferTicket', self.expected_transferticket)
+        self.expected_server_response = response_with_correct_transferticket
 
     def test_if_id_given_and_include_true_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'elster_request_id': self.expected_request_id,
             'eric_response': self.expected_eric_response,
             'server_response': self.expected_server_response
@@ -665,7 +665,7 @@ class TestUnlockCodeRevocationGenerateJson(unittest.TestCase):
 
     def test_if_id_given_and_include_false_then_return_json_with_correct_info(self):
         expected_output = {
-            'transfer_ticket': self.expected_transfer_ticket,
+            'transferticket': self.expected_transferticket,
             'elster_request_id': self.expected_request_id
         }
         unlock_code_request = UnlockCodeRevocationRequestController(UnlockCodeRevocationData(
@@ -679,19 +679,19 @@ class TestUnlockCodeRevocationGenerateJson(unittest.TestCase):
 
         self.assertEqual(expected_output, actual_response)
 
-    def test_if_eric_process_successful_then_return_correct_transfer_ticket(self):
-        expected_transfer_ticket = "PizzaAndNutCake"
+    def test_if_eric_process_successful_then_return_correct_transferticket(self):
+        expected_transferticket = "PizzaAndNutCake"
         unlock_code_revocation = UnlockCodeRevocationRequestController(UnlockCodeRevocationData(idnr=self.expected_idnr,
                                                                                                 elster_request_id='42'),
                                                                        include_elster_responses=False)
 
         successful_server_response = replace_text_in_xml(read_text_from_sample('sample_vast_revocation_response.xml'),
-                                                         "TransferTicket", expected_transfer_ticket)
+                                                         "TransferTicket", expected_transferticket)
 
         pyeric_response = PyericResponse('eric_response', successful_server_response)
         actual_response = unlock_code_revocation.generate_json(pyeric_response)
 
-        self.assertEqual(expected_transfer_ticket, actual_response['transfer_ticket'])
+        self.assertEqual(expected_transferticket, actual_response['transferticket'])
 
 
 class TestCheckTaxNumberRequestControllerProcess:

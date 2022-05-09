@@ -11,7 +11,7 @@ from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
 from erica.domain.erica_request.erica_request import EricaRequest
-from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transfer_ticket_from_xml
+from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import MetaDataEst
 from tests.erica_legacy.utils import TEST_EST_VERANLAGUNGSJAHR
@@ -88,5 +88,5 @@ class TestIntegrationWithDatabaseAndTaxDeclarationJob:
 
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
-        assert updated_entity.result == {'transfer_ticket': get_transfer_ticket_from_xml(xml_string),
+        assert updated_entity.result == {'transferticket': get_transferticket_from_xml(xml_string),
                                          'pdf': expected_pdf}

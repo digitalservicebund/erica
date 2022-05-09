@@ -41,12 +41,12 @@ class FreischaltCodeRevocateDto(BaseDto):
 
 # Output
 
-class TransferTicketAndIdnrResponseDto(BaseDto):
+class TransferticketAndIdnrResponseDto(BaseDto):
     transferticket: str
     idnr: str
 
 
-class ResultFreischaltcodeRequestAndActivationDto(TransferTicketAndIdnrResponseDto):
+class ResultFreischaltcodeRequestAndActivationDto(TransferticketAndIdnrResponseDto):
     elster_request_id: str
 
 
@@ -55,4 +55,4 @@ class FreischaltcodeRequestAndActivationResponseDto(ResponseBaseDto):
 
 
 class FreischaltcodeRevocationResponseDto(ResponseBaseDto):
-    result: Optional[TransferTicketAndIdnrResponseDto]
+    result: Optional[TransferticketAndIdnrResponseDto]

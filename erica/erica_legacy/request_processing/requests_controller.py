@@ -5,7 +5,7 @@ from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generat
 from erica.erica_legacy.elster_xml.elster_xml_generator import get_belege_xml, generate_vorsatz_without_tax_number, \
     generate_vorsatz_with_tax_number
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
-    get_transfer_ticket_from_xml, get_address_from_xml, get_relevant_beleg_ids
+    get_transferticket_from_xml, get_address_from_xml, get_relevant_beleg_ids
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.elster_xml import est_mapping, elster_xml_generator
@@ -71,16 +71,16 @@ class EricaRequestController(object):
         return response
 
 
-class TransferTicketRequestController(EricaRequestController):
+class TransferticketRequestController(EricaRequestController):
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
         if pyeric_response.server_response:
-            response['transfer_ticket'] = get_transfer_ticket_from_xml(pyeric_response.server_response)
+            response['transferticket'] = get_transferticket_from_xml(pyeric_response.server_response)
         return response
 
 
-class EstValidationRequestController(TransferTicketRequestController):
+class EstValidationRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = EstValidationPyericProcessController
 
     def __init__(self, input_data: EstData, include_elster_responses: bool = False):
@@ -135,7 +135,7 @@ class EstRequestController(EstValidationRequestController):
         return response
 
 
-class UnlockCodeRequestController(TransferTicketRequestController):
+class UnlockCodeRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = UnlockCodeRequestPyericProcessController
 
     def __init__(self, input_data: UnlockCodeRequestData, include_elster_responses: bool = False):
@@ -155,7 +155,7 @@ class UnlockCodeRequestController(TransferTicketRequestController):
         return response
 
 
-class UnlockCodeActivationRequestController(TransferTicketRequestController):
+class UnlockCodeActivationRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = UnlockCodeActivationPyericProcessController
 
     def generate_full_xml(self, use_testmerker):
@@ -169,7 +169,7 @@ class UnlockCodeActivationRequestController(TransferTicketRequestController):
         return response
 
 
-class UnlockCodeRevocationRequestController(TransferTicketRequestController):
+class UnlockCodeRevocationRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = UnlockCodeRevocationPyericProcessController
 
     def generate_full_xml(self, use_testmerker):

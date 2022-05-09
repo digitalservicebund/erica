@@ -10,7 +10,7 @@ from erica.application.JobService.job_service_factory import get_job_service
 from erica.application.grundsteuer.grundsteuer_jobs import send_grundsteuer
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
-from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transfer_ticket_from_xml
+from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.utils import read_text_from_sample
@@ -84,5 +84,5 @@ class TestIntegrationWithDatabaseAndGrundsteuerJob:
 
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
-        assert updated_entity.result == {'transfer_ticket': get_transfer_ticket_from_xml(xml_string),
+        assert updated_entity.result == {'transferticket': get_transferticket_from_xml(xml_string),
                                          'pdf': expected_pdf}
