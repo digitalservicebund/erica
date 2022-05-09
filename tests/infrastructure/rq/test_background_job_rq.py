@@ -3,7 +3,7 @@ from unittest.mock import Mock, MagicMock, call
 
 import pytest
 from fakeredis import FakeStrictRedis
-from rq import Queue
+from rq import Queue, Retry
 
 from erica.infrastructure.rq.BackgroundJobRq import BackgroundJobRq
 
@@ -58,6 +58,15 @@ class TestBackgroundJobRqEnqueue:
         background_job_rq.enqueue(fake_job, *args, **input_kwargs, **additional_kwargs)
 
         assert queue.enqueue.mock_calls == [call(args=tuple(args), f=fake_job, **expected_kwargs, kwargs={**additional_kwargs})]
+
+    def test_if_job_enqueued_with_retry_then_job_has_retries_left(self, async_fake_redis_queue):
+        fake_job = PickableMock()
+        background_job_rq = BackgroundJobRq(queue=async_fake_redis_queue)
+
+        job = background_job_rq.enqueue(fake_job, retry=Retry(max=3, interval=1))
+
+        assert job.retries_left == 3
+        assert job.retry_intervals == [1]
 
 
 class TestTestBackgroundJobRqGetJobById:
