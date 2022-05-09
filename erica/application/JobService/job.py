@@ -2,9 +2,7 @@ from datetime import datetime
 from logging import Logger
 from typing import Type
 from uuid import UUID
-
 from erica.application.JobService.job_service import JobServiceInterface
-from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest

@@ -1,4 +1,3 @@
-import socket
 import sys
 
 from redis import Redis
@@ -15,7 +14,7 @@ def run_worker():
                                    retry_on_timeout=True)):
         qs = map(Queue, sys.argv[1:]) if sys.argv[1:] else Queue(get_settings().default_queue)
         worker = Worker(qs)
-        worker.work()
+        worker.work(with_scheduler=True)
 
 
 if __name__ == '__main__':

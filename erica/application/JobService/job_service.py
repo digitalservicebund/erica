@@ -2,7 +2,7 @@ import logging
 from abc import abstractmethod, ABCMeta
 from typing import Type, Callable
 from uuid import uuid4
-
+from rq import Retry
 from erica.application.base_dto import BaseDto
 from erica.application.erica_request.erica_request import EricaRequestDto
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
@@ -57,7 +57,9 @@ class JobService(JobServiceInterface):
         job = self.background_worker.enqueue(
             self.job_method,
             created.request_id,
-            ttl=get_settings().ttl_queuing_job_in_sec
+            ttl=get_settings().ttl_queuing_job_in_sec,
+            retry=Retry(max=get_settings().queue_retry_repetitions,
+                        interval=get_settings().queue_retry_interval_seconds)
         )
         logging.getLogger().info(f"Job created with id {job.id} for EricaRequest with id {created.request_id}")
 
