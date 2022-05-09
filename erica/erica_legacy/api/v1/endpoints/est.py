@@ -22,7 +22,10 @@ def validate_est(est: EstData, include_elster_responses: bool = False):
     """
     try:
         request = EstValidationRequestController(est, include_elster_responses)
-        return request.process()
+        result = request.process()
+        if "transferticket" in result:
+            result["transfer_ticket"] = result.pop("transferticket")
+        return result
     except EricProcessNotSuccessful as e:
         logging.getLogger().info("Could not validate est", exc_info=True)
         raise HTTPException(status_code=422, detail=e.generate_error_response(include_elster_responses))
@@ -43,7 +46,10 @@ def send_est(est: EstData, include_elster_responses: bool = False):
     """
     try:
         request = EstRequestController(est, include_elster_responses)
-        return request.process()
+        result = request.process()
+        if "transferticket" in result:
+            result["transfer_ticket"] = result.pop("transferticket")
+        return result
     except EricProcessNotSuccessful as e:
         logging.getLogger().info("Could not send est", exc_info=True)
         raise HTTPException(status_code=422, detail=e.generate_error_response(include_elster_responses))
