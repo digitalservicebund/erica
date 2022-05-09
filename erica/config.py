@@ -32,6 +32,8 @@ class Settings(BaseSettings):
     ttl_queuing_job_in_sec: int = 60
     ttl_processing_request_entities_in_min: int = 2
     ttl_finished_request_entities_in_min: int = 10
+    queue_retry_repetitions: int = Field(3, env='QUEUE_RETRY_REPETITIONS')
+    queue_retry_interval_seconds: int = Field(1, env='QUEUE_RETRY_INTERVAL_SECONDS')
 
     class Config:
         dir = os.path.dirname(__file__)
