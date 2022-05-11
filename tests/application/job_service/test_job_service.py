@@ -105,7 +105,7 @@ class TestJobServiceQueue:
         assert mock_call.args[1] == UUID('00000000-0000-0000-0000-000000000000')
         assert mock_call.kwargs['ttl'] == get_settings().ttl_queuing_job_in_sec
         assert mock_call.kwargs['retry'].max == get_settings().queue_retry_repetitions
-        assert mock_call.kwargs['retry'].intervals == [get_settings().queue_retry_interval_seconds]
+        assert mock_call.kwargs['retry'].intervals == get_settings().queue_retry_interval_seconds
 
 
 class TestJobServiceRun:
