@@ -46,7 +46,8 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
             )
             entity.error_code = e.generate_error_response().get('message')
             entity.error_message = e.generate_error_response().get('message')
-            entity.result = e.generate_error_response().get('validation_problems')
+            validation_problems = e.generate_error_response().get('validation_problems')
+            entity.result = {"validation_errors": validation_problems} if validation_problems else None
             entity.status = Status.failed
             repository.update(entity.id, entity)
             raise

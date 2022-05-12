@@ -71,7 +71,7 @@ class TestJob:
 
         assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('message')
         assert mock_entity.error_message == EricProcessNotSuccessful().generate_error_response().get('message')
-        assert mock_entity.result == [validation_problems]
+        assert mock_entity.result == {'validation_errors': [validation_problems]}
         assert mock_entity.status == Status.failed
         assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
 
