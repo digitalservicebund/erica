@@ -7,7 +7,7 @@ from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, _ERIC_ERRORS_NO_RETRY
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, ERIC_ERRORS_WITH_RETRY
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
@@ -48,7 +48,7 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
             entity.error_message = e.generate_error_response().get('validation_problems', e.generate_error_response().get('message'))
             entity.status = Status.failed
             repository.update(entity.id, entity)
-            if entity.error_code not in _ERIC_ERRORS_NO_RETRY:
+            if entity.error_code in ERIC_ERRORS_WITH_RETRY:
                 raise
 
         logger.info(f"Job finished: {entity}", exc_info=True)
