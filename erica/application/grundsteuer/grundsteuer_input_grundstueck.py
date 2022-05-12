@@ -34,7 +34,7 @@ class FlurstueckAngaben(CamelCaseInput):
 
 
 class Flur(CamelCaseInput):
-    flur: str
+    flur: Optional[str]
     flurstueck_zaehler: int
     flurstueck_nenner: Optional[str]
     # number with 1-6 integer digits and exactly 4 fractional digits with '.' as decimal separator, e.g.90.1234
