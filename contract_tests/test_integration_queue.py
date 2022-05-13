@@ -299,6 +299,72 @@ def full_grundsteuer_data():
 
 
 @pytest.fixture()
+def grundsteuer_data_with_validation_errors():
+    grundsteuer_payload = {
+        "grundstueck": {
+            "typ": "baureif",
+            "adresse": {
+                "strasse": "GST Strasse",
+                "hausnummer": "2",
+                "hausnummerzusatz": "GST",
+                "zusatzangaben": "GST Zusatzangaben",
+                "plz": "12345",
+                "ort": "GST Ort",
+                "bundesland": "BB"
+            },
+            "steuernummer": "09841275756757579",
+            "innerhalbEinerGemeinde": "true",
+            "bodenrichtwert": "123,00",
+            "flurstueck": [
+                {
+                    "angaben": {
+                        "grundbuchblattnummer": "1",
+                        "gemarkung": "2"
+                    },
+                    "flur": {
+                        "flur": "1",
+                        "flurstueckZaehler": "23",
+                        "flurstueckNenner": "45",
+                        "wirtschaftlicheEinheitZaehler": "67.1000",
+                        "wirtschaftlicheEinheitNenner": "89"
+                    },
+                    "groesseQm": "1234"
+                }
+            ]
+        },
+        "eigentuemer": {
+            "person": [
+                {
+                    "persoenlicheAngaben": {
+                        "anrede": "frau",
+                        "titel": "1 Titel",
+                        "vorname": "1 Vorname",
+                        "name": "1 Name",
+                        "geburtsdatum": "1980-01-31"
+                    },
+                    "adresse": {
+                        # ILLEGAL TO HAND STRASSE + POSTFACH
+                        "postfach": "123456",
+                        "strasse": "1 Strasse",
+                        "hausnummer": "1",
+                        "hausnummerzusatz": "Hausnummer",
+                        "plz": "12345",
+                        "ort": "1 Ort"
+                    },
+                    "telefonnummer": "111111",
+                    "steuerId": "04452397687",
+                    "anteil": {
+                        "zaehler": "1",
+                        "nenner": "2"
+                    }
+                }
+            ],
+        }
+    }
+    return build_request_data(grundsteuer_payload)
+
+
+@pytest.fixture()
 def full_unlock_code_request_data():
     payload = {'tax_id_number': "04531972802",
                'date_of_birth': date(1957, 7, 14),
@@ -727,6 +793,20 @@ class TestV2GrundsteuerRequest:
         assert response.json()["result"] is not None
         assert response.json()["errorCode"] is None
         assert response.json()["errorMessage"] is None
+
+    def test_if_get_existing_request_with_validation_errors_then_return_200_and_response_with_correct_params(self, grundsteuer_data_with_validation_errors):
+        response = requests.post(ERICA_TESTING_URL + self.endpoint,
+                                 data=json.dumps(grundsteuer_data_with_validation_errors, default=json_default))
+        assert response.status_code == 201
+        uuid = response.headers['Location'].split("/")[2]
+        sleep(6)
+        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        assert response.status_code == 200
+        assert response.json()["processStatus"] == "Failure"
+        assert response.json()["result"] is not None
+        assert response.json()["result"]["validation_errors"] is not None
+        assert response.json()["errorCode"] is not None
+        assert response.json()["errorMessage"] is not None
 
     def test_if_get_existing_request_with_wrong_request_type_then_return_404_wrong_request_type(self,
                                                                                                 full_unlock_code_activation_data):
