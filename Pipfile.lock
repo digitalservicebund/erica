@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "356fedf33ffbc71fbb7434aefe8c2178488815e3abd7d11051cb64b5638a1138"
+            "sha256": "f26a5c68fc9307613bf0f7dfd0eb2dbf1ead4120a70bafa1227945e4c69a30a4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -121,11 +121,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:a70d31f4249b6b42dbe267667d22f83af645b2d857876c97f83ca9573215784f",
-                "sha256:b5dac161ee19d33346040d3f44d8b7a9ac09b37df9efff95891f5e7641fa482f"
+                "sha256:041d8935a13c8f22a7ef80c76d8eea54953c44476d7057e7734138ee8951b9dc",
+                "sha256:6dfa715a334d1fafedcea33d74c7382afd2ce123093f83be2f4e322e89d45e22"
             ],
             "index": "pypi",
-            "version": "==0.75.2"
+            "version": "==0.77.1"
         },
         "fastapi-versioning": {
             "hashes": [
@@ -641,11 +641,11 @@
         },
         "starlette": {
             "hashes": [
-                "sha256:26a18cbda5e6b651c964c12c88b36d9898481cd428ed6e063f5f29c418f73050",
-                "sha256:57eab3cc975a28af62f6faec94d355a410634940f10b30d68d31cb5ec1b44ae8"
+                "sha256:5a60c5c2d051f3a8eb546136aa0c9399773a689595e099e0877704d5888279bf",
+                "sha256:c6d21096774ecb9639acad41b86b7706e52ba3bf1dc13ea4ed9ad593d47e24c7"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==0.17.1"
+            "version": "==0.19.1"
         },
         "tomli": {
             "hashes": [
@@ -668,7 +668,7 @@
                 "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14",
                 "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4.0'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_full_version < '4.0.0'",
             "version": "==1.26.9"
         },
         "uvicorn": {
@@ -1224,7 +1224,7 @@
                 "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14",
                 "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4.0'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_full_version < '4.0.0'",
             "version": "==1.26.9"
         },
         "wrapt": {
