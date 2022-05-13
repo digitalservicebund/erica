@@ -1,3 +1,4 @@
+import random
 from datetime import timedelta
 from unittest.mock import MagicMock, call, AsyncMock
 from uuid import uuid4
@@ -7,15 +8,16 @@ from freezegun import freeze_time
 
 from erica.application.JobService.job import perform_job
 from erica.domain.Shared.Status import Status
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, \
+    ERIC_ERRORS_WITH_RETRY, ERIC_ERROR_MESSAGES
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
 class TestJob:
 
     @pytest.mark.asyncio
-    async def test_if_service_raises_error_then_job_raises_error(self):
-        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(610201215))
+    async def test_if_service_raises_raisable_error_then_job_raises_error(self):
+        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(get_random_retry_error_code()))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
 
         with pytest.raises(EricProcessNotSuccessful):
@@ -23,8 +25,18 @@ class TestJob:
                               payload_type=MagicMock(), logger=MagicMock())
 
     @pytest.mark.asyncio
+    async def test_if_service_raises_not_raisable_error_then_job_raises_error(self):
+        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(get_random_non_retry_error_code()))
+        mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
+        try:
+            await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
+                              payload_type=MagicMock(), logger=MagicMock())
+        except EricProcessNotSuccessful:
+            assert False
+
+    @pytest.mark.asyncio
     async def test_if_service_raises_error_then_log_error_in_warning_logger(self):
-        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(610201215))
+        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(get_random_retry_error_code()))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
         warning_logger = MagicMock()
         logger = MagicMock(warning=warning_logger)
@@ -74,7 +86,7 @@ class TestJob:
     @pytest.mark.asyncio
     @freeze_time("Jan 3th, 1892", auto_tick_seconds=15)
     async def test_if_service_raises_error_then_log_runtime_of_job(self):
-        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(610201215))
+        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(get_random_retry_error_code()))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
         info_logger = MagicMock()
         logger = MagicMock(info=info_logger)
@@ -189,3 +201,15 @@ class TestJob:
 
         assert any("Job running time" in logged_msg[1][0] for logged_msg in info_logger.mock_calls)
         assert any(f"{timedelta(seconds=15)}" in logged_msg[1][0] for logged_msg in info_logger.mock_calls)
+
+
+def get_random_retry_error_code():
+    retry_error_message = random.choice(ERIC_ERRORS_WITH_RETRY)
+    key_list = list(ERIC_ERROR_MESSAGES.keys())
+    val_list = list(ERIC_ERROR_MESSAGES.values())
+    return key_list[val_list.index(retry_error_message)]
+
+
+def get_random_non_retry_error_code():
+    non_retry_errors = {k: v for k, v in ERIC_ERROR_MESSAGES.items() if v not in ERIC_ERRORS_WITH_RETRY}
+    return random.choice(list(non_retry_errors.keys()))
