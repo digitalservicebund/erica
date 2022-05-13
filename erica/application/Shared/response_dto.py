@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 
 from erica.application.base_dto import BaseDto
 
@@ -25,3 +25,7 @@ class ResponseErrorDto(BaseDto):
 class ResultTransferPdfResponseDto(BaseDto):
     transferticket: str
     pdf: str
+
+
+class ResultValidationErrorResponseDto(BaseDto):
+    validation_errors: List[str]

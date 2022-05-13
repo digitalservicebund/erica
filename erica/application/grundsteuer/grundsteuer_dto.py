@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, Union
 
-from erica.application.Shared.response_dto import ResponseBaseDto, ResultTransferPdfResponseDto
+from erica.application.Shared.response_dto import ResponseBaseDto, ResultTransferPdfResponseDto, \
+    ResultValidationErrorResponseDto
 from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Eigentuemer
 
 from erica.application.grundsteuer.camel_case_input import CamelCaseInput
@@ -28,4 +29,4 @@ class GrundsteuerDto(CamelCaseInput):
 # Output
 
 class GrundsteuerResponseDto(ResponseBaseDto):
-    result: Optional[ResultTransferPdfResponseDto]
+    result: Optional[Union[ResultTransferPdfResponseDto, ResultValidationErrorResponseDto]]

@@ -7,7 +7,7 @@ from freezegun import freeze_time
 
 from erica.application.JobService.job import perform_job
 from erica.domain.Shared.Status import Status
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, EricTransferError
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
@@ -47,19 +47,20 @@ class TestJob:
 
     @pytest.mark.asyncio
     async def test_if_service_raises_error_then_update_entity_in_database_with_correct_values(self):
-        validation_problems = "These are not the Ericas you are looking for"
         mock_entity = MagicMock(id="R2-D2", request_id="C3PO")
         mock_get_by_job_request_id = MagicMock(return_value=mock_entity)
         mock_update = MagicMock()
         mock_repository = MagicMock(get_by_job_request_id=mock_get_by_job_request_id, update=mock_update)
-        mock_service = MagicMock(apply_to_elster=MagicMock(side_effect=EricGlobalValidationError(
-            eric_response=f"<xml><Text>{validation_problems}</Text></xml>".encode())))
+        mock_service = MagicMock(apply_to_elster=MagicMock(side_effect=EricTransferError(
+            eric_response=f"<xml>Eric Response</xml>".encode(),
+            server_response=f"<xml>Server Response</xml>".encode())))
 
         await perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
 
         assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('message')
-        assert mock_entity.error_message == [validation_problems]
+        assert mock_entity.error_message == EricProcessNotSuccessful().generate_error_response().get('message')
+        assert mock_entity.result is None
         assert mock_entity.status == Status.failed
         assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
 
@@ -77,7 +78,8 @@ class TestJob:
                               payload_type=MagicMock(), logger=MagicMock())
 
         assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('message')
-        assert mock_entity.error_message == [validation_problems]
+        assert mock_entity.error_message == EricProcessNotSuccessful().generate_error_response().get('message')
+        assert mock_entity.result == {'validation_errors': [validation_problems]}
         assert mock_entity.status == Status.failed
         assert mock_update.mock_calls == [call(mock_entity.id, mock_entity)]
 
