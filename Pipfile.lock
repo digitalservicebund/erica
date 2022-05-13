@@ -488,11 +488,11 @@
         },
         "pyhumps": {
             "hashes": [
-                "sha256:20bd389462108c70172a826effb71de5383cb0eff4797d69658e799cc57160a1",
-                "sha256:711c5777e503c013551205689d1e6c60fab48fb9d3f2e4172c6728b7b9d5e651"
+                "sha256:5616f0afdbc73ef479fa9999f4abdcb336a0232707ff1a0b86e29fc9339e18da",
+                "sha256:c6f2d833f2c7afae039d71b7dc0aba5412ae5b8c8c33d4a208c1d412de17229e"
             ],
             "index": "pypi",
-            "version": "==3.7.0"
+            "version": "==3.7.1"
         },
         "pyparsing": {
             "hashes": [
