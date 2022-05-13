@@ -2,7 +2,7 @@ from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grun
     elsterify_wirtschaftliche_einheit_zaehler
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden, EFlurstueck, \
     EAngFlaeche, EEntwZust, EAngGrund, EAngGrundstuecksart
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
+from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck, SampleFlurstueck
 
 

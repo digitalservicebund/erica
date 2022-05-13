@@ -4,8 +4,8 @@ import pytest
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date, \
     elsterify_grundstuecksart, elsterify_wirtschaftliche_einheit_zaehler, elsterify_eigentumsverhaeltnis
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Anrede
+from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Grundstuecksart
 from erica_legacy.samples.grundsteuer_sample_data import SampleEigentuemer, SamplePerson
 
 

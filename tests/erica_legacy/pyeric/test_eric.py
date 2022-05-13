@@ -4,11 +4,12 @@ from unittest.mock import patch, MagicMock, mock_open
 
 import pytest
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from tests.erica_legacy.utils import gen_random_key, missing_cert, missing_pyeric_lib
 from erica.erica_legacy.pyeric.eric import EricWrapper, EricDruckParameterT, EricVerschluesselungsParameterT, EricResponse, \
     get_eric_wrapper
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricNullReturnedError, EricGlobalError
+from tests.utils import read_text_from_sample
 
 TEST_CERTIFICATE_PATH = 'erica/erica_legacy/instances/blueprint/cert.pfx'
 
@@ -854,14 +855,13 @@ class TestGetBelegIds(unittest.TestCase):
         self.abruf_code = get_settings().abruf_code
         self.print_path = 'Not/All/Those/Who/Wander/Are/Lost'
 
-        with open('tests/erica_legacy/samples/sample_vast_activation_response.xml') as sample_xml:
-            self.eric_api_with_mocked_process_method = EricWrapper()
-            self.eric_api_with_mocked_process_method.initialise()
-            self.mock_fun_process = MagicMock(
-                return_value=EricResponse(0, eric_response="".encode(), server_response=sample_xml.read().encode()))
-            self.eric_api_with_mocked_process_method.process = self.mock_fun_process
-            self.eric_api_with_mocked_process_method.get_cert_handle = MagicMock(return_value=1)
-            self.eric_api_with_mocked_process_method.close_cert_handle = MagicMock(return_value=None)
+        self.eric_api_with_mocked_process_method = EricWrapper()
+        self.eric_api_with_mocked_process_method.initialise()
+        self.mock_fun_process = MagicMock(
+            return_value=EricResponse(0, eric_response="".encode(), server_response=read_text_from_sample('sample_vast_activation_response.xml', 'rb')))
+        self.eric_api_with_mocked_process_method.process = self.mock_fun_process
+        self.eric_api_with_mocked_process_method.get_cert_handle = MagicMock(return_value=1)
+        self.eric_api_with_mocked_process_method.close_cert_handle = MagicMock(return_value=None)
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_get_beleg_ids_calls_process_method(self):

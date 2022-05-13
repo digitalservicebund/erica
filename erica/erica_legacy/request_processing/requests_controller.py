@@ -1,6 +1,6 @@
 import base64
 
-from erica.erica_legacy.config import get_settings
+from erica.config import get_settings
 from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_steuernummer
 from erica.erica_legacy.elster_xml.elster_xml_generator import get_belege_xml, generate_vorsatz_without_tax_number, \
     generate_vorsatz_with_tax_number
@@ -61,7 +61,7 @@ class EricaRequestController(object):
         raise NotImplementedError
 
     def _is_testmerker_used(self):
-        return self.input_data.idnr in SPECIAL_TESTMERKER_IDNR
+        return self.input_data.tax_id_number in SPECIAL_TESTMERKER_IDNR
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = {}
@@ -131,7 +131,7 @@ class EstRequestController(EstValidationRequestController):
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
-        response['pdf'] = base64.b64encode(pyeric_response.pdf)
+        response['pdf'] = (base64.b64encode(pyeric_response.pdf)).decode('utf-8')
         return response
 
 
@@ -150,7 +150,7 @@ class UnlockCodeRequestController(TransferTicketRequestController):
         response = super().generate_json(pyeric_response)
 
         response["elster_request_id"] = get_antrag_id_from_xml(pyeric_response.server_response)
-        response["idnr"] = self.input_data.idnr
+        response["idnr"] = self.input_data.tax_id_number
 
         return response
 
@@ -165,7 +165,7 @@ class UnlockCodeActivationRequestController(TransferTicketRequestController):
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
         response["elster_request_id"] = get_antrag_id_from_xml(pyeric_response.server_response)
-        response["idnr"] = self.input_data.idnr
+        response["idnr"] = self.input_data.tax_id_number
         return response
 
 
@@ -232,7 +232,7 @@ class GetBelegeRequestController(EricaRequestController):
         return get_relevant_beleg_ids(pyeric_response.server_response, self._NEEDED_BELEG_ART)
 
     def _request_encrypted_belege(self, beleg_ids):
-        user_data = {'idnr': self.input_data.idnr}
+        user_data = {'idnr': self.input_data.tax_id_number}
         get_beleg_xml = elster_xml_generator.generate_full_vast_beleg_request_xml(user_data, beleg_ids)
         pyeric_response = self._BELEG_REQUEST_PYERIC_CONTROLLER(get_beleg_xml).get_eric_response()
 

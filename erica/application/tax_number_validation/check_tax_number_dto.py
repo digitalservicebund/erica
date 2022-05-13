@@ -1,34 +1,27 @@
-from enum import Enum
+from typing import Optional
 
+from erica.application.Shared.response_dto import ResponseBaseDto
 from erica.application.base_dto import BaseDto
+from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload, StateAbbreviation
 
 
-class StateAbbreviation(str, Enum):
-    bw = "bw"
-    by = "by"
-    be = "be"
-    bb = "bb"
-    hb = "hb"
-    hh = "hh"
-    he = "he"
-    mv = "mv"
-    nd = "nd"
-    nw = "nw"
-    rp = "rp"
-    sl = "sl"
-    sn = "sn"
-    st = "st"
-    sh = "sh"
-    th = "th"
-
-    # To find the correct values case insensitively
-    @classmethod
-    def _missing_(cls, value):
-        for member in cls:
-            if member.lower() == value.lower():
-                return member
-
-
-class CheckTaxNumberDto(BaseDto):
+class CheckTaxNumberPayloadDto(BaseDto):
     state_abbreviation: StateAbbreviation
     tax_number: str
+
+
+# Input
+
+class CheckTaxNumberDto(BaseDto):
+    payload: CheckTaxNumberPayload
+    clientIdentifier: str
+
+
+# Output
+
+class ResultTaxResponseDto(BaseDto):
+    is_valid: bool
+
+
+class TaxResponseDto(ResponseBaseDto):
+    result: Optional[ResultTaxResponseDto]

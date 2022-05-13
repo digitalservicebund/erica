@@ -1,10 +1,12 @@
 from abc import ABC
-from datetime import datetime
 from uuid import UUID
+import datetime as dt
 
 from pydantic import BaseModel
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
+from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
@@ -51,3 +53,22 @@ class EricaRequestRepository(
 
         self.db_connection.delete(entity)
         self.db_connection.commit()
+
+    def delete_success_fail_old_entities(self, ttl) -> int:
+        stmt = self.DatabaseEntity.__table__.delete().where(
+            or_(self.DatabaseEntity.status == Status.success, self.DatabaseEntity.status == Status.failed),
+            self.DatabaseEntity.updated_at < dt.datetime.now() - dt.timedelta(minutes=ttl))
+        deleted = self.db_connection.execute(stmt)
+        self.db_connection.commit()
+        return deleted.rowcount
+
+    def set_not_processed_entities_to_failed(self, ttl) -> int:
+        stmt = self.DatabaseEntity.__table__.update() \
+            .where(or_(self.DatabaseEntity.status == Status.new, self.DatabaseEntity.status == Status.scheduled,
+                       self.DatabaseEntity.status == Status.processing),
+                   self.DatabaseEntity.updated_at < dt.datetime.now() - dt.timedelta(
+                       minutes=ttl)).values(
+            status=Status.failed, error_code="999", error_message="Request could not be processed within 2 minutes.")
+        updated = self.db_connection.execute(stmt)
+        self.db_connection.commit()
+        return updated.rowcount

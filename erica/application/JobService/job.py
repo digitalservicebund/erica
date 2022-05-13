@@ -2,17 +2,17 @@ from datetime import datetime
 from logging import Logger
 from typing import Type
 from uuid import UUID
-
-from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobServiceInterface
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
+from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
-async def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface, dto: Type[BaseDto], logger: Logger):
+async def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,
+                      payload_type: Type[BasePayload], logger: Logger):
     """
     The basic implementation for a job that is put on the Erica queue. It will get an entity, interact with the ERiC
     library using the service and then update the entity according to the result from the service.
@@ -25,7 +25,7 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
         logger.warning(f"Entity not found for request_id {request_id}", exc_info=True)
         raise
 
-    request_payload: dto = dto.parse_obj(entity.payload)
+    request_payload: payload_type = payload_type.parse_obj(entity.payload)
     start_time = datetime.now()
 
     try:
@@ -33,6 +33,9 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
 
         try:
             response = await service.apply_to_elster(request_payload, True)
+            # We do not want to send the server_response or eric_response to the clients in the success case
+            response.pop('server_response', None)
+            response.pop('eric_response', None)
             entity.result = response
             entity.status = Status.success
             repository.update(entity.id, entity)
@@ -41,8 +44,8 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
                 f"Job failed: {entity}. Got Error Message: {e.generate_error_response(True).__str__()}",
                 exc_info=True
             )
-            entity.error_code = e.generate_error_response().get('code')
-            entity.error_message = e.generate_error_response().get('message')
+            entity.error_code = e.generate_error_response().get('message')
+            entity.error_message = e.generate_error_response().get('validation_problems', e.generate_error_response().get('message'))
             entity.status = Status.failed
             repository.update(entity.id, entity)
             raise

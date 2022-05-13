@@ -278,7 +278,7 @@ class EricProcessNotSuccessful(Exception):
 
     @staticmethod
     def get_eric_error_code_message(res_code):
-        return _ERIC_ERROR_MESSAGES.get(res_code, "Unknown error message")
+        return _ERIC_ERROR_MESSAGES.get(res_code, "UNKNOWN_ERROR")
 
     def generate_error_response(self, include_responses=False):
         """

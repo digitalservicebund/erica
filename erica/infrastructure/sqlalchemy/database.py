@@ -4,8 +4,7 @@ from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
-from erica.erica_legacy.config import get_settings
-from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
+from erica.config import get_settings
 
 
 def orjson_serializer(obj):
@@ -20,16 +19,8 @@ def orjson_deserializer(json):
 
 
 def get_engine():
-    return create_engine(get_settings().database_url, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
-
-
-def run_migrations():
-    __create_tables_if_not_exists()
-
-
-def __create_tables_if_not_exists():
-    # NOTE:  use Alembic for migrations (https://alembic.sqlalchemy.org/en/latest/)
-    EricaRequestSchema.metadata.create_all(bind=get_engine())
+    return create_engine(
+        get_settings().database_url, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
 
 
 class DatabaseSessionProvider(Provider[Session]):

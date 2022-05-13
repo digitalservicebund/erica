@@ -1,8 +1,8 @@
 from datetime import date
 from typing import Union
 
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anrede, Eigentuemer
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_grundstueck import Grundstuecksart
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Anrede, Eigentuemer
+from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Grundstuecksart
 
 
 def elsterify_anrede(anrede_input: Anrede):
@@ -29,7 +29,7 @@ def elsterify_grundstuecksart(grundstuecksart_input: Grundstuecksart):
 def elsterify_eigentumsverhaeltnis(eigentuemer_input: Eigentuemer):
     if len(eigentuemer_input.person) == 1:
         return "0"  # Alleineigentum
-    elif len(eigentuemer_input.person) == 2 and eigentuemer_input.verheiratet.are_verheiratet:
+    elif len(eigentuemer_input.person) == 2 and eigentuemer_input.verheiratet:
         return "4"  # Ehegatten / Lebenspartner
     else:
         return "6"  # Bruchteilsgemeinschaft

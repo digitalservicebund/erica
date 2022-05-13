@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_anrede, elsterify_date
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
     EEigentumsverh, EEmpfangsbevollmaechtigter
-from erica.erica_legacy.request_processing.erica_input.v2.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleVertreter, SampleBevollmaechtigter, SamplePerson, \
     SampleEigentuemer, DefaultSampleEigentuemer
 
@@ -34,7 +34,7 @@ class TestEGesetzlicherVertreter:
         assert result.E7415601 == full_vertreter_obj.adresse.plz
         assert result.E7415602 == full_vertreter_obj.adresse.postfach
         assert result.E7415603 == full_vertreter_obj.adresse.ort
-        assert result.E7415604 == full_vertreter_obj.telefonnummer.telefonnummer
+        assert result.E7415604 == full_vertreter_obj.telefonnummer
         assert len(vars(result)) == 11
 
     def test_if_all_optional_attributes_not_given_then_attributes_set_correctly(self):
@@ -75,8 +75,8 @@ class TestEPersonData:
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 == person_obj.adresse.postfach
         assert result.E7404522 == person_obj.adresse.ort
-        assert result.E7414601 == person_obj.telefonnummer.telefonnummer
-        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.E7414601 == person_obj.telefonnummer
+        assert result.E7404519 == person_obj.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
         assert len(vars(result)) == 16
@@ -100,7 +100,7 @@ class TestEPersonData:
         assert result.E7404527 is None
         assert result.E7404522 == person_obj.adresse.ort
         assert result.E7414601 is None
-        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.E7404519 == person_obj.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter is None
         assert len(vars(result)) == 16
@@ -124,8 +124,8 @@ class TestEPersonData:
         assert result.E7404540 == person_obj.adresse.plz
         assert result.E7404527 == person_obj.adresse.postfach
         assert result.E7404522 == person_obj.adresse.ort
-        assert result.E7414601 == person_obj.telefonnummer.telefonnummer
-        assert result.E7404519 == person_obj.steuer_id.steuer_id
+        assert result.E7414601 == person_obj.telefonnummer
+        assert result.E7404519 == person_obj.steuer_id
         assert result.Anteil == EAnteil(person_obj.anteil)
         assert result.Ges_Vertreter == EGesetzlicherVertreter(person_obj.vertreter)
         assert len(vars(result)) == 16
@@ -144,7 +144,7 @@ class TestEEigentumsverh:
         person1 = SamplePerson().parse()
         person2 = SamplePerson().parse()
         eigentuemer_obj = Eigentuemer.parse_obj(
-            {"person": [person1, person2], "verheiratet": {"are_verheiratet": True}})
+            {"person": [person1, person2], "verheiratet": True})
 
         result = EEigentumsverh(eigentuemer_obj)
 
@@ -187,7 +187,7 @@ class TestEEmpfangsbevollmaechtigter:
         assert result.E7404640 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.plz
         assert result.E7404627 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.postfach
         assert result.E7404622 == eigentuemer_obj.empfangsbevollmaechtigter.adresse.ort
-        assert result.E7412201 == eigentuemer_obj.empfangsbevollmaechtigter.telefonnummer.telefonnummer
+        assert result.E7412201 == eigentuemer_obj.empfangsbevollmaechtigter.telefonnummer
         assert result.E7412901 is None
         assert len(vars(result)) == 12
 

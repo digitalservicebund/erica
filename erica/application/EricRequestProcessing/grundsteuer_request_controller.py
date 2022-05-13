@@ -1,13 +1,13 @@
 import base64
 
+
 from erica.erica_legacy.pyeric.pyeric_controller import GrundsteuerPyericProcessController
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.application.EricRequestProcessing.requests_controller import TransferTicketRequestController
 from erica.erica_legacy.elster_xml.common.transfer_header import add_transfer_header
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import get_full_grundsteuer_data_representation
 from erica.erica_legacy.elster_xml.transfer_header_fields import get_grundsteuer_th_fields
-
+from erica.erica_legacy.request_processing.requests_controller import TransferTicketRequestController
 
 class GrundsteuerRequestController(TransferTicketRequestController):
     _PYERIC_CONTROLLER = GrundsteuerPyericProcessController
@@ -26,5 +26,5 @@ class GrundsteuerRequestController(TransferTicketRequestController):
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = super().generate_json(pyeric_response)
-        response['pdf'] = base64.b64encode(pyeric_response.pdf)
+        response['pdf'] = base64.b64encode(pyeric_response.pdf).decode('utf-8')
         return response

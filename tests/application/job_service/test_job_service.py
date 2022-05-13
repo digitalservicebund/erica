@@ -1,16 +1,17 @@
 from datetime import datetime
-from unittest.mock import Mock, MagicMock, call, patch
+from unittest.mock import Mock, MagicMock, call
 from uuid import UUID
 
 import pytest
 from freezegun import freeze_time
 from sqlalchemy.orm import Session
 
-from erica.application.FreischaltCode.FreischaltCode import BaseDto
 from erica.application.JobService.job_service import JobService
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.domain.Shared.EricaAuftrag import RequestType
+from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
+from erica.config import get_settings
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
@@ -58,7 +59,7 @@ class PickableMock(Mock):
         return Mock, ()
 
 
-class MockDto(BaseDto):
+class MockDto(BasePayload):
     name: str
     friend: str
 
@@ -77,7 +78,7 @@ class TestJobServiceQueue:
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
+        service.add_to_queue(input_data, "steuerlotse", job_type=RequestType.freischalt_code_activate)
 
         assert service.repository[0] == EricaRequest(
             id="1234",
@@ -85,7 +86,7 @@ class TestJobServiceQueue:
             payload=input_data,
             created_at=None,
             updated_at=None,
-            creator_id="api",
+            creator_id="steuerlotse",
             type=RequestType.freischalt_code_activate
         )
 
@@ -97,10 +98,14 @@ class TestJobServiceQueue:
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        service.add_to_queue(input_data, job_type=RequestType.freischalt_code_activate)
+        service.add_to_queue(input_data, "steuerlotse", job_type=RequestType.freischalt_code_activate)
 
-        assert mock_bg_worker.enqueue.mock_calls == [
-            call(mock_job, UUID('00000000-0000-0000-0000-000000000000'))]
+        mock_call = mock_bg_worker.enqueue.mock_calls[0]
+        assert mock_call.args[0] == mock_job
+        assert mock_call.args[1] == UUID('00000000-0000-0000-0000-000000000000')
+        assert mock_call.kwargs['ttl'] == get_settings().ttl_queuing_job_in_sec
+        assert mock_call.kwargs['retry'].max == get_settings().queue_retry_repetitions
+        assert mock_call.kwargs['retry'].intervals == get_settings().queue_retry_interval_seconds
 
 
 class TestJobServiceRun:
