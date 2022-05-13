@@ -603,7 +603,7 @@ class TestV2SendEst:
         assert response.json()["processStatus"] == "Success"
         assert response.json()["result"] is not None
         assert response.json()["result"]["pdf"] is not None
-        assert response.json()["result"]["transfer_ticket"] is not None
+        assert response.json()["result"]["transferticket"] is not None
         assert response.json()["errorCode"] is None
         assert response.json()["errorMessage"] is None
 
@@ -666,6 +666,8 @@ class TestV2GrundsteuerRequest:
         assert response.status_code == 200
         assert response.json()["processStatus"] == "Success"
         assert response.json()["result"] is not None
+        assert response.json()["result"]["pdf"] is not None
+        assert response.json()["result"]["transferticket"] is not None
         assert response.json()["errorCode"] is None
         assert response.json()["errorMessage"] is None
 

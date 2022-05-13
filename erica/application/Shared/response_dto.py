@@ -23,5 +23,5 @@ class ResponseErrorDto(BaseDto):
 
 
 class ResultTransferPdfResponseDto(BaseDto):
-    transfer_ticket: str
+    transferticket: str
     pdf: str

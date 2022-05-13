@@ -65,11 +65,11 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
     request_id = uuid.uuid4()
     tax_id_number = "test_idnr"
     elster_request_id = "test_elster_request_id"
-    transfer_ticket = "test_transfer_ticket"
+    transferticket = "test_transferticket"
     erica_request = EricaRequest(type=request_type, status=Status.success,
                                  payload={"tax_id_number": tax_id_number},
                                  result={"elster_request_id": elster_request_id,
-                                         "transfer_ticket": transfer_ticket},
+                                         "transferticket": transferticket},
                                  request_id=request_id, creator_id="test")
     with patch("erica.api.v2.endpoints.fsc.get_service", MagicMock()) as get_service_mock:
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
@@ -78,7 +78,7 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
         assert response.processStatus == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
         assert response.result.elster_request_id == elster_request_id
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None
 
@@ -87,10 +87,10 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
 async def test_if_get_fsc_revocation_job_returns_success_status_with_result():
     request_id = uuid.uuid4()
     tax_id_number = "test_idnr"
-    transfer_ticket = "test_transfer_ticket"
+    transferticket = "test_transferticket"
     erica_request = EricaRequest(type=RequestType.freischalt_code_revocate, status=Status.success,
                                  payload={"tax_id_number": tax_id_number},
-                                 result={"transfer_ticket": transfer_ticket, "idnr": tax_id_number},
+                                 result={"transferticket": transferticket, "idnr": tax_id_number},
                                  request_id=request_id, creator_id="test")
     with patch("erica.api.v2.endpoints.fsc.get_service", MagicMock()) as get_service_mock:
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
@@ -98,7 +98,7 @@ async def test_if_get_fsc_revocation_job_returns_success_status_with_result():
         response = await get_fsc_revocation_job(request_id)
         assert response.processStatus == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None
 
@@ -125,10 +125,10 @@ async def test_if_get_tax_validity_job_returns_success_status_with_result():
 async def test_if_get_send_est_job_returns_success_status_with_result():
     request_id = uuid.uuid4()
     pdf = "test_pdf"
-    transfer_ticket = "test_transfer_ticket"
+    transferticket = "test_transferticket"
     erica_request = EricaRequest(type=RequestType.send_est, status=Status.success,
                                  payload={},
-                                 result={"transfer_ticket": transfer_ticket, "pdf": pdf},
+                                 result={"transferticket": transferticket, "pdf": pdf},
                                  request_id=request_id, creator_id="test")
     with patch("erica.api.v2.endpoints.est.get_service", MagicMock()) as get_service_mock:
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
@@ -136,7 +136,7 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
         response = await get_send_est_job(request_id)
         assert response.processStatus == JobState.SUCCESS
         assert response.result.pdf == pdf
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None
 
@@ -145,10 +145,10 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
 async def test_if_get_grundsteuer_job_returns_success_status_with_result():
     request_id = uuid.uuid4()
     pdf = "test_pdf"
-    transfer_ticket = "test_transfer_ticket"
+    transferticket = "test_transferticket"
     erica_request = EricaRequest(type=RequestType.grundsteuer, status=Status.success,
                                  payload={},
-                                 result={"transfer_ticket": transfer_ticket, "pdf": pdf},
+                                 result={"transferticket": transferticket, "pdf": pdf},
                                  request_id=request_id, creator_id="test")
     with patch("erica.api.v2.endpoints.grundsteuer.get_service", MagicMock()) as get_service_mock:
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
@@ -156,7 +156,7 @@ async def test_if_get_grundsteuer_job_returns_success_status_with_result():
         response = await get_grundsteuer_job(request_id)
         assert response.processStatus == JobState.SUCCESS
         assert response.result.pdf == pdf
-        assert response.result.transfer_ticket == transfer_ticket
+        assert response.result.transferticket == transferticket
         assert response.errorCode is None
         assert response.errorMessage is None
 
