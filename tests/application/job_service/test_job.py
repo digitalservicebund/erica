@@ -23,7 +23,7 @@ class TestJob:
                               payload_type=MagicMock(), logger=MagicMock())
 
     @pytest.mark.asyncio
-    async def test_if_service_raises_not_raisable_error_then_job_raises_error(self):
+    async def test_if_service_raises_not_raisable_error_then_job_does_not_raise_error(self):
         mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(3))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
         try:
