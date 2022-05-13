@@ -259,7 +259,7 @@ _ERIC_PRINT_ERRORS = {
     610501012: "ERIC_PRINT_FUSSTEXT_ZU_LANG"
 }
 
-ERIC_ERROR_MESSAGES = {**_ERIC_SUCCESS_CODE, **_ERIC_CUSTOM_ERROR_CODES, **_ERIC_GLOBAL_VALIDATION_ERRORS,
+_ERIC_ERROR_MESSAGES = {**_ERIC_SUCCESS_CODE, **_ERIC_CUSTOM_ERROR_CODES, **_ERIC_GLOBAL_VALIDATION_ERRORS,
                         **_ERIC_GLOBAL_INITIALISATION_ERRORS, **_ERIC_GLOBAL_ERRORS, **_ERIC_TRANSFER_ERRORS,
                         **_ERIC_CRYPT_ERRORS, **_ERIC_IO_ERRORS, **_ERIC_PRINT_ERRORS}
 
@@ -284,7 +284,7 @@ class EricProcessNotSuccessful(Exception):
 
     @staticmethod
     def get_eric_error_code_message(res_code):
-        return ERIC_ERROR_MESSAGES.get(res_code, "UNKNOWN_ERROR")
+        return _ERIC_ERROR_MESSAGES.get(res_code, "UNKNOWN_ERROR")
 
     def generate_error_response(self, include_responses=False):
         """
