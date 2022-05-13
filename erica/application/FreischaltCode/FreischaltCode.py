@@ -14,7 +14,7 @@ class FreischaltCodeRequestPayloadDto(BaseDto):
 
 
 class FreischaltCodeActivatePayloadDto(BaseDto):
-    tax_id_number: str
+    tax_id_number: Optional[str]
     freischalt_code: str
     elster_request_id: str
 
@@ -30,7 +30,7 @@ class FreischaltCodeActivateDto(BaseDto):
 
 
 class FreischaltCodeRevocatePayloadDto(BaseDto):
-    tax_id_number: str
+    tax_id_number: Optional[str]
     elster_request_id: str
 
 
