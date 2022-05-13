@@ -15,7 +15,7 @@ class TestJob:
 
     @pytest.mark.asyncio
     async def test_if_service_raises_error_then_job_raises_error(self):
-        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful)
+        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(610201215))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
 
         with pytest.raises(EricProcessNotSuccessful):
@@ -24,7 +24,7 @@ class TestJob:
 
     @pytest.mark.asyncio
     async def test_if_service_raises_error_then_log_error_in_warning_logger(self):
-        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful)
+        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(610201215))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
         warning_logger = MagicMock()
         logger = MagicMock(warning=warning_logger)
@@ -45,8 +45,7 @@ class TestJob:
         mock_service = MagicMock(apply_to_elster=MagicMock(side_effect=EricGlobalValidationError(
             eric_response=f"<xml><Text>{validation_problems}</Text></xml>".encode())))
 
-        with pytest.raises(EricProcessNotSuccessful):
-            await perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
+        await perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
 
         assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('message')
@@ -64,8 +63,7 @@ class TestJob:
         mock_service = MagicMock(apply_to_elster=MagicMock(side_effect=EricGlobalValidationError(
             eric_response=f"<xml><Text>{validation_problems}</Text></xml>".encode())))
 
-        with pytest.raises(EricProcessNotSuccessful):
-            await perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
+        await perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
 
         assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('message')
@@ -76,7 +74,7 @@ class TestJob:
     @pytest.mark.asyncio
     @freeze_time("Jan 3th, 1892", auto_tick_seconds=15)
     async def test_if_service_raises_error_then_log_runtime_of_job(self):
-        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful)
+        mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(610201215))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
         info_logger = MagicMock()
         logger = MagicMock(info=info_logger)
