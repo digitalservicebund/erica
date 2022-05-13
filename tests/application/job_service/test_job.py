@@ -1,4 +1,4 @@
-import random
+import secrets
 from datetime import timedelta
 from unittest.mock import MagicMock, call, AsyncMock
 from uuid import uuid4
@@ -204,7 +204,7 @@ class TestJob:
 
 
 def get_random_retry_error_code():
-    retry_error_message = random.choice(ERIC_ERRORS_WITH_RETRY)
+    retry_error_message = secrets.choice(ERIC_ERRORS_WITH_RETRY)
     key_list = list(ERIC_ERROR_MESSAGES.keys())
     val_list = list(ERIC_ERROR_MESSAGES.values())
     return key_list[val_list.index(retry_error_message)]
@@ -212,4 +212,4 @@ def get_random_retry_error_code():
 
 def get_random_non_retry_error_code():
     non_retry_errors = {k: v for k, v in ERIC_ERROR_MESSAGES.items() if v not in ERIC_ERRORS_WITH_RETRY}
-    return random.choice(list(non_retry_errors.keys()))
+    return secrets.choice(list(non_retry_errors.keys()))
