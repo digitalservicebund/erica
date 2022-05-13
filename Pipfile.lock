@@ -82,11 +82,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:53e19890124be45e47ec4f7ffdaf587343d375dbd7c7a501e55aeff80680fec0",
-                "sha256:e2fc586fdc0b54c08fc509e906e87fb358b9f5607b12f526f995ee74a4a4bcd3"
+                "sha256:79b7773b48c9c59acd42ceba0a05b27ab9e326e9ed9b0ca35f41ad8abad61808",
+                "sha256:d99381bda4eed5896b74f6250132e2e6484c2d6e406b1def862113ffdb41c523"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==1.25.12"
+            "version": "==1.25.13"
         },
         "certifi": {
             "hashes": [
@@ -369,11 +369,11 @@
         },
         "prometheus-fastapi-instrumentator": {
             "hashes": [
-                "sha256:5371f1b494e2b00017a02898d854119b4929025d1a203670b07b3f42dd0b5526",
-                "sha256:da40ea0df14b0e95d584769747fba777522a8df6a8c47cec2edf798f1fff49b5"
+                "sha256:53b38095dda0a9e01876de5598c4dae911f5b38190967efd8d79aef8d26a83d6",
+                "sha256:900e191ecc09a10e928e4d8679b5bf114c47931be9f55f1fbb25baade173e16d"
             ],
             "index": "pypi",
-            "version": "==5.7.1"
+            "version": "==5.8.1"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -766,6 +766,14 @@
             ],
             "version": "==1.5.1"
         },
+        "async-timeout": {
+            "hashes": [
+                "sha256:2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15",
+                "sha256:8ca1e4fcf50d07413d66d1a5e416e42cfdf5851c981d679a09851a6853383b3c"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==4.0.2"
+        },
         "attrs": {
             "hashes": [
                 "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4",
@@ -807,11 +815,11 @@
         },
         "fakeredis": {
             "hashes": [
-                "sha256:7c2c4ba1b42e0a75337c54b777bf0671056b4569650e3ff927e4b9b385afc8ec",
-                "sha256:be3668e50f6b57d5fc4abfd27f9f655bed07a2c5aecfc8b15d0aad59f997c1ba"
+                "sha256:69697ffeeb09939073605eeac97f524bccabae04265757a575c7fc923087aa65",
+                "sha256:cc033ebf9af9f42bba6aa538a3e1a9f1732686b8b7e9ef50c7a44955bbc2aff8"
             ],
             "index": "pypi",
-            "version": "==1.7.1"
+            "version": "==1.7.4"
         },
         "flake8": {
             "hashes": [
