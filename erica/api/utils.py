@@ -35,7 +35,7 @@ def generate_error_response(errorcode=-1, errormessage="API resource not yet imp
             Returns:
                     (dict): dict with error respones object.
     """
-    error_response = {"errorCode": errorcode,
+    error_response = {"error_code": errorcode,
                       "errorMessage": errormessage
                       }
     return error_response

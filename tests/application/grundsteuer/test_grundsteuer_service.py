@@ -23,7 +23,7 @@ class TestGrundsteuerService:
         response = GrundsteuerService(service=mock_service).get_response_grundsteuer("test")
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None
 
     def test_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
@@ -39,7 +39,7 @@ class TestGrundsteuerService:
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = GrundsteuerService(service=mock_service).get_response_grundsteuer("test")
         assert response.process_status == JobState.FAILURE
-        assert response.errorCode == error_code
+        assert response.error_code == error_code
         assert response.errorMessage == error_message
         assert response.result is None
 
@@ -57,5 +57,5 @@ class TestGrundsteuerService:
         assert response.process_status == JobState.SUCCESS
         assert response.result.pdf == pdf
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None

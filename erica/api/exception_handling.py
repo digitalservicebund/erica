@@ -26,7 +26,7 @@ def generate_exception_handlers(app):
         logging.getLogger().info(f"The requested entity {request_id} is not present in the database.")
 
         return JSONResponse(
-            {"errorCode": exc.__class__.__name__,
+            {"error_code": exc.__class__.__name__,
              "errorMessage": f"The requested entity with id {request_id} was not found."},
             status_code=404,
         )
@@ -37,7 +37,7 @@ def generate_exception_handlers(app):
         logging.getLogger().info(
             f"The requested entity {request_id} was requested with the incorrect type {exc.requested_type}. Redirect to {redirection_url}")
         return JSONResponse(
-            {"errorCode": exc.__class__.__name__,
+            {"error_code": exc.__class__.__name__,
              "errorMessage": f"The actual location of the request id {request_id} is {redirection_url}"},
             status_code=404,
         )
@@ -46,7 +46,7 @@ def generate_exception_handlers(app):
         request_id = request.path_params.get('request_id')
         logging.getLogger().error(f"Request for entity {request_id} producted unexpected error: {str(exc)}")
         return JSONResponse(
-            {"errorCode": "internal_server_error",
+            {"error_code": "internal_server_error",
              "errorMessage": "An unexpected error occurred."},
             status_code=500,
         )
@@ -69,7 +69,7 @@ def generate_exception_handlers(app):
             return await request_validation_exception_handler(request, exc)
         else:
             return JSONResponse(
-                {"errorCode": exc.__class__.__name__,
+                {"error_code": exc.__class__.__name__,
                  "errorMessage": exc.errors()},
                 status_code=422,
             )

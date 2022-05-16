@@ -23,7 +23,7 @@ class TestFreischaltCodeService:
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_request("test")
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing])
@@ -37,7 +37,7 @@ class TestFreischaltCodeService:
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_activation("test")
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing])
@@ -51,7 +51,7 @@ class TestFreischaltCodeService:
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None
 
     def test_fsc_request_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
@@ -67,7 +67,7 @@ class TestFreischaltCodeService:
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_request("test")
         assert response.process_status == JobState.FAILURE
-        assert response.errorCode == error_code
+        assert response.error_code == error_code
         assert response.errorMessage == error_message
         assert response.result is None
 
@@ -84,7 +84,7 @@ class TestFreischaltCodeService:
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_activation("test")
         assert response.process_status == JobState.FAILURE
-        assert response.errorCode == error_code
+        assert response.error_code == error_code
         assert response.errorMessage == error_message
         assert response.result is None
 
@@ -101,7 +101,7 @@ class TestFreischaltCodeService:
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
         assert response.process_status == JobState.FAILURE
-        assert response.errorCode == error_code
+        assert response.error_code == error_code
         assert response.errorMessage == error_message
         assert response.result is None
 
@@ -122,7 +122,7 @@ class TestFreischaltCodeService:
         assert response.result.idnr == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None
 
     def test_fsc_activate_if_erica_request_found_and_success_then_return_success_response_dto(self):
@@ -142,7 +142,7 @@ class TestFreischaltCodeService:
         assert response.result.idnr == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None
 
     def test_fsc_revocate_if_erica_request_found_and_success_then_return_success_response_dto(self):
@@ -159,5 +159,5 @@ class TestFreischaltCodeService:
         assert response.process_status == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
+        assert response.error_code is None
         assert response.errorMessage is None

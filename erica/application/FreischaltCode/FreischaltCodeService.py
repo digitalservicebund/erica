@@ -49,7 +49,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
                 process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:
             return FreischaltcodeRequestAndActivationResponseDto(
-                process_status=map_status(erica_request.status), errorCode=erica_request.error_code,
+                process_status=map_status(erica_request.status), error_code=erica_request.error_code,
                 errorMessage=erica_request.error_message)
         else:
             return FreischaltcodeRequestAndActivationResponseDto(
@@ -66,7 +66,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
                 process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:
             return FreischaltcodeRevocationResponseDto(
-                process_status=map_status(erica_request.status), errorCode=erica_request.error_code,
+                process_status=map_status(erica_request.status), error_code=erica_request.error_code,
                 errorMessage=erica_request.error_message)
         else:
             return FreischaltcodeRevocationResponseDto(

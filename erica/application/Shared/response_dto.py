@@ -13,12 +13,12 @@ class JobState(Enum):
 class ResponseBaseDto(BaseDto):
     process_status: JobState
     result: Optional[BaseDto]
-    errorCode: Optional[str]
+    error_code: Optional[str]
     errorMessage: Optional[str]
 
 
 class ResponseErrorDto(BaseDto):
-    errorCode: str
+    error_code: str
     errorMessage: str
 
 
