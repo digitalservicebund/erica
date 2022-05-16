@@ -31,7 +31,7 @@ class TaxNumberValidityService(TaxNumberValidityServiceInterface):
         elif process_status == JobState.FAILURE:
             return TaxResponseDto(
                 process_status=map_status(erica_request.status), error_code=erica_request.error_code,
-                errorMessage=erica_request.error_message)
+                error_message=erica_request.error_message)
         else:
             return TaxResponseDto(
                 process_status=map_status(erica_request.status))

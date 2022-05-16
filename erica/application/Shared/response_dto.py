@@ -14,12 +14,12 @@ class ResponseBaseDto(BaseDto):
     process_status: JobState
     result: Optional[BaseDto]
     error_code: Optional[str]
-    errorMessage: Optional[str]
+    error_message: Optional[str]
 
 
 class ResponseErrorDto(BaseDto):
     error_code: str
-    errorMessage: str
+    error_message: str
 
 
 class ResultTransferPdfResponseDto(BaseDto):

@@ -24,7 +24,7 @@ class TestTaxNumberValidityService:
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
     def test_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
         error_code = "1"
@@ -40,7 +40,7 @@ class TestTaxNumberValidityService:
         response = TaxNumberValidityService(service=mock_service).get_response_tax_number_validity("test")
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
     def test_if_erica_request_found_and_success_then_return_success_response_dto(self):
@@ -56,4 +56,4 @@ class TestTaxNumberValidityService:
         assert response.process_status == JobState.SUCCESS
         assert response.result.is_valid == is_valid
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None

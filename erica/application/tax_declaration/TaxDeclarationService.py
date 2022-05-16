@@ -32,7 +32,7 @@ class TaxDeclarationService(TaxDeclarationServiceInterface):
         elif process_status == JobState.FAILURE:
             return EstResponseDto(
                 process_status=map_status(erica_request.status), error_code=erica_request.error_code,
-                errorMessage=erica_request.error_message, result=erica_request.result)
+                error_message=erica_request.error_message, result=erica_request.result)
         else:
             return EstResponseDto(
                 process_status=map_status(erica_request.status))

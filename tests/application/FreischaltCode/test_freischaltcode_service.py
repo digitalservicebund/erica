@@ -24,7 +24,7 @@ class TestFreischaltCodeService:
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing])
     def test_fsc_activate_if_erica_request_found_and_not_finished_then_return_processing_response_dto(self, status):
@@ -38,7 +38,7 @@ class TestFreischaltCodeService:
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
     @pytest.mark.parametrize("status", [Status.new, Status.scheduled, Status.processing])
     def test_fsc_revocate_if_erica_request_found_and_not_finished_then_return_processing_response_dto(self, status):
@@ -52,7 +52,7 @@ class TestFreischaltCodeService:
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
     def test_fsc_request_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
         error_code = "1"
@@ -68,7 +68,7 @@ class TestFreischaltCodeService:
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_request("test")
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
     def test_fsc_activate_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
@@ -85,7 +85,7 @@ class TestFreischaltCodeService:
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_activation("test")
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
     def test_fsc_revocate_if_erica_request_found_and_failed_then_return_failed_response_dto(self):
@@ -102,7 +102,7 @@ class TestFreischaltCodeService:
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
     def test_fsc_request_if_erica_request_found_and_success_then_return_success_response_dto(self):
@@ -123,7 +123,7 @@ class TestFreischaltCodeService:
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
     def test_fsc_activate_if_erica_request_found_and_success_then_return_success_response_dto(self):
         tax_id_number = "test_idnr"
@@ -143,7 +143,7 @@ class TestFreischaltCodeService:
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
     def test_fsc_revocate_if_erica_request_found_and_success_then_return_success_response_dto(self):
         tax_id_number = "test_idnr"
@@ -160,4 +160,4 @@ class TestFreischaltCodeService:
         assert response.result.idnr == tax_id_number
         assert response.result.transferticket == transferticket
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None

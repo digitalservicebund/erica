@@ -80,7 +80,7 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -100,7 +100,7 @@ async def test_if_get_fsc_revocation_job_returns_success_status_with_result():
         assert response.result.idnr == tax_id_number
         assert response.result.transferticket == transferticket
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -118,7 +118,7 @@ async def test_if_get_tax_validity_job_returns_success_status_with_result():
         assert response.process_status == JobState.SUCCESS
         assert response.result.is_valid == is_valid
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -138,7 +138,7 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
         assert response.result.pdf == pdf
         assert response.result.transferticket == transferticket
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -158,7 +158,7 @@ async def test_if_get_grundsteuer_job_returns_success_status_with_result():
         assert response.result.pdf == pdf
         assert response.result.transferticket == transferticket
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -181,7 +181,7 @@ async def test_if_get_fsc_job_returns_failure_status(api_method, request_type):
         response = await api_method(request_id)
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -200,7 +200,7 @@ async def test_if_get_tax_validity_job_returns_failure_status():
         response = await get_valid_tax_number_job(request_id)
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -219,7 +219,7 @@ async def test_if_get_est_job_returns_failure_status():
         response = await get_send_est_job(request_id)
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -238,7 +238,7 @@ async def test_if_get_grundsteuer_job_returns_failure_status():
         response = await get_grundsteuer_job(request_id)
         assert response.process_status == JobState.FAILURE
         assert response.error_code == error_code
-        assert response.errorMessage == error_message
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -260,7 +260,7 @@ async def test_if_get_fsc_job_returns_processing_status(mock_job_state, api_meth
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -277,7 +277,7 @@ async def test_if_get_tax_validity_job_returns_processing_status(mock_job_state,
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -294,4 +294,4 @@ async def test_if_get_est_job_returns_processing_status(mock_job_state, api_meth
         assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.error_code is None
-        assert response.errorMessage is None
+        assert response.error_message is None
