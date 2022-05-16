@@ -21,12 +21,12 @@ class FreischaltCodeActivatePayloadDto(BaseDto):
 
 class FreischaltCodeRequestDto(BaseDto):
     payload: FreischaltCodeRequestPayloadDto
-    clientIdentifier: str
+    client_identifier: str
 
 
 class FreischaltCodeActivateDto(BaseDto):
     payload: FreischaltCodeActivatePayloadDto
-    clientIdentifier: str
+    client_identifier: str
 
 
 class FreischaltCodeRevocatePayloadDto(BaseDto):
@@ -36,7 +36,7 @@ class FreischaltCodeRevocatePayloadDto(BaseDto):
 
 class FreischaltCodeRevocateDto(BaseDto):
     payload: FreischaltCodeRevocatePayloadDto
-    clientIdentifier: str
+    client_identifier: str
 
 
 # Output

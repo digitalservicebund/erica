@@ -15,7 +15,7 @@ class TaxDeclarationPayloadDto(BaseDto):
 
 class TaxDeclarationDto(BaseDto):
     payload: TaxDeclarationPayloadDto
-    clientIdentifier: str
+    client_identifier: str
 
 
 # Output

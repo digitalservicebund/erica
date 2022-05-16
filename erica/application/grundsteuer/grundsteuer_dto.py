@@ -23,7 +23,7 @@ class GrundsteuerPayload(BasePayload, ABC, CamelCaseInput):
 
 class GrundsteuerDto(CamelCaseInput):
     payload: GrundsteuerPayload
-    clientIdentifier: str
+    client_identifier: str
 
 
 # Output

@@ -14,7 +14,7 @@ class CheckTaxNumberPayloadDto(BaseDto):
 
 class CheckTaxNumberDto(BaseDto):
     payload: CheckTaxNumberPayload
-    clientIdentifier: str
+    client_identifier: str
 
 
 # Output

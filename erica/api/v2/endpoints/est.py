@@ -21,7 +21,7 @@ async def send_est(est_data_client_identifier: TaxDeclarationDto, request: Reque
     :param est_data_client_identifier: payload with client identifier and the JSON input data for the tax declaration.
     """
     result = get_job_service(RequestType.send_est).add_to_queue(
-        est_data_client_identifier.payload, est_data_client_identifier.clientIdentifier,
+        est_data_client_identifier.payload, est_data_client_identifier.client_identifier,
         RequestType.send_est)
     return RedirectResponse(
         request.url_for("get_send_est_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),

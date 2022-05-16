@@ -20,7 +20,7 @@ async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDto,
     :param tax_validity_client_identifier: payload with client identifier and the JSON input data for the tax number validity check.
     """
     result = get_job_service(RequestType.check_tax_number).add_to_queue(
-        tax_validity_client_identifier.payload, tax_validity_client_identifier.clientIdentifier,
+        tax_validity_client_identifier.payload, tax_validity_client_identifier.client_identifier,
         RequestType.check_tax_number)
     return RedirectResponse(
         request.url_for("get_valid_tax_number_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),
