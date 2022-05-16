@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from erica.application.grundsteuer.camel_case_input import CamelCaseInput
 
 
-class BaseDto(BaseModel):
+class BaseDto(CamelCaseInput):
     pass
