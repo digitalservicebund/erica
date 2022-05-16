@@ -369,11 +369,11 @@
         },
         "prometheus-fastapi-instrumentator": {
             "hashes": [
-                "sha256:5371f1b494e2b00017a02898d854119b4929025d1a203670b07b3f42dd0b5526",
-                "sha256:da40ea0df14b0e95d584769747fba777522a8df6a8c47cec2edf798f1fff49b5"
+                "sha256:53b38095dda0a9e01876de5598c4dae911f5b38190967efd8d79aef8d26a83d6",
+                "sha256:900e191ecc09a10e928e4d8679b5bf114c47931be9f55f1fbb25baade173e16d"
             ],
             "index": "pypi",
-            "version": "==5.7.1"
+            "version": "==5.8.1"
         },
         "psycopg2-binary": {
             "hashes": [
