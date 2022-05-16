@@ -28,14 +28,14 @@ class TaxDeclarationService(TaxDeclarationServiceInterface):
                 transferticket=erica_request.result["transferticket"],
                 pdf=erica_request.result["pdf"])
             return EstResponseDto(
-                processStatus=map_status(erica_request.status), result=result)
+                process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:
             return EstResponseDto(
-                processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
+                process_status=map_status(erica_request.status), errorCode=erica_request.error_code,
                 errorMessage=erica_request.error_message, result=erica_request.result)
         else:
             return EstResponseDto(
-                processStatus=map_status(erica_request.status))
+                process_status=map_status(erica_request.status))
 
 
 class TaxDeclarationServiceModule(Module):

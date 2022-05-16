@@ -21,7 +21,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_request("test")
-        assert response.processStatus == JobState.PROCESSING
+        assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.errorCode is None
         assert response.errorMessage is None
@@ -35,7 +35,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_activation("test")
-        assert response.processStatus == JobState.PROCESSING
+        assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.errorCode is None
         assert response.errorMessage is None
@@ -49,7 +49,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
-        assert response.processStatus == JobState.PROCESSING
+        assert response.process_status == JobState.PROCESSING
         assert response.result is None
         assert response.errorCode is None
         assert response.errorMessage is None
@@ -66,7 +66,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_request("test")
-        assert response.processStatus == JobState.FAILURE
+        assert response.process_status == JobState.FAILURE
         assert response.errorCode == error_code
         assert response.errorMessage == error_message
         assert response.result is None
@@ -83,7 +83,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_activation("test")
-        assert response.processStatus == JobState.FAILURE
+        assert response.process_status == JobState.FAILURE
         assert response.errorCode == error_code
         assert response.errorMessage == error_message
         assert response.result is None
@@ -100,7 +100,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
-        assert response.processStatus == JobState.FAILURE
+        assert response.process_status == JobState.FAILURE
         assert response.errorCode == error_code
         assert response.errorMessage == error_message
         assert response.result is None
@@ -118,7 +118,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_request("test")
-        assert response.processStatus == JobState.SUCCESS
+        assert response.process_status == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
@@ -138,7 +138,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_activation("test")
-        assert response.processStatus == JobState.SUCCESS
+        assert response.process_status == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
@@ -156,7 +156,7 @@ class TestFreischaltCodeService:
         mock_get_request_by_request_id = MagicMock(return_value=erica_request)
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
-        assert response.processStatus == JobState.SUCCESS
+        assert response.process_status == JobState.SUCCESS
         assert response.result.idnr == tax_id_number
         assert response.result.transferticket == transferticket
         assert response.errorCode is None
