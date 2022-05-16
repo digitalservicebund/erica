@@ -119,7 +119,7 @@ class TestFreischaltCodeService:
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_request("test")
         assert response.process_status == JobState.SUCCESS
-        assert response.result.idnr == tax_id_number
+        assert response.result.tax_id_number == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
         assert response.error_code is None
@@ -139,7 +139,7 @@ class TestFreischaltCodeService:
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_activation("test")
         assert response.process_status == JobState.SUCCESS
-        assert response.result.idnr == tax_id_number
+        assert response.result.tax_id_number == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
         assert response.error_code is None
@@ -157,7 +157,7 @@ class TestFreischaltCodeService:
         mock_service = MagicMock(get_request_by_request_id=mock_get_request_by_request_id)
         response = FreischaltCodeService(service=mock_service).get_response_freischaltcode_revocation("test")
         assert response.process_status == JobState.SUCCESS
-        assert response.result.idnr == tax_id_number
+        assert response.result.tax_id_number == tax_id_number
         assert response.result.transferticket == transferticket
         assert response.error_code is None
         assert response.error_message is None

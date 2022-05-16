@@ -44,7 +44,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
             result = ResultFreischaltcodeRequestAndActivationDto(
                 elster_request_id=erica_request.result["elster_request_id"],
                 transferticket=erica_request.result["transferticket"],
-                idnr=erica_request.payload.get("tax_id_number"))
+                tax_id_number=erica_request.payload.get("tax_id_number"))
             return FreischaltcodeRequestAndActivationResponseDto(
                 process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:
@@ -61,7 +61,7 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         if process_status == JobState.SUCCESS:
             result = TransferticketAndIdnrResponseDto(
                 transferticket=erica_request.result["transferticket"],
-                idnr=erica_request.payload.get("tax_id_number"))
+                tax_id_number=erica_request.payload.get("tax_id_number"))
             return FreischaltcodeRevocationResponseDto(
                 process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:

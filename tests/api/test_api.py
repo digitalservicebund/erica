@@ -76,7 +76,7 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
         get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await api_method(request_id)
         assert response.process_status == JobState.SUCCESS
-        assert response.result.idnr == tax_id_number
+        assert response.result.tax_id_number == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
         assert response.error_code is None
@@ -97,7 +97,7 @@ async def test_if_get_fsc_revocation_job_returns_success_status_with_result():
         get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await get_fsc_revocation_job(request_id)
         assert response.process_status == JobState.SUCCESS
-        assert response.result.idnr == tax_id_number
+        assert response.result.tax_id_number == tax_id_number
         assert response.result.transferticket == transferticket
         assert response.error_code is None
         assert response.error_message is None
