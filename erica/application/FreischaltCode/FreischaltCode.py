@@ -43,7 +43,7 @@ class FreischaltCodeRevocateDto(BaseDto):
 
 class TransferticketAndIdnrResponseDto(BaseDto):
     transferticket: str
-    idnr: str
+    tax_id_number: str
 
 
 class ResultFreischaltcodeRequestAndActivationDto(TransferticketAndIdnrResponseDto):
