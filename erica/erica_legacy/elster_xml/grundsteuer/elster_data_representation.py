@@ -155,8 +155,8 @@ class EVorsatz:
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
         self.Zeitraum = "2022"  # TODO require on input?
-        self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + \
-                       input_data.eigentuemer.person[0].persoenlicheAngaben.name
+        self.AbsName = input_data.eigentuemer.person[0].persoenliche_angaben.vorname + " " + \
+                       input_data.eigentuemer.person[0].persoenliche_angaben.name
         self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort

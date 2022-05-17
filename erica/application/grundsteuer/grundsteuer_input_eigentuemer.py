@@ -44,7 +44,7 @@ class Anteil(CamelCaseModel):
 
 
 class Person(CamelCaseModel):
-    persoenlicheAngaben: PersoenlicheAngaben
+    persoenliche_angaben: PersoenlicheAngaben
     adresse: Adresse
     telefonnummer: Optional[str]
     steuer_id: Optional[str]

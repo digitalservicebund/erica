@@ -248,9 +248,9 @@ class TestEVorsatz:
         assert result.StNr == "1121081508150"
         assert result.Aktenzeichen is None
         assert result.Zeitraum == "2022"
-        assert result.AbsName == grundsteuer_obj.eigentuemer.person[0].persoenlicheAngaben.vorname + \
+        assert result.AbsName == grundsteuer_obj.eigentuemer.person[0].persoenliche_angaben.vorname + \
                " " + \
-               grundsteuer_obj.eigentuemer.person[0].persoenlicheAngaben.name
+               grundsteuer_obj.eigentuemer.person[0].persoenliche_angaben.name
         assert result.AbsStr == grundsteuer_obj.eigentuemer.person[0].adresse.strasse
         assert result.AbsPlz == grundsteuer_obj.eigentuemer.person[0].adresse.plz
         assert result.AbsOrt == grundsteuer_obj.eigentuemer.person[0].adresse.ort
