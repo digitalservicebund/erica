@@ -3,9 +3,6 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      registry:
-        required: true
-        type: string
       imageTag:
         required: true
         type: string
