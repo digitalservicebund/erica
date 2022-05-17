@@ -446,6 +446,7 @@ class TestV2UnlockCodeRequest:
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Failure"
         assert response.json()["result"] is None
         assert response.json()["errorCode"] is not None
@@ -458,6 +459,7 @@ class TestV2UnlockCodeRequest:
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[3]
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 404
         assert "result" not in response.json()
         assert response.json()["errorCode"] is not None
@@ -510,6 +512,7 @@ class TestV2UnlockCodeActivation:
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Failure"
         assert response.json()["result"] is None
         assert response.json()["errorCode"] is not None
@@ -574,6 +577,7 @@ class TestV2UnlockCodeRevocation:
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Failure"
         assert response.json()["result"] is None
         assert response.json()["errorCode"] is not None
@@ -636,6 +640,7 @@ class TestV2TaxNumberValidity:
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Success"
         assert response.json()["result"] is not None
         assert response.json()["result"]["isValid"] is False
@@ -710,6 +715,7 @@ class TestV2SendEst:
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Success"
         assert response.json()["result"] is not None
         assert response.json()["result"]["pdf"] is not None
@@ -726,6 +732,7 @@ class TestV2SendEst:
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Failure"
         assert response.json()["result"] is not None
         assert response.json()["result"]["validationErrors"] is not None
@@ -788,7 +795,9 @@ class TestV2GrundsteuerRequest:
         uuid = response.headers['Location'].split("/")[2]
         sleep(6)
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Success"
         assert response.json()["result"] is not None
         assert response.json()["result"]["pdf"] is not None
@@ -803,7 +812,9 @@ class TestV2GrundsteuerRequest:
         uuid = response.headers['Location'].split("/")[2]
         sleep(6)
         response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
         assert response.status_code == 200
+        print(f"Response: {response.json}")
         assert response.json()["processStatus"] == "Failure"
         assert response.json()["result"] is not None
         assert response.json()["result"]["validationErrors"] is not None
