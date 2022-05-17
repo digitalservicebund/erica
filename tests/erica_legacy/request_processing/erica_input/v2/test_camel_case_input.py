@@ -1,7 +1,7 @@
-from erica.application.grundsteuer.camel_case_input import CamelCaseInput
+from erica.application.base_dto import CamelCaseModel
 
 
-class DummyInput(CamelCaseInput):
+class DummyInput(CamelCaseModel):
     foo: str
 
 

@@ -75,12 +75,12 @@ async def test_if_get_fsc_request_or_activation_job_returns_success_status_with_
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await api_method(request_id)
-        assert response.processStatus == JobState.SUCCESS
-        assert response.result.idnr == tax_id_number
+        assert response.process_status == JobState.SUCCESS
+        assert response.result.tax_id_number == tax_id_number
         assert response.result.elster_request_id == elster_request_id
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -96,11 +96,11 @@ async def test_if_get_fsc_revocation_job_returns_success_status_with_result():
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await get_fsc_revocation_job(request_id)
-        assert response.processStatus == JobState.SUCCESS
-        assert response.result.idnr == tax_id_number
+        assert response.process_status == JobState.SUCCESS
+        assert response.result.tax_id_number == tax_id_number
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -115,10 +115,10 @@ async def test_if_get_tax_validity_job_returns_success_status_with_result():
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = TaxNumberValidityService(service=mock_service)
         response = await get_valid_tax_number_job(request_id)
-        assert response.processStatus == JobState.SUCCESS
+        assert response.process_status == JobState.SUCCESS
         assert response.result.is_valid == is_valid
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -134,11 +134,11 @@ async def test_if_get_send_est_job_returns_success_status_with_result():
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = TaxDeclarationService(service=mock_service)
         response = await get_send_est_job(request_id)
-        assert response.processStatus == JobState.SUCCESS
+        assert response.process_status == JobState.SUCCESS
         assert response.result.pdf == pdf
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -154,11 +154,11 @@ async def test_if_get_grundsteuer_job_returns_success_status_with_result():
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = GrundsteuerService(service=mock_service)
         response = await get_grundsteuer_job(request_id)
-        assert response.processStatus == JobState.SUCCESS
+        assert response.process_status == JobState.SUCCESS
         assert response.result.pdf == pdf
         assert response.result.transferticket == transferticket
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -179,9 +179,9 @@ async def test_if_get_fsc_job_returns_failure_status(api_method, request_type):
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await api_method(request_id)
-        assert response.processStatus == JobState.FAILURE
-        assert response.errorCode == error_code
-        assert response.errorMessage == error_message
+        assert response.process_status == JobState.FAILURE
+        assert response.error_code == error_code
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -198,9 +198,9 @@ async def test_if_get_tax_validity_job_returns_failure_status():
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = TaxNumberValidityService(service=mock_service)
         response = await get_valid_tax_number_job(request_id)
-        assert response.processStatus == JobState.FAILURE
-        assert response.errorCode == error_code
-        assert response.errorMessage == error_message
+        assert response.process_status == JobState.FAILURE
+        assert response.error_code == error_code
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -217,9 +217,9 @@ async def test_if_get_est_job_returns_failure_status():
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = TaxDeclarationService(service=mock_service)
         response = await get_send_est_job(request_id)
-        assert response.processStatus == JobState.FAILURE
-        assert response.errorCode == error_code
-        assert response.errorMessage == error_message
+        assert response.process_status == JobState.FAILURE
+        assert response.error_code == error_code
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -236,9 +236,9 @@ async def test_if_get_grundsteuer_job_returns_failure_status():
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = GrundsteuerService(service=mock_service)
         response = await get_grundsteuer_job(request_id)
-        assert response.processStatus == JobState.FAILURE
-        assert response.errorCode == error_code
-        assert response.errorMessage == error_message
+        assert response.process_status == JobState.FAILURE
+        assert response.error_code == error_code
+        assert response.error_message == error_message
         assert response.result is None
 
 
@@ -257,10 +257,10 @@ async def test_if_get_fsc_job_returns_processing_status(mock_job_state, api_meth
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = FreischaltCodeService(service=mock_service)
         response = await api_method(request_id)
-        assert response.processStatus == JobState.PROCESSING
+        assert response.process_status == JobState.PROCESSING
         assert response.result is None
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -274,10 +274,10 @@ async def test_if_get_tax_validity_job_returns_processing_status(mock_job_state,
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = TaxNumberValidityService(service=mock_service)
         response = await api_method(request_id)
-        assert response.processStatus == JobState.PROCESSING
+        assert response.process_status == JobState.PROCESSING
         assert response.result is None
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None
 
 
 @pytest.mark.asyncio
@@ -291,7 +291,7 @@ async def test_if_get_est_job_returns_processing_status(mock_job_state, api_meth
         mock_service = MagicMock(get_request_by_request_id=MagicMock(return_value=erica_request))
         get_service_mock.return_value = TaxDeclarationService(service=mock_service)
         response = await api_method(request_id)
-        assert response.processStatus == JobState.PROCESSING
+        assert response.process_status == JobState.PROCESSING
         assert response.result is None
-        assert response.errorCode is None
-        assert response.errorMessage is None
+        assert response.error_code is None
+        assert response.error_message is None

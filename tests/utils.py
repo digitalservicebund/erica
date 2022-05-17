@@ -27,7 +27,7 @@ def create_unlock_code_request(correct=True):
     else:
         payload = FreischaltCodeRequestPayload(tax_id_number="123456789", date_of_birth=date(1969, 7, 20))
 
-    return FreischaltCodeRequestDto(payload=payload, clientIdentifier="steuerlotse")
+    return FreischaltCodeRequestDto(payload=payload, client_identifier="steuerlotse")
 
 
 def create_unlock_code_activation(correct=True):
@@ -38,7 +38,7 @@ def create_unlock_code_activation(correct=True):
         payload = FreischaltCodeActivatePayload(tax_id_number="123456789", freischalt_code="INCORRECT",
                                                 elster_request_id="INCORRECT")
 
-    return FreischaltCodeActivateDto(payload=payload, clientIdentifier="steuerlotse")
+    return FreischaltCodeActivateDto(payload=payload, client_identifier="steuerlotse")
 
 
 def create_unlock_code_revocation(correct=True):
@@ -47,7 +47,7 @@ def create_unlock_code_revocation(correct=True):
     else:
         payload = FreischaltCodeRevocatePayload(tax_id_number="123456789", elster_request_id="INCORRECT")
 
-    return FreischaltCodeRevocateDto(payload=payload, clientIdentifier="steuerlotse")
+    return FreischaltCodeRevocateDto(payload=payload, client_identifier="steuerlotse")
 
 
 def create_tax_number_validity(correct=True):
@@ -56,16 +56,16 @@ def create_tax_number_validity(correct=True):
     else:
         payload = CheckTaxNumberPayload(state_abbreviation="BY", tax_number="123456789")
 
-    return CheckTaxNumberDto(payload=payload, clientIdentifier="steuerlotse")
+    return CheckTaxNumberDto(payload=payload, client_identifier="steuerlotse")
 
 
 def create_send_est():
     payload = TaxDeclarationPayload(est_data=create_form_data(), meta_data=create_meta_data())
-    return TaxDeclarationDto(payload=payload, clientIdentifier="steuerlotse")
+    return TaxDeclarationDto(payload=payload, client_identifier="steuerlotse")
 
 
 def create_send_grundsteuer():
-    return GrundsteuerDto(payload=SampleGrundsteuerData().parse(), clientIdentifier="grundsteuer")
+    return GrundsteuerDto(payload=SampleGrundsteuerData().parse(), client_identifier="grundsteuer")
 
 
 def get_job_service_patch_string(endpoint):

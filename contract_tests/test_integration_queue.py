@@ -638,7 +638,7 @@ class TestV2TaxNumberValidity:
         assert response.status_code == 200
         assert response.json()["processStatus"] == "Success"
         assert response.json()["result"] is not None
-        assert response.json()["result"]["is_valid"] is False
+        assert response.json()["result"]["isValid"] is False
         assert response.json()["errorCode"] is None
         assert response.json()["errorMessage"] is None
 
@@ -728,7 +728,7 @@ class TestV2SendEst:
         assert response.status_code == 200
         assert response.json()["processStatus"] == "Failure"
         assert response.json()["result"] is not None
-        assert response.json()["result"]["validation_errors"] is not None
+        assert response.json()["result"]["validationErrors"] is not None
         assert response.json()["errorCode"] is not None
         assert response.json()["errorMessage"] is not None
 
@@ -806,7 +806,7 @@ class TestV2GrundsteuerRequest:
         assert response.status_code == 200
         assert response.json()["processStatus"] == "Failure"
         assert response.json()["result"] is not None
-        assert response.json()["result"]["validation_errors"] is not None
+        assert response.json()["result"]["validationErrors"] is not None
         assert response.json()["errorCode"] is not None
         assert response.json()["errorMessage"] is not None
 

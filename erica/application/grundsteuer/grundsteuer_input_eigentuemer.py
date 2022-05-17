@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Optional, List
 
 from pydantic import validator
-from erica.application.grundsteuer.camel_case_input import CamelCaseInput
+from erica.application.base_dto import CamelCaseModel
 
 
 class Anrede(str, Enum):
@@ -12,7 +12,7 @@ class Anrede(str, Enum):
     frau = 'frau'
 
 
-class Name(CamelCaseInput):
+class Name(CamelCaseModel):
     anrede: Anrede
     titel: Optional[str]
     name: str
@@ -23,7 +23,7 @@ class PersoenlicheAngaben(Name):
     geburtsdatum: Optional[date]
 
 
-class Adresse(CamelCaseInput):
+class Adresse(CamelCaseModel):
     strasse: Optional[str]
     hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
@@ -32,19 +32,19 @@ class Adresse(CamelCaseInput):
     ort: str
 
 
-class Vertreter(CamelCaseInput):
+class Vertreter(CamelCaseModel):
     name: Name
     adresse: Adresse
     telefonnummer: Optional[str]
 
 
-class Anteil(CamelCaseInput):
+class Anteil(CamelCaseModel):
     zaehler: str
     nenner: str
 
 
-class Person(CamelCaseInput):
-    persoenlicheAngaben: PersoenlicheAngaben
+class Person(CamelCaseModel):
+    persoenliche_angaben: PersoenlicheAngaben
     adresse: Adresse
     telefonnummer: Optional[str]
     steuer_id: Optional[str]
@@ -52,18 +52,18 @@ class Person(CamelCaseInput):
     anteil: Anteil
 
 
-class Bruchteilsgemeinschaft(CamelCaseInput):
+class Bruchteilsgemeinschaft(CamelCaseModel):
     name: str
     adresse: Adresse
 
 
-class Empfangsbevollmaechtigter(CamelCaseInput):
+class Empfangsbevollmaechtigter(CamelCaseModel):
     name: Name
     adresse: Adresse
     telefonnummer: Optional[str]
 
 
-class Eigentuemer(CamelCaseInput):
+class Eigentuemer(CamelCaseModel):
     person: List[Person]
     verheiratet: Optional[bool]
     bruchteilsgemeinschaft: Optional[Bruchteilsgemeinschaft]

@@ -3,7 +3,7 @@ from typing import Optional, List, Literal
 
 from pydantic import root_validator, validator, constr
 
-from erica.application.grundsteuer.camel_case_input import CamelCaseInput
+from erica.application.base_dto import CamelCaseModel
 
 
 class Grundstuecksart(str, Enum):
@@ -18,7 +18,7 @@ class Grundstuecksart(str, Enum):
                         Grundstuecksart.wohnungseigentum]
 
 
-class Adresse(CamelCaseInput):
+class Adresse(CamelCaseModel):
     hausnummer: Optional[str]
     hausnummerzusatz: Optional[str]
     strasse: Optional[str]
@@ -28,12 +28,12 @@ class Adresse(CamelCaseInput):
     bundesland: str
 
 
-class FlurstueckAngaben(CamelCaseInput):
+class FlurstueckAngaben(CamelCaseModel):
     grundbuchblattnummer: Optional[str]
     gemarkung: str
 
 
-class Flur(CamelCaseInput):
+class Flur(CamelCaseModel):
     flur: Optional[str]
     flurstueck_zaehler: int
     flurstueck_nenner: Optional[str]
@@ -57,13 +57,13 @@ class Flur(CamelCaseInput):
         return values
 
 
-class Flurstueck(CamelCaseInput):
+class Flurstueck(CamelCaseModel):
     angaben: FlurstueckAngaben
     flur: Flur
     groesse_qm: int
 
 
-class Grundstueck(CamelCaseInput):
+class Grundstueck(CamelCaseModel):
     typ: Grundstuecksart
     abweichende_entwicklung: Optional[Literal["bauerwartungsland", "rohbauland"]]
     steuernummer: str
