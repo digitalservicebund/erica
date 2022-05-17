@@ -11,7 +11,7 @@ jobs:
   deploy-production:
     uses: ./.github/workflows/reusable-deploy-syseleven.yml
     with:
-      imageTag: ${{ github.run_number }}
+      imageTag: ${{ inputs.imageTag }}
       environment: production
     secrets:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}

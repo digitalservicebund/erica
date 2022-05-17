@@ -71,7 +71,7 @@ jobs:
           ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment erica
         shell: bash
 
-      - name: Logout of docker container
+      - name: Logout of container registry
         run: docker logout ${{ secrets.DOCKER_REGISTRY }}
 
       - name: Report Deployment
