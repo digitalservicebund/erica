@@ -18,7 +18,7 @@ from erica.erica_legacy.pyeric.pyeric_controller import EstPyericProcessControll
     UnlockCodeRevocationPyericProcessController, \
     DecryptBelegePyericController, BelegIdRequestPyericProcessController, \
     BelegRequestPyericProcessController, CheckTaxNumberPyericController
-from erica.erica_legacy.pyeric.utils import add_new_request_id_to_cache_list, request_needs_testmerker
+from erica.erica_legacy.pyeric.check_elster_request_id import add_new_request_id_to_cache_list, request_needs_testmerker
 from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, EstData
 

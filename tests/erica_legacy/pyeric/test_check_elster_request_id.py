@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.erica_legacy.pyeric.utils import get_list_vast_requests, get_vast_list_from_xml
+from erica.erica_legacy.pyeric.check_elster_request_id import get_vast_list_from_xml, get_list_vast_requests
 from tests.erica_legacy.utils import missing_pyeric_lib
 from tests.utils import read_text_from_sample
 
