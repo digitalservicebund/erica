@@ -129,8 +129,7 @@ jobs:
       QUEUE_URL: ${{ secrets.QUEUE_URL_STAGING }}
       ERICA_DATABASE_URL: ${{ secrets.ERICA_DATABASE_URL_STAGING }}
       KUBECONFIG_B64: ${{ secrets.CI_KUBECONFIG_B64 }}
-      METRICS_DEPLOYMENT_WEBHOOK_URL: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
-      METRICS_WEBHOOK_TOKEN: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
+
 
   track-deploy:
     needs: [deploy-staging]
