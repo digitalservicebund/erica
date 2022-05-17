@@ -18,19 +18,10 @@ from erica.erica_legacy.pyeric.pyeric_controller import EstPyericProcessControll
     UnlockCodeRevocationPyericProcessController, \
     DecryptBelegePyericController, BelegIdRequestPyericProcessController, \
     BelegRequestPyericProcessController, CheckTaxNumberPyericController
+from erica.erica_legacy.pyeric.check_elster_request_id import add_new_request_id_to_cache_list, \
+    request_needs_testmerker, tax_id_number_is_test_id_number
 from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, EstData
-
-SPECIAL_TESTMERKER_IDNR = ['04452397687',
-                           '02259674819',
-                           '04452317681',
-                           '09952417688',
-                           '03352417692',
-                           '03352419681',
-                           '03352417981',
-                           '03392417683',
-                           '03352917681',
-                           '03359417681']
 
 
 class EricaRequestController(object):
@@ -61,7 +52,7 @@ class EricaRequestController(object):
         raise NotImplementedError
 
     def _is_testmerker_used(self):
-        return self.input_data.tax_id_number in SPECIAL_TESTMERKER_IDNR
+        return tax_id_number_is_test_id_number(self.input_data.tax_id_number)
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = {}
@@ -87,7 +78,7 @@ class EstValidationRequestController(TransferticketRequestController):
         super().__init__(input_data, include_elster_responses)
 
     def _is_testmerker_used(self):
-        return self.input_data.est_data.person_a_idnr in SPECIAL_TESTMERKER_IDNR
+        return tax_id_number_is_test_id_number(self.input_data.est_data.person_a_idnr)
 
     def process(self):
         # Translate our form data structure into the fields from
@@ -141,6 +132,11 @@ class UnlockCodeRequestController(TransferticketRequestController):
     def __init__(self, input_data: UnlockCodeRequestData, include_elster_responses: bool = False):
         super().__init__(input_data, include_elster_responses)
 
+    def process(self):
+        json_response = super().process()
+        add_new_request_id_to_cache_list(json_response.get('elster_request_id'))
+        return json_response
+
     def generate_full_xml(self, use_testmerker):
         return elster_xml_generator.generate_full_vast_request_xml(
             UnlockCodeRequestEricMapper.parse_obj(self.input_data).__dict__,
@@ -158,6 +154,12 @@ class UnlockCodeRequestController(TransferticketRequestController):
 class UnlockCodeActivationRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = UnlockCodeActivationPyericProcessController
 
+    def _is_testmerker_used(self):
+        if self.input_data.tax_id_number:
+            return tax_id_number_is_test_id_number(self.input_data.tax_id_number)
+        else:
+            return request_needs_testmerker(self.input_data.elster_request_id)
+
     def generate_full_xml(self, use_testmerker):
         return elster_xml_generator.generate_full_vast_activation_xml(self.input_data.__dict__,
                                                                       use_testmerker=use_testmerker)
@@ -171,6 +173,12 @@ class UnlockCodeActivationRequestController(TransferticketRequestController):
 
 class UnlockCodeRevocationRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = UnlockCodeRevocationPyericProcessController
+
+    def _is_testmerker_used(self):
+        if self.input_data.tax_id_number:
+            return tax_id_number_is_test_id_number(self.input_data.tax_id_number)
+        else:
+            return request_needs_testmerker(self.input_data.elster_request_id)
 
     def generate_full_xml(self, use_testmerker):
         return elster_xml_generator.generate_full_vast_revocation_xml(self.input_data.__dict__,

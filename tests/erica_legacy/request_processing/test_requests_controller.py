@@ -5,7 +5,9 @@ from unittest.mock import patch, MagicMock, call
 
 import pytest
 
+from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload, FreischaltCodeRevocatePayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
+from erica.erica_legacy.pyeric.check_elster_request_id import SPECIAL_TESTMERKER_IDNR
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
@@ -14,7 +16,7 @@ from erica.erica_legacy.request_processing.erica_input.v1.erica_input import Unl
     UnlockCodeRevocationData, GetAddressData
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, EstRequestController, EstValidationRequestController, \
-    UnlockCodeRevocationRequestController, SPECIAL_TESTMERKER_IDNR, GetAddressRequestController, \
+    UnlockCodeRevocationRequestController, GetAddressRequestController, \
     GetBelegeRequestController, CheckTaxNumberRequestController
 from tests.erica_legacy.utils import create_est, missing_cert, missing_pyeric_lib, replace_text_in_xml, \
     replace_subtree_in_xml, TEST_EST_VERANLAGUNGSJAHR
@@ -329,6 +331,14 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
 
             self.assertFalse(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
+    def test_if_processed_called_then_elster_request_id_added_to_cache_list(self):
+        elster_request_id = "1234"
+        with patch('erica.erica_legacy.request_processing.requests_controller.TransferTicketRequestController.process', MagicMock(return_value={'elster_request_id': elster_request_id})),\
+            patch('erica.erica_legacy.request_processing.requests_controller.add_new_request_id_to_cache_list') as add_to_cache_list:
+            self.unlock_request_with_valid_input.process()
+
+            add_to_cache_list.assert_called_once_with(elster_request_id)
+
 
 class TestUnlockCodeRequestGenerateFullXml(unittest.TestCase):
 
@@ -441,6 +451,10 @@ class TestUnlockCodeActivationProcess(unittest.TestCase):
             unlock_code='1985-T67D-K89O',
             elster_request_id='42'))
 
+        self.unlock_activation_without_idnr = UnlockCodeActivationRequestController(FreischaltCodeActivatePayload(
+            freischalt_code='1985-T67D-K89O',
+            elster_request_id='42'))
+
     def test_pyeric_controller_is_initialised_with_correct_argument(self):
         xml = '<xml></xml>'
 
@@ -492,6 +506,32 @@ class TestUnlockCodeActivationProcess(unittest.TestCase):
                 patch(
                     'erica.erica_legacy.request_processing.requests_controller.UnlockCodeActivationRequestController.generate_json'):
             self.unlock_activation_with_valid_input.process()
+
+            self.assertFalse(generate_xml_fun.call_args.kwargs['use_testmerker'])
+
+    def test_if_idnr_and_request_needs_test_merker_then_create_xml_is_called_with_true(self):
+        with patch(
+                'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_activation_xml') as generate_xml_fun, \
+                patch(
+                    'erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeActivationPyericProcessController.get_eric_response'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.UnlockCodeActivationRequestController.generate_json'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.request_needs_testmerker', MagicMock(return_value=True)):
+            self.unlock_activation_without_idnr.process()
+
+            self.assertTrue(generate_xml_fun.call_args.kwargs['use_testmerker'])
+
+    def test_if_idnr_and_request_needs_test_merker_then_create_xml_is_called_with_false(self):
+        with patch(
+                'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_activation_xml') as generate_xml_fun, \
+                patch(
+                    'erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeActivationPyericProcessController.get_eric_response'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.UnlockCodeActivationRequestController.generate_json'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.request_needs_testmerker', MagicMock(return_value=False)):
+            self.unlock_activation_without_idnr.process()
 
             self.assertFalse(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
@@ -578,6 +618,9 @@ class TestUnlockCodeRevocationProcess(unittest.TestCase):
             idnr="123456789",
             elster_request_id='lookyetanotherrequestid'))
 
+        self.unlock_revocation_without_idnr = UnlockCodeRevocationRequestController(FreischaltCodeRevocatePayload(
+            elster_request_id='lookyetanotherrequestid'))
+
     def test_pyeric_controller_is_initialised_with_correct_arguments(self):
         xml = '<xml></xml>'
 
@@ -629,6 +672,32 @@ class TestUnlockCodeRevocationProcess(unittest.TestCase):
                 patch(
                     'erica.erica_legacy.request_processing.requests_controller.UnlockCodeRevocationRequestController.generate_json'):
             self.unlock_revocation_with_valid_input.process()
+
+            self.assertFalse(generate_xml_fun.call_args.kwargs['use_testmerker'])
+
+    def test_if_idnr_and_request_needs_test_merker_then_create_xml_is_called_with_true(self):
+        with patch(
+                'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_revocation_xml') as generate_xml_fun, \
+                patch(
+                    'erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeRevocationPyericProcessController.get_eric_response'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.UnlockCodeRevocationRequestController.generate_json'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.request_needs_testmerker', MagicMock(return_value=True)):
+            self.unlock_revocation_without_idnr.process()
+
+            self.assertTrue(generate_xml_fun.call_args.kwargs['use_testmerker'])
+
+    def test_if_idnr_and_request_needs_test_merker_then_create_xml_is_called_with_false(self):
+        with patch(
+                'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_revocation_xml') as generate_xml_fun, \
+                patch(
+                    'erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeRevocationPyericProcessController.get_eric_response'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.UnlockCodeRevocationRequestController.generate_json'), \
+                patch(
+                    'erica.erica_legacy.request_processing.requests_controller.request_needs_testmerker', MagicMock(return_value=False)):
+            self.unlock_revocation_without_idnr.process()
 
             self.assertFalse(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
