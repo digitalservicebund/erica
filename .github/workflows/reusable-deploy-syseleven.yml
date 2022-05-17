@@ -52,7 +52,7 @@ jobs:
           password: ${{ secrets.REGISTRY_PWD }}
 
       - name: Pull deploy image
-        run: docker pull ${{ inputs.registry }}/steuerlotse_deployment
+        run: docker pull ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment
         shell: bash
 
       - name: Run deployment
