@@ -149,8 +149,8 @@ jobs:
       QUEUE_URL: ${{ secrets.QUEUE_URL_OTC_STAGING }}
       ERICA_DATABASE_URL: ${{ secrets.ERICA_DATABASE_URL_OTC_STAGING }}
       DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-      ARGOCD_SERVER: ${{ ARGOCD_SERVER }}
-      ARGOCD_PIPELINE_PASSWORD: ${{ ARGOCD_PIPELINE_PASSWORD }}
+      ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+      ARGOCD_PIPELINE_PASSWORD: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
 
   track-deploy:
     needs: [deploy-staging-syseleven, deploy-staging-otc]
