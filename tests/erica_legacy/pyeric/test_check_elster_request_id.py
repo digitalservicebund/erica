@@ -1,9 +1,10 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch, call
 
 import pytest
 
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.erica_legacy.pyeric.check_elster_request_id import get_vast_list_from_xml, get_list_vast_requests
+from erica.erica_legacy.pyeric.check_elster_request_id import get_vast_list_from_xml, get_list_vast_requests, \
+    NEW_REQUEST_ID_SINCE_LAST_CACHE_INVALIDATION, add_new_request_id_to_cache_list, request_needs_testmerker
 from tests.erica_legacy.utils import missing_pyeric_lib
 from tests.utils import read_text_from_sample
 
@@ -73,3 +74,25 @@ class TestListVastRequests:
         get_list_vast_requests(mock_pyeric_controller)
 
         assert mock_pyeric_controller.call_count == 2
+
+
+class TestRequestNeedsTestmerker:
+
+    @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
+    def test_if_idnr_in_list_then_cache_invalidated(self):
+        idnr = "1234"
+        add_new_request_id_to_cache_list(idnr)
+        with patch('erica.erica_legacy.pyeric.check_elster_request_id.get_list_vast_requests') as get_list_vast_requests_mock:
+
+            request_needs_testmerker(idnr)
+
+        assert call.cache_clear() in get_list_vast_requests_mock.mock_calls
+
+    @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
+    def test_if_idnr_not_in_list_then_cache_not_invalidated(self):
+        idnr = "1234"
+        with patch('erica.erica_legacy.pyeric.check_elster_request_id.get_list_vast_requests') as get_list_vast_requests_mock:
+
+            request_needs_testmerker(idnr)
+
+        assert call.cache_clear() not in get_list_vast_requests_mock.mock_calls
