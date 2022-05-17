@@ -333,7 +333,7 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
 
     def test_if_processed_called_then_elster_request_id_added_to_cache_list(self):
         elster_request_id = "1234"
-        with patch('erica.erica_legacy.request_processing.requests_controller.TransferTicketRequestController.process', MagicMock(return_value={'elster_request_id': elster_request_id})),\
+        with patch('erica.erica_legacy.request_processing.requests_controller.TransferticketRequestController.process', MagicMock(return_value={'elster_request_id': elster_request_id})),\
             patch('erica.erica_legacy.request_processing.requests_controller.add_new_request_id_to_cache_list') as add_to_cache_list:
             self.unlock_request_with_valid_input.process()
 
