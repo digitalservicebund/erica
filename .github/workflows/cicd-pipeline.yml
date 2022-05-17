@@ -132,6 +132,20 @@ jobs:
       METRICS_DEPLOYMENT_WEBHOOK_URL: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
       METRICS_WEBHOOK_TOKEN: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
 
+  track-deploy:
+    needs: [deploy-staging]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Report Deployment
+        uses: satak/webrequest-action@v1.2.3
+        with:
+          url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          method: POST
+          payload: '{"project": "Erica", "version_identifier": "${{ github.run_number }}", "environment": "staging", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
+
   contract-tests:
     needs: [deploy-staging]
 

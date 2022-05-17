@@ -28,10 +28,6 @@ on:
         required: true
       KUBECONFIG_B64:
         required: true
-      METRICS_DEPLOYMENT_WEBHOOK_URL:
-        required: true
-      METRICS_WEBHOOK_TOKEN:
-        required: true
 
 env:
   NAMESPACE: erica-${{ inputs.environment }}
@@ -73,11 +69,3 @@ jobs:
 
       - name: Logout of container registry
         run: docker logout ${{ secrets.DOCKER_REGISTRY }}
-
-      - name: Report Deployment
-        uses: satak/webrequest-action@v1.2.3
-        with:
-          url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
-          method: POST
-          payload: '{"project": "Erica", "version_identifier": "${{ inputs.imageTag }}", "environment": "${{ inputs.environment }}", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
-          headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
