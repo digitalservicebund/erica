@@ -331,13 +331,13 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
 
             self.assertFalse(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
-    def test_if_not_special_idnr_then_create_xml_is_called_with_use_testmerker_set_false(self):
+    def test_if_processed_called_then_elster_request_id_added_to_cache_list(self):
         elster_request_id = "1234"
         with patch('erica.erica_legacy.request_processing.requests_controller.TransferTicketRequestController.process', MagicMock(return_value={'elster_request_id': elster_request_id})),\
-            patch('erica.erica_legacy.request_processing.requests_controller.add_new_request_id_to_cache_list') as add_to_cache:
+            patch('erica.erica_legacy.request_processing.requests_controller.add_new_request_id_to_cache_list') as add_to_cache_list:
             self.unlock_request_with_valid_input.process()
 
-            add_to_cache.assert_called_once_with(elster_request_id)
+            add_to_cache_list.assert_called_once_with(elster_request_id)
 
 
 class TestUnlockCodeRequestGenerateFullXml(unittest.TestCase):
