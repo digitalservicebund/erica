@@ -18,20 +18,10 @@ from erica.erica_legacy.pyeric.pyeric_controller import EstPyericProcessControll
     UnlockCodeRevocationPyericProcessController, \
     DecryptBelegePyericController, BelegIdRequestPyericProcessController, \
     BelegRequestPyericProcessController, CheckTaxNumberPyericController
-from erica.erica_legacy.pyeric.check_elster_request_id import add_new_request_id_to_cache_list, request_needs_testmerker
+from erica.erica_legacy.pyeric.check_elster_request_id import add_new_request_id_to_cache_list, \
+    request_needs_testmerker, tax_id_number_is_test_id_number
 from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, EstData
-
-SPECIAL_TESTMERKER_IDNR = ['04452397687',
-                           '02259674819',
-                           '04452317681',
-                           '09952417688',
-                           '03352417692',
-                           '03352419681',
-                           '03352417981',
-                           '03392417683',
-                           '03352917681',
-                           '03359417681']
 
 
 class EricaRequestController(object):
@@ -62,7 +52,7 @@ class EricaRequestController(object):
         raise NotImplementedError
 
     def _is_testmerker_used(self):
-        return self.input_data.tax_id_number in SPECIAL_TESTMERKER_IDNR
+        return tax_id_number_is_test_id_number(self.input_data.tax_id_number)
 
     def generate_json(self, pyeric_response: PyericResponse):
         response = {}
@@ -88,7 +78,7 @@ class EstValidationRequestController(TransferTicketRequestController):
         super().__init__(input_data, include_elster_responses)
 
     def _is_testmerker_used(self):
-        return self.input_data.est_data.person_a_idnr in SPECIAL_TESTMERKER_IDNR
+        return tax_id_number_is_test_id_number(self.input_data.est_data.person_a_idnr)
 
     def process(self):
         # Translate our form data structure into the fields from
@@ -166,7 +156,7 @@ class UnlockCodeActivationRequestController(TransferTicketRequestController):
 
     def _is_testmerker_used(self):
         if self.input_data.tax_id_number:
-            return self.input_data.tax_id_number in SPECIAL_TESTMERKER_IDNR
+            return tax_id_number_is_test_id_number(self.input_data.tax_id_number)
         else:
             return request_needs_testmerker(self.input_data.elster_request_id)
 
@@ -186,7 +176,7 @@ class UnlockCodeRevocationRequestController(TransferTicketRequestController):
 
     def _is_testmerker_used(self):
         if self.input_data.tax_id_number:
-            return self.input_data.tax_id_number in SPECIAL_TESTMERKER_IDNR
+            return tax_id_number_is_test_id_number(self.input_data.tax_id_number)
         else:
             return request_needs_testmerker(self.input_data.elster_request_id)
 

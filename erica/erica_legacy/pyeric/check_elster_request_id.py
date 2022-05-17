@@ -4,6 +4,17 @@ from erica.erica_legacy.elster_xml import elster_xml_generator
 from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
 from erica.erica_legacy.pyeric.pyeric_controller import PermitListingPyericProcessController
 
+SPECIAL_TESTMERKER_IDNR = ['04452397687',
+                           '02259674819',
+                           '04452317681',
+                           '09952417688',
+                           '03352417692',
+                           '03352419681',
+                           '03352417981',
+                           '03392417683',
+                           '03352917681',
+                           '03359417681']
+
 NEW_REQUEST_ID_SINCE_LAST_CACHE_INVALIDATION = []
 
 
@@ -32,7 +43,7 @@ def get_list_vast_requests(pyeric_controller):
 
 
 def tax_id_number_is_test_id_number(tax_id_number):
-    return tax_id_number[0] == "0"
+    return tax_id_number in SPECIAL_TESTMERKER_IDNR
 
 
 def request_needs_testmerker(request_id):

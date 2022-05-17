@@ -7,6 +7,7 @@ import pytest
 
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload, FreischaltCodeRevocatePayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
+from erica.erica_legacy.pyeric.check_elster_request_id import SPECIAL_TESTMERKER_IDNR
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
@@ -15,7 +16,7 @@ from erica.erica_legacy.request_processing.erica_input.v1.erica_input import Unl
     UnlockCodeRevocationData, GetAddressData
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, EstRequestController, EstValidationRequestController, \
-    UnlockCodeRevocationRequestController, SPECIAL_TESTMERKER_IDNR, GetAddressRequestController, \
+    UnlockCodeRevocationRequestController, GetAddressRequestController, \
     GetBelegeRequestController, CheckTaxNumberRequestController
 from tests.erica_legacy.utils import create_est, missing_cert, missing_pyeric_lib, replace_text_in_xml, \
     replace_subtree_in_xml, TEST_EST_VERANLAGUNGSJAHR
