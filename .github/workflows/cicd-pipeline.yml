@@ -166,7 +166,7 @@ jobs:
           payload: '{"project": "Erica", "version_identifier": "${{ github.run_number }}", "environment": "staging", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
           headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
 
-  contract-tests:
+  contract-tests-syseleven:
     needs: [deploy-staging-syseleven]
 
     runs-on: ubuntu-latest
