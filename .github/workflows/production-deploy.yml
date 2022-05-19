@@ -23,8 +23,6 @@ jobs:
       QUEUE_URL: ${{ secrets.QUEUE_URL_PRODUCTION }}
       ERICA_DATABASE_URL: ${{ secrets.ERICA_DATABASE_URL_PRODUCTION }}
       KUBECONFIG_B64: ${{ secrets.CI_KUBECONFIG_B64 }}
-      METRICS_DEPLOYMENT_WEBHOOK_URL: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
-      METRICS_WEBHOOK_TOKEN: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
 
   otc:
     uses: ./.github/workflows/reusable-deploy-otc.yml
@@ -43,3 +41,17 @@ jobs:
       DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
       ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
       ARGOCD_PIPELINE_PASSWORD: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
+
+  track-deploy:
+    needs: [syseleven, otc]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Report Deployment
+        uses: satak/webrequest-action@v1.2.3
+        with:
+          url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          method: POST
+          payload: '{"project": "Erica", "version_identifier": "${{ github.event.inputs.imageTag }}", "environment": "production", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
