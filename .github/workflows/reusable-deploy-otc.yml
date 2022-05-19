@@ -54,21 +54,43 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PWD }}
 
+      - name: Checkout infra repository
+        uses: actions/checkout@v3
+        with:
+          repository: digitalservice4germany/erica-infra
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Update image tags for ${{ inputs.environment }}
+        shell: sh
+        run: |
+          cd manifests/overlays/${{ inputs.environment }}
+          kustomize edit set image scr.syseleven.de/steuerlotse-stack-main/erica_api:${{ inputs.imageTag }}
+          kustomize edit set image scr.syseleven.de/steuerlotse-stack-main/erica_cron:${{ inputs.imageTag }}
+
+      - name: Commit and push changes for infra repository
+        # Third-party action, pin to commit SHA!
+        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+        uses: EndBug/add-and-commit@050a66787244b10a4874a2a5f682130263edc192 # == v9.0.0
+        with:
+          add: manifests/overlays/${{ inputs.environment }}/kustomization.yaml
+          message: "Bump ${{ inputs.environment }} image to ${{ inputs.imageTag }}"
+          pathspec_error_handling: exitImmediately
+          push: true
+
+      - name: Trigger Argo CD sync
+        shell: sh
+        run: |
+          curl -sSL -o argocd https://${ARGOCD_SERVER}/download/argocd-linux-amd64
+          chmod +x argocd
+          ./argocd login ${ARGOCD_SERVER} --username pipeline --password ${{ secrets.ARGOCD_PIPELINE_PASSWORD }} --grpc-web
+          ./argocd app get --refresh erica-${{ inputs.environment }} --grpc-web > /dev/null
+          ./argocd app wait erica-${{ inputs.environment }} --sync --health --grpc-web
+        env:
+          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+
       - name: Pull deploy image
         run: docker pull ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment
         shell: bash
-
-      - name: Deploy to Kubernetes via ArgoCD
-        uses: digitalservice4germany/github-actions/argocd-deploy@e5a88da4a7c71de837e1d813ba6d90faf5ca0c83
-        with:
-          environment: ${{ inputs.environment }}
-          version: ${{ inputs.imageTag }}
-          deploying_repo: erica
-          infra_repo: erica-infra
-          deploy_key: ${{ secrets.DEPLOY_KEY }}
-          app: erica-${{ inputs.environment }}
-          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER }}
 
       - name: Deploy to Erica VM
         run: |
