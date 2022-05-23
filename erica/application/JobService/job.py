@@ -7,6 +7,7 @@ from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.erica_legacy.pyeric.eric import verify_using_stick
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, ERIC_ERRORS_WITH_RETRY
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
@@ -32,8 +33,12 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
         logger.info(f"Job started: {entity}", exc_info=True)
 
         try:
-            response = await service.apply_to_elster(request_payload, True)
+            # Replace actual erica call with verify using stick to only test erica and not elster
+            # response = await service.apply_to_elster(request_payload, True)
+            result = verify_using_stick()
+
             # We do not want to send the server_response or eric_response to the clients in the success case
+            response = result
             response.pop('server_response', None)
             response.pop('eric_response', None)
             entity.result = response
