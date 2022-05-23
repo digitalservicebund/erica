@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      imageTag:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+    secrets:
+      DOCKER_REGISTRY:
+        required: true
+      REGISTRY_USER:
+        required: true
+      REGISTRY_PWD:
+        required: true
+      ERICA_HOST:
+        required: true
+      ERICA_SSH_KEY:
+        required: true
+      CERT_PIN:
+        required: true
+      QUEUE_URL:
+        required: true
+      ERICA_DATABASE_URL:
+        required: true
+      KUBECONFIG_B64:
+        required: true
+
+env:
+  NAMESPACE: erica-${{ inputs.environment }}
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to container repository
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PWD }}
+
+      - name: Pull deploy image
+        run: docker pull ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment
+        shell: bash
+
+      - name: Run deployment
+        run: |
+          docker run \
+          -e DOCKER_REGISTRY='${{ secrets.DOCKER_REGISTRY }}' \
+          -e ERICA_SSH_KEY='${{ secrets.ERICA_SSH_KEY }}' \
+          -e ERICA_HOST='${{ secrets.ERICA_HOST }}' \
+          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
+          -e CERT_PIN='${{ secrets.CERT_PIN }}' \
+          -e QUEUE_URL='${{ secrets.QUEUE_URL }}' \
+          -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL }}' \
+          -e KUBECONFIG_BASE64='${{ secrets.KUBECONFIG_B64 }}' \
+          -e NAMESPACE='${{ env.NAMESPACE }}' \
+          -e IMAGE_TAG='${{ inputs.imageTag }}' \
+          ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment erica
+        shell: bash
+
+      - name: Logout of container registry
+        run: docker logout ${{ secrets.DOCKER_REGISTRY }}
