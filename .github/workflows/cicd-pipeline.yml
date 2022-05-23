@@ -59,10 +59,6 @@ jobs:
           pipenv run invoke --echo lint
         shell: bash
 
-      - name: Test
-        run: |
-          pipenv run invoke --echo test | tee erica-test-report.log
-        shell: bash
 
       - name: Archive test logs
         uses: actions/upload-artifact@v1
