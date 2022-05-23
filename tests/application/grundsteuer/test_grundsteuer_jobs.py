@@ -43,6 +43,7 @@ class TestGrundsteuerJob:
             assert mock_get_service.mock_calls == [call(RequestType.grundsteuer)]
 
     @pytest.mark.asyncio
+    @pytest.mark.skip("Because of mocked erica functionality")
     async def test_request_controller_process_called_with_correct_params(self):
         req_payload = SampleGrundsteuerData().parse()
         mock_req_controller = MagicMock()
@@ -66,6 +67,7 @@ class TestIntegrationWithDatabaseAndGrundsteuerJob:
 
     @pytest.mark.asyncio
     @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
+    @pytest.mark.skip("Because of mocked erica functionality")
     async def test_if_entity_in_data_base_then_set_correct_result_in_database(self, standard_est_input_data):
         payload = SampleGrundsteuerData().parse()
         response_pdf = b"This is the world we live in"

@@ -38,7 +38,7 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
             result = verify_using_stick()
 
             # We do not want to send the server_response or eric_response to the clients in the success case
-            response = result
+            response = {'result': result}
             response.pop('server_response', None)
             response.pop('eric_response', None)
             entity.result = response
