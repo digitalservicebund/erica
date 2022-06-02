@@ -155,23 +155,23 @@ class EVorsatz:
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
         self.Zeitraum = "2022"  # TODO require on input?
-        self.AbsName = input_data.eigentuemer.person[0].persoenlicheAngaben.vorname + " " + \
-                       input_data.eigentuemer.person[0].persoenlicheAngaben.name
+        self.AbsName = input_data.eigentuemer.person[0].persoenliche_angaben.vorname + " " + \
+                       input_data.eigentuemer.person[0].persoenliche_angaben.name
         self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
         self.Copyright = "(C) 2022 DigitalService4Germany"
 
+        steuernummer_aktenzeichen = generate_electronic_aktenzeichen(input_data.grundstueck.steuernummer,
+                                                                     input_data.grundstueck.adresse.bundesland)
         if input_data.grundstueck.adresse.bundesland in BUNDESLAENDER_WITH_STEUERNUMMER:
             self.OrdNrArt = "S"
-            self.StNr = generate_electronic_steuernummer(input_data.grundstueck.steuernummer,
-                                                         input_data.grundstueck.adresse.bundesland)
+            self.StNr = steuernummer_aktenzeichen
             self.Aktenzeichen = None
         else:
             self.OrdNrArt = "A"
             self.StNr = None
-            self.Aktenzeichen = generate_electronic_aktenzeichen(input_data.grundstueck.steuernummer,
-                                                                 input_data.grundstueck.adresse.bundesland)
+            self.Aktenzeichen = steuernummer_aktenzeichen
 
         self.Rueckuebermittlung = ERueckuebermittlung()
 

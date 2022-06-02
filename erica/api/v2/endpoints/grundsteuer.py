@@ -22,7 +22,7 @@ async def send_grundsteuer(grundsteuer: GrundsteuerDto, request: Request):
     :param grundsteuer: payload with TTL, JSON input data for the grundsteuer declaration.
     """
     result = get_job_service(RequestType.grundsteuer).add_to_queue(
-        grundsteuer.payload, grundsteuer.clientIdentifier, RequestType.grundsteuer)
+        grundsteuer.payload, grundsteuer.client_identifier, RequestType.grundsteuer)
     return RedirectResponse(
         request.url_for("get_grundsteuer_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),
         status_code=201)

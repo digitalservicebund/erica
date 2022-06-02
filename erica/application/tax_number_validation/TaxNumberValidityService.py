@@ -27,14 +27,14 @@ class TaxNumberValidityService(TaxNumberValidityServiceInterface):
             result = ResultTaxResponseDto(
                 is_valid=erica_request.result["is_valid"])
             return TaxResponseDto(
-                processStatus=map_status(erica_request.status), result=result)
+                process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:
             return TaxResponseDto(
-                processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
-                errorMessage=erica_request.error_message)
+                process_status=map_status(erica_request.status), error_code=erica_request.error_code,
+                error_message=erica_request.error_message)
         else:
             return TaxResponseDto(
-                processStatus=map_status(erica_request.status))
+                process_status=map_status(erica_request.status))
 
 
 class TaxDeclarationServiceModule(Module):

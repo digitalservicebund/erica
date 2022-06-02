@@ -14,39 +14,39 @@ class FreischaltCodeRequestPayloadDto(BaseDto):
 
 
 class FreischaltCodeActivatePayloadDto(BaseDto):
-    tax_id_number: str
+    tax_id_number: Optional[str]
     freischalt_code: str
     elster_request_id: str
 
 
 class FreischaltCodeRequestDto(BaseDto):
     payload: FreischaltCodeRequestPayloadDto
-    clientIdentifier: str
+    client_identifier: str
 
 
 class FreischaltCodeActivateDto(BaseDto):
     payload: FreischaltCodeActivatePayloadDto
-    clientIdentifier: str
+    client_identifier: str
 
 
 class FreischaltCodeRevocatePayloadDto(BaseDto):
-    tax_id_number: str
+    tax_id_number: Optional[str]
     elster_request_id: str
 
 
 class FreischaltCodeRevocateDto(BaseDto):
     payload: FreischaltCodeRevocatePayloadDto
-    clientIdentifier: str
+    client_identifier: str
 
 
 # Output
 
-class TransferTicketAndIdnrResponseDto(BaseDto):
-    transfer_ticket: str
-    idnr: str
+class TransferticketAndIdnrResponseDto(BaseDto):
+    transferticket: str
+    tax_id_number: str
 
 
-class ResultFreischaltcodeRequestAndActivationDto(TransferTicketAndIdnrResponseDto):
+class ResultFreischaltcodeRequestAndActivationDto(TransferticketAndIdnrResponseDto):
     elster_request_id: str
 
 
@@ -55,4 +55,4 @@ class FreischaltcodeRequestAndActivationResponseDto(ResponseBaseDto):
 
 
 class FreischaltcodeRevocationResponseDto(ResponseBaseDto):
-    result: Optional[TransferTicketAndIdnrResponseDto]
+    result: Optional[TransferticketAndIdnrResponseDto]

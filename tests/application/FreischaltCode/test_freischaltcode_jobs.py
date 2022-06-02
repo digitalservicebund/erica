@@ -14,7 +14,7 @@ from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePay
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
-    get_transfer_ticket_from_xml
+    get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from tests.utils import read_text_from_sample
 
@@ -87,7 +87,7 @@ class TestIntegrationWithDatabaseAndRequestFreischaltcode:
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
                                          'idnr': payload.tax_id_number,
-                                         'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
+                                         'transferticket': get_transferticket_from_xml(xml_string)}
 
 
 class TestActivateFreischaltcode:
@@ -158,7 +158,7 @@ class TestIntegrationWithDatabaseAndActivateFreischaltcode:
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
                                          'idnr': payload.tax_id_number,
-                                         'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
+                                         'transferticket': get_transferticket_from_xml(xml_string)}
 
 
 class TestRevocateFreischaltcode:
@@ -228,5 +228,5 @@ class TestIntegrationWithDatabaseAndRevocateFreischaltcode:
         updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'elster_request_id': get_antrag_id_from_xml(xml_string),
-                                         'transfer_ticket': get_transfer_ticket_from_xml(xml_string)}
+                                         'transferticket': get_transferticket_from_xml(xml_string)}
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><Elster xmlns="http://www.elster.de/elsterxml/schema/v11"><TransferHeader version="11"><Verfahren>ElsterBRM</Verfahren><DatenArt>SpezRechtListe</DatenArt><Vorgang>send-Auth</Vorgang><TransferTicket>et1263dz1n176m23i28wo7y26p7m2u1x</TransferTicket><Testmerker>370000001</Testmerker><Empfaenger id="L"><Ziel>CS</Ziel></Empfaenger><HerstellerID>74931</HerstellerID><DatenLieferant>MIAGCSqGSIb3DQEHBqCAMIACAQAwgAYJKoZIhvcNAQcBMBQGCCqGSIb3DQMHBAiNEOINi7rvPaCA
+BDAEhZHcXImlDlDWiSGihmk+m1RvMbUN6tkfvnzSz3U6oMmtR96q7+NhfGMzpuF81vIAAAAAAAAA
+AAAA
+</DatenLieferant><EingangsDatum>20220506171819</EingangsDatum><Datei><Verschluesselung>CMSEncryptedData</Verschluesselung><Kompression>GZIP</Kompression><TransportSchluessel>MIAGCSqGSIb3DQEHBqCAMIACAQAwgAYJKoZIhvcNAQcBMBQGCCqGSIb3DQMHBAj2hxfc5o8SlKCA
+BBhr0p8Eo6fp8VJnEWicewlnzeXIZV0U/XUAAAAAAAAAAAAA
+</TransportSchluessel></Datei><RC><Rueckgabe><Code>0</Code><Text>OK</Text></Rueckgabe><Stack><Code>0</Code><Text></Text></Stack></RC><VersionClient>1</VersionClient><Zusatz><Info>CorrelationID:d2b78f29-ccb1-4a21-a905-a40ad49429e7</Info></Zusatz></TransferHeader><DatenTeil><Nutzdatenblock><NutzdatenHeader version="11"><NutzdatenTicket>1</NutzdatenTicket><Empfaenger id="L">CS</Empfaenger><RC><Rueckgabe><Code>0</Code><Text>OK</Text></Rueckgabe><Stack><Code>0</Code><Text></Text></Stack></RC></NutzdatenHeader><Nutzdaten>
+                <SpezRechtListe version="7">
+                    <Antrag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DatenabruferAntragCType">
+                        <AntragsID>br1652dntwz6wg1md87hc6055aij0nev</AntragsID>
+                        <AntragsDatum>2021-06-14T15:43:54.238+02:00</AntragsDatum>
+                        <GueltigBis>2224-12-31</GueltigBis>
+                        <AntragsStatus>genehmigt</AntragsStatus>
+                        <Recht>AbrufEBelege</Recht>
+                        <Veranlagungszeitraum>
+                            <Unbeschraenkt>true</Unbeschraenkt>
+                        </Veranlagungszeitraum>
+                        <DateninhaberIdNr>02293417683</DateninhaberIdNr>
+                    </Antrag>
+                    <Antrag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DatenabruferAntragCType">
+                        <AntragsID>br1226cnpymxm35hf0ptmsmc2nqpv9y9</AntragsID>
+                        <AntragsDatum>2022-05-02T14:02:48.564+02:00</AntragsDatum>
+                        <GueltigBis>2022-12-31</GueltigBis>
+                        <AntragsStatus>genehmigt</AntragsStatus>
+                        <Recht>AbrufEBelege</Recht>
+                        <Veranlagungszeitraum>
+                            <Unbeschraenkt>false</Unbeschraenkt>
+                            <Veranlagungsjahre>
+                                <Jahr>2021</Jahr>
+                            </Veranlagungsjahre>
+                        </Veranlagungszeitraum>
+                        <DateninhaberIdNr>03392417683</DateninhaberIdNr>
+                    </Antrag>
+                </SpezRechtListe>
+            </Nutzdaten></Nutzdatenblock></DatenTeil></Elster>

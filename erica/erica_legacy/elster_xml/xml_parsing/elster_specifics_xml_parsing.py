@@ -34,7 +34,7 @@ def get_idnr_from_xml(xml_string):
     return _get_element_from_xml(xml_string, 'DateninhaberIdNr')
 
 
-def get_transfer_ticket_from_xml(xml_string):
+def get_transferticket_from_xml(xml_string):
     return _get_element_from_xml(xml_string, 'TransferTicket')
 
 

@@ -7,9 +7,9 @@ from erica.erica_legacy.elster_xml.common.transfer_header import add_transfer_he
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import get_full_grundsteuer_data_representation
 from erica.erica_legacy.elster_xml.transfer_header_fields import get_grundsteuer_th_fields
-from erica.erica_legacy.request_processing.requests_controller import TransferTicketRequestController
+from erica.erica_legacy.request_processing.requests_controller import TransferticketRequestController
 
-class GrundsteuerRequestController(TransferTicketRequestController):
+class GrundsteuerRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = GrundsteuerPyericProcessController
 
     def _is_testmerker_used(self):

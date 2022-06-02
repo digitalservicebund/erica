@@ -24,7 +24,7 @@ async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto, r
     :param request_fsc_client_identifier: payload with client identifier and the JSON input data for the request.
     """
     result = get_job_service(RequestType.freischalt_code_request).add_to_queue(
-        request_fsc_client_identifier.payload, request_fsc_client_identifier.clientIdentifier,
+        request_fsc_client_identifier.payload, request_fsc_client_identifier.client_identifier,
         RequestType.freischalt_code_request)
     return RedirectResponse(
         request.url_for("get_fsc_request_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),
@@ -50,7 +50,7 @@ async def activate_fsc(activation_fsc_client_identifier: FreischaltCodeActivateD
     :param activation_fsc_client_identifier: payload with client identifier and the JSON input data for the activation.
     """
     result = get_job_service(RequestType.freischalt_code_activate).add_to_queue(
-        activation_fsc_client_identifier.payload, activation_fsc_client_identifier.clientIdentifier,
+        activation_fsc_client_identifier.payload, activation_fsc_client_identifier.client_identifier,
         RequestType.freischalt_code_activate)
     return RedirectResponse(
         request.url_for("get_fsc_activation_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),
@@ -76,7 +76,7 @@ async def revocate_fsc(revocation_fsc_client_identifier: FreischaltCodeRevocateD
     :param revocation_fsc_client_identifier: payload with client identifier and the JSON input data for the revocation.
     """
     result = get_job_service(RequestType.freischalt_code_revocate).add_to_queue(
-        revocation_fsc_client_identifier.payload, revocation_fsc_client_identifier.clientIdentifier,
+        revocation_fsc_client_identifier.payload, revocation_fsc_client_identifier.client_identifier,
         RequestType.freischalt_code_revocate)
     return RedirectResponse(
         request.url_for("get_fsc_revocation_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),

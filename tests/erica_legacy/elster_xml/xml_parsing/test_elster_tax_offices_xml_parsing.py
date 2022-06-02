@@ -1,7 +1,7 @@
 import unittest
 
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_state_ids, get_tax_offices, \
-    get_antrag_id_from_xml, get_idnr_from_xml, get_transfer_ticket_from_xml, get_address_from_xml, \
+    get_antrag_id_from_xml, get_idnr_from_xml, get_transferticket_from_xml, get_address_from_xml, \
     get_relevant_beleg_ids
 from tests.erica_legacy.utils import replace_text_in_xml
 from tests.utils import read_text_from_sample
@@ -48,16 +48,16 @@ class TestIdNrFromXml(unittest.TestCase):
         self.assertEqual(idnr, '04452397687')
 
 
-class TestTransferTicketFromXml(unittest.TestCase):
-    def test_if_correct_server_response_then_return_correct_transfer_ticket_value(self):
-        expected_transfer_ticket = 'Transferiates'
-        xml_string = replace_text_in_xml(read_text_from_sample('sample_vast_request_response.xml'), 'TransferTicket', expected_transfer_ticket)
-        actual_transfer_ticket = get_transfer_ticket_from_xml(xml_string)
-        self.assertEqual(expected_transfer_ticket, actual_transfer_ticket)
+class TestTransferticketFromXml(unittest.TestCase):
+    def test_if_correct_server_response_then_return_correct_transferticket_value(self):
+        expected_transferticket = 'Transferiates'
+        xml_string = replace_text_in_xml(read_text_from_sample('sample_vast_request_response.xml'), 'TransferTicket', expected_transferticket)
+        actual_transferticket = get_transferticket_from_xml(xml_string)
+        self.assertEqual(expected_transferticket, actual_transferticket)
 
 
 class TestAddressFromXml(unittest.TestCase):
-    def test_if_correct_server_response_then_return_correct_transfer_ticket_value(self):
+    def test_if_correct_server_response_then_return_correct_transferticket_value(self):
         import html
         expected_address = html.unescape('<AdrKette>'
                                          '<StrAdr>'

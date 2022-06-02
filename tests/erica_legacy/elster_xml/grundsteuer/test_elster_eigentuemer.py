@@ -64,11 +64,11 @@ class TestEPersonData:
         result = EPersonData(person_obj, person_index)
 
         assert result.Beteiligter == person_index + 1
-        assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
-        assert result.E7404514 == person_obj.persoenlicheAngaben.titel
-        assert result.E7404518 == elsterify_date(person_obj.persoenlicheAngaben.geburtsdatum)
-        assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
-        assert result.E7404511 == person_obj.persoenlicheAngaben.name
+        assert result.E7404510 == elsterify_anrede(person_obj.persoenliche_angaben.anrede)
+        assert result.E7404514 == person_obj.persoenliche_angaben.titel
+        assert result.E7404518 == elsterify_date(person_obj.persoenliche_angaben.geburtsdatum)
+        assert result.E7404513 == person_obj.persoenliche_angaben.vorname
+        assert result.E7404511 == person_obj.persoenliche_angaben.name
         assert result.E7404524 == person_obj.adresse.strasse
         assert result.E7404525 == person_obj.adresse.hausnummer
         assert result.E7404526 == person_obj.adresse.hausnummerzusatz
@@ -88,11 +88,11 @@ class TestEPersonData:
         result = EPersonData(person_obj, person_index)
 
         assert result.Beteiligter == person_index + 1
-        assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
+        assert result.E7404510 == elsterify_anrede(person_obj.persoenliche_angaben.anrede)
         assert result.E7404514 is None
         assert result.E7404518 is None
-        assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
-        assert result.E7404511 == person_obj.persoenlicheAngaben.name
+        assert result.E7404513 == person_obj.persoenliche_angaben.vorname
+        assert result.E7404511 == person_obj.persoenliche_angaben.name
         assert result.E7404524 is None
         assert result.E7404525 is None
         assert result.E7404526 is None
@@ -107,17 +107,17 @@ class TestEPersonData:
 
     def test_if_part_of_optional_attributes_not_given_then_attributes_set_correctly(self):
         person_obj = SamplePerson().with_vertreter().with_telefonnummer().parse()
-        person_obj.persoenlicheAngaben.titel = None
+        person_obj.persoenliche_angaben.titel = None
         person_index = 2
 
         result = EPersonData(person_obj, person_index)
 
         assert result.Beteiligter == person_index + 1
-        assert result.E7404510 == elsterify_anrede(person_obj.persoenlicheAngaben.anrede)
+        assert result.E7404510 == elsterify_anrede(person_obj.persoenliche_angaben.anrede)
         assert result.E7404514 is None
-        assert result.E7404518 == elsterify_date(person_obj.persoenlicheAngaben.geburtsdatum)
-        assert result.E7404513 == person_obj.persoenlicheAngaben.vorname
-        assert result.E7404511 == person_obj.persoenlicheAngaben.name
+        assert result.E7404518 == elsterify_date(person_obj.persoenliche_angaben.geburtsdatum)
+        assert result.E7404513 == person_obj.persoenliche_angaben.vorname
+        assert result.E7404511 == person_obj.persoenliche_angaben.name
         assert result.E7404524 == person_obj.adresse.strasse
         assert result.E7404525 == person_obj.adresse.hausnummer
         assert result.E7404526 == person_obj.adresse.hausnummerzusatz

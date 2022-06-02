@@ -26,9 +26,28 @@ class TestGetBufaNr:
 
 @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
 class TestGenerateElectronicAktenzeichen:
-    def test_gernerate_electronic_aktenzeichen(self):
-        result = generate_electronic_aktenzeichen("2080353038893", "NW")
-        assert result == '520850353038893'
+    @pytest.mark.parametrize("bl, input_stnr, expected_stnr", [
+        ("NW", "2080353038893", "520850353038893"),
+        ("BW", "3100190001250002", "2831400190001250002"),
+        ("BY", "19869040000000012", "9198469040000000012"),
+        ("BE", "1687412343", "1116087412343"),
+        ("BB", "09841275756757579", "3098441275756757579"),
+        ("HB", "5710392627", "2457010392627"),
+        ("HH", "1605432634", "2216005432634"),
+        ("HE", "6000190000020004", "2660400190000020004"),
+        ("MV", "09868000600010001", "4098468000600010001"),
+        ("NI", "7968000600010009", "2379468000600010009"),
+        ("NW", "6000353012851", "560050353012851"),
+        ("RP", "70100281052000010", "2701400281052000010"),
+        ("SL", "01031130640290128", "1010431130640290128"),
+        ("SH", "9800196641", "2198000196641"),
+        ("SN", "22491703400010006", "3224491703400010006"),
+        ("ST", "10220000150210005", "3102420000150210005"),
+        ("TH", "19801005430173326", "4198401005430173326")
+    ])
+    def test_generate_electronic_aktenzeichen(self, bl, input_stnr, expected_stnr):
+        result = generate_electronic_aktenzeichen(input_stnr, bl)
+        assert result == expected_stnr
 
 
 class TestGenerateElectronicSteuernummer:

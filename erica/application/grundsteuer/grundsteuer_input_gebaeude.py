@@ -2,51 +2,51 @@ from typing import Optional, List
 
 from pydantic import validator
 
-from erica.application.grundsteuer.camel_case_input import CamelCaseInput
+from erica.application.base_dto import CamelCaseModel
 
 
-class Ab1949(CamelCaseInput):
+class Ab1949(CamelCaseModel):
     is_ab1949: bool
 
 
-class Baujahr(CamelCaseInput):
+class Baujahr(CamelCaseModel):
     baujahr: str
 
 
-class Kernsaniert(CamelCaseInput):
+class Kernsaniert(CamelCaseModel):
     is_kernsaniert: bool
 
 
-class Kernsanierungsjahr(CamelCaseInput):
+class Kernsanierungsjahr(CamelCaseModel):
     kernsanierungsjahr: str
 
 
-class Abbruchverpflichtung(CamelCaseInput):
+class Abbruchverpflichtung(CamelCaseModel):
     has_abbruchverpflichtung: bool
 
 
-class Abbruchverpflichtungsjahr(CamelCaseInput):
+class Abbruchverpflichtungsjahr(CamelCaseModel):
     abbruchverpflichtungsjahr: str
 
 
-class WeitereWohnraeume(CamelCaseInput):
+class WeitereWohnraeume(CamelCaseModel):
     has_weitere_wohnraeume: bool
 
 
-class WeitereWohnraeumeDetails(CamelCaseInput):
+class WeitereWohnraeumeDetails(CamelCaseModel):
     anzahl: int
     flaeche: int
 
 
-class Garagen(CamelCaseInput):
+class Garagen(CamelCaseModel):
     has_garagen: bool
 
 
-class GaragenAnzahl(CamelCaseInput):
+class GaragenAnzahl(CamelCaseModel):
     anzahl_garagen: int
 
 
-class Gebaeude(CamelCaseInput):
+class Gebaeude(CamelCaseModel):
     ab1949: Ab1949
     baujahr: Optional[Baujahr]
     kernsaniert: Kernsaniert

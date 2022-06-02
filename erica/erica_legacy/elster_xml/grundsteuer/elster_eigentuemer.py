@@ -66,11 +66,11 @@ class EPersonData:
 
     def __init__(self, input_data: Person, person_index: int):
         self.Beteiligter = person_index + 1
-        self.E7404510 = elsterify_anrede(input_data.persoenlicheAngaben.anrede)
-        self.E7404514 = input_data.persoenlicheAngaben.titel
-        self.E7404518 = elsterify_date(input_data.persoenlicheAngaben.geburtsdatum)
-        self.E7404513 = input_data.persoenlicheAngaben.vorname
-        self.E7404511 = input_data.persoenlicheAngaben.name
+        self.E7404510 = elsterify_anrede(input_data.persoenliche_angaben.anrede)
+        self.E7404514 = input_data.persoenliche_angaben.titel
+        self.E7404518 = elsterify_date(input_data.persoenliche_angaben.geburtsdatum)
+        self.E7404513 = input_data.persoenliche_angaben.vorname
+        self.E7404511 = input_data.persoenliche_angaben.name
         self.E7404524 = input_data.adresse.strasse
         self.E7404525 = input_data.adresse.hausnummer
         self.E7404526 = input_data.adresse.hausnummerzusatz

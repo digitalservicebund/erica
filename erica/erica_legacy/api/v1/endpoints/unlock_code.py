@@ -22,7 +22,10 @@ def request_unlock_code(unlock_code_request: UnlockCodeRequestData, include_elst
     """
     try:
         request = UnlockCodeRequestController(unlock_code_request, include_elster_responses)
-        return request.process()
+        result = request.process()
+        if "transferticket" in result:
+            result["transfer_ticket"] = result.pop("transferticket")
+        return result
     except EricProcessNotSuccessful as e:
         logging.getLogger().info("Could not request unlock code", exc_info=True)
         raise HTTPException(status_code=422, detail=e.generate_error_response(include_elster_responses))
@@ -40,7 +43,10 @@ def activate_unlock_code(unlock_code_activation: UnlockCodeActivationData, inclu
     """
     try:
         request = UnlockCodeActivationRequestController(unlock_code_activation, include_elster_responses)
-        return request.process()
+        result = request.process()
+        if "transferticket" in result:
+            result["transfer_ticket"] = result.pop("transferticket")
+        return result
     except EricProcessNotSuccessful as e:
         logging.getLogger().info("Could not activate unlock code", exc_info=True)
         raise HTTPException(status_code=422, detail=e.generate_error_response(include_elster_responses))
@@ -59,7 +65,10 @@ def revoke_unlock_code(unlock_code_revocation: UnlockCodeRevocationData, include
     """
     try:
         request = UnlockCodeRevocationRequestController(unlock_code_revocation, include_elster_responses)
-        return request.process()
+        result = request.process()
+        if "transferticket" in result:
+            result["transfer_ticket"] = result.pop("transferticket")
+        return result
     except EricProcessNotSuccessful as e:
         logging.getLogger().info("Could not revoke unlock code", exc_info=True)
         raise HTTPException(status_code=422, detail=e.generate_error_response(include_elster_responses))

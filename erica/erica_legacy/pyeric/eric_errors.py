@@ -1,6 +1,7 @@
 from xml.etree.ElementTree import ParseError
 
-from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import get_elements_text_from_xml, remove_declaration_and_namespace
+from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import get_elements_text_from_xml, \
+    remove_declaration_and_namespace
 
 _ERIC_SUCCESS_CODE = {
     0: "ERIC_OK"
@@ -8,7 +9,6 @@ _ERIC_SUCCESS_CODE = {
 
 _ERIC_CUSTOM_ERROR_CODES = {
     1: "NULL_POINTER_RETURNED",
-    2: "NO_MATCHING_IDENTIFIER_FOR_UNLOCK_REQUEST",
     3: "ALREADY_OPEN_UNLOCK_CODE_REQUEST",
     5: "ELSTER_REQUEST_ID_UNKNOWN",
     6: "INVALID_BUFA_NUMBER",
@@ -238,6 +238,9 @@ _ERIC_IO_ERRORS = {
     610301150: "ERIC_IO_READER_STEUERZEICHEN_IM_TRANSFERHEADER",
     610301151: "ERIC_IO_READER_STEUERZEICHEN_IM_NUTZDATENHEADER",
     610301152: "ERIC_IO_READER_STEUERZEICHEN_IN_DEN_NUTZDATEN",
+    610301190: 'ERIC_IO_READER_ZU_VIELE_ANHAENGE',
+    610301191: 'ERIC_IO_READER_ANHANG_ZU_GROSS',
+    610301192: 'ERIC_IO_READER_ANHAENGE_ZU_GROSS',
     610301200: "ERIC_IO_READER_SCHEMA_VALIDIERUNGSFEHLER",
     610301201: "ERIC_IO_READER_UNBEKANNTE_XML_ENTITY",
     610301252: "ERIC_IO_DATENTEILNOTFOUND",
@@ -262,6 +265,12 @@ _ERIC_PRINT_ERRORS = {
 _ERIC_ERROR_MESSAGES = {**_ERIC_SUCCESS_CODE, **_ERIC_CUSTOM_ERROR_CODES, **_ERIC_GLOBAL_VALIDATION_ERRORS,
                         **_ERIC_GLOBAL_INITIALISATION_ERRORS, **_ERIC_GLOBAL_ERRORS, **_ERIC_TRANSFER_ERRORS,
                         **_ERIC_CRYPT_ERRORS, **_ERIC_IO_ERRORS, **_ERIC_PRINT_ERRORS}
+
+ERIC_ERRORS_WITH_RETRY = ["ERIC_CRYPT_E_SC_SLOT_EMPTY", "ERIC_CRYPT_E_P11_SLOT_EMPTY", "ERIC_TRANSFER_ERR_PROXYCONNECT",
+                          "ERIC_TRANSFER_ERR_CONNECTSERVER", "ERIC_TRANSFER_ERR_NORESPONSE",
+                          "ERIC_TRANSFER_ERR_TIMEOUT", "ERIC_TRANSFER_ERR_SEND"
+                          "ERIC_TRANSFER_COM_ERROR", "ERIC_GLOBAL_INTERNER_FEHLER"
+                          "ERIC_TRANSFER_ERR_NOTENCRYPTED"]
 
 
 class EricProcessNotSuccessful(Exception):
@@ -497,7 +506,8 @@ def _create_validation_error(rescode, eric_response):
 
 
 def _create_transfer_error(rescode, eric_response, server_response, server_err_msg=None):
-    if rescode == 610101292 and server_err_msg and is_error_in_server_err_msg(server_err_msg.get('NDH_ERR_XML'), '371015213'):
+    if rescode == 610101292 and server_err_msg and is_error_in_server_err_msg(server_err_msg.get('NDH_ERR_XML'),
+                                                                              '371015213'):
         raise EricAlreadyRevokedError(rescode, eric_response, server_response, server_err_msg)
     elif server_response and rescode in _FSC_ALREADY_REQUESTED_ERRORS and \
             ("Es besteht bereits ein offener Antrag auf Erteilung einer Berechtigung zum Datenabruf"
@@ -521,7 +531,8 @@ def check_handle(handle):
 
 def is_error_in_server_err_msg(error_xml_str, error):
     """Checks if a specific error occurs in the <Fehler> tag of the error xml"""
-    return any([elem.text == error for elem in remove_declaration_and_namespace(error_xml_str).findall('.//Fehler/Code')])
+    return any(
+        [elem.text == error for elem in remove_declaration_and_namespace(error_xml_str).findall('.//Fehler/Code')])
 
 
 def check_xml(xml):

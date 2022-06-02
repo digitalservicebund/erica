@@ -4,7 +4,7 @@ from uuid import UUID
 from opyoid import Module
 
 from erica.application.FreischaltCode.FreischaltCode import FreischaltcodeRequestAndActivationResponseDto, \
-    ResultFreischaltcodeRequestAndActivationDto, FreischaltcodeRevocationResponseDto, TransferTicketAndIdnrResponseDto
+    ResultFreischaltcodeRequestAndActivationDto, FreischaltcodeRevocationResponseDto, TransferticketAndIdnrResponseDto
 from erica.application.Shared.base_service import BaseService
 from erica.application.Shared.response_dto import JobState
 from erica.application.Shared.response_state_mapper import map_status
@@ -43,34 +43,34 @@ class FreischaltCodeService(FreischaltCodeServiceInterface):
         if process_status == JobState.SUCCESS:
             result = ResultFreischaltcodeRequestAndActivationDto(
                 elster_request_id=erica_request.result["elster_request_id"],
-                transfer_ticket=erica_request.result["transfer_ticket"],
-                idnr=erica_request.payload.get("tax_id_number"))
+                transferticket=erica_request.result["transferticket"],
+                tax_id_number=erica_request.payload.get("tax_id_number"))
             return FreischaltcodeRequestAndActivationResponseDto(
-                processStatus=map_status(erica_request.status), result=result)
+                process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:
             return FreischaltcodeRequestAndActivationResponseDto(
-                processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
-                errorMessage=erica_request.error_message)
+                process_status=map_status(erica_request.status), error_code=erica_request.error_code,
+                error_message=erica_request.error_message)
         else:
             return FreischaltcodeRequestAndActivationResponseDto(
-                processStatus=map_status(erica_request.status))
+                process_status=map_status(erica_request.status))
 
     def get_response_freischaltcode_revocation(self, request_id: UUID):
         erica_request = self.get_erica_request(request_id, RequestType.freischalt_code_revocate)
         process_status = map_status(erica_request.status)
         if process_status == JobState.SUCCESS:
-            result = TransferTicketAndIdnrResponseDto(
-                transfer_ticket=erica_request.result["transfer_ticket"],
-                idnr=erica_request.payload.get("tax_id_number"))
+            result = TransferticketAndIdnrResponseDto(
+                transferticket=erica_request.result["transferticket"],
+                tax_id_number=erica_request.payload.get("tax_id_number"))
             return FreischaltcodeRevocationResponseDto(
-                processStatus=map_status(erica_request.status), result=result)
+                process_status=map_status(erica_request.status), result=result)
         elif process_status == JobState.FAILURE:
             return FreischaltcodeRevocationResponseDto(
-                processStatus=map_status(erica_request.status), errorCode=erica_request.error_code,
-                errorMessage=erica_request.error_message)
+                process_status=map_status(erica_request.status), error_code=erica_request.error_code,
+                error_message=erica_request.error_message)
         else:
             return FreischaltcodeRevocationResponseDto(
-                processStatus=map_status(erica_request.status))
+                process_status=map_status(erica_request.status))
 
 
 class FreischaltCodeServiceModule(Module):

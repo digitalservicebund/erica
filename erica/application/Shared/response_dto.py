@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 
 from erica.application.base_dto import BaseDto
 
@@ -11,17 +11,21 @@ class JobState(Enum):
 
 
 class ResponseBaseDto(BaseDto):
-    processStatus: JobState
+    process_status: JobState
     result: Optional[BaseDto]
-    errorCode: Optional[str]
-    errorMessage: Optional[str]
+    error_code: Optional[str]
+    error_message: Optional[str]
 
 
 class ResponseErrorDto(BaseDto):
-    errorCode: str
-    errorMessage: str
+    error_code: str
+    error_message: str
 
 
 class ResultTransferPdfResponseDto(BaseDto):
-    transfer_ticket: str
+    transferticket: str
     pdf: str
+
+
+class ResultValidationErrorResponseDto(BaseDto):
+    validation_errors: List[str]

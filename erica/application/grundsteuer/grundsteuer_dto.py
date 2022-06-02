@@ -1,9 +1,10 @@
-from typing import Optional
+from typing import Optional, Union
 
-from erica.application.Shared.response_dto import ResponseBaseDto, ResultTransferPdfResponseDto
+from erica.application.Shared.response_dto import ResponseBaseDto, ResultTransferPdfResponseDto, \
+    ResultValidationErrorResponseDto
 from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Eigentuemer
 
-from erica.application.grundsteuer.camel_case_input import CamelCaseInput
+from erica.application.base_dto import CamelCaseModel
 from erica.application.grundsteuer.grundsteuer_input_gebaeude import Gebaeude
 from erica.application.grundsteuer.grundsteuer_input_grundstueck import Grundstueck
 
@@ -13,19 +14,19 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 
 # Input
 
-class GrundsteuerPayload(BasePayload, ABC, CamelCaseInput):
+class GrundsteuerPayload(BasePayload, ABC, CamelCaseModel):
     grundstueck: Grundstueck
     gebaeude: Optional[Gebaeude]
     eigentuemer: Eigentuemer
     freitext: Optional[str]
 
 
-class GrundsteuerDto(CamelCaseInput):
+class GrundsteuerDto(CamelCaseModel):
     payload: GrundsteuerPayload
-    clientIdentifier: str
+    client_identifier: str
 
 
 # Output
 
 class GrundsteuerResponseDto(ResponseBaseDto):
-    result: Optional[ResultTransferPdfResponseDto]
+    result: Optional[Union[ResultTransferPdfResponseDto, ResultValidationErrorResponseDto]]
