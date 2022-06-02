@@ -1,12 +1,21 @@
 import sys
+from pkg_resources import Environment
 
 from redis import Redis
 from rq import Connection, Worker, Queue
+from sentry_sdk.integrations.rq import RqIntegration
 
 from erica.config import get_settings
+import sentry_sdk
 
 
 def run_worker():
+    if get_settings().sentry_dsn:
+        sentry_sdk.init(
+            get_settings().sentry_dsn,
+            integrations=[RqIntegration()],
+            environment=get_settings().env_name)
+
     with Connection(Redis.from_url(get_settings().queue_url,
                                    health_check_interval=10,
                                    socket_connect_timeout=5,
