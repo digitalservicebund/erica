@@ -10,9 +10,9 @@ import sentry_sdk
 
 
 def run_worker():
-    if get_settings().sentry_dsn:
+    if get_settings().sentry_dsn_worker:
         sentry_sdk.init(
-            get_settings().sentry_dsn,
+            get_settings().sentry_dsn_worker,
             integrations=[RqIntegration()],
             environment=get_settings().env_name)
 

@@ -34,7 +34,8 @@ class Settings(BaseSettings):
     ttl_finished_request_entities_in_min: int = 10
     queue_retry_repetitions: int = Field(3, env='QUEUE_RETRY_REPETITIONS')
     queue_retry_interval_seconds: list = Field([1, 2, 3], env='QUEUE_RETRY_INTERVAL_SECONDS')
-    sentry_dsn: str = None
+    sentry_dsn_api: str = None
+    sentry_dsn_worker: str = None
 
     class Config:
         dir = os.path.dirname(__file__)
@@ -62,7 +63,8 @@ class ProductionSettings(Settings):
     using_stick: bool = True
     use_testmerker: bool = False
     accept_test_bufa: bool = False
-    sentry_dsn: str = "https://fe49771e429c48be8deb9074556c5463@o1248831.ingest.sentry.io/6466074"
+    sentry_dsn_api: str = "https://e8cbb2aaeed742c19965960951c7835c@o1248831.ingest.sentry.io/6466521"
+    sentry_dsn_worker: str = "https://fe49771e429c48be8deb9074556c5463@o1248831.ingest.sentry.io/6466074"
 
 
 
@@ -70,8 +72,8 @@ class StagingSettings(Settings):
     env_name: str = "staging"
     using_stick: bool = True
     accept_test_bufa: bool = True
-    sentry_dsn: str = "https://fe49771e429c48be8deb9074556c5463@o1248831.ingest.sentry.io/6466074"
-
+    sentry_dsn_api: str = "https://e8cbb2aaeed742c19965960951c7835c@o1248831.ingest.sentry.io/6466521"
+    sentry_dsn_worker: str = "https://fe49771e429c48be8deb9074556c5463@o1248831.ingest.sentry.io/6466074"
 
 class DevelopmentSettings(Settings):
     env_name: str = "development"
