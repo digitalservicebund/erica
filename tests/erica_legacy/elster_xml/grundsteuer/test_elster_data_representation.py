@@ -254,7 +254,7 @@ class TestEVorsatz:
         assert result.AbsStr == grundsteuer_obj.eigentuemer.person[0].adresse.strasse
         assert result.AbsPlz == grundsteuer_obj.eigentuemer.person[0].adresse.plz
         assert result.AbsOrt == grundsteuer_obj.eigentuemer.person[0].adresse.ort
-        assert result.Copyright == "(C) 2022 DigitalService4Germany"
+        assert result.Copyright == "(C) 2022 DigitalService GmbH des Bundes"
         assert result.OrdNrArt == "S"
         assert result.Rueckuebermittlung == ERueckuebermittlung()
         assert len(vars(result)) == 12

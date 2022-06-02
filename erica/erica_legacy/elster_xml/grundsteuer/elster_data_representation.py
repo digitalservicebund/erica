@@ -160,7 +160,7 @@ class EVorsatz:
         self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
-        self.Copyright = "(C) 2022 DigitalService4Germany"
+        self.Copyright = "(C) 2022 DigitalService GmbH des Bundes"
 
         steuernummer_aktenzeichen = generate_electronic_aktenzeichen(input_data.grundstueck.steuernummer,
                                                                      input_data.grundstueck.adresse.bundesland)

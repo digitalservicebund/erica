@@ -55,7 +55,7 @@ class TestGenerateVorsatzWithTaxNumber(unittest.TestCase):
             AbsStr=street + ' ' + street_nr,
             AbsPlz=plz,
             AbsOrt=town,
-            Copyright='(C) 2021 DigitalService4Germany'
+            Copyright='(C) 2022 DigitalService GmbH des Bundes'
         )
         actual_vorsatz = generate_vorsatz_with_tax_number(steuernummer, year, person_a_idnr, person_b_idnr, first_name,
                                                           last_name,
@@ -88,7 +88,7 @@ class TestGenerateVorsatzWithoutTaxNumber(unittest.TestCase):
             AbsStr=street + ' ' + street_nr,
             AbsPlz=plz,
             AbsOrt=town,
-            Copyright='(C) 2021 DigitalService4Germany'
+            Copyright='(C) 2022 DigitalService GmbH des Bundes'
         )
         actual_vorsatz = generate_vorsatz_without_tax_number(year, person_a_idnr, person_b_idnr, first_name, last_name,
                                                              street, street_nr, plz, town)

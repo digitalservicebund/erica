@@ -45,7 +45,7 @@ def generate_vorsatz_with_tax_number(steuernummer, year, person_a_idnr, person_b
         AbsStr=street + ' ' + street_nr,
         AbsPlz=plz,
         AbsOrt=town,
-        Copyright='(C) 2021 DigitalService4Germany',
+        Copyright='(C) 2022 DigitalService GmbH des Bundes',
     )
 
 
@@ -63,7 +63,7 @@ def generate_vorsatz_without_tax_number(year, person_a_idnr, person_b_idnr, firs
         AbsStr=street + ' ' + street_nr,
         AbsPlz=plz,
         AbsOrt=town,
-        Copyright='(C) 2021 DigitalService4Germany',
+        Copyright='(C) 2022 DigitalService GmbH des Bundes',
     )
 
 
