@@ -5,7 +5,7 @@ It is a wrapper around the functionality of EriC, ELSTER's own client to access 
 It provides functionality to send tax declarations, as well as request, activate and revoke unlock codes.
 
 It was originally [developed as part of the Tech4Germany Fellowship 2020](https://github.com/tech4germany/steuerlotse). 
-The fellowship is organized by [DigitalService4Germany GmbH](https://digitalservice4germany.com).
+The fellowship is organized by [DigitalService GmbH des Bundes](https://digitalservice4germany.com).
 
 🇩🇪
 Erica ist ein Service, um Steuererklärungen an ELSTER zu senden.
@@ -13,7 +13,7 @@ Es dient als Wrapper um die Funktionalität von EriC, ELSTERs eigener Client um 
 Es stellt Funktionalität zum Absenden von Steuererklärungen sowie dem Beantragen, Freischalten und Stornieren von Freischaltcodes bereit.
 
 Ursprünglich wurde es [als Teil des Tech4Germany Fellowships 2020 entwickelt](https://github.com/tech4germany/steuerlotse), 
-das von der [DigitalService4Germany GmbH](https://digitalservice4germany.com) organisiert wird.
+das von der [DigitalService GmbH des Bundes](https://digitalservice4germany.com) organisiert wird.
 
 # Contributing
 
@@ -30,14 +30,14 @@ Bitte befolge immer die Richtlinien und unseren [Verhaltenskodex](CODE_OF_CONDUC
 ## Contributing code
 🇬🇧 
 Open a pull request with your changes and it will be reviewed by someone from the team. When you submit a pull request, 
-you declare that you have the right to license your contribution to the DigitalService4Germany and the community. 
+you declare that you have the right to license your contribution to the DigitalService and the community. 
 By submitting the patch, you agree that your contributions are licensed under the MIT license.
 
 Please make sure that your changes have been tested befor submitting a pull request.
 
 🇩🇪  
 Nach dem Erstellen eines Pull Requests wird dieser von einer Person aus dem Team überprüft. Wenn du einen Pull-Request 
-einreichst, erklärst du dich damit einverstanden, deinen Beitrag an den DigitalService4Germany und die Community zu 
+einreichst, erklärst du dich damit einverstanden, deinen Beitrag an den DigitalService und die Community zu 
 lizenzieren. Durch das Einreichen des Patches erklärst du dich damit einverstanden, dass deine Beiträge unter der 
 MIT-Lizenz lizenziert sind.
 
