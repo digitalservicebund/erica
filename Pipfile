@@ -29,6 +29,7 @@ opyoid = "*"
 injector = "*"
 orjson = "*"
 alembic = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 pytest = "*"
