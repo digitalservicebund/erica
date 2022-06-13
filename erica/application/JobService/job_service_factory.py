@@ -40,7 +40,7 @@ def _freischalt_code_activation_injector() :
     module.bind(Type[BasePayload], to_instance=FreischaltCodeActivatePayload)
     module.bind(JobServiceInterface, to_class=JobService)
     module.bind(Callable, to_instance=activate_freischalt_code)
-    
+
     return Injector([
         module
     ])

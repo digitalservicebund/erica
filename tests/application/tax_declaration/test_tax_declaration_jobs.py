@@ -14,6 +14,7 @@ from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import MetaDataEst
+from erica.infrastructure.sqlalchemy.database import session_scope
 from tests.erica_legacy.utils import TEST_EST_VERANLAGUNGSJAHR
 from tests.utils import read_text_from_sample
 
@@ -74,19 +75,21 @@ class TestIntegrationWithDatabaseAndTaxDeclarationJob:
             meta_data=MetaDataEst(year=TEST_EST_VERANLAGUNGSJAHR))
         response_pdf = b"This is the world we live in"
         expected_pdf = base64.b64encode(response_pdf).decode()
-        service = get_job_service(RequestType.send_est)
-        entity = service.repository.create(EricaRequest(
-            request_id=uuid4(),
-            payload=payload,
-            creator_id="tests",
-            type=RequestType.freischalt_code_revocate
-        ))
-        xml_string = read_text_from_sample('sample_est_response_server.xml')
-        with patch('erica.erica_legacy.pyeric.pyeric_controller.EstPyericProcessController.get_eric_response',
-                   MagicMock(return_value=PyericResponse(eric_response="eric_response", server_response=xml_string, pdf=response_pdf))):
-            await send_est(entity.request_id)
+        # Necessary due to async db fixture. See fixture definition for details.
+        with session_scope():
+            service = get_job_service(RequestType.send_est)
+            entity = service.repository.create(EricaRequest(
+                request_id=uuid4(),
+                payload=payload,
+                creator_id="tests",
+                type=RequestType.freischalt_code_revocate
+            ))
+            xml_string = read_text_from_sample('sample_est_response_server.xml')
+            with patch('erica.erica_legacy.pyeric.pyeric_controller.EstPyericProcessController.get_eric_response',
+                    MagicMock(return_value=PyericResponse(eric_response="eric_response", server_response=xml_string, pdf=response_pdf))):
+                await send_est(entity.request_id)
 
-        updated_entity = service.repository.get_by_job_request_id(entity.request_id)
+            updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'transferticket': get_transferticket_from_xml(xml_string),
                                          'pdf': expected_pdf}

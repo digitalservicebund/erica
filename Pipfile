@@ -30,6 +30,7 @@ injector = "*"
 orjson = "*"
 alembic = "*"
 sentry-sdk = "*"
+fastapi-sqlalchemy = "*"
 
 [dev-packages]
 pytest = "*"

@@ -1,5 +1,4 @@
 import sys
-from pkg_resources import Environment
 
 from redis import Redis
 from rq import Connection, Worker, Queue

@@ -2,6 +2,7 @@ import logging
 import time
 
 from fastapi import FastAPI, Request
+from fastapi_sqlalchemy import DBSessionMiddleware
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
 import sentry_sdk
@@ -12,6 +13,7 @@ from erica.api.v2.api_v2 import api_router_02
 from erica.config import get_settings
 from erica.erica_legacy.api.api import api_router
 from erica.erica_legacy.pyeric.eric import verify_using_stick
+from erica.infrastructure.sqlalchemy.database import engine_args
 
 app = FastAPI(
     title="Erica Service",
@@ -55,6 +57,7 @@ if get_settings().dongle_connected:
 
 app.include_router(api_router_02)
 
+app.add_middleware(DBSessionMiddleware, db_url=get_settings().database_url, engine_args=engine_args)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
