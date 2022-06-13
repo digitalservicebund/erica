@@ -97,10 +97,10 @@ async def async_fake_db_connection_with_erica_table_in_settings(database_uri):
         # test code in a `with session_scope()` block in the test function.
         yield postgresql_url
 
-    with session_scope():
-        erica_request_service: EricaRequestService = Injector([ApiModule()]).inject(EricaRequestServiceInterface)
-        entities = erica_request_service.erica_request_repository.get()
+        with session_scope():
+            erica_request_service: EricaRequestService = Injector([ApiModule()]).inject(EricaRequestServiceInterface)
+            entities = erica_request_service.erica_request_repository.get()
 
-        for entity in entities:
-            erica_request_service.erica_request_repository.db_connection.delete(entity)
+            for entity in entities:
+                erica_request_service.erica_request_repository.db_connection.delete(entity)
     get_settings().database_url = original_db_url
