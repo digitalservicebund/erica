@@ -87,8 +87,8 @@ async def async_fake_db_connection_with_erica_table_in_settings(database_uri):
 
     # fastapi_sqlalchemy creates its sessionmaker in the middleware constructor and provides
     # no mechanism to override it, so we have to patch it here.
-    _Session = sessionmaker(bind=engine)
-    with unittest.mock.patch('fastapi_sqlalchemy.middleware._Session', _Session):
+    session_class = sessionmaker(bind=engine)
+    with unittest.mock.patch('fastapi_sqlalchemy.middleware._Session', session_class):
         # Ideally, we'd want to wrap this yield (and therefore all test code using this fixture)
         # in a `with session_scope()` block. However, this does not work. Best guess is that it's
         # something to do with how pytest-asyncio copies the run context when scheduling test
