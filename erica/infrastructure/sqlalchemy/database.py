@@ -1,8 +1,8 @@
 import orjson
+from fastapi_sqlalchemy import db
 from opyoid import Provider
-from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session
 
 from erica.config import get_settings
 
@@ -20,14 +20,14 @@ def orjson_deserializer(json):
 
 def get_engine():
     return create_engine(
-        get_settings().database_url, json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)
+        get_settings().database_url, **engine_args)
 
 
 class DatabaseSessionProvider(Provider[Session]):
 
     def get(self) -> Session:
-        engine = get_engine()
-        if not database_exists(engine.url):
-            create_database(engine.url)
-        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-        return SessionLocal()
+        return db.session
+
+session_scope = db
+
+engine_args = dict(json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)

@@ -10,6 +10,7 @@ from erica.application.tax_number_validation.jobs import check_tax_number
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload, StateAbbreviation
+from erica.infrastructure.sqlalchemy.database import session_scope
 
 
 class TestCheckTaxNumber:
@@ -66,17 +67,19 @@ class TestIntegrationWithDatabaseAndCheckTaxNumber:
         payload = CheckTaxNumberPayload(
             state_abbreviation=StateAbbreviation.bw,
             tax_number='04531972802')
-        service = get_job_service(RequestType.check_tax_number)
-        entity = service.repository.create(EricaRequest(
-            request_id=uuid4(),
-            payload=payload,
-            creator_id="tests",
-            type=RequestType.freischalt_code_revocate
-        ))
-        with patch('erica.erica_legacy.pyeric.pyeric_controller.CheckTaxNumberPyericController.get_eric_response',
-                   MagicMock(return_value=True)):
-            await check_tax_number(entity.request_id)
+        # Necessary due to async db fixture. See fixture definition for details.
+        with session_scope():
+            service = get_job_service(RequestType.check_tax_number)
+            entity = service.repository.create(EricaRequest(
+                request_id=uuid4(),
+                payload=payload,
+                creator_id="tests",
+                type=RequestType.freischalt_code_revocate
+            ))
+            with patch('erica.erica_legacy.pyeric.pyeric_controller.CheckTaxNumberPyericController.get_eric_response',
+                    MagicMock(return_value=True)):
+                await check_tax_number(entity.request_id)
 
-        updated_entity = service.repository.get_by_job_request_id(entity.request_id)
+            updated_entity = service.repository.get_by_job_request_id(entity.request_id)
 
         assert updated_entity.result == {'is_valid': True}

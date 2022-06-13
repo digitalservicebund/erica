@@ -1,21 +1,22 @@
 import os
 import sys
+import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 os.environ["ERICA_ENV"] = 'testing'
 
 import pytest_asyncio
 import pytest
-from opyoid import Injector
 from datetime import date
+from opyoid import Injector
+from sqlalchemy.orm import sessionmaker
 
 from erica.api.ApiModule import ApiModule
-from erica.config import get_settings
 from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface, EricaRequestService
-from erica.infrastructure.sqlalchemy.database import get_engine
-from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockSchema
-
+from erica.config import get_settings
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst
+from erica.infrastructure.sqlalchemy.database import get_engine, session_scope
+from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockSchema
 
 
 @pytest.fixture
@@ -57,7 +58,8 @@ def fake_db_connection_in_settings(database_uri):
     original_db_url = get_settings().database_url
     get_settings().database_url = database_uri
 
-    yield database_uri
+    with session_scope():
+        yield database_uri
 
     get_settings().database_url = original_db_url
 
@@ -78,14 +80,27 @@ async def async_fake_db_connection_with_erica_table_in_settings(database_uri):
     original_db_url = get_settings().database_url
     get_settings().database_url = postgresql_url
 
+    engine = get_engine()
+
     from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
-    EricaRequestSchema.metadata.create_all(bind=get_engine())
+    EricaRequestSchema.metadata.create_all(bind=engine)
 
-    yield postgresql_url
+    # fastapi_sqlalchemy creates its sessionmaker in the middleware constructor and provides
+    # no mechanism to override it, so we have to patch it here.
+    _Session = sessionmaker(bind=engine)
+    with unittest.mock.patch('fastapi_sqlalchemy.middleware._Session', _Session):
+        # Ideally, we'd want to wrap this yield (and therefore all test code using this fixture)
+        # in a `with session_scope()` block. However, this does not work. Best guess is that it's
+        # something to do with how pytest-asyncio copies the run context when scheduling test
+        # functions. fastapi_sqlalchemy uses a ContextVar to track the created session and that
+        # somehow gets lots when the test function runs. Workaround is to wrap any database-using
+        # test code in a `with session_scope()` block in the test function.
+        yield postgresql_url
 
-    erica_request_service: EricaRequestService = Injector([ApiModule()]).inject(EricaRequestServiceInterface)
-    entities = erica_request_service.erica_request_repository.get()
+    with session_scope():
+        erica_request_service: EricaRequestService = Injector([ApiModule()]).inject(EricaRequestServiceInterface)
+        entities = erica_request_service.erica_request_repository.get()
 
-    for entity in entities:
-        erica_request_service.erica_request_repository.db_connection.delete(entity)
+        for entity in entities:
+            erica_request_service.erica_request_repository.db_connection.delete(entity)
     get_settings().database_url = original_db_url
