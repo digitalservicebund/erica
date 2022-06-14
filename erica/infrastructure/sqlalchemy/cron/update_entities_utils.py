@@ -11,6 +11,7 @@ from erica.config import get_settings
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 from opyoid import Injector
 from erica.infrastructure.infrastructure_module import InfrastructureModule
+from erica.infrastructure.sqlalchemy.database import session_scope
 
 
 @click.group()
@@ -66,4 +67,5 @@ dictConfig({
 })
 
 if __name__ == "__main__":
-    cli()
+    with session_scope():
+        cli()
