@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 import uuid
 from datetime import date
 from decimal import Decimal
@@ -443,8 +444,7 @@ class TestV2UnlockCodeRequest:
                                  data=json.dumps(full_unlock_code_request_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[3]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -509,8 +509,7 @@ class TestV2UnlockCodeActivation:
                                  data=json.dumps(full_unlock_code_activation_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[3]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -574,8 +573,7 @@ class TestV2UnlockCodeRevocation:
                                  data=json.dumps(full_unlock_code_revocation_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[3]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -637,8 +635,7 @@ class TestV2TaxNumberValidity:
                                  data=json.dumps(tax_number_validity_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Success")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -712,8 +709,7 @@ class TestV2SendEst:
                                  data=json.dumps(full_est_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Success")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -729,8 +725,7 @@ class TestV2SendEst:
                                  data=json.dumps(est_data_with_validation_errors, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -794,8 +789,8 @@ class TestV2GrundsteuerRequest:
                                  data=json.dumps(request, default=json_default))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Success")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -811,8 +806,8 @@ class TestV2GrundsteuerRequest:
                                  data=json.dumps(grundsteuer_data_with_validation_errors, default=json_default))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        sleep(6)
-        response = requests.get(ERICA_TESTING_URL + self.endpoint + "/" + uuid)
+
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -866,3 +861,16 @@ def json_default(value):
         return value.isoformat()
     else:
         return value.__dict__
+
+
+def poll(endpoint, expected_process_status, timeout=30, step=0.5):
+
+    start_time = time.perf_counter()
+    while time.perf_counter()- start_time < timeout:
+        response = requests.get(endpoint)
+        if response.status_code == 200 and response.json()['processStatus'] == expected_process_status:
+            return response
+        sleep(step)
+
+    raise RuntimeError(f"Timeout reached while polling endpoint: {endpoint}")
+
