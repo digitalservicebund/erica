@@ -7,6 +7,8 @@ from sentry_sdk.integrations.rq import RqIntegration
 from erica.config import get_settings
 import sentry_sdk
 
+from erica.exception_handler import retry_exception_handler
+
 
 def run_worker():
     if get_settings().sentry_dsn_worker:
@@ -21,7 +23,7 @@ def run_worker():
                                    socket_keepalive=True,
                                    retry_on_timeout=True)):
         qs = map(Queue, sys.argv[1:]) if sys.argv[1:] else Queue(get_settings().default_queue)
-        worker = Worker(qs)
+        worker = Worker(qs, exception_handlers=[retry_exception_handler])
         worker.work(with_scheduler=True)
 
 
