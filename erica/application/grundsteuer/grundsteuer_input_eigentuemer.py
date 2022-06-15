@@ -4,6 +4,7 @@ from typing import Optional, List
 
 from pydantic import validator
 from erica.application.base_dto import CamelCaseModel
+from erica.erica_legacy.pyeric.check_elster_request_id import tax_id_number_is_test_id_number
 
 
 class Anrede(str, Enum):
@@ -75,4 +76,10 @@ class Eigentuemer(CamelCaseModel):
             raise ValueError('has to be set if two persons')
         if values.get('person') and len(values.get('person')) != 2 and v is not None:
             raise ValueError('must not be set if other than two persons')
+        return v
+
+    @validator("person")
+    def must_have_all_test_ids_or_no_test_ids(cls, v, values):
+        if not(all([tax_id_number_is_test_id_number(person.steuer_id) for person in v]) or all([not tax_id_number_is_test_id_number(person.steuer_id) for person in v])):
+            raise ValueError('all eigentuemer need to use either real or test tax id numbers')
         return v
