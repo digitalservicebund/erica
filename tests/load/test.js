@@ -27,7 +27,7 @@ export let options = {
     },
   },
   thresholds: {
-    erica_jobs_failed: ["rate<0.02"], // 2% max error rate
+    errors: ["rate<0.02"], // 2% max error rate
     erica_job_duration: ["p(95)<120000"], // p95 < 2minutes
   },
 };
