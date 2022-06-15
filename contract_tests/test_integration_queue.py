@@ -444,7 +444,7 @@ class TestV2UnlockCodeRequest:
                                  data=json.dumps(full_unlock_code_request_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[3]
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -509,7 +509,7 @@ class TestV2UnlockCodeActivation:
                                  data=json.dumps(full_unlock_code_activation_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[3]
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -573,7 +573,7 @@ class TestV2UnlockCodeRevocation:
                                  data=json.dumps(full_unlock_code_revocation_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[3]
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -635,7 +635,7 @@ class TestV2TaxNumberValidity:
                                  data=json.dumps(tax_number_validity_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Success")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -709,7 +709,7 @@ class TestV2SendEst:
                                  data=json.dumps(full_est_data, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Success")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -725,7 +725,7 @@ class TestV2SendEst:
                                  data=json.dumps(est_data_with_validation_errors, default=str))
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -790,7 +790,7 @@ class TestV2GrundsteuerRequest:
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
 
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Success")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -807,7 +807,7 @@ class TestV2GrundsteuerRequest:
         assert response.status_code == 201
         uuid = response.headers['Location'].split("/")[2]
 
-        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid, expected_process_status="Failure")
+        response = poll(endpoint=ERICA_TESTING_URL + self.endpoint + "/" + uuid)
 
         assert response.status_code == 200
         logging.getLogger().info(f"Response: {response.json()}")
@@ -863,12 +863,12 @@ def json_default(value):
         return value.__dict__
 
 
-def poll(endpoint, expected_process_status, timeout=30, step=0.5):
+def poll(endpoint, timeout=30, step=0.5):
 
     start_time = time.perf_counter()
     while time.perf_counter()- start_time < timeout:
         response = requests.get(endpoint)
-        if response.status_code == 200 and response.json()['processStatus'] == expected_process_status:
+        if response.status_code == 200 and response.json()['processStatus'] != "Processing":
             return response
         sleep(step)
 
