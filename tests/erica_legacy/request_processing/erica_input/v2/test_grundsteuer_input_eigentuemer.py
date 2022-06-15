@@ -1,7 +1,8 @@
 import pytest
 from pydantic import ValidationError
 
-from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Person, Eigentuemer
+from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Person, Eigentuemer, PersoenlicheAngaben, \
+    Adresse, Anteil
 from tests.erica_legacy.samples.grundsteuer_sample_data import SamplePerson
 
 
@@ -83,3 +84,56 @@ class TestEigentuemer:
         input_data = {"person": [person1, person2, person3], "verheiratet": False}
         with pytest.raises(ValidationError):
             Eigentuemer.parse_obj(input_data)
+
+    def test_if_all_persons_have_test_tax_id_number_then_raise_no_error(self):
+        persons = [Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="daViella",
+                                                                                vorname="Gruella"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="04452317681", anteil=Anteil(zaehler="1", nenner="2")),
+                                Person(persoenliche_angaben=PersoenlicheAngaben(anrede="herr", name="Man",
+                                                                                vorname="Robin"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="09952417688", anteil=Anteil(zaehler="1", nenner="2")),
+                                Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="Biest",
+                                                                                vorname="Bella"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="03352417692", anteil=Anteil(zaehler="1", nenner="2"))]
+        try:
+            Eigentuemer.parse_obj({"person": persons})
+        except ValidationError as e:
+            pytest.fail("parse_obj failed with unexpected ValidationError " + str(e))
+
+    def test_if_all_persons_have_real_tax_id_number_then_raise_no_error(self):
+        persons = [Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="daViella",
+                                                                                vorname="Gruella"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="10796522382", anteil=Anteil(zaehler="1", nenner="2")),
+                                Person(persoenliche_angaben=PersoenlicheAngaben(anrede="herr", name="Man",
+                                                                                vorname="Robin"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="38689804274", anteil=Anteil(zaehler="1", nenner="2")),
+                                Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="Biest",
+                                                                                vorname="Bella"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="43865766025", anteil=Anteil(zaehler="1", nenner="2"))]
+        try:
+            Eigentuemer.parse_obj({"person": persons})
+        except ValidationError as e:
+            pytest.fail("parse_obj failed with unexpected ValidationError " + str(e))
+
+    def test_if_persons_have_real_and_test_tax_id_number_then_raise_error(self):
+        persons = [Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="daViella",
+                                                                                vorname="Gruella"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="10796522382", anteil=Anteil(zaehler="1", nenner="2")),
+                                Person(persoenliche_angaben=PersoenlicheAngaben(anrede="herr", name="Man",
+                                                                                vorname="Robin"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="09952417688", anteil=Anteil(zaehler="1", nenner="2")),
+                                Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="Biest",
+                                                                                vorname="Bella"),
+                                       adresse=Adresse(plz="79618", ort="Rheinfelden"),
+                                       steuer_id="03352417692", anteil=Anteil(zaehler="1", nenner="2"))]
+        with pytest.raises(ValidationError):
+            Eigentuemer.parse_obj({"person": persons})
+

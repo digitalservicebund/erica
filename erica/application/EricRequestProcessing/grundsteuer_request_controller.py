@@ -14,8 +14,10 @@ class GrundsteuerRequestController(TransferticketRequestController):
     _PYERIC_CONTROLLER = GrundsteuerPyericProcessController
 
     def _is_testmerker_used(self):
-        if len(self.input_data.eigentuemer.person) > 1 and self.input_data.eigentuemer.person[0].steuer_id:
+        if len(self.input_data.eigentuemer.person) >= 1 and self.input_data.eigentuemer.person[0].steuer_id:
+            print(self.input_data.eigentuemer.person)
             return tax_id_number_is_test_id_number(self.input_data.eigentuemer.person[0].steuer_id)
+        return True
 
     def generate_full_xml(self, use_testmerker):
         """ Constructs the complete XML for the grundsteuer use case. """
