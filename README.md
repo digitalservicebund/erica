@@ -5,7 +5,7 @@ It is a wrapper around the functionality of EriC, ELSTER's own client to access 
 It provides functionality to send tax declarations, as well as request, activate and revoke unlock codes.
 
 It was originally [developed as part of the Tech4Germany Fellowship 2020](https://github.com/tech4germany/steuerlotse). 
-The fellowship is organized by [DigitalService GmbH des Bundes](https://digitalservice4germany.com).
+The fellowship is organized by [DigitalService GmbH des Bundes](https://digitalservice.bund.de).
 
 🇩🇪
 Erica ist ein Service, um Steuererklärungen an ELSTER zu senden.
@@ -13,7 +13,7 @@ Es dient als Wrapper um die Funktionalität von EriC, ELSTERs eigener Client um 
 Es stellt Funktionalität zum Absenden von Steuererklärungen sowie dem Beantragen, Freischalten und Stornieren von Freischaltcodes bereit.
 
 Ursprünglich wurde es [als Teil des Tech4Germany Fellowships 2020 entwickelt](https://github.com/tech4germany/steuerlotse), 
-das von der [DigitalService GmbH des Bundes](https://digitalservice4germany.com) organisiert wird.
+das von der [DigitalService GmbH des Bundes](https://digitalservice.bund.de) organisiert wird.
 
 # Contributing
 
