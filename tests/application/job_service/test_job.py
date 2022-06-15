@@ -8,6 +8,7 @@ from freezegun import freeze_time
 from erica.application.JobService.job import perform_job
 from erica.domain.Shared.Status import Status
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, EricTransferError
+from erica.exception_handler import RetryException
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
@@ -18,7 +19,7 @@ class TestJob:
         mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(610201215))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
 
-        with pytest.raises(EricProcessNotSuccessful):
+        with pytest.raises(RetryException):
             await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
 
@@ -39,7 +40,7 @@ class TestJob:
         warning_logger = MagicMock()
         logger = MagicMock(warning=warning_logger)
 
-        with pytest.raises(EricProcessNotSuccessful):
+        with pytest.raises(RetryException):
             await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                               payload_type=MagicMock(), logger=logger)
 
@@ -91,7 +92,7 @@ class TestJob:
         info_logger = MagicMock()
         logger = MagicMock(info=info_logger)
 
-        with pytest.raises(EricProcessNotSuccessful):
+        with pytest.raises(RetryException):
             await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                               payload_type=MagicMock(), logger=logger)
 
