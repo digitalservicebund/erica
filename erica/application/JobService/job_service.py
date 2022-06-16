@@ -32,14 +32,12 @@ class JobService(JobServiceInterface):
 
     def __init__(self,
                  job_repository: EricaRequestRepositoryInterface,
-                 background_worker: BackgroundJobInterface,
                  payload_type: Type[BasePayload],
                  request_controller: Type[EricaRequestController],
                  job_method: Callable) -> None:
         super().__init__()
 
         self.repository = job_repository
-        self.background_worker = background_worker
         self.payload_type = payload_type
         self.request_controller = request_controller
         self.job_method = job_method
@@ -54,18 +52,12 @@ class JobService(JobServiceInterface):
         created = self.repository.create(request_entity)
         logging.getLogger().info(f"EricaRequest created with id: {created.request_id}")
 
-        job = self.background_worker.enqueue(
-            self.job_method,
-            created.request_id,
-            ttl=get_settings().ttl_queuing_job_in_sec,
-            retry=Retry(max=get_settings().queue_retry_repetitions,
-                        interval=get_settings().queue_retry_interval_seconds)
-        )
-        logging.getLogger().info(f"Job created with id {job.id} for EricaRequest with id {created.request_id}")
+        self.job_method(created.request_id)
+        logging.getLogger().info(f"Job created with id for EricaRequest with id {created.request_id}")
 
         return EricaRequestDto.parse_obj(created)
 
-    async def apply_to_elster(self, payload_data, include_elster_responses: bool = False):
+    def apply_to_elster(self, payload_data, include_elster_responses: bool = False):
         controller = self.request_controller(payload_data,
                                              include_elster_responses)
         return controller.process()

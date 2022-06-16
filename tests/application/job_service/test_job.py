@@ -20,7 +20,7 @@ class TestJob:
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
 
         with pytest.raises(RetryException):
-            await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
+            perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
 
     @pytest.mark.asyncio
@@ -28,7 +28,7 @@ class TestJob:
         mock_apply_to_elster = MagicMock(side_effect=EricProcessNotSuccessful(3))
         mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
         try:
-            await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
+            perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
         except EricProcessNotSuccessful:
             assert False
@@ -41,7 +41,7 @@ class TestJob:
         logger = MagicMock(warning=warning_logger)
 
         with pytest.raises(RetryException):
-            await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
+            perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                               payload_type=MagicMock(), logger=logger)
 
         assert any("Job failed" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
@@ -56,7 +56,7 @@ class TestJob:
             eric_response=f"<xml>Eric Response</xml>".encode(),
             server_response=f"<xml>Server Response</xml>".encode())))
 
-        await perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
+        perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
 
         assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('message')
@@ -75,7 +75,7 @@ class TestJob:
         mock_service = MagicMock(apply_to_elster=MagicMock(side_effect=EricGlobalValidationError(
             eric_response=f"<xml><Text>{validation_problems}</Text></xml>".encode())))
 
-        await perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
+        perform_job(request_id=uuid4(), repository=mock_repository, service=mock_service,
                               payload_type=MagicMock(), logger=MagicMock())
 
         assert mock_entity.error_code == EricProcessNotSuccessful().generate_error_response().get('message')
@@ -93,7 +93,7 @@ class TestJob:
         logger = MagicMock(info=info_logger)
 
         with pytest.raises(RetryException):
-            await perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
+            perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                               payload_type=MagicMock(), logger=logger)
 
         assert any("Job running time" in logged_msg[1][0] for logged_msg in info_logger.mock_calls)
@@ -105,7 +105,7 @@ class TestJob:
         mock_repository = MagicMock(get_by_job_request_id=mock_get_by_job_request_id)
 
         with pytest.raises(EntityNotFoundError):
-            await perform_job(request_id=uuid4(), repository=mock_repository, service=AsyncMock(),
+            perform_job(request_id=uuid4(), repository=mock_repository, service=AsyncMock(),
                               payload_type=MagicMock(), logger=MagicMock())
 
     @pytest.mark.asyncio
@@ -117,7 +117,7 @@ class TestJob:
         request_id = uuid4()
 
         with pytest.raises(EntityNotFoundError):
-            await perform_job(request_id=request_id, repository=mock_repository, service=AsyncMock(),
+            perform_job(request_id=request_id, repository=mock_repository, service=AsyncMock(),
                               payload_type=MagicMock(), logger=logger)
 
         assert any(f"{request_id}" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
@@ -128,7 +128,7 @@ class TestJob:
         info_logger = MagicMock()
         logger = MagicMock(info=info_logger)
 
-        await perform_job(request_id=uuid4(), repository=MagicMock(), service=AsyncMock(), payload_type=MagicMock(),
+        perform_job(request_id=uuid4(), repository=MagicMock(), service=AsyncMock(), payload_type=MagicMock(),
                           logger=logger)
 
         assert any("Job started" in logged_msg[1][0] for logged_msg in info_logger.mock_calls)
@@ -141,7 +141,7 @@ class TestJob:
         mock_apply_to_elster = AsyncMock()
         service = MagicMock(apply_to_elster=mock_apply_to_elster)
 
-        await perform_job(request_id=uuid4(), repository=mock_repository, service=service,
+        perform_job(request_id=uuid4(), repository=mock_repository, service=service,
                           payload_type=MagicMock(parse_obj=payload_type_parse_obj), logger=MagicMock())
 
         assert mock_apply_to_elster.mock_calls[0] == call(payload_type_parse_obj(mock_entity), True)
@@ -155,7 +155,7 @@ class TestJob:
         mock_result = {'msg': "These are not the mocks you are looking for"}
         service = MagicMock(apply_to_elster=AsyncMock(return_value=mock_result))
 
-        await perform_job(request_id=uuid4(), repository=mock_repository, service=service, payload_type=MagicMock(),
+        perform_job(request_id=uuid4(), repository=mock_repository, service=service, payload_type=MagicMock(),
                           logger=MagicMock())
 
         assert mock_entity.result == {**mock_result}
@@ -174,7 +174,7 @@ class TestJob:
         mock_result = {'msg': "These are not the mocks you are looking for"}
         service = MagicMock(apply_to_elster=AsyncMock(return_value=mock_result))
 
-        await perform_job(request_id=uuid4(), repository=mock_repository, service=service, payload_type=MagicMock(),
+        perform_job(request_id=uuid4(), repository=mock_repository, service=service, payload_type=MagicMock(),
                           logger=MagicMock())
 
         assert mock_entity.id == original_id
@@ -186,7 +186,7 @@ class TestJob:
         info_logger = MagicMock()
         logger = MagicMock(info=info_logger)
 
-        await perform_job(request_id=uuid4(), repository=MagicMock(), service=AsyncMock(), payload_type=MagicMock(),
+        perform_job(request_id=uuid4(), repository=MagicMock(), service=AsyncMock(), payload_type=MagicMock(),
                           logger=logger)
 
         assert any("Job finished" in logged_msg[1][0] for logged_msg in info_logger.mock_calls)
@@ -197,7 +197,7 @@ class TestJob:
         info_logger = MagicMock()
         logger = MagicMock(info=info_logger)
 
-        await perform_job(request_id=uuid4(), repository=MagicMock(), service=AsyncMock(), payload_type=MagicMock(),
+        perform_job(request_id=uuid4(), repository=MagicMock(), service=AsyncMock(), payload_type=MagicMock(),
                           logger=logger)
 
         assert any("Job running time" in logged_msg[1][0] for logged_msg in info_logger.mock_calls)

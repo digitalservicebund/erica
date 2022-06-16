@@ -2,6 +2,7 @@ from datetime import datetime
 from logging import Logger
 from typing import Type
 from uuid import UUID
+
 from erica.application.JobService.job_service import JobServiceInterface
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
@@ -10,9 +11,15 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, ERIC_ERRORS_WITH_RETRY
 from erica.exception_handler import RetryException
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
+from erica.config import get_settings
 
 
-async def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,
+from huey import RedisHuey
+
+huey = RedisHuey('my-app', url=get_settings().queue_url)
+
+
+def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,
                       payload_type: Type[BasePayload], logger: Logger):
     """
     The basic implementation for a job that is put on the Erica queue. It will get an entity, interact with the ERiC
@@ -33,7 +40,7 @@ async def perform_job(request_id: UUID, repository: base_repository_interface, s
         logger.info(f"Job started: {entity}", exc_info=True)
 
         try:
-            response = await service.apply_to_elster(request_payload, True)
+            response = service.apply_to_elster(request_payload, True)
             # We do not want to send the server_response or eric_response to the clients in the success case
             response.pop('server_response', None)
             response.pop('eric_response', None)

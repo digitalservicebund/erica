@@ -8,7 +8,6 @@ from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarati
 from erica.application.tax_number_validation.TaxNumberValidityService import TaxNumberValidityServiceInterface, \
     TaxNumberValidityService
 from erica.infrastructure.infrastructure_module import InfrastructureModule
-from erica.infrastructure.rq.RqModule import RqModule
 
 
 class ApplicationModule(Module):
@@ -19,4 +18,3 @@ class ApplicationModule(Module):
         self.bind(TaxNumberValidityServiceInterface, to_class=TaxNumberValidityService)
         self.bind(GrundsteuerServiceInterface, to_class=GrundsteuerService)
         self.install(InfrastructureModule())
-        self.install(RqModule())
