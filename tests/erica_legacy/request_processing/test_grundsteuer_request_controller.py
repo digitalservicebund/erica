@@ -43,10 +43,7 @@ class TestIsTestmerkerUsed:
 class TestGenerateFullXml:
     def test_returns_valid_xml(self, valid_grundsteuer_request_controller):
         resulting_xml = valid_grundsteuer_request_controller.generate_full_xml(use_testmerker=True)
-        try:
-            ElementTree.fromstring(resulting_xml)
-        except ElementTree.ParseError as e:
-            return pytest.fail("Did not result in a valid xml: \n" + e.msg)
+        ElementTree.fromstring(resulting_xml)
 
     def test_returned_xml_includes_transfer_header(self, valid_grundsteuer_request_controller):
         resulting_xml = valid_grundsteuer_request_controller.generate_full_xml(use_testmerker=True)

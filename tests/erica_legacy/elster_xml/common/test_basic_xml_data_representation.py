@@ -77,7 +77,4 @@ class TestConstructBasicXmlDataRepresentation:
     def test_returns_an_object_convertable_to_valid_xml(self, default_basic_xml_construction_args):
         resulting_object = construct_basic_xml_data_representation(*default_basic_xml_construction_args)
         resulting_xml = convert_object_to_xml(resulting_object)
-        try:
-            ElementTree.fromstring(resulting_xml)
-        except ElementTree.ParseError as e:
-            return pytest.fail("Did not result in a valid xml: \n" + e.msg)
+        ElementTree.fromstring(resulting_xml)

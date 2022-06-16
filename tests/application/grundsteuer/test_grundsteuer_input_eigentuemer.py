@@ -98,10 +98,7 @@ class TestEigentuemer:
                                                                                 vorname="Bella"),
                                        adresse=Adresse(plz="79618", ort="Rheinfelden"),
                                        steuer_id="03352417692", anteil=Anteil(zaehler="1", nenner="2"))]
-        try:
-            Eigentuemer.parse_obj({"person": persons})
-        except ValidationError as e:
-            pytest.fail("parse_obj failed with unexpected ValidationError " + str(e))
+        Eigentuemer.parse_obj({"person": persons})
 
     def test_if_all_persons_have_real_tax_id_number_then_raise_no_error(self):
         persons = [Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="daViella",
@@ -116,10 +113,7 @@ class TestEigentuemer:
                                                                                 vorname="Bella"),
                                        adresse=Adresse(plz="79618", ort="Rheinfelden"),
                                        steuer_id="43865766025", anteil=Anteil(zaehler="1", nenner="2"))]
-        try:
-            Eigentuemer.parse_obj({"person": persons})
-        except ValidationError as e:
-            pytest.fail("parse_obj failed with unexpected ValidationError " + str(e))
+        Eigentuemer.parse_obj({"person": persons})
 
     def test_if_persons_have_real_and_test_tax_id_number_then_raise_error(self):
         persons = [Person(persoenliche_angaben=PersoenlicheAngaben(anrede="frau", name="daViella",
