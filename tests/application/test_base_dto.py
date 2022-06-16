@@ -6,6 +6,10 @@ class CamelCaseModelChild(CamelCaseModel):
     person_a_name: str
 
 
+class DummyInput(CamelCaseModel):
+    foo: str
+
+
 class TestCamelCaseModel:
 
     def test_if_parsed_from_dict_with_snake_case_attribute_then_transform_to_object_with_snake_case_attributes(self):
@@ -32,3 +36,23 @@ class TestCamelCaseModel:
 
         assert resulting_dict['nameOfPet'] == name_of_pet
         assert resulting_dict['personAName'] == person_a_name
+
+    def test_should_strip_leading_spaces(self):
+        result = DummyInput.parse_obj({"foo": "\t  \nbar"})
+
+        assert result.foo == "bar"
+
+    def test_should_strip_trailing_spaces(self):
+        result = DummyInput.parse_obj({"foo": "bar\t  \n"})
+
+        assert result.foo == "bar"
+
+    def test_should_strip_leading_and_trailing_spaces(self):
+        result = DummyInput.parse_obj({"foo": "\n   \t bar\t  \n"})
+
+        assert result.foo == "bar"
+
+    def test_should_convert_whitespace_only_input_to_none(self):
+        result = DummyInput.parse_obj({"foo": "\t  \n"})
+
+        assert result.foo is None

@@ -362,7 +362,5 @@ class TestGetFullGrundsteuerDataRepresentation:
         grundsteuer_obj = SampleGrundsteuerData().parse()
         resulting_object = get_full_grundsteuer_data_representation(grundsteuer_obj)
         resulting_xml = convert_object_to_xml(resulting_object)
-        try:
-            ElementTree.fromstring(resulting_xml)
-        except ElementTree.ParseError as e:
-            return pytest.fail("Did not result in a valid xml: \n" + e.msg)
+
+        ElementTree.fromstring(resulting_xml)

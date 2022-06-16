@@ -866,7 +866,7 @@ def json_default(value):
 def poll(endpoint, timeout=30, step=0.5):
 
     start_time = time.perf_counter()
-    while time.perf_counter()- start_time < timeout:
+    while time.perf_counter() - start_time < timeout:
         response = requests.get(endpoint)
         if response.status_code == 200 and response.json()['processStatus'] != "Processing":
             return response
