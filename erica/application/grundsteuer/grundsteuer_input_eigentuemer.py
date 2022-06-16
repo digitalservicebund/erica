@@ -83,3 +83,9 @@ class Eigentuemer(CamelCaseModel):
         if not(all([tax_id_number_is_test_id_number(person.steuer_id) for person in v]) or all([not tax_id_number_is_test_id_number(person.steuer_id) for person in v])):
             raise ValueError('all eigentuemer need to use either real or test tax id numbers')
         return v
+
+    @validator("person")
+    def must_not_be_empty(cls, v, values):
+        if len(v) < 1:
+            raise ValueError('at least one eigentuemer needs to be set')
+        return v
