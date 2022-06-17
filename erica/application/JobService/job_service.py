@@ -2,15 +2,12 @@ import logging
 from abc import abstractmethod, ABCMeta
 from typing import Type, Callable
 from uuid import uuid4
-from rq import Retry
 from erica.application.base_dto import BaseDto
 from erica.application.erica_request.erica_request import EricaRequestDto
-from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.Shared.EricaRequest import RequestType
-from erica.config import get_settings
 from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
 
