@@ -82,6 +82,7 @@ jobs:
 
       - name: Build docker images
         env:
+          DOCKER_REGISTRY: ${{ env.DOCKER_REGISTRY }}
           DOCKER_TAG: ${{ github.run_number }}
           ERICA_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
@@ -103,10 +104,8 @@ jobs:
 
       - name: Push images
         run: |
-          for IMAGE in api cron worker; do
-            docker tag erica_${IMAGE}:${{ github.run_number }} ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:${{ github.run_number }}
-            docker tag erica_${IMAGE}:latest ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE}:latest
-            docker push ${{ env.DOCKER_REGISTRY }}/erica_${IMAGE} --all-tags
+          for IMAGE in $(docker image ls | grep erica_ | awk '{ print $1 }' | sort | uniq); do
+            docker push ${IMAGE} --all-tags
           done
         shell: bash
 

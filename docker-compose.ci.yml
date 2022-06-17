@@ -4,7 +4,7 @@ version: '3.8'
 # Define common behavior of api
 x-api:
   &default-api
-  image: erica_api:latest
+  image: ${DOCKER_REGISTRY}/erica_api:latest
   build:
     context: .
     target: erica
@@ -21,7 +21,7 @@ x-api:
 # Define common behavior of worker
 x-worker:
   &default-worker
-  image: erica_worker:latest
+  image: ${DOCKER_REGISTRY}/erica_worker:latest
   build:
     context: .
     target: worker
@@ -38,7 +38,7 @@ x-worker:
 # Define common behavior of cron
 x-cron:
   &default-cron
-  image: erica_cron:latest
+  image: ${DOCKER_REGISTRY}/erica_cron:latest
   build:
     context: .
     target: cron
@@ -58,7 +58,7 @@ services:
   # api github run
   api_github_run:
     << : *default-api
-    image: erica_api:${DOCKER_TAG}
+    image: ${DOCKER_REGISTRY}/erica_api:${DOCKER_TAG}
 
   # worker latest
   worker_latest:
@@ -67,7 +67,7 @@ services:
   # worker github run
   worker_github_run:
     << : *default-worker
-    image: erica_worker:${DOCKER_TAG}
+    image: ${DOCKER_REGISTRY}/erica_worker:${DOCKER_TAG}
 
   # Cron latest
   cron_latest:
@@ -76,4 +76,4 @@ services:
   # Cron github run
   cron_github_run:
     << : *default-cron
-    image: erica_cron:${DOCKER_TAG}
+    image: ${DOCKER_REGISTRY}/erica_cron:${DOCKER_TAG}
