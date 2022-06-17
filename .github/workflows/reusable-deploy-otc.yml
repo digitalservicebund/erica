@@ -103,7 +103,7 @@ jobs:
           -e QUEUE_URL='${{ secrets.QUEUE_URL }}' \
           -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL }}' \
           -e IMAGE_TAG='${{ inputs.imageTag }}' \
-          ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment deploy-erica-api-to-vm
+          ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment deploy-erica-to-vm
         shell: bash
 
       - name: Logout of container registry
