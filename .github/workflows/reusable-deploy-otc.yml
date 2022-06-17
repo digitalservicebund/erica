@@ -64,7 +64,7 @@ jobs:
         shell: sh
         run: |
           cd manifests/overlays/${{ inputs.environment }}
-          kustomize edit set image scr.syseleven.de/steuerlotse-stack-main/erica_api:${{ inputs.imageTag }}
+          kustomize edit set image scr.syseleven.de/steuerlotse-stack-main/erica_main:${{ inputs.imageTag }}
           kustomize edit set image scr.syseleven.de/steuerlotse-stack-main/erica_cron:${{ inputs.imageTag }}
 
       - name: Commit and push changes for infra repository

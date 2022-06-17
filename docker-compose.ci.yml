@@ -1,30 +1,13 @@
 # Note: this docker-compose file is used for building staging/production images on GitHub Actions.
 version: '3.8'
 
-# Define common behavior of api
-x-api:
-  &default-api
-  image: ${DOCKER_REGISTRY}/erica_api:latest
+# Define common behavior of main
+x-main:
+  &default-main
+  image: ${DOCKER_REGISTRY}/erica_main:latest
   build:
     context: .
     target: erica
-    args:
-      bucket_name: ${ERICA_BUCKET_NAME}
-      access_key_id: ${ACCESS_KEY_ID}
-      access_key: ${ACCESS_KEY}
-      endpoint_url: ${ENDPOINT_URL}
-      elster_datenlieferant: ${ELSTER_DATENLIEFERANT}
-      elster_hersteller_id: ${ELSTER_HERSTELLER_ID}
-  expose:
-    - 8000
-
-# Define common behavior of worker
-x-worker:
-  &default-worker
-  image: ${DOCKER_REGISTRY}/erica_worker:latest
-  build:
-    context: .
-    target: worker
     args:
       bucket_name: ${ERICA_BUCKET_NAME}
       access_key_id: ${ACCESS_KEY_ID}
@@ -51,29 +34,16 @@ x-cron:
       elster_hersteller_id: ${ELSTER_HERSTELLER_ID}
 
 services:
-  # api latest
-  api_latest:
-    *default-api
+  main_latest:
+    *default-main
 
-  # api github run
-  api_github_run:
-    << : *default-api
-    image: ${DOCKER_REGISTRY}/erica_api:${DOCKER_TAG}
+  main_github_run:
+    << : *default-main
+    image: ${DOCKER_REGISTRY}/erica_main:${DOCKER_TAG}
 
-  # worker latest
-  worker_latest:
-    *default-worker
-
-  # worker github run
-  worker_github_run:
-    << : *default-worker
-    image: ${DOCKER_REGISTRY}/erica_worker:${DOCKER_TAG}
-
-  # Cron latest
   cron_latest:
     *default-cron
 
-  # Cron github run
   cron_github_run:
     << : *default-cron
     image: ${DOCKER_REGISTRY}/erica_cron:${DOCKER_TAG}
