@@ -8,6 +8,7 @@ from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
+from erica.config import get_settings
 from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
 
 config = context.config
@@ -17,7 +18,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option('sqlalchemy.url', os.environ['SQLALCHEMY_DATABASE_URI'])
+config.set_main_option('sqlalchemy.url', get_settings().database_url)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
