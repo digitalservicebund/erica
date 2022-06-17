@@ -49,7 +49,7 @@ Bitte stelle sicher, dass deine Änderungen getestet wurden, bevor du einen Pull
 
 The following prerequisites must be installed:
 
-- python 3.9
+- python 3.10
 - pipenv
 - postgresql client >9.1
 - docker and docker-dompose
@@ -65,15 +65,27 @@ pipenv install
 ### Download ERiC
 
 Erica uses Pyeric, which is a wrapper around ERiC. For this to work you will need to download the latest ERiC 
-library and place the required library files in a `lib` folder.
+library and copy the required library files into the source tree.
 
- - Set the environment variable `ERICA_ENV` to `testing`, `development` or similar.
+#### Downloading as a DigitalService employee
+
+You can download binaries and organisation-specific test certificates by running:
+
+```bash
+ERICA_BUCKET_NAME=xxx AWS_ACCESS_KEY_ID=xxx AWS_SECRET_ACCESS_KEY=xxx ENDPOINT_URL=xxx pipenv run download-eric
+```
+
+Contact the erica service owners for information on how to obtain the required credentials and secrets.
+
+
+#### Downloading as an external user
+
  - Download `ERiC-35.2.8.0-Linux-x86_64.jar` (or a newer version) from the [ELSTER developer portal](https://www.elster.de/elsterweb/infoseite/entwickler).
  - Unpack the downloaded jar file
  - Copy the following library files into `erica/erica_legacy/lib` such that it matches the given structure:
 
 ```bash
-pyeric$ tree lib
+$ tree lib
 lib
 ├── libericapi.so
 ├── libericxerces.so
@@ -81,47 +93,45 @@ lib
 └── plugins2
     ├── libcheckElsterDatenabholung.so
     ├── libcheckESt_2021.so
+    ├── libcheckGrundsteuerwert.so
     ├── libcheckVaSt.so
     └── libcommonData.so
 ```
 
 _NOTE_: If you use a Mac, get the corresponding `*.dylib` files
 
-### Obtain Certificate
+#### Obtain Certificate
 
 You also need to obtain a test certificate from ELSTER and place it under `erica/erica_legacy/instances/blueprint/cert.pfx`.
 
 ## Developing 👩‍💻 👨‍💻
 
-### Start your docker:
+### Start your docker-compose:
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 ### Run Alembic migration on database:
 ```
-env ERICA_ENV=development SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost/db alembic upgrade head
+ERICA_ENV=development pipenv run invoke database-migrations
 ```
 
 ### Start the erica API:
 ```bash
-pipenv shell
-export ERICA_ENV=development
-python3 -m erica
+ERICA_ENV=development pipenv run invoke run-api
 ```
 Note: Swagger UI will be available under: http://localhost:8000/docs 
 
 ### Start a worker:
 ```bash
-pipenv shell
-python3 -m erica.infrastructure.rq.worker [dongle|cert|common]
+ERICA_ENV=development pipenv run invoke run-worker
 ```
 
 ## Testing 📃
 
 You can run tests as follows:
 ```bash
-pipenv run pytest
+pipenv run invoke test
 ```
 
 If you are missing the ERiC library or a suitable certificate then the respective 
