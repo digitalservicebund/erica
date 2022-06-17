@@ -65,7 +65,7 @@ pipenv install
 ### Download ERiC
 
 Erica uses Pyeric, which is a wrapper around ERiC. For this to work you will need to download the latest ERiC 
-library and copy the required library files into the source tree.
+library and a test certificate and copy the required files into the source tree.
 
 #### Downloading as a DigitalService employee
 
@@ -100,7 +100,7 @@ lib
 
 _NOTE_: If you use a Mac, get the corresponding `*.dylib` files
 
-#### Obtain Certificate
+##### Obtain Certificate
 
 You also need to obtain a test certificate from ELSTER and place it under `erica/erica_legacy/instances/blueprint/cert.pfx`.
 
