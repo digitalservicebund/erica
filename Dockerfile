@@ -55,13 +55,3 @@ CMD ["/usr/sbin/cron", "-f"]
 FROM base AS erica
 CMD [ "python", "-m", "erica" ]
 #########
-
-#########
-### api target (with worker) for VM (using supervisord)
-######
-FROM base AS worker
-RUN apt-get update && apt-get install -y supervisor
-RUN mkdir -p /var/log/supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-#########

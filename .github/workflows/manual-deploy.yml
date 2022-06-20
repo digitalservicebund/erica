@@ -1,4 +1,4 @@
-name: Production deployment
+name: Manual deployment
 
 on:
   workflow_dispatch:
@@ -6,13 +6,21 @@ on:
       imageTag:
         description: "Image tag to deploy"
         required: true
+      environment:
+        description: "Environment to deploy to"
+        required: false
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
 
 jobs:
   syseleven:
     uses: ./.github/workflows/reusable-deploy-syseleven.yml
     with:
       imageTag: ${{ github.event.inputs.imageTag }}
-      environment: production
+      environment: ${{ github.event.inputs.environment }}
     secrets:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
@@ -28,7 +36,7 @@ jobs:
     uses: ./.github/workflows/reusable-deploy-otc.yml
     with:
       imageTag: ${{ github.event.inputs.imageTag }}
-      environment: production
+      environment: ${{ github.event.inputs.environment }}
     secrets:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
@@ -53,5 +61,5 @@ jobs:
         with:
           url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
           method: POST
-          payload: '{"project": "Erica", "version_identifier": "${{ github.event.inputs.imageTag }}", "environment": "production", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          payload: '{"project": "Erica", "version_identifier": "${{ github.event.inputs.imageTag }}", "environment": "${{ github.event.inputs.environment }}", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
           headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
