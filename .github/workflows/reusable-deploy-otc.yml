@@ -103,7 +103,7 @@ jobs:
           -e QUEUE_URL='${{ secrets.QUEUE_URL }}' \
           -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL }}' \
           -e IMAGE_TAG='${{ inputs.imageTag }}' \
-          -e ENABLED_VERSION='v1' \
+          -e ENABLED_VERSION='v2' \
           ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment deploy-erica-to-vm
         shell: bash
 
