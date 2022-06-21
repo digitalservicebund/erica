@@ -51,6 +51,20 @@ jobs:
       DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
       ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
       ARGOCD_PIPELINE_PASSWORD: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
+  
+  track-deploy-staging:
+    needs: [syseleven-staging, otc-staging]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Report Deployment
+        uses: satak/webrequest-action@v1.2.3
+        with:
+          url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          method: POST
+          payload: '{"project": "Erica", "version_identifier": "${{ github.event.inputs.imageTag }}", "environment": "staging", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
 
   syseleven-production:
     if: ${{ github.event.inputs.environment}} == 'production'
@@ -88,8 +102,8 @@ jobs:
       ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
       ARGOCD_PIPELINE_PASSWORD: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
 
-  track-deploy:
-    needs: [syseleven, otc]
+  track-deploy-production:
+    needs: [syseleven-production, otc-production]
 
     runs-on: ubuntu-latest
 
@@ -99,5 +113,5 @@ jobs:
         with:
           url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
           method: POST
-          payload: '{"project": "Erica", "version_identifier": "${{ github.event.inputs.imageTag }}", "environment": "${{ github.event.inputs.environment }}", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          payload: '{"project": "Erica", "version_identifier": "${{ github.event.inputs.imageTag }}", "environment": "production", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
           headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
