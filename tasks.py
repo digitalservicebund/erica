@@ -33,7 +33,7 @@ def run_api(c):
 
 @task
 def run_worker(c):
-    c.run("python -m erica.infrastructure.rq.worker")
+    c.run("huey_consumer.py erica.application.JobService.job.huey -k thread -w 10")
 
 @task
 def download_eric(c):
