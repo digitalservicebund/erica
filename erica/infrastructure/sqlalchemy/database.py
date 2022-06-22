@@ -28,6 +28,7 @@ class DatabaseSessionProvider(Provider[Session]):
     def get(self) -> Session:
         return db.session
 
+
 session_scope = db
 
 engine_args = dict(json_serializer=orjson_serializer, json_deserializer=orjson_deserializer)

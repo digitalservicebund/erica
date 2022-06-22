@@ -11,12 +11,6 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, ERIC_ERRORS_WITH_RETRY
 from erica.exception_handler import RetryException
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
-from erica.config import get_settings
-
-
-from huey import RedisHuey
-
-huey = RedisHuey('my-app', url=get_settings().queue_url)
 
 
 def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,

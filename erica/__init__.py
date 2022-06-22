@@ -59,6 +59,7 @@ app.include_router(api_router_02)
 
 app.add_middleware(DBSessionMiddleware, db_url=get_settings().database_url, engine_args=engine_args)
 
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     # TODO Remove the split once v1 is no longer in use
