@@ -24,7 +24,8 @@ async def send_est(est_data_client_identifier: TaxDeclarationDto, request: Reque
         est_data_client_identifier.payload, est_data_client_identifier.client_identifier,
         RequestType.send_est)
     return RedirectResponse(
-        request.url_for("get_send_est_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),
+        request.url_for("get_send_est_job", request_id=str(result.request_id)).removeprefix(
+            str(request.base_url)).removeprefix("v2"),
         status_code=201)
 
 
