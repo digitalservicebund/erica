@@ -57,7 +57,7 @@ async def test_if_post_job_returns_location_with_uuid(api_method, input_data, re
         if request_type == RequestType.grundsteuer:
             assert response.headers['Location'] == mock_url
         else:
-            assert response.headers['Location'] == mock_url.removeprefix("/v2")
+            assert response.headers['Location'] == mock_url.removeprefix("v2")
 
 
 
