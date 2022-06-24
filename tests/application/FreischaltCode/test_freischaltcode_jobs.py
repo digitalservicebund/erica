@@ -64,7 +64,7 @@ class TestRequestFreischaltcode:
 
 class TestIntegrationWithDatabaseAndRequestFreischaltcode:
 
-    @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
+    @pytest.mark.usefixtures('fake_db_connection_with_erica_table_in_settings')
     def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
         # Necessary due to async db fixture. See fixture definition for details.
         with session_scope():
@@ -132,7 +132,7 @@ class TestActivateFreischaltcode:
 
 class TestIntegrationWithDatabaseAndActivateFreischaltcode:
 
-    @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
+    @pytest.mark.usefixtures('fake_db_connection_with_erica_table_in_settings')
     def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
         payload = FreischaltCodeActivatePayload(tax_id_number='04452397687', freischalt_code='Alohomora', elster_request_id='br1272xf3i59m2323ft9qtk7iqzxzke4')
         # Necessary due to async db fixture. See fixture definition for details.
@@ -200,7 +200,7 @@ class TestRevocateFreischaltcode:
 
 class TestIntegrationWithDatabaseAndRevocateFreischaltcode:
 
-    @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
+    @pytest.mark.usefixtures('fake_db_connection_with_erica_table_in_settings')
     def test_if_entity_in_data_base_then_set_correct_result_in_database(self):
         # Necessary due to async db fixture. See fixture definition for details.
         with session_scope():

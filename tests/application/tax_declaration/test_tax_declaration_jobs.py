@@ -63,7 +63,7 @@ class TestTaxDeclarationJob:
 
 class TestIntegrationWithDatabaseAndTaxDeclarationJob:
 
-    @pytest.mark.usefixtures('async_fake_db_connection_with_erica_table_in_settings')
+    @pytest.mark.usefixtures('fake_db_connection_with_erica_table_in_settings')
     def test_if_entity_in_data_base_then_set_correct_result_in_database(self, standard_est_input_data):
         payload = TaxDeclarationPayload(
             est_data=standard_est_input_data,

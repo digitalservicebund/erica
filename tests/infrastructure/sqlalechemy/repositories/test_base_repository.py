@@ -22,7 +22,7 @@ class MockBaseRepository(
 
 class TestBaseRepositoryCreate:
 
-    def test_if_entity_of_type_domain_model_as_input_then_entity_with_correct_data_in_database(self,transactional_session_with_mock_schema):
+    def test_if_entity_of_type_domain_model_as_input_then_entity_with_correct_data_in_database(self, transactional_session_with_mock_schema):
         repository = MockBaseRepository(db_connection=transactional_session_with_mock_schema)
 
         repository.create(MockDomainModel(payload={'endboss': 'Melkor'}))
@@ -30,7 +30,7 @@ class TestBaseRepositoryCreate:
         assert len(transactional_session_with_mock_schema.query(MockSchema).all()) == 1
         assert isinstance(transactional_session_with_mock_schema.query(MockSchema).all()[0], MockSchema)
 
-    def test_if_entity_of_type_domain_model_as_input_then_entity_of_schema_type_is_in_database(self,transactional_session_with_mock_schema):
+    def test_if_entity_of_type_domain_model_as_input_then_entity_of_schema_type_is_in_database(self, transactional_session_with_mock_schema):
         repository = MockBaseRepository(db_connection=transactional_session_with_mock_schema)
 
         repository.create(MockDomainModel(payload={'endboss': 'Melkor'}))
