@@ -1,12 +1,12 @@
 import logging
 
 from erica.application.JobService.job import perform_job
-from erica.infrastructure.worker.huey_task import huey_task
+from erica.infrastructure.huey.huey import huey
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.database import session_scope
 
 
-@huey_task.task()
+@huey.task()
 def request_freischalt_code(request_id):
     from erica.application.JobService.job_service_factory import get_job_service
     with session_scope():
@@ -18,7 +18,7 @@ def request_freischalt_code(request_id):
                         logger=logging.getLogger())
 
 
-@huey_task.task()
+@huey.task()
 def activate_freischalt_code(request_id):
     from erica.application.JobService.job_service_factory import get_job_service
     with session_scope():
@@ -30,7 +30,7 @@ def activate_freischalt_code(request_id):
                         logger=logging.getLogger())
 
 
-@huey_task.task()
+@huey.task()
 def revocate_freischalt_code(request_id):
     from erica.application.JobService.job_service_factory import get_job_service
     with session_scope():

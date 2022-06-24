@@ -1,12 +1,12 @@
 import logging
 
 from erica.application.JobService.job import perform_job
-from erica.infrastructure.worker.huey_task import huey_task
+from erica.infrastructure.huey.huey import huey
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.database import session_scope
 
 
-@huey_task.task()
+@huey.task()
 def send_grundsteuer(request_id):
     with session_scope():
         from erica.application.JobService.job_service_factory import get_job_service
