@@ -74,7 +74,7 @@ class TestJobServiceQueue:
     @pytest.mark.freeze_uuids
     def test_if_input_data_provided_then_add_request_to_repository(self):
         mock_job = PickableMock()
-        service = JobService(job_repository=MockEricaRequestRepository(), background_worker=MagicMock(),
+        service = JobService(job_repository=MockEricaRequestRepository(),
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
@@ -91,44 +91,35 @@ class TestJobServiceQueue:
         )
 
     @pytest.mark.freeze_uuids
-    def test_if_input_data_provided_then_add_job_to_background_job_worker_with_correct_params(self):
+    def test_if_input_data_provided_then_call_job_method_with_correct_params(self):
         mock_job = PickableMock()
-        mock_bg_worker = MagicMock()
-        service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
+        service = JobService(job_repository=MockEricaRequestRepository(),
                              request_controller=MockRequestController, payload_type=MockDto, job_method=mock_job)
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
         service.add_to_queue(input_data, "steuerlotse", job_type=RequestType.freischalt_code_activate)
 
-        mock_call = mock_bg_worker.enqueue.mock_calls[0]
-        assert mock_call.args[0] == mock_job
-        assert mock_call.args[1] == UUID('00000000-0000-0000-0000-000000000000')
-        assert mock_call.kwargs['ttl'] == get_settings().ttl_queuing_job_in_sec
-        assert mock_call.kwargs['retry'].max == get_settings().queue_retry_repetitions
-        assert mock_call.kwargs['retry'].intervals == get_settings().queue_retry_interval_seconds
+        mock_call = mock_job.mock_calls[0]
+        assert mock_call.args[0] == UUID('00000000-0000-0000-0000-000000000000')
 
 
 class TestJobServiceRun:
 
-    @pytest.mark.asyncio
-    async def test_if_input_data_provided_then_call_init_of_request_controller_with_correct_data(self):
-        mock_bg_worker = MagicMock()
+    def test_if_input_data_provided_then_call_init_of_request_controller_with_correct_data(self):
         controller_instance = MagicMock()
         mock_request_controller = MagicMock(return_value=controller_instance)
-        service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
+        service = JobService(job_repository=MockEricaRequestRepository(),
                              request_controller=mock_request_controller, payload_type=MockDto, job_method=MagicMock())
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
 
-        await service.apply_to_elster(input_data)
+        service.apply_to_elster(input_data)
 
         assert mock_request_controller.mock_calls == [call(input_data, False)]
 
-    @pytest.mark.asyncio
-    async def test_if_input_data_provided_then_call_process_with_input_data(self):
-        mock_bg_worker = MagicMock()
+    def test_if_input_data_provided_then_call_process_with_input_data(self):
         controller_instance = MagicMock()
         mock_request_controller = MagicMock(return_value=controller_instance)
-        service = JobService(job_repository=MockEricaRequestRepository(), background_worker=mock_bg_worker,
+        service = JobService(job_repository=MockEricaRequestRepository(),
                              request_controller=mock_request_controller, payload_type=MockDto, job_method=MagicMock())
         input_data = MockDto.parse_obj({'name': 'Batman', 'friend': 'Joker'})
         request_entity = EricaRequest(
@@ -141,6 +132,6 @@ class TestJobServiceRun:
             type=RequestType.freischalt_code_activate
         )
 
-        await service.apply_to_elster(request_entity)
+        service.apply_to_elster(request_entity)
 
         assert controller_instance.process.call_count == 1

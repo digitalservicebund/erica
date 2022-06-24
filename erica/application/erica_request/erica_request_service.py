@@ -4,10 +4,9 @@ from abc import abstractmethod, ABCMeta
 from uuid import UUID
 from opyoid import Injector, Module
 from erica.infrastructure.infrastructure_module import InfrastructureModule
-from erica.infrastructure.rq.RqModule import RqModule
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
-injector = Injector([InfrastructureModule(), RqModule()])
+injector = Injector([InfrastructureModule()])
 
 
 class EricaRequestServiceInterface:
