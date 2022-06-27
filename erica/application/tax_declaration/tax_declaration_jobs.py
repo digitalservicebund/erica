@@ -1,7 +1,7 @@
 import logging
 
 from erica.application.JobService.job import perform_job
-from erica.infrastructure.huey.huey import huey
+from erica.infrastructure.huey import huey
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.infrastructure.sqlalchemy.database import session_scope
 
