@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "826f10143490d0fcc42985cac119d10122e96313ec8bfaf5f8d0bb89ef6a5d89"
+            "sha256": "0c90ed1c22c3dbeb05543aaae606e87c31856a8e701a001536334ce5d8e7a611"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -40,14 +40,6 @@
             "markers": "python_full_version >= '3.6.2'",
             "version": "==3.6.1"
         },
-        "asgiref": {
-            "hashes": [
-                "sha256:1d2880b792ae8757289136f1db2b7b99100ce959b2aa57fd69dab783d05afac4",
-                "sha256:4a29362a6acebe09bf1d6640db38c1dc3d9217c68e6f9f6204d72667fc19a424"
-            ],
-            "markers": "python_version >= '3.7'",
-            "version": "==3.5.2"
-        },
         "async-timeout": {
             "hashes": [
                 "sha256:2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15",
@@ -82,11 +74,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:b3b9710902f675a11f5bfd46afda770150530876ae6541d099584462bf949fd1",
-                "sha256:f117d59899d21beeb200130d7af2090a8112d702a06e2c2794ef576bcea36773"
+                "sha256:af9d44592b4d0d6509b355b2ec5cb14fd23eadf7c33d13b880266dede22759ac",
+                "sha256:baf60b803ffd7b1dbc9c93dd2049fe2372699e4c993c9d33713667acdea64d1f"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.27.16"
+            "version": "==1.27.17"
         },
         "certifi": {
             "hashes": [
@@ -693,11 +685,11 @@
         },
         "uvicorn": {
             "hashes": [
-                "sha256:19e2a0e96c9ac5581c01eb1a79a7d2f72bb479691acd2b8921fce48ed5b961a6",
-                "sha256:5180f9d059611747d841a4a4c4ab675edf54c8489e97f96d0583ee90ac3bfc23"
+                "sha256:013c4ea0787cc2dc456ef4368e18c01982e6be57903e4d3183218e543eb889b7",
+                "sha256:35703e6518105cfe53f16a5a9435db3e2e227d0784f1fd8fbc1214b1fdc108df"
             ],
             "index": "pypi",
-            "version": "==0.17.6"
+            "version": "==0.18.1"
         },
         "wrapt": {
             "hashes": [
