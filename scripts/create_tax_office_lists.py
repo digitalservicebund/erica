@@ -1,8 +1,5 @@
 import json
-import os
 import click as click
-import sys
-sys.path.append(os.getcwd())
 
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
 
