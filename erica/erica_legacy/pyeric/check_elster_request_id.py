@@ -35,7 +35,7 @@ def get_vast_list_from_xml(xml):
 
 @lru_cache
 def get_list_vast_requests(pyeric_controller):
-    xml = elster_xml_generator.generate_full_vast_list_xml()
+    xml = elster_xml_generator.generate_full_vast_list_xml(use_testmerker=True)
     result = pyeric_controller(xml=xml).get_eric_response()
     vast_request_list = get_vast_list_from_xml(result.server_response)
     reset_new_request_id_list()

@@ -2,10 +2,10 @@ from unittest.mock import MagicMock, patch, call
 
 import pytest
 
-from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.pyeric.check_elster_request_id import get_vast_list_from_xml, get_list_vast_requests, \
-    NEW_REQUEST_ID_SINCE_LAST_CACHE_INVALIDATION, add_new_request_id_to_cache_list, request_needs_testmerker, \
+    add_new_request_id_to_cache_list, request_needs_testmerker, \
     reset_new_request_id_list
+from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from tests.erica_legacy.utils import missing_pyeric_lib
 from tests.utils import read_text_from_sample
 
@@ -75,6 +75,16 @@ class TestListVastRequests:
         get_list_vast_requests(mock_pyeric_controller)
 
         assert mock_pyeric_controller.call_count == 2
+
+    @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
+    def test_if_config_set_to_not_use_testmerker_then_call_with_testmerker_used(self):
+        get_list_vast_requests.cache_clear()
+        mock_pyeric_controller = MockPyericController()
+
+        with patch("erica.erica_legacy.pyeric.check_elster_request_id.elster_xml_generator") as mock_xml_generator:
+            get_list_vast_requests(mock_pyeric_controller)
+
+            assert mock_xml_generator.generate_full_vast_list_xml.mock_calls == [call(use_testmerker=True)]
 
 
 class TestRequestNeedsTestmerker:
