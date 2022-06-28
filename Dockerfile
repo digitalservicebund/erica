@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y pcsc-tools pcscd procps unzip && rm -rf
 COPY ./entrypoint.sh /entrypoint.sh
 
 RUN pip install --upgrade pip pipenv
-COPY ./Pipfile ./Pipfile.lock ./
+COPY ./Pipfile ./Pipfile.lock ./setup.py ./
 RUN pipenv install
 
 COPY . .
