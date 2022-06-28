@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+erica = {path = ".", editable = true}
 click = "==8.1.3"
 fastapi = "~=0.78.0"
 freezegun = "*"
