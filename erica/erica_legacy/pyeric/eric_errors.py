@@ -350,11 +350,9 @@ class EricTransferError(EricProcessNotSuccessful):
 
     def __str__(self):
         if self.work_dir:
-            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)} in: {self.work_dir}; " \
-                   f"server_err_msg: {self.server_err_msg} "
+            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)} in: {self.work_dir}"
         else:
-            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)}; " \
-                   f"server_err_msg: {self.server_err_msg} "
+            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)}"
 
     def generate_error_response(self, include_responses=False):
         """

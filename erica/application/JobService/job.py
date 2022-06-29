@@ -43,7 +43,7 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
         except EricProcessNotSuccessful as e:
             error_response = e.generate_error_response(True)
             logger.warning(
-                f"Job failed: {entity}. Got Error Message: {error_response.__str__()}",
+                f"Job failed: {entity}. Got error: {error_response.get('code')}",
                 exc_info=True
             )
             entity.error_code = error_response.get('message')
