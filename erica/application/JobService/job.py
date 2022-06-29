@@ -30,7 +30,7 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
     start_time = datetime.now()
 
     try:
-        logger.info(f"Job started: {entity}", exc_info=True)
+        logger.info(f"Job started: {entity}")
 
         try:
             response = service.apply_to_elster(request_payload, True)
@@ -53,7 +53,7 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
             entity.status = Status.failed
             repository.update(entity.id, entity)
 
-        logger.info(f"Job finished: {entity}", exc_info=True)
+        logger.info(f"Job finished: {entity}")
     finally:
         end_time = datetime.now()
         elapsed_time = end_time - start_time
