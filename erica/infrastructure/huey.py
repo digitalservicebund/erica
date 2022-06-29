@@ -31,4 +31,6 @@ def start_sentry_transaction(task):
 
 @huey.post_execute()
 def finish_sentry_transaction(task, task_value, exc):
+    if exc:
+        task.sentry_txn.set_status("internal_error")
     task.sentry_txn.finish()
