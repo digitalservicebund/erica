@@ -1,11 +1,9 @@
 import logging
-import time
 
 from fastapi import FastAPI, Request
 from fastapi_sqlalchemy import DBSessionMiddleware
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
-import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 from erica.api.exception_handling import generate_exception_handlers
@@ -52,18 +50,9 @@ async def log_requests(request: Request, call_next):
 
     return response
 
+# Sentry error tracking
+if get_settings().sentry_dsn_api:
+    app.add_middleware(SentryAsgiMiddleware)
+
 # Add default metrics and expose endpoint.
 Instrumentator().instrument(app).expose(app)
-
-# Sentry error tracking
-try:
-    if get_settings().sentry_dsn_api:
-        sentry_sdk.init(
-            dsn=get_settings().sentry_dsn_api,
-            environment=get_settings().env_name,
-        )
-        app.add_middleware(SentryAsgiMiddleware)
-except Exception as e:
-    # pass silently if the Sentry integration failed
-    logging.getLogger().warn(f"Sentry integration failed to load: {e}")
-    pass
