@@ -80,7 +80,7 @@ class Eigentuemer(CamelCaseModel):
 
     @validator("person")
     def must_have_all_test_ids_or_no_test_ids(cls, v, values):
-        if not(all([tax_id_number_is_test_id_number(person.steuer_id) for person in v]) or all([not tax_id_number_is_test_id_number(person.steuer_id) for person in v])):
+        if not(all([tax_id_number_is_test_id_number(person.steuer_id) for person in v]) or all([not tax_id_number_is_test_id_number(person.steuer_id) and person.steuer_id[0] != "0" for person in v])):
             raise ValueError('all eigentuemer need to use either real or test tax id numbers')
         return v
 
