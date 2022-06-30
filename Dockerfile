@@ -14,7 +14,10 @@ ENV ELSTER_DATENLIEFERANT=$elster_datenlieferant
 ENV ELSTER_HERSTELLER_ID=$elster_hersteller_id
 
 WORKDIR /app
-RUN apt-get update && apt-get install --no-install-recommends -y pcsc-tools pcscd procps unzip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y pcsc-tools pcscd procps unzip curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    curl https://dbs-download.obs.otc.t-systems.com/rds/ca-bundle.pem -o /opt/rds-ca-bundle.pem
 
 # Install debugging tools
 # RUN apt-get update && \
@@ -38,7 +41,7 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 
 ######## cron target
 FROM base AS cron
-RUN apt-get update && apt-get install --no-install-recommends --yes curl cron procps && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install --no-install-recommends --yes cron procps && rm -rf /var/lib/apt/lists/*
 # Set up log forwarding to docker log collector (used by cron jobs)
 RUN ln -sf /proc/1/fd/1 /app/cronjob_success_fail_output && \
     ln -sf /proc/1/fd/1 /app/cronjob_not_processed_output
