@@ -432,10 +432,10 @@ class TestUnlockCodeRequestGenerateJson(unittest.TestCase):
 
 class TestUnlockCodeActivationProcess(unittest.TestCase):
     def setUp(self):
-        self.known_idnr = '19327675747'
+        self.known_real_idnr = '19327675747'
 
         self.unlock_activation_with_valid_input = UnlockCodeActivationRequestController(UnlockCodeActivationData(
-            idnr=self.known_idnr,
+            idnr=self.known_real_idnr,
             unlock_code='1985-T67D-K89O',
             elster_request_id='42'))
 
@@ -602,10 +602,10 @@ class TestUnlockCodeActivationGenerateJson(unittest.TestCase):
 
 class TestUnlockCodeRevocationProcess(unittest.TestCase):
     def setUp(self):
-        self.known_idnr = '19327675747'
+        self.known_real_idnr = '19327675747'
 
         self.unlock_revocation_with_valid_input = UnlockCodeRevocationRequestController(UnlockCodeRevocationData(
-            idnr=self.known_idnr,
+            idnr=self.known_real_idnr,
             elster_request_id='lookanotherrequestid'))
 
         self.unlock_revocation_with_valid_input_and_test_idnr = UnlockCodeRevocationRequestController(
@@ -905,9 +905,9 @@ class TestGetBelegeRequestController(unittest.TestCase):
 
 class TestGetAddressProcess(unittest.TestCase):
     def setUp(self):
-        self.known_idnr = '02293417683'
+        self.known_real_idnr = '02293417683'
 
-        self.get_address_with_valid_input = GetAddressRequestController(GetAddressData(idnr=self.known_idnr))
+        self.get_address_with_valid_input = GetAddressRequestController(GetAddressData(idnr=self.known_real_idnr))
 
     def test_calls_get_relevant_beleg_ids_with_correct_arguments(self):
         mock_server_response = 'server_response'
