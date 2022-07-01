@@ -3,6 +3,8 @@ from logging import Logger
 from typing import Type
 from uuid import UUID
 
+from pydantic import ValidationError
+
 from erica.application.JobService.job_service import JobServiceInterface
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
@@ -26,10 +28,17 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
         logger.warning(f"Entity not found for request_id {request_id}", exc_info=True)
         raise
 
-    request_payload: payload_type = payload_type.parse_obj(entity.payload)
-    start_time = datetime.now()
+    try:
+        request_payload: payload_type = payload_type.parse_obj(entity.payload)
+    except ValidationError as e:
+        entity.error_code = "ParsingError"
+        entity.error_message = "Failed to parse payload"
+        entity.status = Status.failed
+        repository.update(entity.id, entity)
+        raise
 
     try:
+        start_time = datetime.now()
         logger.info(f"Job started: {entity}")
 
         try:
@@ -54,6 +63,13 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
             repository.update(entity.id, entity)
 
         logger.info(f"Job finished: {entity}")
+    except Exception as e:
+        # Intentional bare except because this should be a catch-all
+        entity.error_code = "UnkownException"
+        entity.error_message = "An unknown error occurred"
+        entity.status = Status.failed
+        repository.update(entity.id, entity)
+        raise
     finally:
         end_time = datetime.now()
         elapsed_time = end_time - start_time
