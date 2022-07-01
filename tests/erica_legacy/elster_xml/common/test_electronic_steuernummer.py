@@ -2,26 +2,55 @@ from unittest.mock import patch
 
 import pytest
 
-from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_aktenzeichen, get_bufa_nr, \
-    generate_electronic_steuernummer
+from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_aktenzeichen, \
+    get_bufa_nr_from_steuernummer, \
+    generate_electronic_steuernummer, get_bufa_nr_from_aktenzeichen
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 from tests.erica_legacy.utils import missing_pyeric_lib
 
 
 @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
-class TestGetBufaNr:
+class TestGetBufaNrFromSteuernummer:
     def test_if_steuernummer_given_then_return_bufa_correctly(self):
-        result = get_bufa_nr("13381508159", "NW")
+        result = get_bufa_nr_from_steuernummer("13381508159", "NW")
         assert result == "5133"
 
     def test_if_aktenzeichen_given_then_return_bufa_correctly(self):
-        result = get_bufa_nr("2080353038893", "NW")
+        result = get_bufa_nr_from_steuernummer("2080353038893", "NW")
         assert result == "5208"
 
     def test_calls_steuernummer_generation(self):
         with patch("erica.erica_legacy.elster_xml.common.electronic_steuernummer.generate_electronic_steuernummer") as fun_gen_steuernummer:
-            get_bufa_nr("2181508150", "BE")
+            get_bufa_nr_from_steuernummer("2181508150", "BE")
             fun_gen_steuernummer.assert_called_once()
+
+
+class TestGetBufaNrFromAktenzeichen:
+
+    @pytest.mark.parametrize("bl, input_aktenzeichen, expected_bufa_nr", [
+        ("NW", "2080353038893", "5208"),
+        ("BW", "3100190001250002", "2831"),
+        ("BY", "19869040000000012", "9198"),
+        ("BE", "1687412343", "1116"),
+        ("BB", "09841275756757579", "3098"),
+        ("HB", "5710392627", "2457"),
+        ("HH", "1605432634", "2216"),
+        ("HE", "6000190000020004", "2660"),
+        ("MV", "09868000600010001", "4098"),
+        ("NI", "7968000600010009", "2379"),
+        ("NW", "6000353012851", "5600"),
+        ("RP", "70100281052000010", "2701"),
+        ("SL", "01031130640290128", "1010"),
+        ("SH", "9800196641", "2198"),
+        ("SN", "22491703400010006", "3224"),
+        ("ST", "10220000150210005", "3102"),
+        ("TH", "19801005430173326", "4198")
+    ])
+    @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
+    def test_get_correct_bufa_number_for_correct_aktenzeichen(self, bl, input_aktenzeichen, expected_bufa_nr):
+
+        bufa_nr = get_bufa_nr_from_aktenzeichen(input_aktenzeichen, bl)
+        assert bufa_nr == expected_bufa_nr
 
 
 @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
