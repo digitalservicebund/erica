@@ -15,7 +15,7 @@ def init_sentry():
         sentry_sdk.init(
             dsn=get_settings().sentry_dsn_worker,
             environment=get_settings().env_name,
-            traces_sample_rate=1.0,
+            # traces_sample_rate=1.0,
         )
     except Exception as e:
         # pass silently if the Sentry integration failed
