@@ -38,4 +38,7 @@ def tax_id_number_is_test_id_number(tax_id_number):
 def request_needs_testmerker(request_id):
     if request_id in NEW_REQUEST_ID_SINCE_LAST_CACHE_INVALIDATION:
         get_list_vast_requests.cache_clear()
-    return tax_id_number_is_test_id_number(get_list_vast_requests(PermitListingPyericProcessController, use_testmerker=True).get(request_id))
+    tax_id_number = get_list_vast_requests(PermitListingPyericProcessController, use_testmerker=True).get(request_id)
+    if tax_id_number is None:
+        return False
+    return tax_id_number_is_test_id_number(tax_id_number)
