@@ -1,7 +1,4 @@
 from xml.etree import ElementTree
-
-import pytest
-
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import EXml
 from erica.erica_legacy.elster_xml.common.xml_conversion import convert_object_to_xml
 from erica.erica_legacy.elster_xml.grundsteuer.elster_data_representation import ERueckuebermittlung, EVorsatz, \
@@ -298,6 +295,15 @@ class TestEVorsatz:
         assert result.StNr is None
         assert result.Aktenzeichen == "520850353038893"
         assert result.OrdNrArt == "A"
+
+    def test_if_no_street_given_then_attributes_set_postfach_for_AbsStr(self):
+        grundsteuer_obj = SampleGrundsteuerData().parse()
+        grundsteuer_obj.eigentuemer.person[0].adresse.strasse = None
+        grundsteuer_obj.eigentuemer.person[0].adresse.postfach = "123456"
+
+        result = EVorsatz(grundsteuer_obj)
+
+        assert result.AbsStr == "123456"
 
 
 class TestEGrundsteuerSpecifics:

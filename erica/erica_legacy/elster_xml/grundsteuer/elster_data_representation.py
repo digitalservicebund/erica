@@ -154,10 +154,13 @@ class EVorsatz:
     def __init__(self, input_data: GrundsteuerPayload):
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
-        self.Zeitraum = "2022"  # TODO require on input?
+        self.Zeitraum = "2022"
         self.AbsName = input_data.eigentuemer.person[0].persoenliche_angaben.vorname + " " + \
                        input_data.eigentuemer.person[0].persoenliche_angaben.name
-        self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
+        if input_data.eigentuemer.person[0].adresse.strasse:
+            self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
+        else:
+            self.AbsStr = input_data.eigentuemer.person[0].adresse.postfach
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
         self.Copyright = "(C) 2022 DigitalService GmbH des Bundes"
