@@ -15,7 +15,8 @@ def request_freischalt_code(request_id):
                     repository=service.repository,
                     service=service,
                     payload_type=service.payload_type,
-                    logger=logging.getLogger())
+                    logger=logging.getLogger(),
+                    job_type=RequestType.freischalt_code_request)
 
 
 @huey.task()
@@ -27,7 +28,8 @@ def activate_freischalt_code(request_id):
                     repository=service.repository,
                     service=service,
                     payload_type=service.payload_type,
-                    logger=logging.getLogger())
+                    logger=logging.getLogger(),
+                    job_type=RequestType.freischalt_code_activate)
 
 
 @huey.task()
@@ -39,4 +41,5 @@ def revocate_freischalt_code(request_id):
                     repository=service.repository,
                     service=service,
                     payload_type=service.payload_type,
-                    logger=logging.getLogger())
+                    logger=logging.getLogger(),
+                    job_type=RequestType.freischalt_code_revocate)

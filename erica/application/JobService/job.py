@@ -6,6 +6,7 @@ from uuid import UUID
 from pydantic import ValidationError
 
 from erica.application.JobService.job_service import JobServiceInterface
+from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
@@ -15,7 +16,7 @@ from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityN
 
 
 def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,
-                      payload_type: Type[BasePayload], logger: Logger):
+                      payload_type: Type[BasePayload], logger: Logger, job_type: RequestType = RequestType.unknown):
     """
     The basic implementation for a job that is put on the Erica queue. It will get an entity, interact with the ERiC
     library using the service and then update the entity according to the result from the service.
@@ -49,6 +50,7 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
             entity.result = response
             entity.status = Status.success
             repository.update(entity.id, entity)
+            logger.info(f"Job ran successfully: type {job_type}")
         except EricProcessNotSuccessful as e:
             error_response = e.generate_error_response(True)
             logger.warning(

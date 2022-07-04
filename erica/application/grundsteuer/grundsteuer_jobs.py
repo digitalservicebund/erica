@@ -15,4 +15,5 @@ def send_grundsteuer(request_id):
                     repository=service.repository,
                     service=service,
                     payload_type=service.payload_type,
-                    logger=logging.getLogger())
+                    logger=logging.getLogger(),
+                    job_type=RequestType.grundsteuer)

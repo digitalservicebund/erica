@@ -15,4 +15,5 @@ def send_est(request_id):
                     repository=service.repository,
                     service=service,
                     payload_type=service.payload_type,
-                    logger=logging.getLogger())
+                    logger=logging.getLogger(),
+                    job_type=RequestType.send_est)
