@@ -54,11 +54,7 @@ async def test_if_post_job_returns_location_with_uuid(api_method, input_data, re
     mock_request_object = MagicMock(url_for=MagicMock(return_value=str(mock_url)), base_url="lorem")
     with patch(get_job_service_patch_string(endpoint_to_patch), MagicMock(return_value=job_service_mock)):
         response = await api_method(input_data, mock_request_object)
-        if request_type == RequestType.grundsteuer:
-            assert response.headers['Location'] == mock_url
-        else:
-            assert response.headers['Location'] == mock_url.removeprefix("v2")
-
+        assert response.headers['Location'] == mock_url
 
 
 @pytest.mark.asyncio

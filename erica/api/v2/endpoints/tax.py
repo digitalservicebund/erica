@@ -24,7 +24,7 @@ async def is_valid_tax_number(tax_validity_client_identifier: CheckTaxNumberDto,
         RequestType.check_tax_number)
     return RedirectResponse(
         request.url_for("get_valid_tax_number_job", request_id=str(result.request_id)).removeprefix(
-            str(request.base_url)).removeprefix("v2"),
+            str(request.base_url)),
         status_code=201)
 
 
