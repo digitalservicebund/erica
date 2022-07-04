@@ -7,7 +7,6 @@ import pytest
 
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeActivatePayload, FreischaltCodeRevocatePayload
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
-from erica.erica_legacy.pyeric.check_elster_request_id import SPECIAL_TESTMERKER_IDNR
 from erica.erica_legacy.pyeric.eric_errors import InvalidBufaNumberError
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper
@@ -122,9 +121,9 @@ class TestEstRequestProcess(unittest.TestCase):
 
             pyeric_get_response.assert_called()
 
-    def test_if_use_testmerker_env_false_and_special_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
+    def test_if_use_testmerker_env_false_and_test_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
         correct_est = create_est(correct_form_data=True)
-        correct_est.est_data.person_a_idnr = SPECIAL_TESTMERKER_IDNR[0]
+        correct_est.est_data.person_a_idnr = '04452397687'
 
         with patch('erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_est_xml') as generate_xml_fun, \
                 patch('erica.erica_legacy.pyeric.pyeric_controller.EstPyericProcessController.get_eric_response'), \
@@ -134,10 +133,10 @@ class TestEstRequestProcess(unittest.TestCase):
 
             self.assertTrue(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
-    def test_if_use_testmerker_env_false_and_not_special_idnr_then_create_xml_is_called_with_use_testmerker_set_false(
+    def test_if_use_testmerker_env_false_and_not_test_idnr_then_create_xml_is_called_with_use_testmerker_set_false(
             self):
         correct_est = create_est(correct_form_data=True)
-        correct_est.est_data.person_a_idnr = '02293417683'
+        correct_est.est_data.person_a_idnr = '19327675747'
 
         with patch('erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_est_xml') as generate_xml_fun, \
                 patch('erica.erica_legacy.pyeric.pyeric_controller.EstPyericProcessController.get_eric_response'), \
@@ -270,11 +269,11 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
 
     def setUp(self):
         self.unlock_request_with_valid_input = UnlockCodeRequestController(UnlockCodeRequestData(
-            idnr="02293417683",
+            idnr="19327675747",
             dob=date(1985, 1, 1)))
 
-        self.unlock_request_with_valid_input_with_special_idnr = UnlockCodeRequestController(UnlockCodeRequestData(
-            idnr=SPECIAL_TESTMERKER_IDNR[0],
+        self.unlock_request_with_valid_input_with_test_idnr = UnlockCodeRequestController(UnlockCodeRequestData(
+            idnr='04452397687',
             dob=date(1985, 1, 1)))
 
     def test_pyeric_controller_is_initialised_with_correct_arguments(self):
@@ -309,18 +308,18 @@ class TestUnlockCodeRequestProcess(unittest.TestCase):
 
             pyeric_controller_get_response.assert_called()
 
-    def test_if_special_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
+    def test_if_test_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
         with patch(
                 'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_request_xml') as generate_xml_fun, \
                 patch(
                     'erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeRequestPyericProcessController.get_eric_response'), \
                 patch(
                     'erica.erica_legacy.request_processing.requests_controller.UnlockCodeRequestController.generate_json'):
-            self.unlock_request_with_valid_input_with_special_idnr.process()
+            self.unlock_request_with_valid_input_with_test_idnr.process()
 
             self.assertTrue(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
-    def test_if_not_special_idnr_then_create_xml_is_called_with_use_testmerker_set_false(self):
+    def test_if_not_test_idnr_then_create_xml_is_called_with_use_testmerker_set_false(self):
         with patch(
                 'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_request_xml') as generate_xml_fun, \
                 patch(
@@ -433,16 +432,16 @@ class TestUnlockCodeRequestGenerateJson(unittest.TestCase):
 
 class TestUnlockCodeActivationProcess(unittest.TestCase):
     def setUp(self):
-        self.known_idnr = '02293417683'
+        self.known_real_idnr = '19327675747'
 
         self.unlock_activation_with_valid_input = UnlockCodeActivationRequestController(UnlockCodeActivationData(
-            idnr=self.known_idnr,
+            idnr=self.known_real_idnr,
             unlock_code='1985-T67D-K89O',
             elster_request_id='42'))
 
-        self.unlock_activation_with_valid_input_with_special_idnr = UnlockCodeActivationRequestController(
+        self.unlock_activation_with_valid_input_with_test_idnr = UnlockCodeActivationRequestController(
             UnlockCodeActivationData(
-                idnr=SPECIAL_TESTMERKER_IDNR[0],
+                idnr='04452397687',
                 unlock_code='1985-T67D-K89O',
                 elster_request_id='42'))
 
@@ -487,18 +486,18 @@ class TestUnlockCodeActivationProcess(unittest.TestCase):
 
             pyeric_controller_get_response.assert_called()
 
-    def test_if_special_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
+    def test_if_test_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
         with patch(
                 'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_activation_xml') as generate_xml_fun, \
                 patch(
                     'erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeActivationPyericProcessController.get_eric_response'), \
                 patch(
                     'erica.erica_legacy.request_processing.requests_controller.UnlockCodeActivationRequestController.generate_json'):
-            self.unlock_activation_with_valid_input_with_special_idnr.process()
+            self.unlock_activation_with_valid_input_with_test_idnr.process()
 
             self.assertTrue(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
-    def test_if_not_special_idnr_then_create_xml_is_called_with_use_testmerker_set_false(self):
+    def test_if_not_test_idnr_then_create_xml_is_called_with_use_testmerker_set_false(self):
         with patch(
                 'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_activation_xml') as generate_xml_fun, \
                 patch(
@@ -603,15 +602,15 @@ class TestUnlockCodeActivationGenerateJson(unittest.TestCase):
 
 class TestUnlockCodeRevocationProcess(unittest.TestCase):
     def setUp(self):
-        self.known_idnr = '02293417683'
+        self.known_real_idnr = '19327675747'
 
         self.unlock_revocation_with_valid_input = UnlockCodeRevocationRequestController(UnlockCodeRevocationData(
-            idnr=self.known_idnr,
+            idnr=self.known_real_idnr,
             elster_request_id='lookanotherrequestid'))
 
-        self.unlock_revocation_with_valid_input_and_special_idnr = UnlockCodeRevocationRequestController(
+        self.unlock_revocation_with_valid_input_and_test_idnr = UnlockCodeRevocationRequestController(
             UnlockCodeRevocationData(
-                idnr=SPECIAL_TESTMERKER_IDNR[0],
+                idnr='04452397687',
                 elster_request_id='lookanotherrequestid'))
 
         self.unlock_revocation_with_unknown_idnr = UnlockCodeRevocationRequestController(UnlockCodeRevocationData(
@@ -653,18 +652,18 @@ class TestUnlockCodeRevocationProcess(unittest.TestCase):
 
             pyeric_controller_get_response.assert_called()
 
-    def test_if_special_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
+    def test_if_test_idnr_then_create_xml_is_called_with_use_testmerker_set_true(self):
         with patch(
                 'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_revocation_xml') as generate_xml_fun, \
                 patch(
                     'erica.erica_legacy.pyeric.pyeric_controller.UnlockCodeRevocationPyericProcessController.get_eric_response'), \
                 patch(
                     'erica.erica_legacy.request_processing.requests_controller.UnlockCodeRevocationRequestController.generate_json'):
-            self.unlock_revocation_with_valid_input_and_special_idnr.process()
+            self.unlock_revocation_with_valid_input_and_test_idnr.process()
 
             self.assertTrue(generate_xml_fun.call_args.kwargs['use_testmerker'])
 
-    def test_if_not_special_idnr_then_create_xml_is_called_with_use_testmerker_set_false(self):
+    def test_if_not_test_idnr_then_create_xml_is_called_with_use_testmerker_set_false(self):
         with patch(
                 'erica.erica_legacy.elster_xml.elster_xml_generator.generate_full_vast_revocation_xml') as generate_xml_fun, \
                 patch(
@@ -906,9 +905,9 @@ class TestGetBelegeRequestController(unittest.TestCase):
 
 class TestGetAddressProcess(unittest.TestCase):
     def setUp(self):
-        self.known_idnr = '02293417683'
+        self.known_real_idnr = '02293417683'
 
-        self.get_address_with_valid_input = GetAddressRequestController(GetAddressData(idnr=self.known_idnr))
+        self.get_address_with_valid_input = GetAddressRequestController(GetAddressData(idnr=self.known_real_idnr))
 
     def test_calls_get_relevant_beleg_ids_with_correct_arguments(self):
         mock_server_response = 'server_response'

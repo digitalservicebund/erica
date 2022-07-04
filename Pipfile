@@ -4,12 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+erica = {path = ".", editable = true}
 click = "==8.1.3"
 fastapi = "~=0.78.0"
 freezegun = "*"
 pydantic = "~=1.9.1"
 pytest = "==7.1.2"
-uvicorn = "~=0.17.5"
+uvicorn = "~=0.18.2"
 babel = "*"
 python-dotenv = "*"
 prometheus-fastapi-instrumentator = "*"
@@ -23,7 +24,6 @@ sqlalchemy = "*"
 psycopg2-binary = "*"
 sqlalchemy-utils = "*"
 fastapi-versioning = "*"
-rq = "*"
 redis = "*"
 opyoid = "*"
 injector = "*"
@@ -31,6 +31,8 @@ orjson = "*"
 alembic = "*"
 sentry-sdk = "*"
 fastapi-sqlalchemy = "*"
+typing-extensions = "*"
+huey = "*"
 
 [dev-packages]
 pytest = "*"

@@ -363,6 +363,7 @@ class EricWrapper(object):
             fun_make_elster_ewaz,
             aktenzeichen.encode(),
             bundesland.encode()).decode()
+
     def _call_and_return_buffer_contents(self, function, *args):
         """
         :param function: The ERIC function to be called. The argtypes and restype have to be set before.

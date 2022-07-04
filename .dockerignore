@@ -1,2 +1,5 @@
+*.md
+doc/
 Dockerfile
+docker-compose*
 tests/

@@ -44,7 +44,7 @@ from tests.utils import create_unlock_code_request, \
 async def test_if_post_job_returns_location_with_uuid(api_method, input_data, request_type, endpoint_to_patch,
                                                       expected_location):
     request_id = uuid.uuid4()
-    job_service_mock = JobService(job_repository=MockEricaRequestRepository(), background_worker=MagicMock(),
+    job_service_mock = JobService(job_repository=MockEricaRequestRepository(),
                                   request_controller=MockRequestController, payload_type=MockDto,
                                   job_method=PickableMock())
     job_service_mock.add_to_queue = Mock(

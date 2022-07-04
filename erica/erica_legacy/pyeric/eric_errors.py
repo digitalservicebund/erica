@@ -266,12 +266,6 @@ _ERIC_ERROR_MESSAGES = {**_ERIC_SUCCESS_CODE, **_ERIC_CUSTOM_ERROR_CODES, **_ERI
                         **_ERIC_GLOBAL_INITIALISATION_ERRORS, **_ERIC_GLOBAL_ERRORS, **_ERIC_TRANSFER_ERRORS,
                         **_ERIC_CRYPT_ERRORS, **_ERIC_IO_ERRORS, **_ERIC_PRINT_ERRORS}
 
-ERIC_ERRORS_WITH_RETRY = ["ERIC_CRYPT_E_SC_SLOT_EMPTY", "ERIC_CRYPT_E_P11_SLOT_EMPTY", "ERIC_TRANSFER_ERR_PROXYCONNECT",
-                          "ERIC_TRANSFER_ERR_CONNECTSERVER", "ERIC_TRANSFER_ERR_NORESPONSE",
-                          "ERIC_TRANSFER_ERR_TIMEOUT", "ERIC_TRANSFER_ERR_SEND"
-                          "ERIC_TRANSFER_COM_ERROR", "ERIC_GLOBAL_INTERNER_FEHLER"
-                          "ERIC_TRANSFER_ERR_NOTENCRYPTED"]
-
 
 class EricProcessNotSuccessful(Exception):
     """Exception raised in case of an unsuccessful process in the ERiC binaries
@@ -356,11 +350,9 @@ class EricTransferError(EricProcessNotSuccessful):
 
     def __str__(self):
         if self.work_dir:
-            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)} in: {self.work_dir}; " \
-                   f"server_err_msg: {self.server_err_msg} "
+            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)} in: {self.work_dir}"
         else:
-            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)}; " \
-                   f"server_err_msg: {self.server_err_msg} "
+            return f"{self.res_code}: {self.get_eric_error_code_message(self.res_code)}"
 
     def generate_error_response(self, include_responses=False):
         """

@@ -1,8 +1,6 @@
 import os
-import sys
 import unittest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 os.environ["ERICA_ENV"] = 'testing'
 
 import pytest_asyncio
@@ -64,8 +62,8 @@ def fake_db_connection_in_settings(database_uri):
     get_settings().database_url = original_db_url
 
 
-@pytest_asyncio.fixture()
-async def transactional_session_with_mock_schema(transacted_postgresql_db):
+@pytest.fixture()
+def transactional_session_with_mock_schema(transacted_postgresql_db):
     if not transacted_postgresql_db.has_table(MockSchema.__tablename__):
         transacted_postgresql_db.create_table(MockSchema)
 
@@ -74,8 +72,8 @@ async def transactional_session_with_mock_schema(transacted_postgresql_db):
     transacted_postgresql_db.reset_db()
 
 
-@pytest_asyncio.fixture()
-async def async_fake_db_connection_with_erica_table_in_settings(database_uri):
+@pytest.fixture()
+def fake_db_connection_with_erica_table_in_settings(database_uri):
     postgresql_url = database_uri
     original_db_url = get_settings().database_url
     get_settings().database_url = postgresql_url

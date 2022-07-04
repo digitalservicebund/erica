@@ -1,12 +1,9 @@
 import logging
-import os
 from datetime import datetime
 from logging.config import dictConfig
 
 import click
-import sys
 
-sys.path.append(os.getcwd())
 from erica.config import get_settings
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 from opyoid import Injector

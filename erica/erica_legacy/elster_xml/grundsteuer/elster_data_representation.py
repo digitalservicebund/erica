@@ -3,8 +3,8 @@ from typing import List, Optional
 
 from erica.erica_legacy.elster_xml.common.basic_xml_data_representation import ENutzdaten, \
     construct_basic_xml_data_representation
-from erica.erica_legacy.elster_xml.common.electronic_steuernummer import get_bufa_nr, generate_electronic_aktenzeichen, \
-    BUNDESLAENDER_WITH_STEUERNUMMER, generate_electronic_steuernummer
+from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generate_electronic_aktenzeichen, \
+    BUNDESLAENDER_WITH_STEUERNUMMER, get_bufa_nr_from_aktenzeichen
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
@@ -154,10 +154,13 @@ class EVorsatz:
     def __init__(self, input_data: GrundsteuerPayload):
         self.Unterfallart = "88"  # Grundsteuer
         self.Vorgang = "01"  # Veranlagung
-        self.Zeitraum = "2022"  # TODO require on input?
+        self.Zeitraum = "2022"
         self.AbsName = input_data.eigentuemer.person[0].persoenliche_angaben.vorname + " " + \
                        input_data.eigentuemer.person[0].persoenliche_angaben.name
-        self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
+        if input_data.eigentuemer.person[0].adresse.strasse:
+            self.AbsStr = input_data.eigentuemer.person[0].adresse.strasse
+        else:
+            self.AbsStr = input_data.eigentuemer.person[0].adresse.postfach
         self.AbsPlz = input_data.eigentuemer.person[0].adresse.plz
         self.AbsOrt = input_data.eigentuemer.person[0].adresse.ort
         self.Copyright = "(C) 2022 DigitalService GmbH des Bundes"
@@ -202,7 +205,7 @@ class EGrundsteuerData(ENutzdaten):
 
 def get_full_grundsteuer_data_representation(input_data: GrundsteuerPayload):
     """ Returns the full data representation of an elster XML for the Grundsteuer use case. """
-    bufa_nr = get_bufa_nr(input_data.grundstueck.steuernummer, input_data.grundstueck.adresse.bundesland)
+    bufa_nr = get_bufa_nr_from_aktenzeichen(input_data.grundstueck.steuernummer, input_data.grundstueck.adresse.bundesland)
 
     grundsteuer_elster_data_representation = EGrundsteuerData(input_data)
     return construct_basic_xml_data_representation(empfaenger_id='F', empfaenger_text=bufa_nr,

@@ -12,15 +12,28 @@ BUNDESLAND_BUFANR_MAPPING = {
 BUNDESLAENDER_WITH_PREPENDED_NUMBER = ['BB', 'HE', 'MV', 'SL', 'SN', 'ST', 'TH']
 
 
-def get_bufa_nr(steuernummer: str, bundesland: str):
+def get_bufa_nr_from_steuernummer(steuernummer: str, bundesland: str):
     """
-        Returns the bufa-nr for the given steuernummer/aktenzeichen and bundesland.
-        :param steuernummer: steuernummer/aktenzeichen in state-specific format
+        Returns the bufa-nr for the given steuernummer and bundesland.
+        :param steuernummer: steuernummer in state-specific format
         :param bundesland: bundesland identifier
      """
 
     electronic_steuernummer = generate_electronic_steuernummer(steuernummer, bundesland)
     bufa_nr = electronic_steuernummer[:4]
+    return bufa_nr
+
+
+def get_bufa_nr_from_aktenzeichen(aktenzeichen: str, bundesland: str):
+    """
+        Returns the bufa-nr for the given aktenzeichen and bundesland.
+        :param aktenzeichen: aktenzeichen in state-specific format
+        :param bundesland: bundesland identifier
+     """
+    bundesschema_steuernummer = generate_electronic_aktenzeichen(aktenzeichen, bundesland)
+    bufa_nr = bundesschema_steuernummer[:4]
+    if not is_valid_bufa(bufa_nr):
+        raise InvalidBufaNumberError
     return bufa_nr
 
 

@@ -1,6 +1,7 @@
 import logging
 from logging.config import dictConfig
 
+import sentry_sdk
 import uvicorn
 
 from erica import get_settings
@@ -36,5 +37,16 @@ dictConfig({
     },
     "disable_existing_loggers": False
 })
+
+try:
+    sentry_sdk.init(
+        dsn=get_settings().sentry_dsn_api,
+        environment=get_settings().env_name,
+        # traces_sample_rate=0.01,
+    )
+except Exception as e:
+    # pass silently if the Sentry integration failed
+    logging.getLogger().warn(f"Sentry integration failed to load: {e}")
+    pass
 
 uvicorn.run("erica:app", host="0.0.0.0", port=8000, log_config=None)
