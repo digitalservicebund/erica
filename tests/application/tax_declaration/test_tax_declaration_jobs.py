@@ -32,7 +32,8 @@ class TestTaxDeclarationJob:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        payload_type=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type,
+                                                        job_type=RequestType.send_est)]
 
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"

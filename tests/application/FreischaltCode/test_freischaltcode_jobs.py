@@ -33,7 +33,8 @@ class TestRequestFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        payload_type=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type,
+                                                        job_type=RequestType.freischalt_code_request)]
 
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
@@ -101,7 +102,8 @@ class TestActivateFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        payload_type=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type,
+                                                        job_type=RequestType.freischalt_code_activate)]
 
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
@@ -169,7 +171,8 @@ class TestRevocateFreischaltcode:
                                                         repository=mock_get_service().repository,
                                                         service=mock_get_service(),
                                                         logger=logging.getLogger(),
-                                                        payload_type=mock_get_service().payload_type)]
+                                                        payload_type=mock_get_service().payload_type,
+                                                        job_type=RequestType.freischalt_code_revocate)]
 
     async def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
