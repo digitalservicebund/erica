@@ -286,6 +286,6 @@ def generate_electronic_steuernummer(steuernummer, bundesland, use_testmerker=Fa
     # first four digits of the electronic_steuernummer represent the bufa
     bufa_nr = bundesschema_steuernummer[:4]
     if not is_valid_bufa(bufa_nr, use_testmerker):
-        raise InvalidBufaNumberError
+        raise InvalidBufaNumberError(bufa_nr=bufa_nr)
     electronic_steuernummer = bufa_nr + '0' + bundesschema_steuernummer[4:]
     return electronic_steuernummer

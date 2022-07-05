@@ -429,12 +429,13 @@ class InvalidBufaNumberError(EricProcessNotSuccessful):
     ERROR_CODE = 12
 
     # Overwrite initaliser to set custom res_code
-    def __init__(self, res_code=6):
+    def __init__(self, res_code=6, bufa_nr=None):
         # This error always has the res_code 6
         super().__init__(res_code)
+        self.bufa_nr = bufa_nr
 
     def __str__(self):
-        return 'The BuFa number is invalid'
+        return f'The BuFa number {self.bufa_nr} is invalid'
 
 
 class EricWrongTaxNumberError(EricGlobalValidationError):
