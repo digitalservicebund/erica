@@ -156,13 +156,13 @@ class TestJob:
         assert mock_entity.type == original_type
 
     def test_if_job_ran_successful_then_log_completion_message(self):
-        info_logger = MagicMock()
-        logger = MagicMock(info=info_logger)
+        warning_logger = MagicMock()
+        logger = MagicMock(warning=warning_logger)
 
         perform_job(request_id=uuid4(), repository=MagicMock(), service=MagicMock(), payload_type=MagicMock(),
                           logger=logger)
 
-        assert any("Job finished" in logged_msg[1][0] for logged_msg in info_logger.mock_calls)
+        assert any("Job finished" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
 
     @freeze_time("Jan 3th, 1892", auto_tick_seconds=15)
     def test_if_job_ran_successful_then_log_runtime_of_job(self):
