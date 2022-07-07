@@ -79,6 +79,14 @@ class TestEAngGemeinschaften:
         assert result.E7404591 == "Bruchteilsgemeinschaft Wi"
         assert result.E7404592 == "th Long Name"
 
+    def test_if_name_over_25_letters_and_includes_whitespaces_then_remove_whitespaces(self):
+        bruchteilsgemeinschaft_input = SampleBruchteilsgemeinschaft().name(
+            " BruchteilsgemeinschaftWi  th Long Name ").with_postfach().parse()
+        result = EAngGemeinschaften(bruchteilsgemeinschaft_input)
+
+        assert result.E7404591 == "BruchteilsgemeinschaftWi"
+        assert result.E7404592 == "th Long Name"
+
 
 class TestEGW1:
     def test_if_valid_input_then_all_attributes_set_correctly(self):
