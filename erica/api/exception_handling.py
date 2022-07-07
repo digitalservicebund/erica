@@ -44,7 +44,7 @@ def generate_exception_handlers(app):
 
     async def internal_server_error(request: Request, exc: Exception):
         request_id = request.path_params.get('request_id')
-        logging.getLogger().error(f"Request for entity {request_id} producted unexpected error: {str(exc)}")
+        logging.getLogger().error(f"Request for entity {request_id} produced unexpected error: {str(exc)}")
         return JSONResponse(
             {"errorCode": "internal_server_error",
              "errorMessage": "An unexpected error occurred."},

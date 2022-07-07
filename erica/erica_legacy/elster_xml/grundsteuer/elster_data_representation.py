@@ -56,9 +56,9 @@ class EAngGemeinschaften:
 
     def __init__(self, input_data: Bruchteilsgemeinschaft):
         self.E7403301 = "01"  # no_anrede
-        self.E7404591 = input_data.name[:25]
+        self.E7404591 = input_data.name[:25].strip()
         if len(input_data.name) > 25:
-            self.E7404592 = input_data.name[25:]
+            self.E7404592 = input_data.name[25:].strip()
         else:
             self.E7404592 = None
         self.E7413501 = input_data.adresse.strasse

@@ -8,6 +8,7 @@ from typing import ByteString
 
 from erica.config import get_settings, Settings
 from erica.erica_legacy.pyeric.eric_errors import check_result, check_handle, check_xml, EricWrongTaxNumberError
+from erica.infrastructure.huey import huey
 
 logger = logging.getLogger('eric')
 
@@ -65,6 +66,17 @@ def verify_using_stick():
         except Exception as e:
             logger.debug("Exception while trying to verify Stick", exc_info=e)
             return False
+
+
+@huey.task()
+def _verify_using_stick_with_queue():
+    return verify_using_stick()
+
+
+def verify_using_stick_with_queue(timeout=10):
+    result = _verify_using_stick_with_queue()
+
+    return result(blocking=True, timeout=timeout)
 
 
 class EricWrapper(object):

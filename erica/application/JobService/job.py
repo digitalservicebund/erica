@@ -62,7 +62,9 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
             entity.status = Status.failed
             repository.update(entity.id, entity)
 
-        logger.info(f"Job finished: {entity}")
+        # TODO: NF 2022-07-06: this should be logged at info level, but huey doesn't yet log properly.
+        # setting the level to warning is the quickest way to get this into our production logs.
+        logger.warning(f"Job finished: {entity}")
     except Exception as e:
         # Intentional bare except because this should be a catch-all
         entity.error_code = "UnkownException"

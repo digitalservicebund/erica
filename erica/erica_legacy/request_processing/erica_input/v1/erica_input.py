@@ -123,7 +123,7 @@ class FormDataEst(Stmind):
         if values.get('submission_without_tax_nr') and (not v or not len(v) == 4):
             raise ValueError('must be 4 numbers long for new admission')
         if values.get('submission_without_tax_nr') and not is_valid_bufa(v):
-            raise InvalidBufaNumberError
+            raise InvalidBufaNumberError(bufa_nr=v)
         return v
 
     @validator('familienstand_married_lived_separated_since', always=True)
