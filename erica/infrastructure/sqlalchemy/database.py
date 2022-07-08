@@ -1,3 +1,5 @@
+import decimal
+
 import orjson
 from fastapi_sqlalchemy import db
 from opyoid import Provider
@@ -7,11 +9,17 @@ from sqlalchemy.orm import Session
 from erica.config import get_settings
 
 
+def default(obj):
+    if isinstance(obj, decimal.Decimal):
+        return str(obj)
+    raise TypeError
+
+
 def orjson_serializer(obj):
     """
         Note that `orjson.dumps()` return byte array, while sqlalchemy expects string, thus `decode()` call.
     """
-    return orjson.dumps(obj, option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_NAIVE_UTC).decode()
+    return orjson.dumps(obj, option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_NAIVE_UTC, default=default).decode()
 
 
 def orjson_deserializer(json):
