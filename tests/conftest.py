@@ -1,5 +1,6 @@
 import os
 import unittest
+from decimal import Decimal
 
 os.environ["ERICA_ENV"] = 'testing'
 
@@ -47,7 +48,8 @@ def standard_est_input_data():
         account_holder='person_a',
 
         confirm_complete_correct=True,
-        confirm_send=True
+        confirm_send=True,
+        stmind_haushaltsnahe_summe=Decimal('3.14')
     )
 
 
