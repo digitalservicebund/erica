@@ -13,6 +13,7 @@ _ERIC_CUSTOM_ERROR_CODES = {
     5: "ELSTER_REQUEST_ID_UNKNOWN",
     6: "INVALID_BUFA_NUMBER",
     7: "INVALID_TAX_NUMBER",
+    8: "ALREADY_REVOKED",
 }
 
 _ERIC_GLOBAL_VALIDATION_ERRORS = {
@@ -419,6 +420,11 @@ class EricAlreadyRevokedError(EricTransferError):
     """Exception raised in case the unlock code was already revoked.
     """
     ERROR_CODE = 11
+
+    # Overwrite initaliser to set custom res_code
+    def __init__(self, eric_response=None, server_response=None, server_err_msg=None):
+        # This error always has the res_code 8
+        super().__init__(8, eric_response, server_response, server_err_msg)
 
     def __str__(self):
         return "The request for the request code has already been revoked"
