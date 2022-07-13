@@ -10,6 +10,7 @@ _ERIC_SUCCESS_CODE = {
 _ERIC_CUSTOM_ERROR_CODES = {
     1: "NULL_POINTER_RETURNED",
     3: "ALREADY_OPEN_UNLOCK_CODE_REQUEST",
+    4: "ALREADY_REVOKED_UNLOCK_CODE",
     5: "ELSTER_REQUEST_ID_UNKNOWN",
     6: "INVALID_BUFA_NUMBER",
     7: "INVALID_TAX_NUMBER",
@@ -420,6 +421,11 @@ class EricAlreadyRevokedError(EricTransferError):
     """
     ERROR_CODE = 11
 
+    # Overwrite initaliser to set custom res_code
+    def __init__(self, eric_response=None, server_response=None, server_err_msg=None):
+        # This error always has the res_code 8
+        super().__init__(4, eric_response, server_response, server_err_msg)
+
     def __str__(self):
         return "The request for the request code has already been revoked"
 
@@ -501,7 +507,7 @@ def _create_validation_error(rescode, eric_response):
 def _create_transfer_error(rescode, eric_response, server_response, server_err_msg=None):
     if rescode == 610101292 and server_err_msg and is_error_in_server_err_msg(server_err_msg.get('NDH_ERR_XML'),
                                                                               '371015213'):
-        raise EricAlreadyRevokedError(rescode, eric_response, server_response, server_err_msg)
+        raise EricAlreadyRevokedError(eric_response, server_response, server_err_msg)
     elif server_response and rescode in _FSC_ALREADY_REQUESTED_ERRORS and \
             ("Es besteht bereits ein offener Antrag auf Erteilung einer Berechtigung zum Datenabruf"
              in server_response.decode() or
