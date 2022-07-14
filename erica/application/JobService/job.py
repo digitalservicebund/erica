@@ -10,7 +10,7 @@ from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
@@ -51,10 +51,11 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
             repository.update(entity.id, entity)
         except EricProcessNotSuccessful as e:
             error_response = e.generate_error_response(True)
-            transfer_error_code = error_response.get('server_err_msg').get('TH_RES_CODE') if error_response.get('server_err_msg') else None
-            if transfer_error_code:
+            transfer_errors_xml = error_response.get('server_err_msg').get('NDH_ERR_XML') if error_response.get('server_err_msg') else None
+            if transfer_errors_xml:
                 logger.warning(
-                    f"Job failed: {entity}. Got error: {error_response.get('code')}. TransferError: {transfer_error_code}",
+                    f"Job failed: {entity}. Got error: {error_response.get('code')}. "
+                    f"TransferErrors: {get_error_codes_from_server_err_msg(transfer_errors_xml)}",
                     exc_info=True
                 )
             else:
