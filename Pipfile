@@ -33,6 +33,7 @@ sentry-sdk = "*"
 fastapi-sqlalchemy = "*"
 typing-extensions = "*"
 huey = "*"
+python-stdnum = "*"
 
 [dev-packages]
 pytest = "*"
