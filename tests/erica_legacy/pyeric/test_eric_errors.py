@@ -59,7 +59,9 @@ class TestGenerateErrorResponse(unittest.TestCase):
         self.assertEqual(expected_response, actual_response)
 
     def test_if_transfer_error_then_set_correct_error_code_and_msg_in_response(self):
-        server_err_msg = "This is another message to youhuh"
+        server_err_msg = {'TH_RES_CODE': "1234",
+                          'TH_ERR_MSG': "A message - do you copy?",
+                          'NDH_ERR_XML': "<xml/>"}
         expected_response = {"code": 4,
                              "message": EricProcessNotSuccessful.get_eric_error_code_message(-1),
                              'server_err_msg': server_err_msg}
@@ -103,7 +105,9 @@ class TestGenerateErrorResponse(unittest.TestCase):
         self.assertEqual(expected_response, actual_response)
 
     def test_if_transfer_error_with_correct_res_code_and_server_response_already_requested_then_set_correct_error_code_and_msg_in_response(self):
-        server_err_msg = "This is another message to youhuh"
+        server_err_msg = {'TH_RES_CODE': "1234",
+                          'TH_ERR_MSG': "A message - do you copy?",
+                          'NDH_ERR_XML': "<xml/>"}
         expected_response = {
             "code": 9,
             "message": EricProcessNotSuccessful.get_eric_error_code_message(3),
@@ -117,7 +121,9 @@ class TestGenerateErrorResponse(unittest.TestCase):
         self.assertEqual(expected_response, actual_response)
 
     def test_if_transfer_error_with_correct_res_code_and_server_response_no_antrag_found_then_set_correct_error_code_and_msg_in_response(self):
-        server_err_msg = "This is another message to youhuh"
+        server_err_msg = {'TH_RES_CODE': "1234",
+                          'TH_ERR_MSG': "A message - do you copy?",
+                          'NDH_ERR_XML': "<xml/>"}
         expected_response = {"code": 10,
                              "message": EricProcessNotSuccessful.get_eric_error_code_message(5),
                              'server_err_msg': server_err_msg}

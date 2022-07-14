@@ -51,10 +51,17 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
             repository.update(entity.id, entity)
         except EricProcessNotSuccessful as e:
             error_response = e.generate_error_response(True)
-            logger.warning(
-                f"Job failed: {entity}. Got error: {error_response.get('code')}",
-                exc_info=True
-            )
+            transfer_error_code = error_response.get('server_err_msg').get('TH_RES_CODE') if error_response.get('server_err_msg') else None
+            if transfer_error_code:
+                logger.warning(
+                    f"Job failed: {entity}. Got error: {error_response.get('code')}. TransferError: {transfer_error_code}",
+                    exc_info=True
+                )
+            else:
+                logger.warning(
+                    f"Job failed: {entity}. Got error: {error_response.get('code')}.",
+                    exc_info=True
+                )
             entity.error_code = error_response.get('message')
             entity.error_message = error_response.get('message')
             validation_problems = error_response.get('validation_problems')
