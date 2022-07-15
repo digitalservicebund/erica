@@ -3,7 +3,8 @@ import unittest
 from erica.erica_legacy.pyeric.eric_errors import EricGlobalError, EricProcessNotSuccessful, EricGlobalValidationError, \
     EricGlobalInitialisationError, EricTransferError, EricCryptError, EricIOError, EricPrintError, \
     EricNullReturnedError, EricAlreadyRequestedError, EricAntragNotFoundError, check_result, EricUnknownError, \
-    check_xml, EricInvalidXmlReturnedError, EricAlreadyRevokedError, check_handle, EricWrongTaxNumberError
+    check_xml, EricInvalidXmlReturnedError, EricAlreadyRevokedError, check_handle, EricWrongTaxNumberError, \
+    get_error_codes_from_server_err_msg
 from tests.utils import read_text_from_sample
 
 _VALIDATION_ERROR_CODE = 610001002
@@ -276,3 +277,22 @@ class TestCheckXml(unittest.TestCase):
             check_xml(b'')
         except EricProcessNotSuccessful:
             self.fail("CheckXml raised EricProcessNotSuccessful unexpected.")
+
+
+class TestGetErrorCodesFromServerErrMsg:
+
+    def test_if_no_error_code_in_server_err_msg_then_return_empty_array(self):
+        server_err_msg = '<?xml version="1.0" encoding="UTF-8"?><EricGetErrormessagesFromXMLAnswer xmlns="http://www.elster.de/EricXML/1.0/EricGetErrormessagesFromXMLAnswer"></EricGetErrormessagesFromXMLAnswer>'
+        result = get_error_codes_from_server_err_msg(server_err_msg)
+        assert result == []
+
+    def test_if_one_error_code_in_server_err_msg_then_return_code_in_array(self):
+        server_err_msg = '<?xml version="1.0" encoding="UTF-8"?><EricGetErrormessagesFromXMLAnswer xmlns="http://www.elster.de/EricXML/1.0/EricGetErrormessagesFromXMLAnswer">\t<Fehler>\t\t<Code>01</Code>\t\t<Meldung>Ein Fehler ist aufgetreten</Meldung>\t</Fehler>   </EricGetErrormessagesFromXMLAnswer>'
+        result = get_error_codes_from_server_err_msg(server_err_msg)
+        assert result == ['01']
+
+    def test_if_many_error_code_in_server_err_msg_then_return_all_codes_in_array(self):
+        server_err_msg = '<?xml version="1.0" encoding="UTF-8"?><EricGetErrormessagesFromXMLAnswer xmlns="http://www.elster.de/EricXML/1.0/EricGetErrormessagesFromXMLAnswer">\t<Fehler>\t\t<Code>01</Code>\t\t<Meldung>Ein Fehler ist aufgetreten</Meldung>\t</Fehler>   <Fehler>\t\t<Code>02</Code>\t\t<Meldung>Ein weiterer Fehler ist aufgetreten</Meldung>\t</Fehler></EricGetErrormessagesFromXMLAnswer>'
+        result = get_error_codes_from_server_err_msg(server_err_msg)
+        assert result == ['01', '02']
+
