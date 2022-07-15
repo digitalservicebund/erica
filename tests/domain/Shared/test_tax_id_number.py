@@ -6,16 +6,18 @@ from erica.domain.Shared.tax_id_number import TaxIdNumber
 class TestTaxIdNumberValidation:
 
     def test_valid_id_nr_returns_no_validation_error(self):
+        tax_id_number = "17375028697"
+        TaxIdNumber.validate_tax_id_number(tax_id_number)
+
+    def test_valid_test_id_nr_returns_no_validation_error(self):
         tax_id_number = "04452397687"
         TaxIdNumber.validate_tax_id_number(tax_id_number)
 
     def test_if_nothing_set_then_return_validation_error(self):
-        nothing_set_input = ['']
+        tax_id_number = ''
+        with pytest.raises(ValueError):
+            TaxIdNumber.validate_tax_id_number(tax_id_number)
 
-        for input_value in nothing_set_input:
-            tax_id_number = input_value
-            with pytest.raises(ValueError):
-                TaxIdNumber.validate_tax_id_number(tax_id_number)
 
     def test_with_letters_id_nr_returns_validation_error(self):
         tax_id_number = "A4452397687"
