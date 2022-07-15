@@ -534,6 +534,11 @@ def is_error_in_server_err_msg(error_xml_str, error):
         [elem.text == error for elem in remove_declaration_and_namespace(error_xml_str).findall('.//Fehler/Code')])
 
 
+def get_error_codes_from_server_err_msg(error_xml_str):
+    """Returns all error codes in the <Fehler> tag of the error xml"""
+    return [elem.text for elem in remove_declaration_and_namespace(error_xml_str).findall('.//Fehler/Code')]
+
+
 def check_xml(xml):
     """Checks if xml is a valid xml"""
     if xml != '' and xml != b'':

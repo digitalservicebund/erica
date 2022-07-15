@@ -591,6 +591,10 @@
             "markers": "python_version >= '3.7'",
             "version": "==0.6.0"
         },
+        "sanitized-package": {
+            "editable": true,
+            "path": "."
+        },
         "sentry-sdk": {
             "hashes": [
                 "sha256:560ce41420373b6949830831e8e11d96b311694ae58c8b145954bcb365bb035f",
