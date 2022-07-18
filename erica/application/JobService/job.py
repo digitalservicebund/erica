@@ -53,6 +53,8 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
         except EricProcessNotSuccessful as e:
             error_response = e.generate_error_response(True)
             transfer_errors_xml = error_response.get('server_err_msg').get('NDH_ERR_XML') if error_response.get('server_err_msg') else None
+
+            # We only want to log the transfer codes for general EricTransferErrors
             if transfer_errors_xml and e.__class__ is EricTransferError:
                 logger.warning(
                     f"Job failed: {entity}. Got error: {error_response.get('code')}. "
