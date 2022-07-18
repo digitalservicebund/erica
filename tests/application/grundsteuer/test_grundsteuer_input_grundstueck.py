@@ -25,12 +25,6 @@ class TestGrundstuecksart:
 
 
 class TestFlur:
-    def test_if_w_einheit_zaehler_3_decimal_places_then_raise_error(self):
-        input_data = SampleFlurstueck().w_einheit_zaehler("1.000").w_einheit_nenner(10).build()
-
-        with pytest.raises(ValidationError):
-            Flurstueck.parse_obj(input_data)
-
     def test_if_w_einheit_zaehler_5_decimal_places_then_raise_error(self):
         input_data = SampleFlurstueck().w_einheit_zaehler("1.00000").w_einheit_nenner(10).build()
 
@@ -39,12 +33,6 @@ class TestFlur:
 
     def test_if_w_einheit_zaehler_contains_nondigits_then_raise_error(self):
         input_data = SampleFlurstueck().w_einheit_zaehler("1.0a00").w_einheit_nenner(10).build()
-
-        with pytest.raises(ValidationError):
-            Flurstueck.parse_obj(input_data)
-
-    def test_if_w_einheit_zaehler_no_decimal_places_then_raise_error(self):
-        input_data = SampleFlurstueck().w_einheit_zaehler("10").w_einheit_nenner(10).build()
 
         with pytest.raises(ValidationError):
             Flurstueck.parse_obj(input_data)

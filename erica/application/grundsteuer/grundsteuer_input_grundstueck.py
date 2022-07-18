@@ -38,7 +38,7 @@ class Flur(CamelCaseModel):
     flurstueck_zaehler: int
     flurstueck_nenner: Optional[str]
     # number with 1-6 integer digits and exactly 4 fractional digits with '.' as decimal separator, e.g.90.1234
-    wirtschaftliche_einheit_zaehler: Optional[constr(regex=r"^(?=.{6,11}$)(?!0\d)\d{1,6}(\.\d{4,4})$")]  # noqa: F722
+    wirtschaftliche_einheit_zaehler: Optional[constr(regex=r"^(?=.{1,11}$)(?=.*[1-9].*)(?!0\d)\d{1,6}(.\d{1,4})?$")]  # noqa: F722
     wirtschaftliche_einheit_nenner: Optional[int]
 
     @root_validator
@@ -73,7 +73,7 @@ class Grundstueck(CamelCaseModel):
     flurstueck: List[Flurstueck]
 
     @validator("adresse", always=True)
-    def adresse_fields_must_be_set_if_beabut(cls, v, values):
+    def adresse_fields_must_be_set_if_bebaut(cls, v, values):
         if "typ" in values and values["typ"] in ["einfamilienhaus", "mehrfamilienhaus", "wohnungseigentum"] and (
                 not v.strasse or not v.plz or not v.ort):
             raise ValueError("strasse, plz and ort must be set if bebaut")
