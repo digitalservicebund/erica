@@ -996,9 +996,9 @@ class TestVastRequest(unittest.TestCase):
 
     def test_set_tax_year_correctly(self):
         xml_top = Element('top')
-        input = copy.deepcopy(self.valid_user_data)
-        input["tax_year"] = "3000"
-        _add_vast_request_xml_nutzdaten(xml_top, input)
+        input_data = copy.deepcopy(self.valid_user_data)
+        input_data["tax_year"] = "3000"
+        _add_vast_request_xml_nutzdaten(xml_top, input_data)
 
         self.assertEqual("3000", xml_top.find('.//SpezRechtAntrag/Veranlagungszeitraum/Veranlagungsjahre/Jahr').text)
 
