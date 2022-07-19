@@ -1,3 +1,4 @@
+import copy
 import json
 import logging
 import os
@@ -421,6 +422,15 @@ class TestV2UnlockCodeRequest:
     endpoint = "/v2/fsc/request"
 
     def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self, full_unlock_code_request_data):
+        response = requests.post(ERICA_TESTING_URL + self.endpoint,
+                                 data=json.dumps(full_unlock_code_request_data, default=str))
+        assert response.status_code == 201
+        location = response.headers['Location'].split("/")
+        assert "/" + location[0] + "/" + location[1] + "/" + location[2] == self.endpoint
+        assert is_valid_uuid(location[3])
+
+    def test_if_post_with_full_data_and_tax_year_then_return_201_and_location_with_valid_uuid(self, full_unlock_code_request_data):
+        full_unlock_code_request_data["tax_year"] = "3000"
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(full_unlock_code_request_data, default=str))
         assert response.status_code == 201

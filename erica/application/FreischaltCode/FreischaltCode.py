@@ -13,6 +13,7 @@ from erica.domain.Shared.tax_id_number import TaxIdNumber
 class FreischaltCodeRequestPayloadDto(BaseDto):
     tax_id_number: TaxIdNumber
     date_of_birth: date
+    tax_year: str = "2021"
 
 
 class FreischaltCodeActivatePayloadDto(BaseDto):

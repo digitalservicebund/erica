@@ -274,7 +274,7 @@ def _add_vast_request_xml_nutzdaten(xml_top, user_data):
     veranlagungszeitraum_xml = SubElement(spez_recht_antrag_xml, 'Veranlagungszeitraum')
     SubElement(veranlagungszeitraum_xml, 'Unbeschraenkt').text = 'false'
     veranlagungsjahre_xml = SubElement(veranlagungszeitraum_xml, 'Veranlagungsjahre')
-    SubElement(veranlagungsjahre_xml, 'Jahr').text = str(VERANLAGUNGSJAHR)
+    SubElement(veranlagungsjahre_xml, 'Jahr').text = user_data['tax_year']
 
 
 def _add_vast_activation_xml_nutzdaten(xml_top, user_data):
