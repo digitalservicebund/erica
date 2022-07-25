@@ -8,6 +8,7 @@ from erica.domain.Shared.BaseDomainModel import BasePayload
 class FreischaltCodeRequestPayload(BasePayload, ABC):
     tax_id_number: str
     date_of_birth: date
+    tax_year: Optional[str]
 
 
 class FreischaltCodeActivatePayload(BasePayload, ABC):
