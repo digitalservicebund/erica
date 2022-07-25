@@ -5,6 +5,8 @@ import sentry_sdk
 import uvicorn
 
 from erica import get_settings
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.starlette import StarletteIntegration
 
 debug = get_settings().debug
 log_eric_debug_info = get_settings().log_eric_debug_info
@@ -42,6 +44,7 @@ try:
     sentry_sdk.init(
         dsn=get_settings().sentry_dsn_api,
         environment=get_settings().env_name,
+        integrations=[StarletteIntegration(), FastApiIntegration()],
         # traces_sample_rate=0.01,
     )
 except Exception as e:
