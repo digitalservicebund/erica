@@ -3,13 +3,12 @@ from datetime import date
 from typing import Optional
 
 from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.erica_legacy.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
 
 
 class FreischaltCodeRequestPayload(BasePayload, ABC):
     tax_id_number: str
     date_of_birth: date
-    tax_year: str = str(VERANLAGUNGSJAHR)
+    tax_year: Optional[str]
 
 
 class FreischaltCodeActivatePayload(BasePayload, ABC):

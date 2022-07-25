@@ -8,13 +8,12 @@ from erica.application.base_dto import BaseDto
 
 # Input
 from erica.domain.Shared.tax_id_number import TaxIdNumber
-from erica.erica_legacy.elster_xml.elster_xml_generator import VERANLAGUNGSJAHR
 
 
 class FreischaltCodeRequestPayloadDto(BaseDto):
     tax_id_number: TaxIdNumber
     date_of_birth: date
-    tax_year: str = str(VERANLAGUNGSJAHR)
+    tax_year: Optional[str]
 
 
 class FreischaltCodeActivatePayloadDto(BaseDto):

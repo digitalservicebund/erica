@@ -994,13 +994,20 @@ class TestVastRequest(unittest.TestCase):
         self.assertIn(f"<DatenabruferMail>{get_settings().testing_email_address}</DatenabruferMail>",
                       "".join(xml_string.split()))
 
-    def test_set_tax_year_correctly(self):
+    def test_if_tax_year_given_then_set_tax_year_correctly(self):
         xml_top = Element('top')
         input_data = copy.deepcopy(self.valid_user_data)
         input_data["tax_year"] = "3000"
         _add_vast_request_xml_nutzdaten(xml_top, input_data)
 
         self.assertEqual("3000", xml_top.find('.//SpezRechtAntrag/Veranlagungszeitraum/Veranlagungsjahre/Jahr').text)
+
+    def test_if_tax_year_not_given_then_set_tax_year_correctly(self):
+        xml_top = Element('top')
+        input_data = copy.deepcopy(self.valid_user_data)
+        _add_vast_request_xml_nutzdaten(xml_top, input_data)
+
+        self.assertEqual(str(TEST_EST_VERANLAGUNGSJAHR), xml_top.find('.//SpezRechtAntrag/Veranlagungszeitraum/Veranlagungsjahre/Jahr').text)
 
     @freeze_time("2020-05-04")
     def test_compute_valid_until_date_returns_correct_date_if_during_a_year(self):

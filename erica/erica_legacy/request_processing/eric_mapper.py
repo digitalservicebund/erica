@@ -164,7 +164,7 @@ class EstEricMapping(Stmind):
 class UnlockCodeRequestEricMapper(BaseModel):
     tax_id_number: str
     date_of_birth: str
-    tax_year: str
+    tax_year: Optional[str]
 
     @validator('date_of_birth', pre=True)
     def convert_datetime_to_y_m_d(cls, v):
