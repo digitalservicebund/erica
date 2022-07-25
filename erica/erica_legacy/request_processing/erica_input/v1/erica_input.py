@@ -221,7 +221,7 @@ class EstData(BaseModel):
 class UnlockCodeRequestData(BaseModel):
     tax_id_number: str = Field(alias='idnr')
     date_of_birth: date = Field(alias='dob')
-    tax_year: str = Field(default='2021', alias='taxYear')
+    tax_year: str = Field(default=str(VERANLAGUNGSJAHR), alias='taxYear')
 
 
 class UnlockCodeActivationData(BaseModel):
