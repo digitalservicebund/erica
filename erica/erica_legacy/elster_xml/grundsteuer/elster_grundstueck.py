@@ -89,7 +89,7 @@ class EAngFlaeche:
             w_einheit_zaehler = Decimal(flurstueck.flur.wirtschaftliche_einheit_zaehler)
             w_einheit_nenner = flurstueck.flur.wirtschaftliche_einheit_nenner
             gesamtflaeche += (w_einheit_zaehler / w_einheit_nenner) * flurstueck.groesse_qm
-        self.E7403010 = int(gesamtflaeche)
+        self.E7403010 = 1 if int(gesamtflaeche) == 0 else int(gesamtflaeche)
         self.E7403011 = grundstueck.bodenrichtwert
 
 

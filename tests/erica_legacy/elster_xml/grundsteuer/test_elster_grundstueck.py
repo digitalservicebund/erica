@@ -153,6 +153,14 @@ class TestEAngFlaeche:
 
         assert result.E7403010 == 500
 
+    def test_if_one_flurstueck_partial_under_1_qm_then_set_1_qm(self):
+        flurstueck1 = SampleFlurstueck().groesse(1).w_einheit_zaehler("1").w_einheit_nenner(3).parse()
+        grundstueck = SampleGrundstueck().flurstuck(flurstueck1).parse()
+
+        result = EAngFlaeche(grundstueck)
+
+        assert result.E7403010 == 1
+
     def test_if_zaehler_with_nonzero_fraction_then_calculate_correctly(self):
         flurstueck1 = SampleFlurstueck().groesse(1000).w_einheit_zaehler("1.2345").w_einheit_nenner(2).parse()
         grundstueck = SampleGrundstueck().flurstuck(flurstueck1).parse()
