@@ -18,6 +18,6 @@ def get_idnr_status_list():
 
 
 if __name__ == "__main__":
-    os.chdir('../../')  # Change the working directory to be able to find the eric binaries
+    os.chdir('../')  # Change the working directory to be able to find the eric binaries
     get_idnr_status_list()
 
