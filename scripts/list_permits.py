@@ -1,17 +1,13 @@
 import os
 import sys
-from xml.etree.ElementTree import Element
 
 from erica.erica_legacy.elster_xml import elster_xml_generator
-from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace, \
-    get_elements_from_xml_element, get_elements_text_from_xml_element
+from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.erica_legacy.pyeric.pyeric_controller import PermitListingPyericProcessController
 
 
-def get_idnr_status_list():
-    xml = elster_xml_generator.generate_full_vast_list_xml()
-
+def _get_eric_response_datenteil(xml):
     try:
         result = PermitListingPyericProcessController(xml=xml).get_eric_response()
     except EricProcessNotSuccessful as e:
@@ -20,28 +16,27 @@ def get_idnr_status_list():
         return
 
     xml = remove_declaration_and_namespace(result.server_response)
-    datenteil_xml = xml.find('.//DatenTeil')
-    return datenteil_xml
+    return xml.find('.//DatenTeil')
 
 
-def get_status_of_idnr(idnr, xml: Element):
-    antraege = get_elements_from_xml_element(xml, "Antrag")
+def get_idnr_status_list():
+    xml = elster_xml_generator.generate_full_vast_list_xml()
+    return _get_eric_response_datenteil(xml)
 
-    matching_antraege = []
-    for antrag in antraege:
-        antrag_idnrs = get_elements_text_from_xml_element(antrag, "DateninhaberIdNr")
-        if (antrag_idnrs[0] == idnr):
-            matching_antraege.append(antrag)
 
-    for matching_antrag in matching_antraege:
-        print(elster_xml_generator._pretty(matching_antrag))
+def get_status_of_idnr(idnr):
+    xml = elster_xml_generator.generate_full_vast_list_xml(specific_idnr=idnr)
+    return _get_eric_response_datenteil(xml)
 
 
 if __name__ == "__main__":
     os.chdir('../')  # Change the working directory to be able to find the eric binaries
     requested_idnr = sys.argv[1] if len(sys.argv) > 1 else None
-    permit_list = get_idnr_status_list()
     if requested_idnr:
-        get_status_of_idnr(requested_idnr, permit_list)
+        permit_list = get_status_of_idnr(requested_idnr)
     else:
+        permit_list = get_idnr_status_list()
+    if permit_list:
         print(elster_xml_generator._pretty(permit_list))
+    else:
+        print("No list returned")
