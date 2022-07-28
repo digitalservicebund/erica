@@ -5,13 +5,19 @@ from xml.etree.ElementTree import Element
 from erica.erica_legacy.elster_xml import elster_xml_generator
 from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace, \
     get_elements_from_xml_element, get_elements_text_from_xml_element
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.erica_legacy.pyeric.pyeric_controller import PermitListingPyericProcessController
 
 
 def get_idnr_status_list():
     xml = elster_xml_generator.generate_full_vast_list_xml()
 
-    result = PermitListingPyericProcessController(xml=xml).get_eric_response()
+    try:
+        result = PermitListingPyericProcessController(xml=xml).get_eric_response()
+    except EricProcessNotSuccessful as e:
+        print("Error occurred")
+        print(e.generate_error_response(True))
+        return
 
     xml = remove_declaration_and_namespace(result.server_response)
     datenteil_xml = xml.find('.//DatenTeil')
