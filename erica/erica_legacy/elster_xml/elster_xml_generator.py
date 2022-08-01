@@ -297,7 +297,7 @@ def _add_vast_revocation_xml_nutzdaten(xml_top, user_data):
     SubElement(spez_recht_storno_xml, 'AntragsID').text = user_data['elster_request_id']
 
 
-def _add_vast_list_xml_nutzdaten(xml_top, input_data=None, version='7'):
+def _add_vast_list_xml_nutzdaten(xml_top, input_data, version='7'):
     """ Generates <Nutzdaten> for Datenart SpezRechtListe and adds it to xml_top. """
     nutzdaten_xml = SubElement(xml_top, 'Nutzdaten')
     list_xml = SubElement(nutzdaten_xml, 'SpezRechtListe')
