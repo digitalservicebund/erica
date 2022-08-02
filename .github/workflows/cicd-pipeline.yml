@@ -184,7 +184,7 @@ jobs:
         run: docker pull ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment
         shell: bash
 
-      - name: Run contract tests v1
+      - name: Run contract tests v2
         env:
           NAMESPACE: erica-staging
           IMAGE_TAG: ${{ github.run_number }}
@@ -195,8 +195,8 @@ jobs:
           -e KUBECONFIG_BASE64='${{ secrets.CI_KUBECONFIG_B64 }}' \
           -e NAMESPACE='${{ env.NAMESPACE }}' \
           -e IMAGE_TAG='${{ env.IMAGE_TAG }}' \
-          -e ERICA_TESTING_URL='${{ secrets.ERICA_TESTING_URL_V1 }}' \
-          -e TEST_INTEGRATION_TASK='test-integration' \
+          -e ERICA_TESTING_URL='${{ secrets.ERICA_TESTING_URL_V2 }}' \
+          -e TEST_INTEGRATION_TASK='test-integration-queue' \
           ${{ env.DOCKER_REGISTRY }}/steuerlotse_deployment erica-contract-tests
         shell: bash
 
