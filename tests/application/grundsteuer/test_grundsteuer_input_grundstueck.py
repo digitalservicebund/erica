@@ -25,12 +25,6 @@ class TestGrundstuecksart:
 
 
 class TestFlur:
-    def test_if_w_einheit_zaehler_3_decimal_places_then_raise_error(self):
-        input_data = SampleFlurstueck().w_einheit_zaehler("1.000").w_einheit_nenner(10).build()
-
-        with pytest.raises(ValidationError):
-            Flurstueck.parse_obj(input_data)
-
     def test_if_w_einheit_zaehler_5_decimal_places_then_raise_error(self):
         input_data = SampleFlurstueck().w_einheit_zaehler("1.00000").w_einheit_nenner(10).build()
 
@@ -39,12 +33,6 @@ class TestFlur:
 
     def test_if_w_einheit_zaehler_contains_nondigits_then_raise_error(self):
         input_data = SampleFlurstueck().w_einheit_zaehler("1.0a00").w_einheit_nenner(10).build()
-
-        with pytest.raises(ValidationError):
-            Flurstueck.parse_obj(input_data)
-
-    def test_if_w_einheit_zaehler_no_decimal_places_then_raise_error(self):
-        input_data = SampleFlurstueck().w_einheit_zaehler("10").w_einheit_nenner(10).build()
 
         with pytest.raises(ValidationError):
             Flurstueck.parse_obj(input_data)
@@ -89,6 +77,18 @@ class TestFlur:
 
         assert result.wirtschaftliche_einheit_zaehler == "1.4200"
         assert result.wirtschaftliche_einheit_nenner == 42
+
+    def test_if_w_einheit_zaehler_wrong_format_then_raise_error(self):
+        input_data = SampleFlurstueck().w_einheit_zaehler("wrong").w_einheit_nenner(42).build()
+
+        with pytest.raises(ValidationError):
+            Flurstueck.parse_obj(input_data)
+
+    def test_if_groesse_is_no_integer_then_raise_error(self):
+        input_data = SampleFlurstueck().groesse("0.1").build()
+
+        with pytest.raises(ValidationError):
+            Flurstueck.parse_obj(input_data)
 
 
 class TestGrundstueck:
@@ -183,6 +183,12 @@ class TestGrundstueck:
 
     def test_if_abweichende_entwicklung_invalid_then_should_raise_error(self):
         grundstueck = SampleGrundstueck().abweichende_enwticklung("invalid").build()
+
+        with pytest.raises(ValidationError):
+            Grundstueck.parse_obj(grundstueck)
+
+    def test_if_bodenrichtwert_wrong_format_then_raise_error(self):
+        grundstueck = SampleGrundstueck().bodenrichtwert("wrong").build()
 
         with pytest.raises(ValidationError):
             Grundstueck.parse_obj(grundstueck)

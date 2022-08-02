@@ -4,7 +4,6 @@ from fastapi import FastAPI, Request
 from fastapi_sqlalchemy import DBSessionMiddleware
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
-from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 from erica.api.exception_handling import generate_exception_handlers
 from erica.api.v2.api_v2 import api_router_02
@@ -49,10 +48,6 @@ async def log_requests(request: Request, call_next):
     response = await call_next(request)
 
     return response
-
-# Sentry error tracking
-if get_settings().sentry_dsn_api:
-    app.add_middleware(SentryAsgiMiddleware)
 
 # Add default metrics and expose endpoint.
 Instrumentator().instrument(app).expose(app)

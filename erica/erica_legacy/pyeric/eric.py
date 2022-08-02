@@ -113,7 +113,7 @@ class EricWrapper(object):
         log_path = c_char_p(log_path.encode() if log_path else None)
 
         self.eric_instance = fun_init(plugin_path, log_path)
-        logger.debug(f"fun_init instance: {self.eric_instance}")
+        logger.info(f"fun_init instance: {self.eric_instance}")
 
     def shutdown(self):
         """Shuts down ERiC and releases resources. One must not use the object afterwards."""
@@ -122,7 +122,7 @@ class EricWrapper(object):
         fun_shutdown.restype = c_int
         res = fun_shutdown(self.eric_instance)
         check_result(res)
-        logger.debug(f"fun_shutdown res: {res}")
+        logger.info(f"fun_shutdown res: {res}")
 
     def validate(self, xml, data_type_version):
         """Validate the given XML using the built-in plausibility checks."""

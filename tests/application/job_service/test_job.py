@@ -1,5 +1,5 @@
 from datetime import timedelta
-from unittest.mock import MagicMock, call
+from unittest.mock import MagicMock, call, patch
 from uuid import uuid4
 
 import pytest
@@ -7,7 +7,8 @@ from freezegun import freeze_time
 
 from erica.application.JobService.job import perform_job
 from erica.domain.Shared.Status import Status
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, EricTransferError
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, \
+    EricTransferError, EricAlreadyRequestedError
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
@@ -29,6 +30,34 @@ class TestJob:
                               payload_type=MagicMock(), logger=logger)
 
         assert any("Job failed" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
+
+    def test_if_service_raises_transfer_error_then_log_error_with_elster_error_code_in_warning_logger(self):
+        mock_apply_to_elster = MagicMock(side_effect=EricTransferError(
+            610101210, b'<xml/>', b'<xml/>', {'TH_RES_CODE': "0", 'TH_ERR_MSG': "A message - do you copy?", 'NDH_ERR_XML': "<xml/>"}))
+        mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
+        warning_logger = MagicMock()
+        logger = MagicMock(warning=warning_logger)
+
+        with patch("erica.application.JobService.job.get_error_codes_from_server_err_msg", MagicMock(return_value="1234")):
+            perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
+                        payload_type=MagicMock(), logger=logger)
+
+        assert any("Job failed" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
+        assert any("1234" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
+
+    def test_if_service_raises_special_transfer_error_then_log_error_without_elster_error_code_in_warning_logger(self):
+        mock_apply_to_elster = MagicMock(side_effect=EricAlreadyRequestedError(
+            b'<xml/>', b'<xml/>', {'TH_RES_CODE': "0", 'TH_ERR_MSG': "A message - do you copy?", 'NDH_ERR_XML': "<xml/>"}))
+        mock_service = MagicMock(apply_to_elster=mock_apply_to_elster)
+        warning_logger = MagicMock()
+        logger = MagicMock(warning=warning_logger)
+
+        with patch("erica.application.JobService.job.get_error_codes_from_server_err_msg", MagicMock(return_value="1234")):
+            perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
+                        payload_type=MagicMock(), logger=logger)
+
+        assert any("Job failed" in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
+        assert any("1234" not in logged_msg[1][0] for logged_msg in warning_logger.mock_calls)
 
     def test_if_service_raises_error_then_update_entity_in_database_with_correct_values(self):
         mock_entity = MagicMock(id="R2-D2", request_id="C3PO")

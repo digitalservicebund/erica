@@ -10,7 +10,8 @@ from erica.domain.repositories import base_repository_interface
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg, \
+    EricTransferError
 from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
@@ -51,10 +52,20 @@ def perform_job(request_id: UUID, repository: base_repository_interface, service
             repository.update(entity.id, entity)
         except EricProcessNotSuccessful as e:
             error_response = e.generate_error_response(True)
-            logger.warning(
-                f"Job failed: {entity}. Got error: {error_response.get('code')}",
-                exc_info=True
-            )
+            transfer_errors_xml = error_response.get('server_err_msg').get('NDH_ERR_XML') if error_response.get('server_err_msg') else None
+
+            # We only want to log the transfer codes for general EricTransferErrors
+            if transfer_errors_xml and e.__class__ is EricTransferError:
+                logger.warning(
+                    f"Job failed: {entity}. Got error: {error_response.get('code')}. "
+                    f"TransferErrors: {get_error_codes_from_server_err_msg(transfer_errors_xml)}",
+                    exc_info=True
+                )
+            else:
+                logger.warning(
+                    f"Job failed: {entity}. Got error: {error_response.get('code')}.",
+                    exc_info=True
+                )
             entity.error_code = error_response.get('message')
             entity.error_message = error_response.get('message')
             validation_problems = error_response.get('validation_problems')

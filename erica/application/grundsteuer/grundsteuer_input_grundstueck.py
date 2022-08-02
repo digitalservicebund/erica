@@ -1,7 +1,9 @@
+import logging
+import re
 from enum import Enum
 from typing import Optional, List, Literal
 
-from pydantic import root_validator, validator, constr
+from pydantic import root_validator, validator
 
 from erica.application.base_dto import CamelCaseModel
 
@@ -37,8 +39,7 @@ class Flur(CamelCaseModel):
     flur: Optional[str]
     flurstueck_zaehler: int
     flurstueck_nenner: Optional[str]
-    # number with 1-6 integer digits and exactly 4 fractional digits with '.' as decimal separator, e.g.90.1234
-    wirtschaftliche_einheit_zaehler: Optional[constr(regex=r"^(?=.{6,11}$)(?!0\d)\d{1,6}(\.\d{4,4})$")]  # noqa: F722
+    wirtschaftliche_einheit_zaehler: Optional[str]
     wirtschaftliche_einheit_nenner: Optional[int]
 
     @root_validator
@@ -56,11 +57,30 @@ class Flur(CamelCaseModel):
                 values[nenner] = 1
         return values
 
+    @validator("wirtschaftliche_einheit_zaehler")
+    def must_be_regex_compliant(cls, v):
+        # number with 1-6 integer digits and exactly 4 fractional digits with '.' as decimal separator, e.g.90.1234
+        pattern = re.compile("^(?=.{1,11}$)(?=.*[1-9].*)(?!0\d)\d{1,6}(.\d{1,4})?$")  # noqa: F722
+        match = pattern.match(v)
+        if match:
+            return v
+        else:
+            logging.getLogger().warning("Invalid wirtschaftliche einheit zaehler: " + v)
+            raise ValueError("Must match regex")
+
 
 class Flurstueck(CamelCaseModel):
     angaben: FlurstueckAngaben
     flur: Flur
-    groesse_qm: int
+    groesse_qm: str
+
+    @validator("groesse_qm")
+    def must_be_valid_integer(cls, v):
+        try:
+            return int(v)
+        except ValueError:
+            logging.getLogger().warning("Invalid flurstueck groesse: " + v)
+            raise ValueError("Must be a valid integer")
 
 
 class Grundstueck(CamelCaseModel):
@@ -69,12 +89,22 @@ class Grundstueck(CamelCaseModel):
     steuernummer: str
     adresse: Adresse
     innerhalb_einer_gemeinde: bool
-    bodenrichtwert: constr(regex=r"^(?=.{4,9}$)(?!0\d)\d{1,6}(,\d{2,2})$")  # noqa: F722
+    bodenrichtwert: str
     flurstueck: List[Flurstueck]
 
     @validator("adresse", always=True)
-    def adresse_fields_must_be_set_if_beabut(cls, v, values):
+    def adresse_fields_must_be_set_if_bebaut(cls, v, values):
         if "typ" in values and values["typ"] in ["einfamilienhaus", "mehrfamilienhaus", "wohnungseigentum"] and (
                 not v.strasse or not v.plz or not v.ort):
             raise ValueError("strasse, plz and ort must be set if bebaut")
         return v
+
+    @validator("bodenrichtwert")
+    def must_be_regex_compliant(cls, v):
+        pattern = re.compile("^(?=.{4,9}$)(?!0\d)\d{1,6}(,\d{2,2})$")  # noqa: F722
+        match = pattern.match(v)
+        if match:
+            return v
+        else:
+            logging.getLogger().warning("Invalid bodenrichtwert: " + v)
+            raise ValueError("Must match regex")

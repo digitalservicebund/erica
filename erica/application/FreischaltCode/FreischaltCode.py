@@ -7,14 +7,17 @@ from erica.application.base_dto import BaseDto
 
 
 # Input
+from erica.domain.Shared.tax_id_number import TaxIdNumber
+
 
 class FreischaltCodeRequestPayloadDto(BaseDto):
-    tax_id_number: str
+    tax_id_number: TaxIdNumber
     date_of_birth: date
+    tax_year: Optional[str]
 
 
 class FreischaltCodeActivatePayloadDto(BaseDto):
-    tax_id_number: Optional[str]
+    tax_id_number: Optional[TaxIdNumber]
     freischalt_code: str
     elster_request_id: str
 
@@ -30,7 +33,7 @@ class FreischaltCodeActivateDto(BaseDto):
 
 
 class FreischaltCodeRevocatePayloadDto(BaseDto):
-    tax_id_number: Optional[str]
+    tax_id_number: Optional[TaxIdNumber]
     elster_request_id: str
 
 
