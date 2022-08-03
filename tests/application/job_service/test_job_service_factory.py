@@ -6,12 +6,12 @@ from erica.application.job_service.job_service_factory import get_job_service
 from erica.application.grundsteuer.grundsteuer_jobs import send_grundsteuer
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
 from erica.application.tax_number_validation.tax_number_validation_jobs import check_tax_number
-from erica.domain.freischaltcode.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
+from erica.erica_shared.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
-from erica.domain.shared.base_domain_model import BasePayload
-from erica.domain.shared.erica_request import RequestType
-from erica.domain.tax_declaration.tax_declaration import TaxDeclarationPayload
-from erica.domain.tax_number_validation.tax_number_validation import CheckTaxNumberPayload
+from erica.erica_shared.model.base_domain_model import BasePayload
+from erica.erica_shared.model.erica_request import RequestType
+from erica.erica_shared.payload.tax_declaration import TaxDeclarationPayload
+from erica.erica_shared.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \

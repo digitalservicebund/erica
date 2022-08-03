@@ -1,9 +1,25 @@
+from enum import Enum
 from typing import Optional
 from uuid import UUID
 
-from erica.domain.shared.base_domain_model import BaseDomainModel
-from erica.domain.shared.erica_request import RequestType
-from erica.domain.shared.status import Status
+from erica.erica_shared.model.base_domain_model import BaseDomainModel
+
+
+class RequestType(int, Enum):
+    freischalt_code_request = 0
+    freischalt_code_activate = 1
+    freischalt_code_revocate = 2
+    check_tax_number = 3
+    send_est = 4
+    grundsteuer = 5
+
+
+class Status(int, Enum):
+    new = 0
+    scheduled = 1
+    processing = 2
+    failed = 3
+    success = 4
 
 
 class EricaRequest(BaseDomainModel[UUID]):

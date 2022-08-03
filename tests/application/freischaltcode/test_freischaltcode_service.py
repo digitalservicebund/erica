@@ -5,9 +5,7 @@ import pytest
 
 from erica.application.shared.response_dto import JobState
 from erica.application.freischaltcode.freischaltcode_service import FreischaltCodeService
-from erica.domain.shared.erica_request import RequestType
-from erica.domain.shared.status import Status
-from erica.domain.erica_request.erica_request import EricaRequest
+from erica.erica_shared.model.erica_request import EricaRequest, RequestType, Status
 
 
 class TestFreischaltCodeService:

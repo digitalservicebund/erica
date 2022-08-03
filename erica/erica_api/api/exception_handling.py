@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from starlette.responses import RedirectResponse
 
 from erica.application.errors.errors import RequestTypeDoesNotMatchEndpointError
-from erica.domain.shared.erica_request import RequestType
+from erica.erica_shared.model.erica_request import RequestType
 from erica.erica_shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 job_type_to_endpoint = {

@@ -5,10 +5,10 @@ from erica.application.freischaltcode.freischaltcode import FreischaltCodeReques
     FreischaltCodeRevocateDto
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.application.tax_number_validation.tax_number_validation_dto import CheckTaxNumberDto
-from erica.domain.freischaltcode.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
+from erica.erica_shared.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
-from erica.domain.tax_declaration.tax_declaration import TaxDeclarationPayload
-from erica.domain.tax_number_validation.tax_number_validation import CheckTaxNumberPayload
+from erica.erica_shared.payload.tax_declaration import TaxDeclarationPayload
+from erica.erica_shared.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerDto
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import create_meta_data, create_form_data

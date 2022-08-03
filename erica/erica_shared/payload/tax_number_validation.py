@@ -1,7 +1,7 @@
 from abc import ABC
 from enum import Enum
 
-from erica.domain.shared.base_domain_model import BasePayload
+from erica.erica_shared.model.base_domain_model import BasePayload
 
 
 class StateAbbreviation(str, Enum):

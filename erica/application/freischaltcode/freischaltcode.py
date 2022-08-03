@@ -7,7 +7,7 @@ from erica.application.base_dto import BaseDto
 
 
 # Input
-from erica.domain.shared.tax_id_number import TaxIdNumber
+from erica.application.freischaltcode.tax_id_number import TaxIdNumber
 
 
 class FreischaltCodeRequestPayloadDto(BaseDto):

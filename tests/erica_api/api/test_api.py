@@ -16,9 +16,7 @@ from erica.application.erica_request.erica_request import EricaRequestDto
 from erica.application.grundsteuer.grundsteuer_service import GrundsteuerService
 from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationService
 from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityService
-from erica.domain.shared.erica_request import RequestType
-from erica.domain.shared.status import Status
-from erica.domain.erica_request.erica_request import EricaRequest
+from erica.erica_shared.model.erica_request import EricaRequest, RequestType, Status
 from tests.application.job_service.test_job_service import MockEricaRequestRepository, MockRequestController, MockDto, \
     PickableMock
 from tests.utils import create_unlock_code_request, \

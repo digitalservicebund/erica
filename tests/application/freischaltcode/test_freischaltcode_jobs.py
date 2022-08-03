@@ -9,10 +9,9 @@ from erica.application.freischaltcode.freischaltcode_jobs import request_freisch
     revocate_freischalt_code
 from erica.application.job_service.job_service import JobService
 from erica.application.job_service.job_service_factory import get_job_service
-from erica.domain.freischaltcode.freischaltcode import FreischaltCodeActivatePayload, FreischaltCodeRequestPayload, \
+from erica.erica_shared.payload.freischaltcode import FreischaltCodeActivatePayload, FreischaltCodeRequestPayload, \
     FreischaltCodeRevocatePayload
-from erica.domain.shared.erica_request import RequestType
-from erica.domain.erica_request.erica_request import EricaRequest
+from erica.erica_shared.model.erica_request import EricaRequest, RequestType
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
     get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse

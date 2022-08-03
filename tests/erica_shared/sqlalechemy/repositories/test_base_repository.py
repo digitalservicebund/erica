@@ -4,7 +4,7 @@ from uuid import uuid4, UUID
 
 import pytest
 
-from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
+from erica.erica_shared.repositories.base_repository_interface import BaseRepositoryInterface
 from erica.erica_shared.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
 from tests.erica_shared.sqlalechemy.repositories.mock_repositories import MockDomainModel, MockSchema
 

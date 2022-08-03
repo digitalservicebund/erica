@@ -8,7 +8,7 @@ from erica.application.freischaltcode.freischaltcode import FreischaltcodeReques
 from erica.application.shared.base_service import BaseService
 from erica.application.shared.response_dto import JobState
 from erica.application.shared.response_state_mapper import map_status
-from erica.domain.shared.erica_request import RequestType
+from erica.erica_shared.model.erica_request import RequestType
 
 
 class FreischaltCodeServiceInterface(BaseService):

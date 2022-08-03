@@ -6,17 +6,16 @@ from uuid import UUID
 from pydantic import ValidationError
 
 from erica.application.job_service.job_service import JobServiceInterface
-from erica.domain.repositories import base_repository_interface
-from erica.domain.shared.status import Status
-from erica.domain.erica_request.erica_request import EricaRequest
-from erica.domain.shared.base_domain_model import BasePayload
+from erica.erica_shared.repositories import base_repository_interface
+from erica.erica_shared.model.erica_request import EricaRequest, Status
+from erica.erica_shared.model.base_domain_model import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg, \
     EricTransferError
 from erica.erica_shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
 def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,
-                      payload_type: Type[BasePayload], logger: Logger):
+                payload_type: Type[BasePayload], logger: Logger):
     """
     The basic implementation for a job that is put on the Erica queue. It will get an entity, interact with the ERiC
     library using the service and then update the entity according to the result from the service.
