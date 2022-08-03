@@ -1,11 +1,11 @@
 from opyoid import Injector
 
-from erica.application.ApplicationModule import ApplicationModule
-from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeServiceInterface
-from erica.application.Shared.base_service import BaseService
-from erica.application.grundsteuer.GrundsteuerService import GrundsteuerServiceInterface
-from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarationServiceInterface
-from erica.application.tax_number_validation.TaxNumberValidityService import TaxNumberValidityServiceInterface
+from erica.application.application_module import ApplicationModule
+from erica.application.freischaltcode.freischaltcode_service import FreischaltCodeServiceInterface
+from erica.application.shared.base_service import BaseService
+from erica.application.grundsteuer.grundsteuer_service import GrundsteuerServiceInterface
+from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationServiceInterface
+from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityServiceInterface
 from erica.domain.Shared.EricaRequest import RequestType
 
 

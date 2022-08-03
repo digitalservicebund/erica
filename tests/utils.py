@@ -1,10 +1,10 @@
 import os
 from datetime import date
 
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+from erica.application.freischaltcode.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
-from erica.application.tax_number_validation.check_tax_number_dto import CheckTaxNumberDto
+from erica.application.tax_number_validation.tax_number_validation_dto import CheckTaxNumberDto
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
 from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload

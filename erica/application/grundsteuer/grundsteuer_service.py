@@ -3,9 +3,9 @@ from uuid import UUID
 
 from opyoid import Module
 
-from erica.application.Shared.base_service import BaseService
-from erica.application.Shared.response_dto import JobState, ResultTransferPdfResponseDto
-from erica.application.Shared.response_state_mapper import map_status
+from erica.application.shared.base_service import BaseService
+from erica.application.shared.response_dto import JobState, ResultTransferPdfResponseDto
+from erica.application.shared.response_state_mapper import map_status
 from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerResponseDto
 from erica.domain.Shared.EricaRequest import RequestType
 

@@ -2,7 +2,7 @@ from datetime import date
 
 from typing import Optional
 
-from erica.application.Shared.response_dto import ResponseBaseDto
+from erica.application.shared.response_dto import ResponseBaseDto
 from erica.application.base_dto import BaseDto
 
 

@@ -3,10 +3,10 @@ from uuid import UUID
 
 from opyoid import Module
 
-from erica.application.Shared.base_service import BaseService
-from erica.application.Shared.response_dto import JobState
-from erica.application.Shared.response_state_mapper import map_status
-from erica.application.tax_number_validation.check_tax_number_dto import TaxResponseDto, ResultTaxResponseDto
+from erica.application.shared.base_service import BaseService
+from erica.application.shared.response_dto import JobState
+from erica.application.shared.response_state_mapper import map_status
+from erica.application.tax_number_validation.tax_number_validation_dto import TaxResponseDto, ResultTaxResponseDto
 from erica.domain.Shared.EricaRequest import RequestType
 
 

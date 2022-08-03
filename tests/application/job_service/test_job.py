@@ -5,7 +5,7 @@ from uuid import uuid4
 import pytest
 from freezegun import freeze_time
 
-from erica.application.JobService.job import perform_job
+from erica.application.job_service.job import perform_job
 from erica.domain.Shared.Status import Status
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, \
     EricTransferError, EricAlreadyRequestedError
@@ -38,7 +38,7 @@ class TestJob:
         warning_logger = MagicMock()
         logger = MagicMock(warning=warning_logger)
 
-        with patch("erica.application.JobService.job.get_error_codes_from_server_err_msg", MagicMock(return_value="1234")):
+        with patch("erica.application.job_service.job.get_error_codes_from_server_err_msg", MagicMock(return_value="1234")):
             perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                         payload_type=MagicMock(), logger=logger)
 
@@ -52,7 +52,7 @@ class TestJob:
         warning_logger = MagicMock()
         logger = MagicMock(warning=warning_logger)
 
-        with patch("erica.application.JobService.job.get_error_codes_from_server_err_msg", MagicMock(return_value="1234")):
+        with patch("erica.application.job_service.job.get_error_codes_from_server_err_msg", MagicMock(return_value="1234")):
             perform_job(request_id=uuid4(), repository=MagicMock(), service=mock_service,
                         payload_type=MagicMock(), logger=logger)
 

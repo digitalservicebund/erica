@@ -3,8 +3,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from erica.application.Shared.response_dto import JobState
-from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarationService
+from erica.application.shared.response_dto import JobState
+from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationService
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest

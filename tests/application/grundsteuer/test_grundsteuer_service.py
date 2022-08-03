@@ -3,8 +3,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from erica.application.Shared.response_dto import JobState
-from erica.application.grundsteuer.GrundsteuerService import GrundsteuerService
+from erica.application.shared.response_dto import JobState
+from erica.application.grundsteuer.grundsteuer_service import GrundsteuerService
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest

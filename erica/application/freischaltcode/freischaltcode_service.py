@@ -3,11 +3,11 @@ from uuid import UUID
 
 from opyoid import Module
 
-from erica.application.FreischaltCode.FreischaltCode import FreischaltcodeRequestAndActivationResponseDto, \
+from erica.application.freischaltcode.freischaltcode import FreischaltcodeRequestAndActivationResponseDto, \
     ResultFreischaltcodeRequestAndActivationDto, FreischaltcodeRevocationResponseDto, TransferticketAndIdnrResponseDto
-from erica.application.Shared.base_service import BaseService
-from erica.application.Shared.response_dto import JobState
-from erica.application.Shared.response_state_mapper import map_status
+from erica.application.shared.base_service import BaseService
+from erica.application.shared.response_dto import JobState
+from erica.application.shared.response_state_mapper import map_status
 from erica.domain.Shared.EricaRequest import RequestType
 
 

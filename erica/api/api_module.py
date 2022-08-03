@@ -1,6 +1,6 @@
 from opyoid import Module
 
-from erica.application.ApplicationModule import ApplicationModule
+from erica.application.application_module import ApplicationModule
 
 
 class ApiModule(Module):

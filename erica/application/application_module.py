@@ -1,11 +1,11 @@
 from opyoid import Module
 
-from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeServiceInterface, FreischaltCodeService
+from erica.application.freischaltcode.freischaltcode_service import FreischaltCodeServiceInterface, FreischaltCodeService
 from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface, EricaRequestService
-from erica.application.grundsteuer.GrundsteuerService import GrundsteuerServiceInterface, GrundsteuerService
-from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarationServiceInterface, \
+from erica.application.grundsteuer.grundsteuer_service import GrundsteuerServiceInterface, GrundsteuerService
+from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationServiceInterface, \
     TaxDeclarationService
-from erica.application.tax_number_validation.TaxNumberValidityService import TaxNumberValidityServiceInterface, \
+from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityServiceInterface, \
     TaxNumberValidityService
 from erica.infrastructure.infrastructure_module import InfrastructureModule
 

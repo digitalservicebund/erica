@@ -2,8 +2,8 @@ from uuid import UUID
 
 from opyoid import Injector
 
-from erica.api.ApiModule import ApiModule
-from erica.application.Shared.response_dto import JobState
+from erica.api.api_module import ApiModule
+from erica.application.shared.response_dto import JobState
 from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface
 from erica.domain.Shared.Status import Status
 

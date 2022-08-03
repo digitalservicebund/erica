@@ -4,9 +4,9 @@ from fastapi import status, APIRouter
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from erica.api.v2.responses.model import response_model_get_send_est_from_queue, response_model_post_to_queue
-from erica.application.JobService.job_service_factory import get_job_service
-from erica.application.Shared.service_injector import get_service
-from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarationServiceInterface
+from erica.application.job_service.job_service_factory import get_job_service
+from erica.application.shared.service_injector import get_service
+from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationServiceInterface
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
 from erica.domain.Shared.EricaRequest import RequestType
 

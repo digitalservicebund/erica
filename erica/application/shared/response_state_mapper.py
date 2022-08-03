@@ -1,4 +1,4 @@
-from erica.application.Shared.response_dto import JobState
+from erica.application.shared.response_dto import JobState
 from erica.domain.Shared.Status import Status
 
 

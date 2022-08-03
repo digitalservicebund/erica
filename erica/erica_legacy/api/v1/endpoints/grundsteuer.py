@@ -4,7 +4,7 @@ from fastapi import status, APIRouter, HTTPException
 
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
-from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
+from erica.application.eric_request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 
 router = APIRouter()
 

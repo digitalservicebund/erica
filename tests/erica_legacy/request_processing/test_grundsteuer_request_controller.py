@@ -6,7 +6,7 @@ from xml.etree import ElementTree
 import pytest
 from xmldiff import main
 
-from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
+from erica.application.eric_request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData

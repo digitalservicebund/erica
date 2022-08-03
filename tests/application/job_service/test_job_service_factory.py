@@ -1,11 +1,11 @@
 import pytest
 
-from erica.application.FreischaltCode.Jobs.jobs import activate_freischalt_code, revocate_freischalt_code, \
+from erica.application.freischaltcode.freischaltcode_jobs import activate_freischalt_code, revocate_freischalt_code, \
     request_freischalt_code
-from erica.application.JobService.job_service_factory import get_job_service
+from erica.application.job_service.job_service_factory import get_job_service
 from erica.application.grundsteuer.grundsteuer_jobs import send_grundsteuer
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
-from erica.application.tax_number_validation.jobs import check_tax_number
+from erica.application.tax_number_validation.tax_number_validation_jobs import check_tax_number
 from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
 from erica.domain.Shared.BaseDomainModel import BasePayload
@@ -17,7 +17,7 @@ from erica.erica_legacy.request_processing.requests_controller import UnlockCode
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \
     EstRequestController
 from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
-from erica.application.EricRequestProcessing.grundsteuer_request_controller import GrundsteuerRequestController
+from erica.application.eric_request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 
 
 class TestJobServiceFactory:

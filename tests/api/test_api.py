@@ -9,13 +9,13 @@ from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activat
     revocate_fsc, get_fsc_revocation_job
 from erica.api.v2.endpoints.grundsteuer import send_grundsteuer, get_grundsteuer_job
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
-from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService
-from erica.application.JobService.job_service import JobService
-from erica.application.Shared.response_dto import JobState
+from erica.application.freischaltcode.freischaltcode_service import FreischaltCodeService
+from erica.application.job_service.job_service import JobService
+from erica.application.shared.response_dto import JobState
 from erica.application.erica_request.erica_request import EricaRequestDto
-from erica.application.grundsteuer.GrundsteuerService import GrundsteuerService
-from erica.application.tax_declaration.TaxDeclarationService import TaxDeclarationService
-from erica.application.tax_number_validation.TaxNumberValidityService import TaxNumberValidityService
+from erica.application.grundsteuer.grundsteuer_service import GrundsteuerService
+from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationService
+from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityService
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest

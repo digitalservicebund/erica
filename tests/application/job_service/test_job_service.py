@@ -6,7 +6,7 @@ import pytest
 from freezegun import freeze_time
 from sqlalchemy.orm import Session
 
-from erica.application.JobService.job_service import JobService
+from erica.application.job_service.job_service import JobService
 from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
 from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaRequest import RequestType

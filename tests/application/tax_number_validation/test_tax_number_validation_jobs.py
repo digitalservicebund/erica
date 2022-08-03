@@ -4,9 +4,9 @@ from uuid import uuid4
 
 import pytest
 
-from erica.application.JobService.job_service import JobService
-from erica.application.JobService.job_service_factory import get_job_service
-from erica.application.tax_number_validation.jobs import check_tax_number
+from erica.application.job_service.job_service import JobService
+from erica.application.job_service.job_service_factory import get_job_service
+from erica.application.tax_number_validation.tax_number_validation_jobs import check_tax_number
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload, StateAbbreviation
@@ -18,8 +18,8 @@ class TestCheckTaxNumber:
     def test_perform_job_called_with_correct_parameters(self):
         request_id = "1234"
 
-        with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
-                patch("erica.application.tax_number_validation.jobs.perform_job", AsyncMock()) as mock_perform_job:
+        with patch("erica.application.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+                patch("erica.application.tax_number_validation.tax_number_validation_jobs.perform_job", AsyncMock()) as mock_perform_job:
             check_tax_number(request_id)
 
             assert mock_perform_job.mock_calls == [call(request_id=request_id,
@@ -31,8 +31,8 @@ class TestCheckTaxNumber:
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
 
-        with patch("erica.application.JobService.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
-                patch("erica.application.tax_number_validation.jobs.perform_job", AsyncMock()):
+        with patch("erica.application.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+                patch("erica.application.tax_number_validation.tax_number_validation_jobs.perform_job", AsyncMock()):
             check_tax_number(request_id)
 
             assert mock_get_service.mock_calls == [call(RequestType.check_tax_number)]
@@ -47,7 +47,7 @@ class TestCheckTaxNumber:
                 request_controller=mock_req_controller,
                 job_method=check_tax_number
             ))
-        with patch("erica.application.JobService.job_service_factory.get_job_service", mock_get_service), \
+        with patch("erica.application.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
                     "erica.erica_legacy.request_processing.requests_controller.CheckTaxNumberRequestController", mock_req_controller):
             check_tax_number("1234")

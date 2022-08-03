@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from erica.application.Shared.response_dto import ResponseBaseDto, ResultTransferPdfResponseDto, \
+from erica.application.shared.response_dto import ResponseBaseDto, ResultTransferPdfResponseDto, \
     ResultValidationErrorResponseDto
 from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Eigentuemer
 

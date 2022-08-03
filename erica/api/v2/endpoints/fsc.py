@@ -6,11 +6,11 @@ from starlette.responses import RedirectResponse
 from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
     response_model_post_to_queue
-from erica.application.FreischaltCode.FreischaltCode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+from erica.application.freischaltcode.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
-from erica.application.FreischaltCode.FreischaltCodeService import FreischaltCodeService, FreischaltCodeServiceInterface
-from erica.application.JobService.job_service_factory import get_job_service
-from erica.application.Shared.service_injector import get_service
+from erica.application.freischaltcode.freischaltcode_service import FreischaltCodeService, FreischaltCodeServiceInterface
+from erica.application.job_service.job_service_factory import get_job_service
+from erica.application.shared.service_injector import get_service
 from erica.domain.Shared.EricaRequest import RequestType
 
 router = APIRouter()
