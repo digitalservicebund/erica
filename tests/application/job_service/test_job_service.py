@@ -7,7 +7,6 @@ from freezegun import freeze_time
 from sqlalchemy.orm import Session
 
 from erica.application.job_service.job_service import JobService
-from erica.domain.background_jobs.background_job_interface import BackgroundJobInterface
 from erica.domain.shared.base_domain_model import BasePayload
 from erica.domain.shared.erica_request import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
@@ -63,8 +62,6 @@ class MockDto(BasePayload):
     friend: str
 
 
-class MockBackgroundJob(BackgroundJobInterface, MagicMock):
-    pass
 
 
 class TestJobServiceQueue:
