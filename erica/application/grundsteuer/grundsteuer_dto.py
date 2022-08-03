@@ -9,7 +9,7 @@ from erica.application.grundsteuer.grundsteuer_input_gebaeude import Gebaeude
 from erica.application.grundsteuer.grundsteuer_input_grundstueck import Grundstueck
 
 from abc import ABC
-from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.domain.shared.base_domain_model import BasePayload
 
 
 # Input

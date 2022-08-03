@@ -7,7 +7,7 @@ from erica.application.shared.base_service import BaseService
 from erica.application.shared.response_dto import JobState, ResultTransferPdfResponseDto
 from erica.application.shared.response_state_mapper import map_status
 from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerResponseDto
-from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.shared.erica_request import RequestType
 
 
 class GrundsteuerServiceInterface(BaseService):

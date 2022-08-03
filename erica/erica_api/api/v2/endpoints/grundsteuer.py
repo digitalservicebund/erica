@@ -9,7 +9,7 @@ from erica.application.job_service.job_service_factory import get_job_service
 from erica.application.shared.service_injector import get_service
 from erica.application.grundsteuer.grundsteuer_service import GrundsteuerServiceInterface
 from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerDto
-from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.shared.erica_request import RequestType
 
 router = APIRouter()
 

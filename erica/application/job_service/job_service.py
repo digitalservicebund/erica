@@ -4,10 +4,10 @@ from typing import Type, Callable
 from uuid import uuid4
 from erica.application.base_dto import BaseDto
 from erica.application.erica_request.erica_request import EricaRequestDto
-from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.domain.shared.base_domain_model import BasePayload
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
-from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.shared.erica_request import RequestType
 from erica.erica_legacy.request_processing.requests_controller import EricaRequestController
 
 

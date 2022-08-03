@@ -7,7 +7,7 @@ from erica.application.job_service.job_service_factory import get_job_service
 from erica.application.shared.service_injector import get_service
 from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityServiceInterface
 from erica.application.tax_number_validation.tax_number_validation_dto import CheckTaxNumberDto
-from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.shared.erica_request import RequestType
 
 router = APIRouter()
 

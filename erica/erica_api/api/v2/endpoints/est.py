@@ -8,7 +8,7 @@ from erica.application.job_service.job_service_factory import get_job_service
 from erica.application.shared.service_injector import get_service
 from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationServiceInterface
 from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
-from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.shared.erica_request import RequestType
 
 router = APIRouter()
 

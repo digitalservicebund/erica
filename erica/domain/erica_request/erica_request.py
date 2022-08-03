@@ -1,9 +1,9 @@
 from typing import Optional
 from uuid import UUID
 
-from erica.domain.Shared.BaseDomainModel import BaseDomainModel
-from erica.domain.Shared.EricaRequest import RequestType
-from erica.domain.Shared.Status import Status
+from erica.domain.shared.base_domain_model import BaseDomainModel
+from erica.domain.shared.erica_request import RequestType
+from erica.domain.shared.status import Status
 
 
 class EricaRequest(BaseDomainModel[UUID]):

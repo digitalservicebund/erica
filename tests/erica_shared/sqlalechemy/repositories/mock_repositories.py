@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy import Column, Integer, Enum
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 
-from erica.domain.Shared.Status import Status
+from erica.domain.shared.status import Status
 from erica.erica_shared.sqlalchemy.erica_request_schema import BaseDbSchema
 
 

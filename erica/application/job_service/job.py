@@ -7,9 +7,9 @@ from pydantic import ValidationError
 
 from erica.application.job_service.job_service import JobServiceInterface
 from erica.domain.repositories import base_repository_interface
-from erica.domain.Shared.Status import Status
+from erica.domain.shared.status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
-from erica.domain.Shared.BaseDomainModel import BasePayload
+from erica.domain.shared.base_domain_model import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg, \
     EricTransferError
 from erica.erica_shared.sqlalchemy.repositories.base_repository import EntityNotFoundError

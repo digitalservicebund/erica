@@ -1,6 +1,6 @@
 import pytest
 
-from erica.domain.Shared.tax_id_number import TaxIdNumber
+from erica.domain.shared.tax_id_number import TaxIdNumber
 
 
 class TestTaxIdNumberValidation:

@@ -7,9 +7,9 @@ from freezegun import freeze_time
 from sqlalchemy.orm import Session
 
 from erica.application.job_service.job_service import JobService
-from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInterface
-from erica.domain.Shared.BaseDomainModel import BasePayload
-from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.background_jobs.background_job_interface import BackgroundJobInterface
+from erica.domain.shared.base_domain_model import BasePayload
+from erica.domain.shared.erica_request import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
 from erica.erica_shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository

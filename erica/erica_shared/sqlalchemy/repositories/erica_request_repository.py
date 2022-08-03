@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from erica.domain.Shared.Status import Status
+from erica.domain.shared.status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.erica_shared.sqlalchemy.erica_request_schema import EricaRequestSchema

@@ -4,7 +4,7 @@ from sqlalchemy import Integer
 from sqlalchemy.orm import Session
 
 from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
-from erica.domain.Shared.BaseDomainModel import BaseDomainModel
+from erica.domain.shared.base_domain_model import BaseDomainModel
 from erica.erica_shared.sqlalchemy.erica_request_schema import BaseDbSchema
 
 

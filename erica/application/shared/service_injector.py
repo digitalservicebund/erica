@@ -6,7 +6,7 @@ from erica.application.shared.base_service import BaseService
 from erica.application.grundsteuer.grundsteuer_service import GrundsteuerServiceInterface
 from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationServiceInterface
 from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityServiceInterface
-from erica.domain.Shared.EricaRequest import RequestType
+from erica.domain.shared.erica_request import RequestType
 
 
 def get_service(request_type: RequestType) -> BaseService:

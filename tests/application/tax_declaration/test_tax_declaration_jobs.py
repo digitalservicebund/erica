@@ -8,8 +8,8 @@ import pytest
 from erica.application.job_service.job_service import JobService
 from erica.application.job_service.job_service_factory import get_job_service
 from erica.application.tax_declaration.tax_declaration_jobs import send_est
-from erica.domain.Shared.EricaRequest import RequestType
-from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
+from erica.domain.shared.erica_request import RequestType
+from erica.domain.tax_declaration.tax_declaration import TaxDeclarationPayload
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
