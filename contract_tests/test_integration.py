@@ -313,7 +313,7 @@ class TestV1ValidTaxNumber:
 class TestV1TaxOfficeList:
 
     def test_if_get_list_then_return_json_list_of_tax_offices(self):
-        with open("erica/infrastructure/static/tax_offices.json", "r") as response_file:
+        with open("erica/erica_api/static/tax_offices.json", "r") as response_file:
             response_content = json.load(response_file)
 
         response = requests.get(ERICA_TESTING_URL + f"/01/tax_offices",)

@@ -44,4 +44,4 @@ def get_tax_offices():
     """
     The list of tax offices for all states is requested and returned.
     """
-    return FileResponse("erica/infrastructure/static/tax_offices.json")
+    return FileResponse("erica/erica_api/static/tax_offices.json")
