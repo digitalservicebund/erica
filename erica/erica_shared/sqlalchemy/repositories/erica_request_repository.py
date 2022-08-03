@@ -9,8 +9,8 @@ from sqlalchemy.orm import Session
 from erica.domain.Shared.Status import Status
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
-from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
-from erica.infrastructure.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
+from erica.erica_shared.sqlalchemy.erica_request_schema import EricaRequestSchema
+from erica.erica_shared.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
 
 
 class EricaRequestRepository(

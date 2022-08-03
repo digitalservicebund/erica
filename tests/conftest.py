@@ -13,8 +13,8 @@ from erica.erica_api.api.api_module import ApiModule
 from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface, EricaRequestService
 from erica.config import get_settings
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst
-from erica.infrastructure.sqlalchemy.database import get_engine, session_scope
-from tests.infrastructure.sqlalechemy.repositories.mock_repositories import MockSchema
+from erica.erica_shared.sqlalchemy.database import get_engine, session_scope
+from tests.erica_shared.sqlalechemy.repositories.mock_repositories import MockSchema
 
 
 @pytest.fixture
@@ -81,7 +81,7 @@ def fake_db_connection_with_erica_table_in_settings(database_uri):
 
     engine = get_engine()
 
-    from erica.infrastructure.sqlalchemy.erica_request_schema import EricaRequestSchema
+    from erica.erica_shared.sqlalchemy.erica_request_schema import EricaRequestSchema
     EricaRequestSchema.metadata.create_all(bind=engine)
 
     # fastapi_sqlalchemy creates its sessionmaker in the middleware constructor and provides

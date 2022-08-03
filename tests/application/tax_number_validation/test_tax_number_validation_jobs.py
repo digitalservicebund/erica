@@ -10,7 +10,7 @@ from erica.application.tax_number_validation.tax_number_validation_jobs import c
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload, StateAbbreviation
-from erica.infrastructure.sqlalchemy.database import session_scope
+from erica.erica_shared.sqlalchemy.database import session_scope
 
 
 class TestCheckTaxNumber:

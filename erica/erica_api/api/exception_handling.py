@@ -8,7 +8,7 @@ from starlette.responses import RedirectResponse
 
 from erica.application.errors.errors import RequestTypeDoesNotMatchEndpointError
 from erica.domain.Shared.EricaRequest import RequestType
-from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
+from erica.erica_shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 job_type_to_endpoint = {
     RequestType.freischalt_code_request: 'get_fsc_request_job',

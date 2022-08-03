@@ -12,7 +12,7 @@ from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.infrastructure.sqlalchemy.database import session_scope
+from erica.erica_shared.sqlalchemy.database import session_scope
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.utils import read_text_from_sample
 

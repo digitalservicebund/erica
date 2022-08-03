@@ -7,7 +7,7 @@ from erica.application.tax_declaration.tax_declaration_service import TaxDeclara
     TaxDeclarationService
 from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityServiceInterface, \
     TaxNumberValidityService
-from erica.infrastructure.infrastructure_module import InfrastructureModule
+from erica.erica_shared.infrastructure_module import InfrastructureModule
 
 
 class ApplicationModule(Module):

@@ -14,7 +14,7 @@ from erica.domain.erica_request.erica_request import EricaRequest
 from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import MetaDataEst
-from erica.infrastructure.sqlalchemy.database import session_scope
+from erica.erica_shared.sqlalchemy.database import session_scope
 from tests.erica_legacy.utils import TEST_EST_VERANLAGUNGSJAHR
 from tests.utils import read_text_from_sample
 

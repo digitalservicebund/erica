@@ -3,8 +3,8 @@
 from abc import abstractmethod, ABCMeta
 from uuid import UUID
 from opyoid import Injector, Module
-from erica.infrastructure.infrastructure_module import InfrastructureModule
-from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.erica_shared.infrastructure_module import InfrastructureModule
+from erica.erica_shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 injector = Injector([InfrastructureModule()])
 

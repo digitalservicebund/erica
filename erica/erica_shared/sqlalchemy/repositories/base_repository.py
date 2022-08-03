@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
 from erica.domain.Shared.BaseDomainModel import BaseDomainModel
-from erica.infrastructure.sqlalchemy.erica_request_schema import BaseDbSchema
+from erica.erica_shared.sqlalchemy.erica_request_schema import BaseDbSchema
 
 
 class EntityNotFoundError(Exception):

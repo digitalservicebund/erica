@@ -12,7 +12,7 @@ from erica.domain.erica_request.erica_request import EricaRequest
 from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg, \
     EricTransferError
-from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
+from erica.erica_shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
 def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,

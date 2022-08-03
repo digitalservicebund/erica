@@ -16,7 +16,7 @@ from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
 from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \
     EstRequestController
-from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.erica_shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 from erica.application.eric_request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 
 

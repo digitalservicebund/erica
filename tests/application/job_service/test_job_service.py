@@ -11,9 +11,8 @@ from erica.domain.BackgroundJobs.BackgroundJobInterface import BackgroundJobInte
 from erica.domain.Shared.BaseDomainModel import BasePayload
 from erica.domain.Shared.EricaRequest import RequestType
 from erica.domain.erica_request.erica_request import EricaRequest
-from erica.config import get_settings
 from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
-from erica.infrastructure.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.erica_shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 
 class MockEricaRequestRepository(EricaRequestRepository, list):
