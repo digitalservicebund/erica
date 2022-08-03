@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
-from erica.api.v2.responses.model import response_model_post_to_queue, response_model_get_send_grundsteuer_from_queue
+from erica.erica_api.api.v2.responses.model import response_model_post_to_queue, response_model_get_send_grundsteuer_from_queue
 from erica.application.job_service.job_service_factory import get_job_service
 from erica.application.shared.service_injector import get_service
 from erica.application.grundsteuer.grundsteuer_service import GrundsteuerServiceInterface

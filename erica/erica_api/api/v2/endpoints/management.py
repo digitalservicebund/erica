@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from opyoid import Injector
 
-from erica.api.api_module import ApiModule
+from erica.erica_api.api.api_module import ApiModule
 from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface
 
 router = APIRouter()

@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import status, APIRouter
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
-from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
+from erica.erica_api.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
     response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
     response_model_post_to_queue
 from erica.application.freischaltcode.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \

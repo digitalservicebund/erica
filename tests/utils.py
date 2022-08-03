@@ -69,8 +69,8 @@ def create_send_grundsteuer():
 
 
 def get_job_service_patch_string(endpoint):
-    return "erica.api.v2.endpoints." + endpoint + ".get_job_service"
+    return "erica.erica_api.api.v2.endpoints." + endpoint + ".get_job_service"
 
 
 def get_erica_request_patch_string(endpoint):
-    return "erica.api.v2.endpoints." + endpoint + ".get_erica_request"
+    return "erica.erica_api.api.v2.endpoints." + endpoint + ".get_erica_request"
