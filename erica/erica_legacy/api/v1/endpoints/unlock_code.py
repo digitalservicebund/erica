@@ -1,10 +1,10 @@
 import logging
 
 from fastapi import HTTPException, status, APIRouter
-from erica.erica_legacy.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, UnlockCodeActivationData, \
+from erica.erica_worker.request_processing.erica_input.v1.erica_input import UnlockCodeRequestData, UnlockCodeActivationData, \
     UnlockCodeRevocationData
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
-from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRequestController, \
+from erica.erica_worker.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_worker.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController
 
 router = APIRouter()

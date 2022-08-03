@@ -1,10 +1,10 @@
 import os
 import sys
 
-from erica.erica_legacy.elster_xml import elster_xml_generator
-from erica.erica_legacy.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
-from erica.erica_legacy.pyeric.pyeric_controller import PermitListingPyericProcessController
+from erica.erica_worker.elster_xml import elster_xml_generator
+from erica.erica_worker.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
+from erica.erica_worker.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_worker.pyeric.pyeric_controller import PermitListingPyericProcessController
 
 
 def _get_eric_response_datenteil(xml):

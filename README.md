@@ -82,7 +82,7 @@ Contact the erica service owners for information on how to obtain the required c
 
  - Download `ERiC-35.2.8.0-Linux-x86_64.jar` (or a newer version) from the [ELSTER developer portal](https://www.elster.de/elsterweb/infoseite/entwickler).
  - Unpack the downloaded jar file
- - Copy the following library files into `erica/erica_legacy/lib` such that it matches the given structure:
+ - Copy the following library files into `erica/erica_worker/lib` such that it matches the given structure:
 
 ```bash
 $ tree lib
@@ -102,7 +102,7 @@ _NOTE_: If you use a Mac, get the corresponding `*.dylib` files
 
 ##### Obtain Certificate
 
-You also need to obtain a test certificate from ELSTER and place it under `erica/erica_legacy/instances/blueprint/cert.pfx`.
+You also need to obtain a test certificate from ELSTER and place it under `erica/erica_worker/instances/blueprint/cert.pfx`.
 
 ## Developing 👩‍💻 👨‍💻
 

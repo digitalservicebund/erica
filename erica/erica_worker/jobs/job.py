@@ -9,7 +9,7 @@ from erica.erica_shared.job_service.job_service import JobServiceInterface
 from erica.erica_shared.repositories import base_repository_interface
 from erica.erica_shared.model.erica_request import EricaRequest, Status
 from erica.erica_shared.model.base_domain_model import BasePayload
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg, \
+from erica.erica_worker.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg, \
     EricTransferError
 from erica.erica_shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
 

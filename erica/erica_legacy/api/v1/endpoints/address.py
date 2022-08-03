@@ -1,5 +1,5 @@
 from fastapi import status, APIRouter
-from erica.erica_legacy.request_processing.erica_input.v1.erica_input import GetAddressData
+from erica.erica_worker.request_processing.erica_input.v1.erica_input import GetAddressData
 
 router = APIRouter()
 

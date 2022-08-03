@@ -3,8 +3,8 @@ import logging
 from fastapi import HTTPException, status, APIRouter
 from starlette.responses import FileResponse
 from erica.erica_shared.payload.tax_number_validation import StateAbbreviation, CheckTaxNumberPayload
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful
-from erica.erica_legacy.request_processing.requests_controller import CheckTaxNumberRequestController
+from erica.erica_worker.pyeric.eric_errors import EricProcessNotSuccessful
+from erica.erica_worker.request_processing.requests_controller import CheckTaxNumberRequestController
 
 router = APIRouter()
 
@@ -30,4 +30,4 @@ def get_tax_offices():
     """
     The list of tax offices for all states is requested and returned.
     """
-    return FileResponse("erica/erica_legacy/static/tax_offices.json")
+    return FileResponse("erica/erica_worker/static/tax_offices.json")

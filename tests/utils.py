@@ -10,10 +10,10 @@ from erica.erica_shared.payload.freischaltcode import FreischaltCodeRequestPaylo
 from erica.erica_shared.payload.tax_declaration import TaxDeclarationPayload
 from erica.erica_shared.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.erica_api.dto.grundsteuer_dto import GrundsteuerDto
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
-from tests.erica_legacy.utils import create_meta_data, create_form_data
+from tests.erica_worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
+from tests.erica_worker.utils import create_meta_data, create_form_data
 
-samples_folder = os.path.join(os.path.dirname(__file__), 'erica_legacy/samples')
+samples_folder = os.path.join(os.path.dirname(__file__), 'erica_worker/samples')
 
 
 def read_text_from_sample(sample_name, read_type='r'):

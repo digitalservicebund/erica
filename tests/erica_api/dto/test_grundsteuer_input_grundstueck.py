@@ -3,7 +3,7 @@ from pydantic import ValidationError
 
 from erica.erica_api.dto.grundsteuer_input_grundstueck import Flurstueck, Grundstueck, \
     Grundstuecksart
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleFlurstueck, SampleGrundstueck
+from tests.erica_worker.samples.grundsteuer_sample_data import SampleFlurstueck, SampleGrundstueck
 
 
 class TestGrundstuecksart:

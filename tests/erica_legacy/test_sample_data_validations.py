@@ -5,7 +5,7 @@ import unittest
 import pytest
 
 from erica.erica_legacy.api.v1.endpoints.est import validate_est
-from tests.erica_legacy.utils import create_est, create_est_single, missing_cert, missing_pyeric_lib
+from tests.erica_worker.utils import create_est, create_est_single, missing_cert, missing_pyeric_lib
 
 
 class TestSampleDataValidation(unittest.TestCase):

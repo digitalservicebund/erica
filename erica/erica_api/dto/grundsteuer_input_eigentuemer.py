@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from pydantic import validator
 from erica.erica_api.dto.base_dto import CamelCaseModel
-from erica.erica_legacy.pyeric.check_elster_request_id import tax_id_number_is_test_id_number
+from erica.erica_worker.pyeric.check_elster_request_id import tax_id_number_is_test_id_number
 
 
 class Anrede(str, Enum):

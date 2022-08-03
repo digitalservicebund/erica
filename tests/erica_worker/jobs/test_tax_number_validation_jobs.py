@@ -48,7 +48,7 @@ class TestCheckTaxNumber:
             ))
         with patch("erica.erica_shared.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
-                    "erica.erica_legacy.request_processing.requests_controller.CheckTaxNumberRequestController", mock_req_controller):
+                    "erica.erica_worker.request_processing.requests_controller.CheckTaxNumberRequestController", mock_req_controller):
             check_tax_number("1234")
 
             assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
@@ -70,7 +70,7 @@ class TestIntegrationWithDatabaseAndCheckTaxNumber:
                 creator_id="tests",
                 type=RequestType.freischalt_code_revocate
             ))
-            with patch('erica.erica_legacy.pyeric.pyeric_controller.CheckTaxNumberPyericController.get_eric_response',
+            with patch('erica.erica_worker.pyeric.pyeric_controller.CheckTaxNumberPyericController.get_eric_response',
                     MagicMock(return_value=True)):
                 check_tax_number(entity.request_id)
 

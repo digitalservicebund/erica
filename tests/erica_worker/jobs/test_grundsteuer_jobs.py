@@ -9,10 +9,10 @@ from erica.erica_shared.job_service.job_service import JobService
 from erica.erica_shared.job_service.job_service_factory import get_job_service
 from erica.erica_worker.jobs.grundsteuer_jobs import send_grundsteuer
 from erica.erica_shared.model.erica_request import EricaRequest, RequestType
-from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
-from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
+from erica.erica_worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
+from erica.erica_worker.pyeric.pyeric_response import PyericResponse
 from erica.erica_shared.sqlalchemy.database import session_scope
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
+from tests.erica_worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.utils import read_text_from_sample
 
 
@@ -52,7 +52,7 @@ class TestGrundsteuerJob:
             ))
         with patch("erica.erica_shared.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
-                    "erica.erica_legacy.request_processing.grundsteuer_request_controller.GrundsteuerRequestController", mock_req_controller):
+                    "erica.erica_worker.request_processing.grundsteuer_request_controller.GrundsteuerRequestController", mock_req_controller):
             send_grundsteuer("1234")
 
             assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
@@ -75,7 +75,7 @@ class TestIntegrationWithDatabaseAndGrundsteuerJob:
                 type=RequestType.grundsteuer
             ))
             xml_string = read_text_from_sample('sample_grundsteuer_response.xml')
-            with patch('erica.erica_legacy.pyeric.pyeric_controller.GrundsteuerPyericProcessController.get_eric_response',
+            with patch('erica.erica_worker.pyeric.pyeric_controller.GrundsteuerPyericProcessController.get_eric_response',
                     MagicMock(return_value=PyericResponse(eric_response="eric_response", server_response=xml_string, pdf=response_pdf))):
                 send_grundsteuer(entity.request_id)
 

@@ -13,11 +13,11 @@ from erica.erica_shared.model.erica_request import RequestType
 from erica.erica_shared.payload.tax_declaration import TaxDeclarationPayload
 from erica.erica_shared.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.erica_api.dto.grundsteuer_dto import GrundsteuerPayload
-from erica.erica_legacy.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
+from erica.erica_worker.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \
     EstRequestController
 from erica.erica_shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
-from erica.erica_legacy.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
+from erica.erica_worker.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 
 
 class TestJobServiceFactory:

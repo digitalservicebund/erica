@@ -7,7 +7,7 @@ from freezegun import freeze_time
 
 from erica.erica_worker.jobs.job import perform_job
 from erica.erica_shared.model.erica_request import Status
-from erica.erica_legacy.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, \
+from erica.erica_worker.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, \
     EricTransferError, EricAlreadyRequestedError
 from erica.erica_shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
 

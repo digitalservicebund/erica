@@ -10,11 +10,11 @@ from erica.erica_shared.job_service.job_service_factory import get_job_service
 from erica.erica_worker.jobs.tax_declaration_jobs import send_est
 from erica.erica_shared.payload.tax_declaration import TaxDeclarationPayload
 from erica.erica_shared.model.erica_request import EricaRequest, RequestType
-from erica.erica_legacy.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
-from erica.erica_legacy.pyeric.pyeric_response import PyericResponse
-from erica.erica_legacy.request_processing.erica_input.v1.erica_input import MetaDataEst
+from erica.erica_worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
+from erica.erica_worker.pyeric.pyeric_response import PyericResponse
+from erica.erica_worker.request_processing.erica_input.v1.erica_input import MetaDataEst
 from erica.erica_shared.sqlalchemy.database import session_scope
-from tests.erica_legacy.utils import TEST_EST_VERANLAGUNGSJAHR
+from tests.erica_worker.utils import TEST_EST_VERANLAGUNGSJAHR
 from tests.utils import read_text_from_sample
 
 
@@ -54,7 +54,7 @@ class TestTaxDeclarationJob:
             ))
         with patch("erica.erica_shared.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
-                    "erica.erica_legacy.request_processing.requests_controller.EstRequestController", mock_req_controller):
+                    "erica.erica_worker.request_processing.requests_controller.EstRequestController", mock_req_controller):
             send_est("1234")
 
             assert [call(req_payload, True), call().process()] in mock_req_controller.mock_calls
@@ -79,7 +79,7 @@ class TestIntegrationWithDatabaseAndTaxDeclarationJob:
                 type=RequestType.freischalt_code_revocate
             ))
             xml_string = read_text_from_sample('sample_est_response_server.xml')
-            with patch('erica.erica_legacy.pyeric.pyeric_controller.EstPyericProcessController.get_eric_response',
+            with patch('erica.erica_worker.pyeric.pyeric_controller.EstPyericProcessController.get_eric_response',
                     MagicMock(return_value=PyericResponse(eric_response="eric_response", server_response=xml_string, pdf=response_pdf))):
                 send_est(entity.request_id)
 

@@ -11,11 +11,11 @@ from erica.erica_legacy.api.v1.endpoints.grundsteuer import send_grundsteuer
 from erica.erica_legacy.api.v1.endpoints.tax import is_valid_tax_number, get_tax_offices
 from erica.erica_legacy.api.v1.endpoints.unlock_code import request_unlock_code, activate_unlock_code, \
     revoke_unlock_code
-from erica.erica_legacy.pyeric.eric import EricResponse
-from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
+from erica.erica_worker.pyeric.eric import EricResponse
+from erica.erica_worker.pyeric.pyeric_controller import GetTaxOfficesPyericController
 from erica.erica_api.dto.grundsteuer_dto import GrundsteuerPayload
 
-from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
+from tests.erica_worker.utils import create_unlock_request, create_unlock_activation, create_est, \
     create_unlock_revocation, \
     missing_cert, missing_pyeric_lib
 from tests.utils import read_text_from_sample
@@ -96,7 +96,7 @@ class TestSendEst(unittest.TestCase):
 class TestSendGrundsteuer(unittest.TestCase):
 
     def test_if_request_correct_then_no_error_and_correct_response(self):
-        with open("tests/erica_legacy/samples/grundsteuer_sample_input.json") as f:
+        with open("tests/erica_worker/samples/grundsteuer_sample_input.json") as f:
             payload = json.loads(f.read())
             parsed_input = GrundsteuerPayload.parse_obj(payload)
             result = send_grundsteuer(parsed_input)
@@ -105,7 +105,7 @@ class TestSendGrundsteuer(unittest.TestCase):
         assert result['pdf']
 
     def test_if_request_correct_with_bruchteilsgemeinschaft_then_no_error_and_correct_response(self):
-        with open("tests/erica_legacy/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json") as f:
+        with open("tests/erica_worker/samples/grundsteuer_sample_input_bruchteilsgemeinschaft.json") as f:
             payload = json.loads(f.read())
             parsed_input = GrundsteuerPayload.parse_obj(payload)
             result = send_grundsteuer(parsed_input)
@@ -139,7 +139,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         correct_request_include = create_unlock_request(correct=True)
 
         try:
-            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_worker.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -155,7 +155,7 @@ class TestRequestUnlockCode(unittest.TestCase):
         correct_request_no_include = create_unlock_request(correct=True)
 
         try:
-            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_worker.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -190,7 +190,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         correct_activation_include = create_unlock_activation(correct=True)
 
         try:
-            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_worker.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -208,7 +208,7 @@ class TestActivateUnlockCode(unittest.TestCase):
         correct_activation_no_include = create_unlock_activation(correct=True)
 
         try:
-            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_worker.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -232,7 +232,7 @@ class TestRevokeUnlockCode(unittest.TestCase):
         correct_revocation_include = create_unlock_revocation(correct=True)
 
         try:
-            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_worker.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
@@ -249,7 +249,7 @@ class TestRevokeUnlockCode(unittest.TestCase):
         correct_revocation_no_include = create_unlock_revocation(correct=True)
 
         try:
-            with patch('erica.erica_legacy.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
+            with patch('erica.erica_worker.pyeric.eric.EricWrapper.process', MagicMock(return_value=EricResponse(
                     0,
                     self.successful_response,
                     self.successful_response))):
