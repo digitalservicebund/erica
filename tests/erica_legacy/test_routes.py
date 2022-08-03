@@ -13,7 +13,7 @@ from erica.erica_legacy.api.v1.endpoints.unlock_code import request_unlock_code,
     revoke_unlock_code
 from erica.erica_legacy.pyeric.eric import EricResponse
 from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
-from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
+from erica.erica_api.dto.grundsteuer_dto import GrundsteuerPayload
 
 from tests.erica_legacy.utils import create_unlock_request, create_unlock_activation, create_est, \
     create_unlock_revocation, \

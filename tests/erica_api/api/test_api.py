@@ -9,15 +9,15 @@ from erica.erica_api.api.v2.endpoints.fsc import request_fsc, get_fsc_request_jo
     revocate_fsc, get_fsc_revocation_job
 from erica.erica_api.api.v2.endpoints.grundsteuer import send_grundsteuer, get_grundsteuer_job
 from erica.erica_api.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
-from erica.application.freischaltcode.freischaltcode_service import FreischaltCodeService
-from erica.application.job_service.job_service import JobService
-from erica.application.shared.response_dto import JobState
-from erica.application.erica_request.erica_request import EricaRequestDto
-from erica.application.grundsteuer.grundsteuer_service import GrundsteuerService
-from erica.application.tax_declaration.tax_declaration_service import TaxDeclarationService
-from erica.application.tax_number_validation.tax_number_validition_service import TaxNumberValidityService
+from erica.erica_api.service.freischaltcode_service import FreischaltCodeService
+from erica.erica_shared.job_service.job_service import JobService
+from erica.erica_api.dto.response_dto import JobState
+from erica.erica_api.dto.erica_request_dto import EricaRequestDto
+from erica.erica_api.service.grundsteuer_service import GrundsteuerService
+from erica.erica_api.service.tax_declaration_service import TaxDeclarationService
+from erica.erica_api.service.tax_number_validition_service import TaxNumberValidityService
 from erica.erica_shared.model.erica_request import EricaRequest, RequestType, Status
-from tests.application.job_service.test_job_service import MockEricaRequestRepository, MockRequestController, MockDto, \
+from tests.erica_api.service.test_job_service import MockEricaRequestRepository, MockRequestController, MockDto, \
     PickableMock
 from tests.utils import create_unlock_code_request, \
     create_unlock_code_activation, create_unlock_code_revocation, create_tax_number_validity, create_send_est, \

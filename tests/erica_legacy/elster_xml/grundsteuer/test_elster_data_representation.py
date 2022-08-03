@@ -9,8 +9,8 @@ from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPerson
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
     EGemarkungen, EAngGrund
-from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Person
-from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Grundstuecksart
+from erica.erica_api.dto.grundsteuer_input_eigentuemer import Person
+from erica.erica_api.dto.grundsteuer_input_grundstueck import Grundstuecksart
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundstueck, SampleBevollmaechtigter, SamplePerson, \
     SampleEigentuemer, \
     DefaultSampleEigentuemer, SampleFlurstueck, SampleGrundsteuerData, SampleBruchteilsgemeinschaft

@@ -1,11 +1,10 @@
-import re
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Optional, List
 
 from erica.erica_legacy.elster_xml.common.elsterify_fields import elsterify_grundstuecksart, \
     elsterify_wirtschaftliche_einheit_zaehler
-from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Adresse, Grundstueck, \
+from erica.erica_api.dto.grundsteuer_input_grundstueck import Adresse, Grundstueck, \
     Flurstueck, Grundstuecksart
 
 

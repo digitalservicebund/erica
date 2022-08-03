@@ -8,12 +8,12 @@ from erica.erica_legacy.elster_xml.common.electronic_steuernummer import generat
 from erica.erica_legacy.elster_xml.grundsteuer.elster_eigentuemer import EPersonData, EEigentumsverh, \
     EEmpfangsbevollmaechtigter
 from erica.erica_legacy.elster_xml.grundsteuer.elster_gebaeude import EAngWohn
-from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
-from erica.application.grundsteuer.grundsteuer_input_eigentuemer import \
+from erica.erica_api.dto.grundsteuer_dto import GrundsteuerPayload
+from erica.erica_api.dto.grundsteuer_input_eigentuemer import \
     Eigentuemer as EigentuemerInput, Bruchteilsgemeinschaft
 from erica.erica_legacy.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGrundstuecksart, EMehrereGemeinden, \
     EGemarkungen, EAngGrund
-from erica.application.grundsteuer.grundsteuer_input_grundstueck  import \
+from erica.erica_api.dto.grundsteuer_input_grundstueck import \
     Grundstueck as GrundstueckInput, Grundstuecksart
 
 """

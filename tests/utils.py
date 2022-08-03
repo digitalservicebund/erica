@@ -1,15 +1,15 @@
 import os
 from datetime import date
 
-from erica.application.freischaltcode.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+from erica.erica_api.dto.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
-from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
-from erica.application.tax_number_validation.tax_number_validation_dto import CheckTaxNumberDto
+from erica.erica_api.dto.tax_declaration_dto import TaxDeclarationDto
+from erica.erica_api.dto.tax_number_validation_dto import CheckTaxNumberDto
 from erica.erica_shared.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
 from erica.erica_shared.payload.tax_declaration import TaxDeclarationPayload
 from erica.erica_shared.payload.tax_number_validation import CheckTaxNumberPayload
-from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerDto
+from erica.erica_api.dto.grundsteuer_dto import GrundsteuerDto
 from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.erica_legacy.utils import create_meta_data, create_form_data
 

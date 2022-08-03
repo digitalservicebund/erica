@@ -10,7 +10,7 @@ from opyoid import Injector
 from sqlalchemy.orm import sessionmaker
 
 from erica.erica_api.api.api_module import ApiModule
-from erica.application.erica_request.erica_request_service import EricaRequestServiceInterface, EricaRequestService
+from erica.erica_api.service.erica_request_service import EricaRequestServiceInterface, EricaRequestService
 from erica.config import get_settings
 from erica.erica_legacy.request_processing.erica_input.v1.erica_input import FormDataEst
 from erica.erica_shared.sqlalchemy.database import get_engine, session_scope

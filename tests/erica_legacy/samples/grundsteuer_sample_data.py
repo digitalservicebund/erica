@@ -1,11 +1,11 @@
 import datetime
 from typing import Optional
 
-from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerPayload
-from erica.application.grundsteuer.grundsteuer_input_eigentuemer import Vertreter, \
+from erica.erica_api.dto.grundsteuer_dto import GrundsteuerPayload
+from erica.erica_api.dto.grundsteuer_input_eigentuemer import Vertreter, \
     Empfangsbevollmaechtigter, Person, Eigentuemer, Bruchteilsgemeinschaft
-from erica.application.grundsteuer.grundsteuer_input_gebaeude import Gebaeude
-from erica.application.grundsteuer.grundsteuer_input_grundstueck  import Grundstueck, Flurstueck
+from erica.erica_api.dto.grundsteuer_input_gebaeude import Gebaeude
+from erica.erica_api.dto.grundsteuer_input_grundstueck import Grundstueck, Flurstueck
 
 
 class Builder:
