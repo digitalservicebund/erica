@@ -179,13 +179,14 @@ def generate_full_vast_revocation_xml(form_data, th_fields=None, use_testmerker=
     return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_revocation_xml_nutzdaten, form_data)
 
 
-def generate_full_vast_list_xml(th_fields=None, use_testmerker=False, specific_idnr=None):
+def generate_full_vast_list_xml(th_fields=None, use_testmerker=False, specific_idnr=None, specific_status=None):
     """ Generates the full xml for the VaSt SpezRechtListe. An example xml can be found in the Eric documentation under
         common/Schnittstellenbeschreibungen/Sonstige/VaSt-Berechtigungsmanagement/ElsterBRM/Beispiele """
 
     if not th_fields:
         th_fields = get_vast_list_th_fields(use_testmerker)
-    return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_list_xml_nutzdaten, {"idnr": specific_idnr})
+    return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_list_xml_nutzdaten,
+                             {"idnr": specific_idnr, "status": specific_status})
 
 
 def generate_full_vast_beleg_ids_request_xml(form_data, th_fields=None, use_testmerker=False):
@@ -302,11 +303,17 @@ def _add_vast_list_xml_nutzdaten(xml_top, input_data, version='7'):
     nutzdaten_xml = SubElement(xml_top, 'Nutzdaten')
     list_xml = SubElement(nutzdaten_xml, 'SpezRechtListe')
     list_xml.set('version', version)
-    if input_data.get("idnr"):
+    if input_data:
         suchkriterien_xml = SubElement(list_xml, "Suchkriterien")
-        dateninhaber_xml = SubElement(suchkriterien_xml, "Dateninhaber")
-        idnr_xml = SubElement(dateninhaber_xml, "DateninhaberIdNr")
-        idnr_xml.text = input_data.get("idnr")
+        if input_data.get("idnr"):
+            dateninhaber_xml = SubElement(suchkriterien_xml, "Dateninhaber")
+            idnr_xml = SubElement(dateninhaber_xml, "DateninhaberIdNr")
+            idnr_xml.text = input_data.get("idnr")
+        if input_data.get("status"):
+            status_list_xml = SubElement(suchkriterien_xml, "AntragsStatus")
+            for status in input_data.get("status"):
+                status_xml = SubElement(status_list_xml, "AntragsStatus")
+                status_xml.text = status
 
 
 def _add_vast_beleg_ids_request_nutzdaten(xml_top, user_data, year='2021'):
