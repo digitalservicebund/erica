@@ -21,10 +21,10 @@ class MockEricaRequestRepository(
 
 
 @pytest.fixture
-def transactional_erica_postgresql_db(postgresql_db):
-    if not postgresql_db.has_table(EricaRequestSchema.__tablename__):
-        postgresql_db.create_table(EricaRequestSchema)
-    yield postgresql_db
+def transactional_erica_postgresql_db(transacted_postgresql_db):
+    if not transacted_postgresql_db.has_table(EricaRequestSchema.__tablename__):
+        transacted_postgresql_db.create_table(EricaRequestSchema)
+    yield transacted_postgresql_db
 
 
 @pytest.fixture
@@ -54,6 +54,39 @@ class TestEricaRepositoryCreate:
 class TestEricaRepositoryGetByJobId:
 
     def test_if_entity_in_database_then_return_domain_representation(self, transactional_session_with_mock_schema):
+        mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
+        request_id = uuid4()
+        mock_object.request_id = request_id
+        schema_object = MockSchema(**mock_object.dict())
+        transactional_session_with_mock_schema.add(schema_object)
+        transactional_session_with_mock_schema.commit()
+
+        found_entity = MockEricaRequestRepository(db_connection=transactional_session_with_mock_schema).get_by_job_request_id(request_id)
+
+        assert found_entity == mock_object
+
+    @pytest.mark.parametrize("status", [Status.failed], ids=["failed"])
+    def test_if_success_or_failed_entity_older_than_ttl_in_database_then_delete_from_database(self,
+                                                                                              transactional_erica_postgresql_db,
+                                                                                              status):
+        transactional_erica_postgresql_db.session.query(EricaRequestSchema).delete()
+        request_id = uuid.uuid4()
+        mock_object = EricaRequest(request_id=request_id,
+                                   payload={'endboss': 'Melkor'},
+                                   creator_id="api",
+                                   type=RequestType.freischalt_code_request,
+                                   status=status,
+                                   updated_at=datetime.datetime.now() - datetime.timedelta(minutes=2))
+        EricaRequestRepository(db_connection=transactional_erica_postgresql_db.session).create(mock_object)
+
+        deleted = EricaRequestRepository(
+            db_connection=transactional_erica_postgresql_db.session).delete_success_fail_old_entities(1)
+        assert deleted == 1
+        entity_not_found = transactional_erica_postgresql_db.session.query(EricaRequestSchema).filter(
+            EricaRequestSchema.request_id == request_id).first()
+        assert entity_not_found is None
+
+    def test_if_entity_in_database_then_return_domain_representation1(self, transactional_session_with_mock_schema):
         mock_object = MockDomainModel(payload={'endboss': 'Melkor'})
         request_id = uuid4()
         mock_object.request_id = request_id
