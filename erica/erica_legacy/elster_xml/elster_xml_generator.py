@@ -185,6 +185,8 @@ def generate_full_vast_list_xml(th_fields=None, use_testmerker=False, specific_i
 
     if not th_fields:
         th_fields = get_vast_list_th_fields(use_testmerker)
+    if not specific_idnr and not specific_status:
+        return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_list_xml_nutzdaten, None)
     return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_list_xml_nutzdaten,
                              {"idnr": specific_idnr, "status": specific_status})
 
@@ -298,7 +300,7 @@ def _add_vast_revocation_xml_nutzdaten(xml_top, user_data):
     SubElement(spez_recht_storno_xml, 'AntragsID').text = user_data['elster_request_id']
 
 
-def _add_vast_list_xml_nutzdaten(xml_top, input_data, version='7'):
+def _add_vast_list_xml_nutzdaten(xml_top, input_data=None, version='7'):
     """ Generates <Nutzdaten> for Datenart SpezRechtListe and adds it to xml_top. """
     nutzdaten_xml = SubElement(xml_top, 'Nutzdaten')
     list_xml = SubElement(nutzdaten_xml, 'SpezRechtListe')
