@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 
 from erica.config import Settings, DevelopmentSettings, StagingSettings, TestingSettings, get_settings, UnknownEricaEnvironment
-from tests.erica_worker.utils import missing_cert, missing_pyeric_lib
+from tests.worker.utils import missing_cert, missing_pyeric_lib
 
 
 class TestGetCertPath(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestGetCertPath(unittest.TestCase):
     def setUp(self):
         self.darwin_stick_cert_path = "libaetpkss.dylib"
         self.linux_stick_cert_path = "libaetpkss.so"
-        self.file_cert_path = "erica/erica_worker/instances/blueprint/cert.pfx"
+        self.file_cert_path = "erica/worker/instances/blueprint/cert.pfx"
 
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
@@ -59,8 +59,8 @@ class TestGetEricDll(unittest.TestCase):
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def setUp(self):
-        self.darwin_dll_path = "erica/erica_worker/lib/libericapi.dylib"
-        self.linux_dll_path = "erica/erica_worker/lib/libericapi.so"
+        self.darwin_dll_path = "erica/worker/lib/libericapi.dylib"
+        self.linux_dll_path = "erica/worker/lib/libericapi.so"
 
     @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")

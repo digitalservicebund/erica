@@ -15,7 +15,7 @@ class UnknownEricaEnvironment(Exception):
 class Settings(BaseSettings):
     send_file_max_age_default: int = 60
     cert_pin: str = Field("123456", env='CERT_PIN')
-    cert_path: str = 'erica/erica_worker/instances/blueprint/cert.pfx'
+    cert_path: str = 'erica/worker/instances/blueprint/cert.pfx'
     using_stick: bool = True
     use_testmerker: bool = True
     accept_test_bufa: bool = False
@@ -43,9 +43,9 @@ class Settings(BaseSettings):
     @staticmethod
     def get_eric_dll_path():
         if platform == "darwin":
-            return "erica/erica_worker/lib/libericapi.dylib"
+            return "erica/worker/lib/libericapi.dylib"
         else:
-            return "erica/erica_worker/lib/libericapi.so"
+            return "erica/worker/lib/libericapi.so"
 
     def get_cert_path(self):
         if self.using_stick:

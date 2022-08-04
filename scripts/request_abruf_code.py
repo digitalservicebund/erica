@@ -1,9 +1,9 @@
 import os
 import click
 
-from erica.erica_worker.elster_xml import elster_xml_generator
-from erica.erica_worker.pyeric.pyeric_controller import AbrufcodeRequestPyericProcessController
-from tests.erica_worker.utils import remove_declaration_and_namespace
+from erica.worker.elster_xml import elster_xml_generator
+from erica.worker.pyeric.pyeric_controller import AbrufcodeRequestPyericProcessController
+from tests.worker.utils import remove_declaration_and_namespace
 
 
 # ATTENTION

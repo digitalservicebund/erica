@@ -686,7 +686,7 @@ class TestV2TaxOffices:
     endpoint = "/v2/tax_offices"
 
     def test_if_get_from_tax_office_list_then_return_tax_offices_json(self):
-        with open("erica/erica_api/static/tax_offices.json", "r") as response_file:
+        with open("erica/api/static/tax_offices.json", "r") as response_file:
             response_content = json.load(response_file)
         response = requests.get(ERICA_TESTING_URL + self.endpoint)
         assert response.status_code == 200

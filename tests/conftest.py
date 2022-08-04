@@ -9,12 +9,12 @@ from datetime import date
 from opyoid import Injector
 from sqlalchemy.orm import sessionmaker
 
-from erica.erica_api.api.api_module import ApiModule
-from erica.erica_api.service.erica_request_service import EricaRequestServiceInterface, EricaRequestService
+from erica.api.api_module import ApiModule
+from erica.api.service.erica_request_service import EricaRequestServiceInterface, EricaRequestService
 from erica.config import get_settings
-from erica.erica_worker.request_processing.erica_input.v1.erica_input import FormDataEst
-from erica.erica_shared.sqlalchemy.database import get_engine, session_scope
-from tests.erica_shared.sqlalechemy.repositories.mock_repositories import MockSchema
+from erica.worker.request_processing.erica_input.v1.erica_input import FormDataEst
+from erica.shared.sqlalchemy.database import get_engine, session_scope
+from tests.shared.sqlalechemy.repositories.mock_repositories import MockSchema
 
 
 @pytest.fixture
@@ -81,7 +81,7 @@ def fake_db_connection_with_erica_table_in_settings(database_uri):
 
     engine = get_engine()
 
-    from erica.erica_shared.sqlalchemy.erica_request_schema import EricaRequestSchema
+    from erica.shared.sqlalchemy.erica_request_schema import EricaRequestSchema
     EricaRequestSchema.metadata.create_all(bind=engine)
 
     # fastapi_sqlalchemy creates its sessionmaker in the middleware constructor and provides

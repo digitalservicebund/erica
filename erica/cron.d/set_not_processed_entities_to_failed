@@ -1,2 +1,2 @@
 SHELL=/bin/bash
-* * * * * root cd /app && /usr/local/bin/pipenv run python erica/erica_shared/sqlalchemy/cron/update_entities_utils.py set-not-processed-entities-to-failed &> /app/cronjob_not_processed_output
+* * * * * root cd /app && /usr/local/bin/pipenv run python erica/shared/sqlalchemy/cron/update_entities_utils.py set-not-processed-entities-to-failed &> /app/cronjob_not_processed_output

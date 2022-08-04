@@ -5,11 +5,11 @@ from fastapi_sqlalchemy import DBSessionMiddleware
 from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from erica.erica_api.api.exception_handling import generate_exception_handlers
-from erica.erica_api.api.v2.api_v2 import api_router_02
+from erica.api.exception_handling import generate_exception_handlers
+from erica.api.v2.api_v2 import api_router_02
 from erica.config import get_settings
-from erica.erica_legacy.api.api import api_router
-from erica.erica_shared.sqlalchemy.database import engine_args
+from erica.legacy.api.api import api_router
+from erica.shared.sqlalchemy.database import engine_args
 
 app = FastAPI(
     title="Erica Service",

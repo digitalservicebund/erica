@@ -1,19 +1,19 @@
 import os
 from datetime import date
 
-from erica.erica_api.dto.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+from erica.api.dto.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
-from erica.erica_api.dto.tax_declaration_dto import TaxDeclarationDto
-from erica.erica_api.dto.tax_number_validation_dto import CheckTaxNumberDto
-from erica.erica_shared.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
+from erica.api.dto.tax_declaration_dto import TaxDeclarationDto
+from erica.api.dto.tax_number_validation_dto import CheckTaxNumberDto
+from erica.shared.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
-from erica.erica_shared.payload.tax_declaration import TaxDeclarationPayload
-from erica.erica_shared.payload.tax_number_validation import CheckTaxNumberPayload
-from erica.erica_api.dto.grundsteuer_dto import GrundsteuerDto
-from tests.erica_worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
-from tests.erica_worker.utils import create_meta_data, create_form_data
+from erica.shared.payload.tax_declaration import TaxDeclarationPayload
+from erica.shared.payload.tax_number_validation import CheckTaxNumberPayload
+from erica.api.dto.grundsteuer_dto import GrundsteuerDto
+from tests.worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
+from tests.worker.utils import create_meta_data, create_form_data
 
-samples_folder = os.path.join(os.path.dirname(__file__), 'erica_worker/samples')
+samples_folder = os.path.join(os.path.dirname(__file__), 'worker/samples')
 
 
 def read_text_from_sample(sample_name, read_type='r'):
@@ -69,8 +69,8 @@ def create_send_grundsteuer():
 
 
 def get_job_service_patch_string(endpoint):
-    return "erica.erica_api.api.v2.endpoints." + endpoint + ".get_job_service"
+    return "erica.api.v2.endpoints." + endpoint + ".get_job_service"
 
 
 def get_erica_request_patch_string(endpoint):
-    return "erica.erica_api.api.v2.endpoints." + endpoint + ".get_erica_request"
+    return "erica.api.v2.endpoints." + endpoint + ".get_erica_request"

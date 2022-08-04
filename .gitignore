@@ -68,11 +68,11 @@ logs/
 abruf_code_log.txt
 
 # Eric binaries and certificates
-erica/erica_worker/lib/*.dylib
-erica/erica_worker/lib/*.so
-erica/erica_worker/lib/plugins2/*.dylib
-erica/erica_worker/lib/plugins2/*.so
-erica/erica_worker/instances/blueprint/cert.pfx
+erica/worker/lib/*.dylib
+erica/worker/lib/*.so
+erica/worker/lib/plugins2/*.dylib
+erica/worker/lib/plugins2/*.so
+erica/worker/instances/blueprint/cert.pfx
 
 .DS_Store
 /lib/pyeric/eric-lib/
