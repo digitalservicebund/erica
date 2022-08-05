@@ -1,9 +1,9 @@
 import pytest
 from opyoid import Injector
 
-from erica.shared.infrastructure_module import InfrastructureModule
-from erica.shared.sqlalchemy.database import DatabaseSessionProvider
-from erica.shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.domain.infrastructure_module import InfrastructureModule
+from erica.domain.sqlalchemy.database import DatabaseSessionProvider
+from erica.domain.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 
 class TestInfrastructureModule:

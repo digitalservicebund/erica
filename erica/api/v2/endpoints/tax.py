@@ -3,11 +3,11 @@ from fastapi import status, APIRouter
 from starlette.requests import Request
 from starlette.responses import FileResponse, RedirectResponse
 from erica.api.v2.responses.model import response_model_get_tax_number_validity_from_queue, response_model_post_to_queue
-from erica.shared.job_service.job_service_factory import get_job_service
+from erica.job_service.job_service_factory import get_job_service
 from erica.api.service.service_injector import get_service
 from erica.api.service.tax_number_validition_service import TaxNumberValidityServiceInterface
 from erica.api.dto.tax_number_validation_dto import CheckTaxNumberDto
-from erica.shared.model.erica_request import RequestType
+from erica.domain.model.erica_request import RequestType
 
 router = APIRouter()
 

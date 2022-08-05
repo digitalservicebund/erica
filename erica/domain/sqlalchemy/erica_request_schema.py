@@ -2,8 +2,8 @@ from sqlalchemy import MetaData, Column, String, Enum, Integer
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 
-from erica.shared.model.erica_request import RequestType, Status
-from erica.shared.sqlalchemy.base_schema import AuditedSchemaMixin
+from erica.domain.model.erica_request import RequestType, Status
+from erica.domain.sqlalchemy.base_schema import AuditedSchemaMixin
 
 metadata = MetaData()
 BaseDbSchema = declarative_base()

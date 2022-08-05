@@ -4,12 +4,12 @@ from uuid import uuid4
 
 import pytest
 
-from erica.shared.job_service.job_service import JobService
-from erica.shared.job_service.job_service_factory import get_job_service
+from erica.job_service.job_service import JobService
+from erica.job_service.job_service_factory import get_job_service
 from erica.worker.jobs.tax_number_validation_jobs import check_tax_number
-from erica.shared.model.erica_request import EricaRequest, RequestType
-from erica.shared.payload.tax_number_validation import CheckTaxNumberPayload, StateAbbreviation
-from erica.shared.sqlalchemy.database import session_scope
+from erica.domain.model.erica_request import EricaRequest, RequestType
+from erica.domain.payload.tax_number_validation import CheckTaxNumberPayload, StateAbbreviation
+from erica.domain.sqlalchemy.database import session_scope
 
 
 class TestCheckTaxNumber:
@@ -17,7 +17,7 @@ class TestCheckTaxNumber:
     def test_perform_job_called_with_correct_parameters(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.tax_number_validation_jobs.perform_job", AsyncMock()) as mock_perform_job:
             check_tax_number(request_id)
 
@@ -30,7 +30,7 @@ class TestCheckTaxNumber:
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.tax_number_validation_jobs.perform_job", AsyncMock()):
             check_tax_number(request_id)
 
@@ -46,7 +46,7 @@ class TestCheckTaxNumber:
                 request_controller=mock_req_controller,
                 job_method=check_tax_number
             ))
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", mock_get_service), \
+        with patch("erica.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
                     "erica.worker.request_processing.requests_controller.CheckTaxNumberRequestController", mock_req_controller):
             check_tax_number("1234")

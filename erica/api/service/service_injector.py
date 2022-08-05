@@ -1,12 +1,12 @@
 from opyoid import Injector
 
-from erica.shared.application_module import ApplicationModule
+from erica.job_service.application_module import ApplicationModule
 from erica.api.service.freischaltcode_service import FreischaltCodeServiceInterface
 from erica.api.service.base_service import BaseService
 from erica.api.service.grundsteuer_service import GrundsteuerServiceInterface
 from erica.api.service.tax_declaration_service import TaxDeclarationServiceInterface
 from erica.api.service.tax_number_validition_service import TaxNumberValidityServiceInterface
-from erica.shared.model.erica_request import RequestType
+from erica.domain.model.erica_request import RequestType
 
 
 def get_service(request_type: RequestType) -> BaseService:

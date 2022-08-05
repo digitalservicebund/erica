@@ -6,10 +6,10 @@ import pytest
 from freezegun import freeze_time
 
 from erica.worker.jobs.job import perform_job
-from erica.shared.model.erica_request import Status
+from erica.domain.model.erica_request import Status
 from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful, EricGlobalValidationError, \
     EricTransferError, EricAlreadyRequestedError
-from erica.shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
+from erica.domain.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
 class TestJob:

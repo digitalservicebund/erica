@@ -5,13 +5,13 @@ from uuid import UUID
 
 from pydantic import ValidationError
 
-from erica.shared.job_service.job_service import JobServiceInterface
-from erica.shared.repositories import base_repository_interface
-from erica.shared.model.erica_request import EricaRequest, Status
-from erica.shared.model.base_domain_model import BasePayload
+from erica.job_service.job_service import JobServiceInterface
+from erica.domain.repositories import base_repository_interface
+from erica.domain.model.erica_request import EricaRequest, Status
+from erica.domain.model.base_domain_model import BasePayload
 from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful, get_error_codes_from_server_err_msg, \
     EricTransferError
-from erica.shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
+from erica.domain.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 
 def perform_job(request_id: UUID, repository: base_repository_interface, service: JobServiceInterface,

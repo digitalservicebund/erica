@@ -5,10 +5,10 @@ from logging.config import dictConfig
 import click
 
 from erica.config import get_settings
-from erica.shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.domain.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 from opyoid import Injector
-from erica.shared.infrastructure_module import InfrastructureModule
-from erica.shared.sqlalchemy.database import session_scope
+from erica.domain.infrastructure_module import InfrastructureModule
+from erica.domain.sqlalchemy.database import session_scope
 
 
 @click.group()

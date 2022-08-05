@@ -4,10 +4,10 @@ from unittest.mock import MagicMock, call
 from uuid import uuid4, UUID
 import pytest
 import pytest_pgsql
-from erica.shared.model.erica_request import EricaRequest, RequestType, Status
-from erica.shared.sqlalchemy.erica_request_schema import EricaRequestSchema
-from erica.shared.sqlalchemy.repositories.base_repository import EntityNotFoundError
-from erica.shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.domain.model.erica_request import EricaRequest, RequestType, Status
+from erica.domain.sqlalchemy.erica_request_schema import EricaRequestSchema
+from erica.domain.sqlalchemy.repositories.base_repository import EntityNotFoundError
+from erica.domain.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 from tests.shared.sqlalechemy.repositories.mock_repositories import MockDomainModel, MockSchema
 
 

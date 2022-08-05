@@ -8,7 +8,7 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 from erica.config import get_settings
-from erica.shared.sqlalchemy.erica_request_schema import EricaRequestSchema
+from erica.domain.sqlalchemy.erica_request_schema import EricaRequestSchema
 
 config = context.config
 

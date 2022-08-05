@@ -10,13 +10,13 @@ from erica.api.v2.endpoints.fsc import request_fsc, get_fsc_request_job, activat
 from erica.api.v2.endpoints.grundsteuer import send_grundsteuer, get_grundsteuer_job
 from erica.api.v2.endpoints.tax import is_valid_tax_number, get_valid_tax_number_job
 from erica.api.service.freischaltcode_service import FreischaltCodeService
-from erica.shared.job_service.job_service import JobService
+from erica.job_service.job_service import JobService
 from erica.api.dto.response_dto import JobState
 from erica.api.dto.erica_request_dto import EricaRequestDto
 from erica.api.service.grundsteuer_service import GrundsteuerService
 from erica.api.service.tax_declaration_service import TaxDeclarationService
 from erica.api.service.tax_number_validition_service import TaxNumberValidityService
-from erica.shared.model.erica_request import EricaRequest, RequestType, Status
+from erica.domain.model.erica_request import EricaRequest, RequestType, Status
 from tests.api.service.test_job_service import MockEricaRequestRepository, MockRequestController, MockDto, \
     PickableMock
 from tests.utils import create_unlock_code_request, \

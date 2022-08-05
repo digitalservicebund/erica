@@ -9,7 +9,7 @@ from erica.api.exception_handling import generate_exception_handlers
 from erica.api.v2.api_v2 import api_router_02
 from erica.config import get_settings
 from erica.legacy.api.api import api_router
-from erica.shared.sqlalchemy.database import engine_args
+from erica.domain.sqlalchemy.database import engine_args
 
 app = FastAPI(
     title="Erica Service",

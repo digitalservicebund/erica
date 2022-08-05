@@ -5,8 +5,8 @@ from unittest.mock import patch, MagicMock, call
 
 import pytest
 
-from erica.shared.payload.freischaltcode import FreischaltCodeActivatePayload, FreischaltCodeRevocatePayload
-from erica.shared.payload.tax_number_validation import CheckTaxNumberPayload
+from erica.domain.payload.freischaltcode import FreischaltCodeActivatePayload, FreischaltCodeRevocatePayload
+from erica.domain.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.worker.pyeric.eric_errors import InvalidBufaNumberError
 from erica.worker.pyeric.pyeric_response import PyericResponse
 from erica.worker.request_processing.eric_mapper import EstEricMapping, UnlockCodeRequestEricMapper

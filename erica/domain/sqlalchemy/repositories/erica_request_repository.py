@@ -6,10 +6,10 @@ from pydantic import BaseModel
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from erica.shared.model.erica_request import EricaRequest, Status
-from erica.shared.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
-from erica.shared.sqlalchemy.erica_request_schema import EricaRequestSchema
-from erica.shared.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
+from erica.domain.model.erica_request import EricaRequest, Status
+from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
+from erica.domain.sqlalchemy.erica_request_schema import EricaRequestSchema
+from erica.domain.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
 
 
 class EricaRequestRepository(

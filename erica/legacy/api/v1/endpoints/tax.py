@@ -2,7 +2,7 @@ import logging
 
 from fastapi import HTTPException, status, APIRouter
 from starlette.responses import FileResponse
-from erica.shared.payload.tax_number_validation import StateAbbreviation, CheckTaxNumberPayload
+from erica.domain.payload.tax_number_validation import StateAbbreviation, CheckTaxNumberPayload
 from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.worker.request_processing.requests_controller import CheckTaxNumberRequestController
 

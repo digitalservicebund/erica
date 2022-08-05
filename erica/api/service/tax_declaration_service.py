@@ -7,7 +7,7 @@ from erica.api.service.base_service import BaseService
 from erica.api.dto.response_dto import JobState, ResultTransferPdfResponseDto
 from erica.api.service.response_state_mapper import map_status
 from erica.api.dto.tax_declaration_dto import EstResponseDto
-from erica.shared.model.erica_request import RequestType
+from erica.domain.model.erica_request import RequestType
 
 
 class TaxDeclarationServiceInterface(BaseService):

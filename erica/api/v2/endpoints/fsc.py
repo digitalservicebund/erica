@@ -9,9 +9,9 @@ from erica.api.v2.responses.model import response_model_get_unlock_code_request_
 from erica.api.dto.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
 from erica.api.service.freischaltcode_service import FreischaltCodeService, FreischaltCodeServiceInterface
-from erica.shared.job_service.job_service_factory import get_job_service
+from erica.job_service.job_service_factory import get_job_service
 from erica.api.service.service_injector import get_service
-from erica.shared.model.erica_request import RequestType
+from erica.domain.model.erica_request import RequestType
 
 router = APIRouter()
 

@@ -5,13 +5,13 @@ from uuid import uuid4
 
 import pytest
 
-from erica.shared.job_service.job_service import JobService
-from erica.shared.job_service.job_service_factory import get_job_service
+from erica.job_service.job_service import JobService
+from erica.job_service.job_service_factory import get_job_service
 from erica.worker.jobs.grundsteuer_jobs import send_grundsteuer
-from erica.shared.model.erica_request import EricaRequest, RequestType
+from erica.domain.model.erica_request import EricaRequest, RequestType
 from erica.worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.worker.pyeric.pyeric_response import PyericResponse
-from erica.shared.sqlalchemy.database import session_scope
+from erica.domain.sqlalchemy.database import session_scope
 from tests.worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
 from tests.utils import read_text_from_sample
 
@@ -21,7 +21,7 @@ class TestGrundsteuerJob:
     def test_perform_job_called_with_correct_parameters(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.grundsteuer_jobs.perform_job", AsyncMock()) as mock_perform_job:
             send_grundsteuer(request_id)
 
@@ -34,7 +34,7 @@ class TestGrundsteuerJob:
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.grundsteuer_jobs.perform_job", AsyncMock()):
             send_grundsteuer(request_id)
 
@@ -50,7 +50,7 @@ class TestGrundsteuerJob:
                 request_controller=mock_req_controller,
                 job_method=send_grundsteuer
             ))
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", mock_get_service), \
+        with patch("erica.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
                     "erica.worker.request_processing.grundsteuer_request_controller.GrundsteuerRequestController", mock_req_controller):
             send_grundsteuer("1234")

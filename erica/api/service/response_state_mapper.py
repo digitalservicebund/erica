@@ -1,5 +1,5 @@
 from erica.api.dto.response_dto import JobState
-from erica.shared.model.erica_request import Status
+from erica.domain.model.erica_request import Status
 
 
 def map_status(status: Status):

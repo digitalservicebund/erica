@@ -5,15 +5,15 @@ from uuid import uuid4
 
 import pytest
 
-from erica.shared.job_service.job_service import JobService
-from erica.shared.job_service.job_service_factory import get_job_service
+from erica.job_service.job_service import JobService
+from erica.job_service.job_service_factory import get_job_service
 from erica.worker.jobs.tax_declaration_jobs import send_est
-from erica.shared.payload.tax_declaration import TaxDeclarationPayload
-from erica.shared.model.erica_request import EricaRequest, RequestType
+from erica.domain.payload.tax_declaration import TaxDeclarationPayload
+from erica.domain.model.erica_request import EricaRequest, RequestType
 from erica.worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_transferticket_from_xml
 from erica.worker.pyeric.pyeric_response import PyericResponse
 from erica.worker.request_processing.erica_input.v1.erica_input import MetaDataEst
-from erica.shared.sqlalchemy.database import session_scope
+from erica.domain.sqlalchemy.database import session_scope
 from tests.worker.utils import TEST_EST_VERANLAGUNGSJAHR
 from tests.utils import read_text_from_sample
 
@@ -23,7 +23,7 @@ class TestTaxDeclarationJob:
     def test_perform_job_called_with_correct_parameters(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.tax_declaration_jobs.perform_job", AsyncMock()) as mock_perform_job:
             send_est(request_id)
 
@@ -36,7 +36,7 @@ class TestTaxDeclarationJob:
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.tax_declaration_jobs.perform_job", AsyncMock()):
             send_est(request_id)
 
@@ -52,7 +52,7 @@ class TestTaxDeclarationJob:
                 request_controller=mock_req_controller,
                 job_method=send_est
             ))
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", mock_get_service), \
+        with patch("erica.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
                     "erica.worker.request_processing.requests_controller.EstRequestController", mock_req_controller):
             send_est("1234")

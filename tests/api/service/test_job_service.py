@@ -6,11 +6,11 @@ import pytest
 from freezegun import freeze_time
 from sqlalchemy.orm import Session
 
-from erica.shared.job_service.job_service import JobService
-from erica.shared.model.base_domain_model import BasePayload
-from erica.shared.model.erica_request import EricaRequest, RequestType
+from erica.job_service.job_service import JobService
+from erica.domain.model.base_domain_model import BasePayload
+from erica.domain.model.erica_request import EricaRequest, RequestType
 from erica.worker.request_processing.requests_controller import CheckTaxNumberRequestController
-from erica.shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.domain.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 
 class MockEricaRequestRepository(EricaRequestRepository, list):

@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Optional
 from uuid import UUID
 
-from erica.shared.model.base_domain_model import BaseDomainModel
+from erica.domain.model.base_domain_model import BaseDomainModel
 
 
 class RequestType(int, Enum):

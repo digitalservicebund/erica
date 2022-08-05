@@ -7,15 +7,15 @@ import pytest
 
 from erica.worker.jobs.freischaltcode_jobs import request_freischalt_code, activate_freischalt_code, \
     revocate_freischalt_code
-from erica.shared.job_service.job_service import JobService
-from erica.shared.job_service.job_service_factory import get_job_service
-from erica.shared.payload.freischaltcode import FreischaltCodeActivatePayload, FreischaltCodeRequestPayload, \
+from erica.job_service.job_service import JobService
+from erica.job_service.job_service_factory import get_job_service
+from erica.domain.payload.freischaltcode import FreischaltCodeActivatePayload, FreischaltCodeRequestPayload, \
     FreischaltCodeRevocatePayload
-from erica.shared.model.erica_request import EricaRequest, RequestType
+from erica.domain.model.erica_request import EricaRequest, RequestType
 from erica.worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_antrag_id_from_xml, \
     get_transferticket_from_xml
 from erica.worker.pyeric.pyeric_response import PyericResponse
-from erica.shared.sqlalchemy.database import session_scope
+from erica.domain.sqlalchemy.database import session_scope
 from tests.utils import read_text_from_sample
 
 
@@ -24,7 +24,7 @@ class TestRequestFreischaltcode:
     def test_perform_job_called_with_correct_parameters(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.freischaltcode_jobs.perform_job", AsyncMock()) as mock_perform_job:
             request_freischalt_code(request_id)
 
@@ -37,7 +37,7 @@ class TestRequestFreischaltcode:
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.freischaltcode_jobs.perform_job", AsyncMock()):
             request_freischalt_code(request_id)
 
@@ -53,7 +53,7 @@ class TestRequestFreischaltcode:
                 request_controller=mock_req_controller,
                 job_method=request_freischalt_code
             ))
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", mock_get_service), \
+        with patch("erica.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
                     "erica.worker.request_processing.requests_controller.UnlockCodeRequestController", mock_req_controller):
             request_freischalt_code("1234")
@@ -92,7 +92,7 @@ class TestActivateFreischaltcode:
     def test_perform_job_called_with_correct_parameters(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.freischaltcode_jobs.perform_job", AsyncMock()) as mock_perform_job:
             activate_freischalt_code(request_id)
 
@@ -105,7 +105,7 @@ class TestActivateFreischaltcode:
     def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.freischaltcode_jobs.perform_job", AsyncMock()):
             activate_freischalt_code(request_id)
 
@@ -121,7 +121,7 @@ class TestActivateFreischaltcode:
                 request_controller=mock_req_controller,
                 job_method=activate_freischalt_code
             ))
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", mock_get_service), \
+        with patch("erica.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
                     "erica.worker.request_processing.requests_controller.UnlockCodeActivationRequestController", mock_req_controller):
             activate_freischalt_code("1234")
@@ -160,7 +160,7 @@ class TestRevocateFreischaltcode:
     def test_perform_job_called_with_correct_parameters(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.freischaltcode_jobs.perform_job", AsyncMock()) as mock_perform_job:
             revocate_freischalt_code(request_id)
 
@@ -173,7 +173,7 @@ class TestRevocateFreischaltcode:
     async def test_get_job_service_called_with_correct_param(self):
         request_id = "1234"
 
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
+        with patch("erica.job_service.job_service_factory.get_job_service", MagicMock()) as mock_get_service, \
                 patch("erica.worker.jobs.freischaltcode_jobs.perform_job", AsyncMock()):
             revocate_freischalt_code(request_id)
 
@@ -189,7 +189,7 @@ class TestRevocateFreischaltcode:
                 request_controller=mock_req_controller,
                 job_method=revocate_freischalt_code
             ))
-        with patch("erica.shared.job_service.job_service_factory.get_job_service", mock_get_service), \
+        with patch("erica.job_service.job_service_factory.get_job_service", mock_get_service), \
                 patch(
                     "erica.worker.request_processing.requests_controller.UnlockCodeRevocationRequestController", mock_req_controller):
             revocate_freischalt_code("1234")

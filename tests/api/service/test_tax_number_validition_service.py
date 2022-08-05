@@ -5,7 +5,7 @@ import pytest
 
 from erica.api.dto.response_dto import JobState
 from erica.api.service.tax_number_validition_service import TaxNumberValidityService
-from erica.shared.model.erica_request import EricaRequest, RequestType, Status
+from erica.domain.model.erica_request import EricaRequest, RequestType, Status
 
 
 class TestTaxNumberValidityService:

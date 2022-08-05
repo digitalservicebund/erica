@@ -1,4 +1,4 @@
-from erica.shared.model.erica_request import RequestType
+from erica.domain.model.erica_request import RequestType
 
 
 class RequestTypeDoesNotMatchEndpointError(Exception):

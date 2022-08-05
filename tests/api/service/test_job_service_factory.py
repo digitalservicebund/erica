@@ -2,21 +2,21 @@ import pytest
 
 from erica.worker.jobs.freischaltcode_jobs import activate_freischalt_code, revocate_freischalt_code, \
     request_freischalt_code
-from erica.shared.job_service.job_service_factory import get_job_service
+from erica.job_service.job_service_factory import get_job_service
 from erica.worker.jobs.grundsteuer_jobs import send_grundsteuer
 from erica.worker.jobs.tax_declaration_jobs import send_est
 from erica.worker.jobs.tax_number_validation_jobs import check_tax_number
-from erica.shared.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
+from erica.domain.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
-from erica.shared.model.base_domain_model import BasePayload
-from erica.shared.model.erica_request import RequestType
-from erica.shared.payload.tax_declaration import TaxDeclarationPayload
-from erica.shared.payload.tax_number_validation import CheckTaxNumberPayload
+from erica.domain.model.base_domain_model import BasePayload
+from erica.domain.model.erica_request import RequestType
+from erica.domain.payload.tax_declaration import TaxDeclarationPayload
+from erica.domain.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.api.dto.grundsteuer_dto import GrundsteuerPayload
 from erica.worker.request_processing.requests_controller import UnlockCodeRevocationRequestController, \
     UnlockCodeRequestController, CheckTaxNumberRequestController, UnlockCodeActivationRequestController, \
     EstRequestController
-from erica.shared.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
+from erica.domain.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 from erica.worker.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 
 

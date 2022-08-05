@@ -2,7 +2,7 @@ from typing import Optional
 
 from erica.api.dto.response_dto import ResponseBaseDto
 from erica.api.dto.base_dto import BaseDto
-from erica.shared.payload.tax_number_validation import StateAbbreviation
+from erica.domain.payload.tax_number_validation import StateAbbreviation
 
 
 class CheckTaxNumberPayloadDto(BaseDto):

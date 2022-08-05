@@ -1,21 +1,21 @@
 from typing import Callable, Type
 from opyoid import Injector
 
-from erica.shared.application_module import ApplicationModule
+from erica.job_service.application_module import ApplicationModule
 from erica.worker.jobs.freischaltcode_jobs import activate_freischalt_code, request_freischalt_code, \
     revocate_freischalt_code
-from erica.shared.job_service.job_service import JobService, JobServiceInterface
+from erica.job_service.job_service import JobService, JobServiceInterface
 from erica.worker.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.api.dto.grundsteuer_dto import GrundsteuerPayload
 from erica.worker.jobs.grundsteuer_jobs import send_grundsteuer
 from erica.worker.jobs.tax_declaration_jobs import send_est
-from erica.shared.payload.freischaltcode import FreischaltCodeRevocatePayload, FreischaltCodeActivatePayload, \
+from erica.domain.payload.freischaltcode import FreischaltCodeRevocatePayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRequestPayload
-from erica.shared.model.base_domain_model import BasePayload
+from erica.domain.model.base_domain_model import BasePayload
 from erica.worker.jobs.tax_number_validation_jobs import check_tax_number
-from erica.shared.model.erica_request import RequestType
-from erica.shared.payload.tax_declaration import TaxDeclarationPayload
-from erica.shared.payload.tax_number_validation import CheckTaxNumberPayload
+from erica.domain.model.erica_request import RequestType
+from erica.domain.payload.tax_declaration import TaxDeclarationPayload
+from erica.domain.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.worker.request_processing.requests_controller import UnlockCodeRequestController, \
     UnlockCodeActivationRequestController, UnlockCodeRevocationRequestController, EricaRequestController, \
     CheckTaxNumberRequestController, EstRequestController

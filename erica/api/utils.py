@@ -5,7 +5,7 @@ from opyoid import Injector
 from erica.api.api_module import ApiModule
 from erica.api.dto.response_dto import JobState
 from erica.api.service.erica_request_service import EricaRequestServiceInterface
-from erica.shared.model.erica_request import Status
+from erica.domain.model.erica_request import Status
 
 
 def map_status(status: Status):

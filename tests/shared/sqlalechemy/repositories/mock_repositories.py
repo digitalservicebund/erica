@@ -5,8 +5,8 @@ from pydantic import BaseModel
 from sqlalchemy import Column, Integer, Enum
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 
-from erica.shared.model.erica_request import Status
-from erica.shared.sqlalchemy.erica_request_schema import BaseDbSchema
+from erica.domain.model.erica_request import Status
+from erica.domain.sqlalchemy.erica_request_schema import BaseDbSchema
 
 
 class MockDomainModel(BaseModel):

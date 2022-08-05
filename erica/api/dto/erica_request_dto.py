@@ -2,7 +2,7 @@ from typing import Optional
 from uuid import UUID
 
 from erica.api.dto.base_dto import BaseDto
-from erica.shared.model.erica_request import RequestType, Status
+from erica.domain.model.erica_request import RequestType, Status
 
 
 class BasePayloadDto(BaseDto):

@@ -1,7 +1,7 @@
 from uuid import UUID
 from erica.api.service.erica_request_service import EricaRequestService
 from erica.api.errors import RequestTypeDoesNotMatchEndpointError
-from erica.shared.model.erica_request import RequestType
+from erica.domain.model.erica_request import RequestType
 
 
 class BaseService:

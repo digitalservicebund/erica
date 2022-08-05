@@ -2,7 +2,7 @@ from abc import ABC
 from datetime import date
 from typing import Optional
 
-from erica.shared.model.base_domain_model import BasePayload
+from erica.domain.model.base_domain_model import BasePayload
 
 
 class FreischaltCodeRequestPayload(BasePayload, ABC):

@@ -3,9 +3,9 @@ from pydantic import BaseModel
 from sqlalchemy import Integer
 from sqlalchemy.orm import Session
 
-from erica.shared.repositories.base_repository_interface import BaseRepositoryInterface
-from erica.shared.model.base_domain_model import BaseDomainModel
-from erica.shared.sqlalchemy.erica_request_schema import BaseDbSchema
+from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
+from erica.domain.model.base_domain_model import BaseDomainModel
+from erica.domain.sqlalchemy.erica_request_schema import BaseDbSchema
 
 
 class EntityNotFoundError(Exception):
