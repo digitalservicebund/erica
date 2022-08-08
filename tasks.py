@@ -28,7 +28,7 @@ def run_api(c):
 
 @task
 def run_worker(c, number_of_workers=10):
-    c.run(f"huey_consumer.py erica.infrastructure.huey.huey -k thread -w {number_of_workers}")
+    c.run(f"huey_consumer.py erica.worker.huey.huey -k thread -w {number_of_workers}")
 
 @task
 def download_eric(c):
