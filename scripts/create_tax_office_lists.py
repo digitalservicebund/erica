@@ -1,9 +1,9 @@
 import json
 import click as click
 
-from erica.erica_legacy.pyeric.pyeric_controller import GetTaxOfficesPyericController
+from erica.worker.pyeric.pyeric_controller import GetTaxOfficesPyericController
 
-_STATIC_FOLDER = "erica/erica_legacy/static"
+_STATIC_FOLDER = "erica/api/static"
 _TAX_OFFICES_JSON_FILE_NAME = _STATIC_FOLDER + "/tax_offices.json"
 
 

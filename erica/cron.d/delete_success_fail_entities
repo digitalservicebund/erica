@@ -1,2 +1,0 @@
-SHELL=/bin/bash
-*/5 * * * * root cd /app && /usr/local/bin/pipenv run python erica/infrastructure/sqlalchemy/cron/update_entities_utils.py delete-success-fail-entities &> /app/cronjob_success_fail_output

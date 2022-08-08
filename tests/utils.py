@@ -1,19 +1,19 @@
 import os
 from datetime import date
 
-from erica.application.freischaltcode.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
+from erica.api.dto.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
-from erica.application.tax_declaration.tax_declaration_dto import TaxDeclarationDto
-from erica.application.tax_number_validation.tax_number_validation_dto import CheckTaxNumberDto
-from erica.domain.FreischaltCode.FreischaltCode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
+from erica.api.dto.tax_declaration_dto import TaxDeclarationDto
+from erica.api.dto.tax_number_validation_dto import CheckTaxNumberDto
+from erica.domain.payload.freischaltcode import FreischaltCodeRequestPayload, FreischaltCodeActivatePayload, \
     FreischaltCodeRevocatePayload
-from erica.domain.TaxDeclaration.TaxDeclaration import TaxDeclarationPayload
-from erica.domain.tax_number_validation.check_tax_number import CheckTaxNumberPayload
-from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerDto
-from tests.erica_legacy.samples.grundsteuer_sample_data import SampleGrundsteuerData
-from tests.erica_legacy.utils import create_meta_data, create_form_data
+from erica.domain.payload.tax_declaration import TaxDeclarationPayload
+from erica.domain.payload.tax_number_validation import CheckTaxNumberPayload
+from erica.api.dto.grundsteuer_dto import GrundsteuerDto
+from tests.worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
+from tests.worker.utils import create_meta_data, create_form_data
 
-samples_folder = os.path.join(os.path.dirname(__file__), 'erica_legacy/samples')
+samples_folder = os.path.join(os.path.dirname(__file__), 'worker/samples')
 
 
 def read_text_from_sample(sample_name, read_type='r'):
