@@ -2,13 +2,11 @@ import logging
 
 from fastapi import FastAPI, Request
 from fastapi_sqlalchemy import DBSessionMiddleware
-from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from erica.api.exception_handling import generate_exception_handlers
 from erica.api.v2.api_v2 import api_router_02
 from erica.config import get_settings
-from erica.legacy.api.api import api_router
 from erica.domain.sqlalchemy.database import engine_args
 
 app = FastAPI(
@@ -20,15 +18,6 @@ app = FastAPI(
     },
 )
 app.exception_handlers = generate_exception_handlers(app)
-
-
-if get_settings().dongle_connected:
-    # Add a metric from prometheus_client - these are automatically exported by the instrumentator.
-    up_metric = Gauge('up', 'Is the job available', ['job'])
-    up_metric.labels(job='erica').set(1.0)  # Always 1 when the erica_app is running.
-
-    # Add router
-    app.include_router(api_router)
 
 app.include_router(api_router_02)
 
