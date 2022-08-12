@@ -14,7 +14,7 @@ from erica.api.service.erica_request_service import EricaRequestServiceInterface
 from erica.config import get_settings
 from erica.worker.request_processing.erica_input.v1.erica_input import FormDataEst
 from erica.domain.sqlalchemy.database import get_engine, session_scope
-from tests.domain.sqlalchemy.repositories.mock_repositories import MockSchema
+from domain.sqlalchemy.repositories.mock_repositories import MockSchema
 
 
 @pytest.fixture
