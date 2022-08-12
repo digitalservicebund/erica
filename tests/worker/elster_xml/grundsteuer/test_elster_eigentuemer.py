@@ -4,7 +4,7 @@ from erica.worker.elster_xml.common.elsterify_fields import elsterify_anrede, el
 from erica.worker.elster_xml.grundsteuer.elster_eigentuemer import EAnteil, EGesetzlicherVertreter, EPersonData, \
     EEigentumsverh, EEmpfangsbevollmaechtigter
 from erica.api.dto.grundsteuer_input_eigentuemer import Anteil, Eigentuemer
-from tests.worker.samples.grundsteuer_sample_data import SampleVertreter, SampleBevollmaechtigter, SamplePerson, \
+from worker.samples.grundsteuer_sample_data import SampleVertreter, SampleBevollmaechtigter, SamplePerson, \
     SampleEigentuemer, DefaultSampleEigentuemer
 
 

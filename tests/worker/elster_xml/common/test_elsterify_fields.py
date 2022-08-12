@@ -6,7 +6,7 @@ from erica.worker.elster_xml.common.elsterify_fields import elsterify_anrede, el
     elsterify_grundstuecksart, elsterify_wirtschaftliche_einheit_zaehler, elsterify_eigentumsverhaeltnis
 from erica.api.dto.grundsteuer_input_eigentuemer import Anrede
 from erica.api.dto.grundsteuer_input_grundstueck import Grundstuecksart
-from tests.worker.samples.grundsteuer_sample_data import SampleEigentuemer, SamplePerson
+from worker.samples.grundsteuer_sample_data import SampleEigentuemer, SamplePerson
 
 
 class TestElsterifyAnrede:

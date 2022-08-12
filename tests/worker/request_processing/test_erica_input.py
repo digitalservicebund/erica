@@ -7,7 +7,7 @@ from pydantic import ValidationError
 
 from erica.worker.pyeric.eric_errors import InvalidBufaNumberError
 from erica.worker.request_processing.erica_input.v1.erica_input import FormDataEst, MetaDataEst
-from tests.worker.utils import TEST_EST_VERANLAGUNGSJAHR
+from worker.utils import TEST_EST_VERANLAGUNGSJAHR
 
 
 @pytest.fixture

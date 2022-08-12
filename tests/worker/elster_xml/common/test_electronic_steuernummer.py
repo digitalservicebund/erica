@@ -6,7 +6,7 @@ from erica.worker.elster_xml.common.electronic_steuernummer import generate_elec
     get_bufa_nr_from_steuernummer, \
     generate_electronic_steuernummer, get_bufa_nr_from_aktenzeichen
 from erica.worker.pyeric.eric_errors import InvalidBufaNumberError
-from tests.worker.utils import missing_pyeric_lib
+from worker.utils import missing_pyeric_lib
 
 
 @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")

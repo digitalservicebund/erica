@@ -10,8 +10,8 @@ from erica.domain.payload.freischaltcode import FreischaltCodeRequestPayload, Fr
 from erica.domain.payload.tax_declaration import TaxDeclarationPayload
 from erica.domain.payload.tax_number_validation import CheckTaxNumberPayload
 from erica.api.dto.grundsteuer_dto import GrundsteuerDto
-from tests.worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
-from tests.worker.utils import create_meta_data, create_form_data
+from worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
+from worker.utils import create_meta_data, create_form_data
 
 samples_folder = os.path.join(os.path.dirname(__file__), 'worker/samples')
 

@@ -6,8 +6,8 @@ from erica.worker.pyeric.check_elster_request_id import get_vast_list_from_xml, 
     add_new_request_id_to_cache_list, request_needs_testmerker, \
     reset_new_request_id_list
 from erica.worker.pyeric.pyeric_response import PyericResponse
-from tests.worker.utils import missing_pyeric_lib
-from tests.utils import read_text_from_sample
+from worker.utils import missing_pyeric_lib
+from utils import read_text_from_sample
 
 
 class TestGetVastListFromXml:

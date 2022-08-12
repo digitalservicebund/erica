@@ -6,7 +6,7 @@ from xml.etree.ElementTree import tostring, ParseError, Element, SubElement
 from erica.worker.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace, \
     get_elements_from_xml_element, get_elements_from_xml, get_elements_text_from_xml, \
     get_elements_text_from_xml_element, get_elements_key_value_from_xml
-from tests.utils import read_text_from_sample
+from utils import read_text_from_sample
 
 
 class TestRemoveDeclarationAndNamespace(unittest.TestCase):
