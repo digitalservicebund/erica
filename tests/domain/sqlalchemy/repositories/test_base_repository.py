@@ -6,7 +6,7 @@ import pytest
 
 from erica.domain.repositories.base_repository_interface import BaseRepositoryInterface
 from erica.domain.sqlalchemy.repositories.base_repository import BaseRepository, EntityNotFoundError
-from tests.domain.sqlalechemy.repositories.mock_repositories import MockDomainModel, MockSchema
+from tests.domain.sqlalchemy.repositories.mock_repositories import MockDomainModel, MockSchema
 
 
 class MockBaseRepository(
