@@ -3,8 +3,8 @@ import unittest
 from erica.worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get_state_ids, get_tax_offices, \
     get_antrag_id_from_xml, get_idnr_from_xml, get_transferticket_from_xml, get_address_from_xml, \
     get_relevant_beleg_ids
-from tests.worker.utils import replace_text_in_xml
-from tests.utils import read_text_from_sample
+from worker.utils import replace_text_in_xml
+from utils import read_text_from_sample
 
 
 class TestGetstateIds(unittest.TestCase):

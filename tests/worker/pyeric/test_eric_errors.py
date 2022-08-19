@@ -5,7 +5,7 @@ from erica.worker.pyeric.eric_errors import EricGlobalError, EricProcessNotSucce
     EricNullReturnedError, EricAlreadyRequestedError, EricAntragNotFoundError, check_result, EricUnknownError, \
     check_xml, EricInvalidXmlReturnedError, EricAlreadyRevokedError, check_handle, EricWrongTaxNumberError, \
     get_error_codes_from_server_err_msg
-from tests.utils import read_text_from_sample
+from utils import read_text_from_sample
 
 _VALIDATION_ERROR_CODE = 610001002
 _INITIALISATION_ERROR_CODES = [610001081, 610001082, 610001083]

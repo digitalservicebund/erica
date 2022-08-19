@@ -17,9 +17,9 @@ from erica.worker.request_processing.requests_controller import UnlockCodeReques
     UnlockCodeActivationRequestController, EstRequestController, EstValidationRequestController, \
     UnlockCodeRevocationRequestController, GetAddressRequestController, \
     GetBelegeRequestController, CheckTaxNumberRequestController
-from tests.worker.utils import create_est, missing_cert, missing_pyeric_lib, replace_text_in_xml, \
+from worker.utils import create_est, missing_cert, missing_pyeric_lib, replace_text_in_xml, \
     replace_subtree_in_xml, TEST_EST_VERANLAGUNGSJAHR
-from tests.utils import read_text_from_sample
+from utils import read_text_from_sample
 
 
 class TestEstValidationRequestProcess(unittest.TestCase):
