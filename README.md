@@ -135,4 +135,4 @@ pipenv run invoke test
 ```
 
 If you are missing the ERiC library or a suitable certificate then the respective 
-tests will be skipped.
+tests will be skipped

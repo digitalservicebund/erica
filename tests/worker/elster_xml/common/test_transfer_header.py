@@ -6,8 +6,8 @@ import pytest as pytest
 from erica.worker.elster_xml.common.transfer_header import add_transfer_header
 from erica.worker.elster_xml.transfer_header_fields import TransferHeaderFields
 from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful
-from tests.worker.utils import missing_cert, missing_pyeric_lib, remove_declaration_and_namespace
-from tests.utils import read_text_from_sample
+from worker.utils import missing_cert, missing_pyeric_lib, remove_declaration_and_namespace
+from utils import read_text_from_sample
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")

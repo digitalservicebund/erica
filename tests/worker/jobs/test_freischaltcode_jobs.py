@@ -16,7 +16,7 @@ from erica.worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get
     get_transferticket_from_xml
 from erica.worker.pyeric.pyeric_response import PyericResponse
 from erica.domain.sqlalchemy.database import session_scope
-from tests.utils import read_text_from_sample
+from utils import read_text_from_sample
 
 
 class TestRequestFreischaltcode:

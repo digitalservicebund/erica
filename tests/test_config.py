@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 
 from erica.config import Settings, DevelopmentSettings, StagingSettings, TestingSettings, get_settings, UnknownEricaEnvironment
-from tests.worker.utils import missing_cert, missing_pyeric_lib
+from worker.utils import missing_cert, missing_pyeric_lib
 
 
 class TestGetCertPath(unittest.TestCase):

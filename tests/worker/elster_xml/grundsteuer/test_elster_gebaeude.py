@@ -2,7 +2,7 @@ from erica.worker.elster_xml.grundsteuer.elster_gebaeude import EWohnUnter60, EW
     EWeitereWohn, EGaragen, EAngDurchschn, EAngWohn
 from erica.api.dto.grundsteuer_input_gebaeude import WeitereWohnraeumeDetails, \
     GaragenAnzahl
-from tests.worker.samples.grundsteuer_sample_data import SampleGebaeude
+from worker.samples.grundsteuer_sample_data import SampleGebaeude
 
 
 class TestEWohnUnter60:

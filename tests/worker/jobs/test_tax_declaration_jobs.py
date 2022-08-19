@@ -14,8 +14,8 @@ from erica.worker.elster_xml.xml_parsing.elster_specifics_xml_parsing import get
 from erica.worker.pyeric.pyeric_response import PyericResponse
 from erica.worker.request_processing.erica_input.v1.erica_input import MetaDataEst
 from erica.domain.sqlalchemy.database import session_scope
-from tests.worker.utils import TEST_EST_VERANLAGUNGSJAHR
-from tests.utils import read_text_from_sample
+from worker.utils import TEST_EST_VERANLAGUNGSJAHR
+from utils import read_text_from_sample
 
 
 class TestTaxDeclarationJob:

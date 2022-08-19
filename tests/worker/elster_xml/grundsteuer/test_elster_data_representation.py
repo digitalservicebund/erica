@@ -11,7 +11,7 @@ from erica.worker.elster_xml.grundsteuer.elster_grundstueck import ELage, EAngGr
     EGemarkungen, EAngGrund
 from erica.api.dto.grundsteuer_input_eigentuemer import Person
 from erica.api.dto.grundsteuer_input_grundstueck import Grundstuecksart
-from tests.worker.samples.grundsteuer_sample_data import SampleGrundstueck, SampleBevollmaechtigter, SamplePerson, \
+from worker.samples.grundsteuer_sample_data import SampleGrundstueck, SampleBevollmaechtigter, SamplePerson, \
     SampleEigentuemer, \
     DefaultSampleEigentuemer, SampleFlurstueck, SampleGrundsteuerData, SampleBruchteilsgemeinschaft
 
