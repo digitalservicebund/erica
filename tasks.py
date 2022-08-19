@@ -2,11 +2,6 @@ from invoke import task
 
 
 @task
-def test_integration(c):
-    c.run("pytest ./contract_tests/test_integration.py")
-
-
-@task
 def test_integration_queue(c):
     c.run("pytest ./contract_tests/test_integration_queue.py")
 
@@ -33,7 +28,7 @@ def run_api(c):
 
 @task
 def run_worker(c, number_of_workers=10):
-    c.run(f"huey_consumer.py erica.infrastructure.huey.huey -k thread -w {number_of_workers}")
+    c.run(f"huey_consumer.py erica.worker.huey.huey -k thread -w {number_of_workers}")
 
 @task
 def download_eric(c):

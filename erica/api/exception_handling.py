@@ -6,9 +6,9 @@ from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.responses import RedirectResponse
 
-from erica.application.errors.errors import RequestTypeDoesNotMatchEndpointError
-from erica.domain.Shared.EricaRequest import RequestType
-from erica.infrastructure.sqlalchemy.repositories.base_repository import EntityNotFoundError
+from erica.api.errors import RequestTypeDoesNotMatchEndpointError
+from erica.domain.model.erica_request import RequestType
+from erica.domain.sqlalchemy.repositories.base_repository import EntityNotFoundError
 
 job_type_to_endpoint = {
     RequestType.freischalt_code_request: 'get_fsc_request_job',
@@ -63,8 +63,7 @@ def generate_exception_handlers(app):
     # Re-using the default FastAPIs exception handler for RequestValidationError (needed for v1)
     # Needed because otherwise the handler "internal_server_error" would also catch these
     async def request_validation_error(request: Request, exc: RequestValidationError):
-        request_id = request.path_params.get('request_id')
-        logging.getLogger().error(f"Request for entity {request_id} had invalid input payload: {str(exc)}")
+        logging.getLogger().error(f"Request had invalid input payload: {str(exc)}")
         if str(request.url).removeprefix(str(request.base_url)).startswith("01"):
             return await request_validation_exception_handler(request, exc)
         else:

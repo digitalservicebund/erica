@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes cron procps 
 # Set up log forwarding to docker log collector (used by cron jobs)
 RUN ln -sf /proc/1/fd/1 /app/cronjob_success_fail_output && \
     ln -sf /proc/1/fd/1 /app/cronjob_not_processed_output
-COPY ./erica/cron.d/* /etc/cron.d/
+COPY ./cron.d/* /etc/cron.d/
 RUN chown root:root /etc/cron.d/* && \
     chmod go-wx /etc/cron.d/* && \
     chmod -x /etc/cron.d/*

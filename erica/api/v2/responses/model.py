@@ -1,9 +1,9 @@
-from erica.application.freischaltcode.freischaltcode import FreischaltcodeRequestAndActivationResponseDto, \
+from erica.api.dto.freischaltcode import FreischaltcodeRequestAndActivationResponseDto, \
     FreischaltcodeRevocationResponseDto
-from erica.application.shared.response_dto import ResponseErrorDto
-from erica.application.grundsteuer.grundsteuer_dto import GrundsteuerResponseDto
-from erica.application.tax_declaration.tax_declaration_dto import EstResponseDto
-from erica.application.tax_number_validation.tax_number_validation_dto import TaxResponseDto
+from erica.api.dto.response_dto import ResponseErrorDto
+from erica.api.dto.grundsteuer_dto import GrundsteuerResponseDto
+from erica.api.dto.tax_declaration_dto import EstResponseDto
+from erica.api.dto.tax_number_validation_dto import TaxResponseDto
 
 model_404_error_get_from_queue = {"model": ResponseErrorDto,
                                   "description": "The requested entity is not present in the database."}
