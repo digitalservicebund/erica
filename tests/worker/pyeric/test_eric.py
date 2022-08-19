@@ -5,11 +5,11 @@ from unittest.mock import patch, MagicMock, mock_open
 import pytest
 
 from erica.config import get_settings
-from tests.worker.utils import gen_random_key, missing_cert, missing_pyeric_lib
+from worker.utils import gen_random_key, missing_cert, missing_pyeric_lib
 from erica.worker.pyeric.eric import EricWrapper, EricDruckParameterT, EricVerschluesselungsParameterT, EricResponse, \
     get_eric_wrapper
 from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful, EricNullReturnedError, EricGlobalError
-from tests.utils import read_text_from_sample
+from utils import read_text_from_sample
 
 TEST_CERTIFICATE_PATH = 'erica/worker/instances/blueprint/cert.pfx'
 

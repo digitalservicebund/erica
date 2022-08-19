@@ -23,8 +23,8 @@ from erica.worker.elster_xml.est_mapping import PersonSpecificFieldId
 from erica.worker.pyeric.eric import get_eric_wrapper
 from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.worker.elster_xml.transfer_header_fields import TransferHeaderFields
-from tests.worker.utils import missing_cert, missing_pyeric_lib, use_testmerker_env_set_false, TEST_EST_VERANLAGUNGSJAHR
-from tests.utils import read_text_from_sample
+from worker.utils import missing_cert, missing_pyeric_lib, use_testmerker_env_set_false, TEST_EST_VERANLAGUNGSJAHR
+from utils import read_text_from_sample
 
 _BEANTRAGUNGSJAHR = TEST_EST_VERANLAGUNGSJAHR + 1
 

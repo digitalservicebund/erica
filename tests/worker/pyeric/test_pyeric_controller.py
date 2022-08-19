@@ -15,7 +15,7 @@ from erica.worker.pyeric.pyeric_controller import PyericProcessController, EstPy
     UnlockCodeRevocationPyericProcessController, BelegIdRequestPyericProcessController, DecryptBelegePyericController, \
     BelegRequestPyericProcessController, GetTaxOfficesPyericController, CheckTaxNumberPyericController, \
     GrundsteuerPyericProcessController
-from tests.worker.utils import missing_cert, missing_pyeric_lib, TEST_EST_VERANLAGUNGSJAHR
+from worker.utils import missing_cert, missing_pyeric_lib, TEST_EST_VERANLAGUNGSJAHR
 
 
 class TestPyericControllerInit(unittest.TestCase):

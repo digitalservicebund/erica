@@ -3,7 +3,7 @@ from pydantic import ValidationError
 
 from erica.api.dto.grundsteuer_input_eigentuemer import Person, Eigentuemer, PersoenlicheAngaben, \
     Adresse, Anteil
-from tests.worker.samples.grundsteuer_sample_data import SamplePerson
+from worker.samples.grundsteuer_sample_data import SamplePerson
 
 
 class TestPerson:

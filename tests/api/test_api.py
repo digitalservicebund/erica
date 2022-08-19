@@ -17,9 +17,9 @@ from erica.api.service.grundsteuer_service import GrundsteuerService
 from erica.api.service.tax_declaration_service import TaxDeclarationService
 from erica.api.service.tax_number_validition_service import TaxNumberValidityService
 from erica.domain.model.erica_request import EricaRequest, RequestType, Status
-from tests.api.service.test_job_service import MockEricaRequestRepository, MockRequestController, MockDto, \
+from api.service.test_job_service import MockEricaRequestRepository, MockRequestController, MockDto, \
     PickableMock
-from tests.utils import create_unlock_code_request, \
+from utils import create_unlock_code_request, \
     create_unlock_code_activation, create_unlock_code_revocation, create_tax_number_validity, create_send_est, \
     get_job_service_patch_string, create_send_grundsteuer
 

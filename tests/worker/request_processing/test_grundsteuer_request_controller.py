@@ -9,9 +9,9 @@ from xmldiff import main
 from erica.worker.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.worker.pyeric.pyeric_response import PyericResponse
 from erica.api.dto.grundsteuer_dto import GrundsteuerPayload
-from tests.worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
-from tests.worker.utils import missing_cert, missing_pyeric_lib
-from tests.utils import read_text_from_sample
+from worker.samples.grundsteuer_sample_data import SampleGrundsteuerData
+from worker.utils import missing_cert, missing_pyeric_lib
+from utils import read_text_from_sample
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ from erica.worker.elster_xml.common.elsterify_fields import elsterify_grundstuec
 from erica.worker.elster_xml.grundsteuer.elster_grundstueck import ELage, EMehrereGemeinden, EFlurstueck, \
     EAngFlaeche, EEntwZust, EAngGrund, EAngGrundstuecksart
 from erica.api.dto.grundsteuer_input_grundstueck import Grundstuecksart
-from tests.worker.samples.grundsteuer_sample_data import SampleGrundstueck, SampleFlurstueck
+from worker.samples.grundsteuer_sample_data import SampleGrundstueck, SampleFlurstueck
 
 
 class TestELage:
