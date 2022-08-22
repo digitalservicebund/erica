@@ -33,12 +33,12 @@ def set_not_processed_entities_to_failed():
     entities_updated = erica_request_repo.set_not_processed_entities_to_failed(
         get_settings().ttl_processing_request_entities_in_min)
     log_message = str(
-        entities_updated) + " new/scheduled/processing entities  set to failed at " + datetime.now().strftime(
+        entities_updated) + " new/scheduled/processing entities set to failed at " + datetime.now().strftime(
         "%H:%M:%S")
     if entities_updated > 0:
         logging.getLogger().error(log_message)
     else:
-        logging.getLogger().debug(log_message)
+        logging.getLogger().info(log_message)
 
 
 dictConfig({
