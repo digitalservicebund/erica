@@ -41,7 +41,7 @@ class EricVerschluesselungsParameterT(Structure):
 
 # TODO: Unify usage of EricWrapper; rethink having eric_wrapper as a parameter
 @contextmanager
-def get_eric_wrapper():
+def get_eric_wrapper(keep_logs=False):
     """This context manager returns an initialised eric wrapper; it will ensure that the ERiC API is shutdown after
     use. """
     eric = EricWrapper()
@@ -52,14 +52,17 @@ def get_eric_wrapper():
             yield eric
         finally:
             eric.shutdown()
-            with open(os.path.join(tmp_dir, 'eric.log')) as eric_log:
-                logger.debug(eric_log.read())
+            with open(os.path.join(tmp_dir, 'eric.log'), "r") as eric_log:
+                eric_log_data = eric_log.read()
+                logger.debug(eric_log_data)
+                if keep_logs:
+                    print(eric_log_data)
 
 
 def verify_using_stick():
     """Calls into eric to verify whether we are using a token of type "Stick"."""
 
-    with get_eric_wrapper() as eric_wrapper:
+    with get_eric_wrapper(keep_logs=True) as eric_wrapper:
         try:
             cert_properties = eric_wrapper.get_cert_properties()
             return "<TokenTyp>Stick</TokenTyp>" in cert_properties
