@@ -53,7 +53,7 @@ def get_eric_wrapper(keep_logs=False):
         finally:
             eric.shutdown()
             with open(os.path.join(tmp_dir, 'eric.log'), "r") as eric_log:
-                logger.debug(eric_log_data)
+                logger.debug(eric_log.read())
 
 
 def verify_using_stick():
