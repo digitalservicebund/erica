@@ -41,7 +41,7 @@ class EricVerschluesselungsParameterT(Structure):
 
 # TODO: Unify usage of EricWrapper; rethink having eric_wrapper as a parameter
 @contextmanager
-def get_eric_wrapper(keep_logs=False):
+def get_eric_wrapper():
     """This context manager returns an initialised eric wrapper; it will ensure that the ERiC API is shutdown after
     use. """
     eric = EricWrapper()
@@ -59,12 +59,13 @@ def get_eric_wrapper(keep_logs=False):
 def verify_using_stick():
     """Calls into eric to verify whether we are using a token of type "Stick"."""
 
-    with get_eric_wrapper(keep_logs=True) as eric_wrapper:
+    with get_eric_wrapper() as eric_wrapper:
         try:
             cert_properties = eric_wrapper.get_cert_properties()
             return "<TokenTyp>Stick</TokenTyp>" in cert_properties
         except Exception as e:
-            logger.debug("Exception while trying to verify Stick", exc_info=e)
+            with open(os.path.join(eric_wrapper.log_path, 'eric.log'), "r") as eric_log:
+                logger.info(f"Exception while trying to verify Stick. eric_log: {eric_log.read()}", exc_info=e)
             return False
 
 
@@ -96,6 +97,7 @@ class EricWrapper(object):
         """
         self.eric = CDLL(Settings.get_eric_dll_path(), RTLD_GLOBAL)
         self.eric_instance = None
+        self.log_path = None
         logger.debug(f"eric: {self.eric}")
 
     def initialise(self, log_path=None):
@@ -103,6 +105,7 @@ class EricWrapper(object):
         that the .so file was found and loaded successfully. Where `initialise` is called,
         `shutdown` shall be called when done.
         """
+        self.log_path = log_path
         fun_init = self.eric.EricMtInstanzErzeugen
         fun_init.argtypes = [c_char_p, c_char_p]
         fun_init.restype = c_void_p
