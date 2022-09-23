@@ -1,5 +1,6 @@
 import os
-import sys
+
+import click
 
 from erica.worker.elster_xml import elster_xml_generator
 from erica.worker.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
@@ -19,24 +20,20 @@ def _get_eric_response_datenteil(xml):
     return xml.find('.//DatenTeil')
 
 
-def get_idnr_status_list():
-    xml = elster_xml_generator.generate_full_vast_list_xml()
-    return _get_eric_response_datenteil(xml)
-
-
-def get_status_of_idnr(idnr):
-    xml = elster_xml_generator.generate_full_vast_list_xml(specific_idnr=idnr)
-    return _get_eric_response_datenteil(xml)
-
-
-if __name__ == "__main__":
-    os.chdir('../')  # Change the working directory to be able to find the eric binaries
-    requested_idnr = sys.argv[1] if len(sys.argv) > 1 else None
-    if requested_idnr:
-        permit_list = get_status_of_idnr(requested_idnr)
-    else:
-        permit_list = get_idnr_status_list()
+@click.command()
+@click.option('--idnr')
+@click.option('--status', multiple=True)
+@click.option('--start_date')
+@click.option('--end_date')
+def get_idnr_status_list(idnr=None, status=None, start_date=None, end_date=None):
+    xml = elster_xml_generator.generate_full_vast_list_xml(specific_idnr=idnr, specific_status=status,start_date=start_date, end_date=end_date)
+    permit_list = _get_eric_response_datenteil(xml)
     if permit_list:
         print(elster_xml_generator._pretty(permit_list))
     else:
         print("No list returned")
+
+
+if __name__ == "__main__":
+    os.chdir('../')  # Change the working directory to be able to find the eric binaries
+    get_idnr_status_list()
