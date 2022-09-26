@@ -25,8 +25,12 @@ def _get_eric_response_datenteil(xml):
 @click.option('--status', multiple=True)
 @click.option('--start_date')
 @click.option('--end_date')
-def get_idnr_status_list(idnr=None, status=None, start_date=None, end_date=None):
+@click.option('--show_xml')
+def get_idnr_status_list(idnr=None, status=None, start_date=None, end_date=None, show_xml=False):
     xml = elster_xml_generator.generate_full_vast_list_xml(specific_idnr=idnr, specific_status=status,start_date=start_date, end_date=end_date)
+    if show_xml:
+        print(xml)
+        print("---------------")
     permit_list = _get_eric_response_datenteil(xml)
     if permit_list:
         print(elster_xml_generator._pretty(permit_list))
