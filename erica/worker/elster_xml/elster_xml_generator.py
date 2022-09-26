@@ -311,6 +311,11 @@ def _add_vast_list_xml_nutzdaten(xml_top, input_data=None, version='7'):
             dateninhaber_xml = SubElement(suchkriterien_xml, "Dateninhaber")
             idnr_xml = SubElement(dateninhaber_xml, "DateninhaberIdNr")
             idnr_xml.text = input_data.get("idnr")
+        if input_data.get("status"):
+            status_list_xml = SubElement(suchkriterien_xml, "AntragsStatus")
+            for status in input_data.get("status"):
+                status_xml = SubElement(status_list_xml, "AntragsStatus")
+                status_xml.text = status
         if input_data.get("start_date") or input_data.get("end_date"):
             datum_xml = SubElement(suchkriterien_xml, "AntragsDatum")
             if input_data.get("start_date"):
@@ -319,11 +324,6 @@ def _add_vast_list_xml_nutzdaten(xml_top, input_data=None, version='7'):
             if input_data.get("end_date"):
                 datum_von_xml = SubElement(datum_xml, "Bis")
                 datum_von_xml.text = input_data.get("end_date")
-        if input_data.get("status"):
-            status_list_xml = SubElement(suchkriterien_xml, "AntragsStatus")
-            for status in input_data.get("status"):
-                status_xml = SubElement(status_list_xml, "AntragsStatus")
-                status_xml.text = status
 
 
 def _add_vast_beleg_ids_request_nutzdaten(xml_top, user_data, year='2021'):
