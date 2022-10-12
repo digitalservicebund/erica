@@ -41,5 +41,5 @@ session_scope = db
 
 engine_args = dict(json_serializer=orjson_serializer,
                    json_deserializer=orjson_deserializer,
-                   pool_size=15,
-                   max_overflow=30)
+                   pool_size=30,
+                   max_overflow=90)
