@@ -8,7 +8,7 @@ from typing import ByteString
 
 from erica.config import get_settings, Settings
 from erica.worker.pyeric.eric_errors import check_result, check_handle, check_xml, EricWrongTaxNumberError
-from erica.worker.huey import huey, eric_wrapper, get_initialised_eric_wrapper
+from erica.worker.huey import huey, get_initialised_eric_wrapper, shutdown_eric_wrapper, eric_wrapper_init
 
 logger = logging.getLogger('eric')
 
@@ -43,7 +43,20 @@ class EricVerschluesselungsParameterT(Structure):
 def get_eric_wrapper():
     """This context manager returns an initialised eric wrapper; it will ensure that the ERiC API is shutdown after
     use. """
-    yield get_initialised_eric_wrapper()
+    if get_settings().run_with_huey:
+        yield get_initialised_eric_wrapper()
+    else:
+        eric = EricWrapper()
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            eric.initialise(log_path=tmp_dir)
+
+            try:
+                yield eric
+            finally:
+                eric.shutdown()
+                with open(os.path.join(tmp_dir, 'eric.log'), "r") as eric_log:
+                    eric_log_data = eric_log.read()
+                    logger.debug(eric_log_data)
 
 
 def verify_using_stick():

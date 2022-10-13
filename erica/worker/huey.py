@@ -33,7 +33,6 @@ def init_sentry():
 
 def eric_wrapper_init():
     global eric_wrapper
-    print("eric_wrapper: " + str(eric_wrapper))
     if eric_wrapper is None:
         from erica.worker.pyeric.eric import EricWrapper
         eric_wrapper = EricWrapper()
@@ -46,9 +45,8 @@ def get_initialised_eric_wrapper():
 
 
 @huey.on_shutdown()
-def huey_shutdown():
+def shutdown_eric_wrapper():
     global eric_wrapper
-    print("eric_wrapper shutdown: " + str(eric_wrapper))
     eric_wrapper.shutdown()
 
 

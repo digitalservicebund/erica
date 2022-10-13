@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     use_immediate_worker: bool = False
     sentry_dsn_api: str = None
     sentry_dsn_worker: str = None
+    run_with_huey: bool = True
 
     class Config:
         dir = os.path.dirname(__file__)
@@ -64,6 +65,7 @@ class ProductionSettings(Settings):
     accept_test_bufa: bool = False
     sentry_dsn_api: str = "https://e8cbb2aaeed742c19965960951c7835c@o1248831.ingest.sentry.io/6466521"
     sentry_dsn_worker: str = "https://fe49771e429c48be8deb9074556c5463@o1248831.ingest.sentry.io/6466074"
+    run_with_huey: bool = True
 
 
 class StagingSettings(Settings):
@@ -72,6 +74,7 @@ class StagingSettings(Settings):
     accept_test_bufa: bool = True
     sentry_dsn_api: str = "https://e8cbb2aaeed742c19965960951c7835c@o1248831.ingest.sentry.io/6466521"
     sentry_dsn_worker: str = "https://fe49771e429c48be8deb9074556c5463@o1248831.ingest.sentry.io/6466074"
+    run_with_huey: bool = True
 
 
 class DevelopmentSettings(Settings):
