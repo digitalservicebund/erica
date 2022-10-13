@@ -1,5 +1,6 @@
 import logging
 import tempfile
+from threading import local
 
 import sentry_sdk
 
@@ -9,7 +10,7 @@ from erica.config import get_settings
 
 
 huey = RedisHuey('erica-huey-queue', url=get_settings().queue_url, immediate=get_settings().use_immediate_worker)
-eric_wrapper = None
+eric_wrapper = local()
 
 
 @huey.on_startup()
@@ -33,21 +34,19 @@ def init_sentry():
 
 def eric_wrapper_init():
     global eric_wrapper
-    if eric_wrapper is None:
-        from erica.worker.pyeric.eric import EricWrapper
-        eric_wrapper = EricWrapper()
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            eric_wrapper.initialise(log_path=tmp_dir)
+    from erica.worker.pyeric.eric import EricWrapper
+    eric_wrapper.wrapper_instance = EricWrapper()
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        eric_wrapper.wrapper_instance.initialise(log_path=tmp_dir)
 
 
 def get_initialised_eric_wrapper():
-    return eric_wrapper
+    return eric_wrapper.wrapper_instance
 
 
 @huey.on_shutdown()
 def shutdown_eric_wrapper():
-    global eric_wrapper
-    eric_wrapper.shutdown()
+    get_initialised_eric_wrapper().shutdown()
 
 
 @huey.pre_execute()

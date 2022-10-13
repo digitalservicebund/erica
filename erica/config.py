@@ -82,6 +82,7 @@ class DevelopmentSettings(Settings):
     using_stick: bool = False
     debug: bool = True
     accept_test_bufa: bool = True
+    run_with_huey: bool = True
 
 
 class TestingSettings(Settings):
