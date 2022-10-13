@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     use_immediate_worker: bool = False
     sentry_dsn_api: str = None
     sentry_dsn_worker: str = None
-    run_with_huey: bool = True
+    run_with_huey: bool = False
 
     class Config:
         dir = os.path.dirname(__file__)
