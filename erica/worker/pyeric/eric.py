@@ -8,10 +8,9 @@ from typing import ByteString
 
 from erica.config import get_settings, Settings
 from erica.worker.pyeric.eric_errors import check_result, check_handle, check_xml, EricWrongTaxNumberError
-from erica.worker.huey import huey
+from erica.worker.huey import huey, eric_wrapper, get_initialised_eric_wrapper
 
 logger = logging.getLogger('eric')
-
 
 @dataclass
 class EricResponse:
@@ -41,28 +40,16 @@ class EricVerschluesselungsParameterT(Structure):
 
 # TODO: Unify usage of EricWrapper; rethink having eric_wrapper as a parameter
 @contextmanager
-def get_eric_wrapper(keep_logs=True):
+def get_eric_wrapper():
     """This context manager returns an initialised eric wrapper; it will ensure that the ERiC API is shutdown after
     use. """
-    eric = EricWrapper()
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        eric.initialise(log_path=tmp_dir)
-
-        try:
-            yield eric
-        finally:
-            eric.shutdown()
-            with open(os.path.join(tmp_dir, 'eric.log'), "r") as eric_log:
-                eric_log_data = eric_log.read()
-                logger.debug(eric_log_data)
-                if keep_logs:
-                    print(eric_log_data)
+    yield get_initialised_eric_wrapper()
 
 
 def verify_using_stick():
     """Calls into eric to verify whether we are using a token of type "Stick"."""
 
-    with get_eric_wrapper(keep_logs=True) as eric_wrapper:
+    with get_eric_wrapper() as eric_wrapper:
         try:
             cert_properties = eric_wrapper.get_cert_properties()
             return "<TokenTyp>Stick</TokenTyp>" in cert_properties
@@ -71,7 +58,7 @@ def verify_using_stick():
             return False
 
 
-@huey.task()
+@huey.task(expires=120)
 def _verify_using_stick_with_queue():
     return verify_using_stick()
 

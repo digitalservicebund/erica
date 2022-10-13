@@ -2,6 +2,8 @@ import os
 import unittest
 from decimal import Decimal
 
+from erica.worker.huey import eric_wrapper_init, huey_shutdown
+
 os.environ["ERICA_ENV"] = 'testing'
 
 import pytest
@@ -15,6 +17,16 @@ from erica.config import get_settings
 from erica.worker.request_processing.erica_input.v1.erica_input import FormDataEst
 from erica.domain.sqlalchemy.database import get_engine, session_scope
 from domain.sqlalchemy.repositories.mock_repositories import MockSchema
+
+
+def pytest_sessionstart(session):
+    # Need to initialise the eric wrapper because no huey worker is started
+    eric_wrapper_init()
+
+
+def pytest_sessionfinish(session, exitstatus):
+    # Need to shutdown the eric wrapper because no huey worker is shut down
+    huey_shutdown()
 
 
 @pytest.fixture
