@@ -1,5 +1,6 @@
 import base64
 
+from erica.config import get_settings
 from erica.worker.pyeric.check_elster_request_id import tax_id_number_is_test_id_number
 from erica.worker.pyeric.pyeric_controller import GrundsteuerPyericProcessController
 from erica.worker.pyeric.pyeric_response import PyericResponse
@@ -16,7 +17,7 @@ class GrundsteuerRequestController(TransferticketRequestController):
     def _is_testmerker_used(self):
         if len(self.input_data.eigentuemer.person) >= 1 and self.input_data.eigentuemer.person[0].steuer_id:
             return tax_id_number_is_test_id_number(self.input_data.eigentuemer.person[0].steuer_id)
-        return True
+        return get_settings().use_testmerker
 
     def generate_full_xml(self, use_testmerker):
         """ Constructs the complete XML for the grundsteuer use case. """

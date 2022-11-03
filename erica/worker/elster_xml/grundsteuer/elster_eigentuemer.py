@@ -60,7 +60,7 @@ class EPersonData:
     E7404527: Optional[str]
     E7404522: str
     E7414601: Optional[str]
-    E7404519: str
+    E7404519: Optional[str]
     Anteil: EAnteil
     Ges_Vertreter: Optional[EGesetzlicherVertreter]
 
