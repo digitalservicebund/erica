@@ -179,7 +179,7 @@ def generate_full_vast_revocation_xml(form_data, th_fields=None, use_testmerker=
     return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_revocation_xml_nutzdaten, form_data)
 
 
-def generate_full_vast_list_xml(th_fields=None, use_testmerker=False, specific_idnr=None, specific_status=None):
+def generate_full_vast_list_xml(th_fields=None, use_testmerker=False, specific_idnr=None, specific_status=None, start_date=None, end_date=None):
     """ Generates the full xml for the VaSt SpezRechtListe. An example xml can be found in the Eric documentation under
         common/Schnittstellenbeschreibungen/Sonstige/VaSt-Berechtigungsmanagement/ElsterBRM/Beispiele """
 
@@ -188,7 +188,7 @@ def generate_full_vast_list_xml(th_fields=None, use_testmerker=False, specific_i
     if not specific_idnr and not specific_status:
         return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_list_xml_nutzdaten, None)
     return generate_full_xml(th_fields, _add_vast_xml_nutzdaten_header, _add_vast_list_xml_nutzdaten,
-                             {"idnr": specific_idnr, "status": specific_status})
+                             {"idnr": specific_idnr, "status": specific_status, "start_date": start_date, "end_date": end_date})
 
 
 def generate_full_vast_beleg_ids_request_xml(form_data, th_fields=None, use_testmerker=False):
@@ -316,6 +316,14 @@ def _add_vast_list_xml_nutzdaten(xml_top, input_data=None, version='7'):
             for status in input_data.get("status"):
                 status_xml = SubElement(status_list_xml, "AntragsStatus")
                 status_xml.text = status
+        if input_data.get("start_date") or input_data.get("end_date"):
+            datum_xml = SubElement(suchkriterien_xml, "AntragsDatum")
+            if input_data.get("start_date"):
+                datum_von_xml = SubElement(datum_xml, "Von")
+                datum_von_xml.text = input_data.get("start_date")
+            if input_data.get("end_date"):
+                datum_von_xml = SubElement(datum_xml, "Bis")
+                datum_von_xml.text = input_data.get("end_date")
 
 
 def _add_vast_beleg_ids_request_nutzdaten(xml_top, user_data, year='2021'):

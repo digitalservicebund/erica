@@ -1,6 +1,6 @@
 import unittest
 from ctypes import c_int
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch, MagicMock
 
 import pytest
 
@@ -12,30 +12,6 @@ from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful, EricNullRe
 from utils import read_text_from_sample
 
 TEST_CERTIFICATE_PATH = 'erica/worker/instances/blueprint/cert.pfx'
-
-
-@pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
-@pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
-class TestGetEricWrapper(unittest.TestCase):
-    def test_calls_initialise(self):
-        with patch('erica.worker.pyeric.eric.EricWrapper.initialise') as init_fun, \
-                patch('erica.worker.pyeric.eric.EricWrapper.shutdown'), \
-                patch('builtins.open', mock_open()):
-            with get_eric_wrapper():
-                # Test the context manager
-                pass
-
-            init_fun.assert_called_once()
-
-    def test_calls_shutdown(self):
-        with patch('erica.worker.pyeric.eric.EricWrapper.initialise'), \
-             patch('erica.worker.pyeric.eric.EricWrapper.shutdown') as shutdown_fun, \
-                patch('builtins.open', mock_open()):
-            with get_eric_wrapper():
-                # Test the context manager
-                pass
-
-            shutdown_fun.assert_called_once()
 
 
 class TestEricBasicSanity(unittest.TestCase):
