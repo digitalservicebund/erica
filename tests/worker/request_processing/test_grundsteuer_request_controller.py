@@ -6,6 +6,7 @@ from xml.etree import ElementTree
 import pytest
 from xmldiff import main
 
+from erica.config import get_settings
 from erica.worker.request_processing.grundsteuer_request_controller import GrundsteuerRequestController
 from erica.worker.pyeric.pyeric_response import PyericResponse
 from erica.api.dto.grundsteuer_dto import GrundsteuerPayload
@@ -32,10 +33,25 @@ class TestIsTestmerkerUsed:
         result = valid_grundsteuer_request_controller._is_testmerker_used()
         assert result is False
 
-    def test_if_no_tax_id_number_then_returns_true(self, valid_grundsteuer_request_controller):
-        valid_grundsteuer_request_controller.input_data.eigentuemer.person[0].steuer_id = None
-        result = valid_grundsteuer_request_controller._is_testmerker_used()
-        assert result is True
+    def test_if_no_tax_id_and_flag_set_then_returns_true(self, valid_grundsteuer_request_controller):
+        orig_flag = get_settings().use_testmerker
+        try:
+            get_settings().use_testmerker = True
+            valid_grundsteuer_request_controller.input_data.eigentuemer.person[0].steuer_id = None
+            result = valid_grundsteuer_request_controller._is_testmerker_used()
+            assert result is True
+        finally:
+            get_settings().use_testmerker = orig_flag
+
+    def test_if_no_tax_id_and_flag_not_set_then_returns_false(self, valid_grundsteuer_request_controller):
+        orig_flag = get_settings().use_testmerker
+        try:
+            get_settings().use_testmerker = False
+            valid_grundsteuer_request_controller.input_data.eigentuemer.person[0].steuer_id = None
+            result = valid_grundsteuer_request_controller._is_testmerker_used()
+            assert result is False
+        finally:
+            get_settings().use_testmerker = orig_flag
 
 
 @pytest.mark.skipif(missing_cert(), reason="skipped because of missing cert.pfx; see pyeric/README.md")
