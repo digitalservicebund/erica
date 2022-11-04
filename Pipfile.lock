@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f5dd31b42cf2576faf7b2935b98d54df76e0384c3e24c496d51291024d2b9f92"
+            "sha256": "25c86da9328bb05fc074df40fbc51948af0040f2e112afd2e6b569157f7c4fb9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -411,11 +411,11 @@
         },
         "prometheus-fastapi-instrumentator": {
             "hashes": [
-                "sha256:53b38095dda0a9e01876de5598c4dae911f5b38190967efd8d79aef8d26a83d6",
-                "sha256:900e191ecc09a10e928e4d8679b5bf114c47931be9f55f1fbb25baade173e16d"
+                "sha256:3651a72f73359a28e8afb0d370ebe3774147323ee2285e21236b229ce79172fc",
+                "sha256:b5206ea9aa6975a0b07f3bf7376932b8a1b2983164b5abb04878e75ba336d9ed"
             ],
             "index": "pypi",
-            "version": "==5.8.1"
+            "version": "==5.9.1"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -621,6 +621,10 @@
             "markers": "python_version >= '3.7'",
             "version": "==0.6.0"
         },
+        "sanitized-package": {
+            "editable": true,
+            "path": "."
+        },
         "sentry-sdk": {
             "hashes": [
                 "sha256:06c0fa9ccfdc80d7e3b5d2021978d6eb9351fa49db9b5847cf4d1f2a473414ad",
@@ -729,7 +733,7 @@
                 "sha256:3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e",
                 "sha256:b930dd878d5a8afb066a637fbb35144fe7901e3b209d1cd4f524bd0e9deee997"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_full_version < '4.0.0'",
             "version": "==1.26.12"
         },
         "uvicorn": {
@@ -1298,7 +1302,7 @@
                 "sha256:3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e",
                 "sha256:b930dd878d5a8afb066a637fbb35144fe7901e3b209d1cd4f524bd0e9deee997"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_full_version < '4.0.0'",
             "version": "==1.26.12"
         },
         "wrapt": {
