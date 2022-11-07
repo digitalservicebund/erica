@@ -35,6 +35,14 @@ def tax_id_number_is_test_id_number(tax_id_number):
     return tax_id_number[0] == "0"
 
 
+def tax_id_number_is_none_or_real_id_number(tax_id_number):
+    return tax_id_number is None or not tax_id_number_is_test_id_number(tax_id_number)
+
+
+def tax_id_number_is_none_or_test_id_number(tax_id_number):
+    return tax_id_number is None or tax_id_number_is_test_id_number(tax_id_number)
+
+
 def request_needs_testmerker(request_id):
     if request_id in NEW_REQUEST_ID_SINCE_LAST_CACHE_INVALIDATION:
         get_list_vast_requests.cache_clear()
