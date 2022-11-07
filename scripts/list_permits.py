@@ -6,6 +6,7 @@ from erica.worker.elster_xml import elster_xml_generator
 from erica.worker.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
 from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.worker.pyeric.pyeric_controller import PermitListingPyericProcessController
+from erica.worker.huey import huey
 
 
 def _get_eric_response_datenteil(xml):
@@ -26,6 +27,18 @@ def _get_eric_response_datenteil(xml):
 @click.option('--start_date')
 @click.option('--end_date')
 @click.option('--show_xml')
+@click.option('--use_huey')
+def main(idnr=None, status=None, start_date=None, end_date=None, show_xml=False, use_huey=False):
+    if use_huey:
+        return get_idnr_status_list_with_huey(idnr, status, start_date, end_date, show_xml)
+    return get_idnr_status_list(idnr, status, start_date, end_date, show_xml)
+
+
+@huey.task(expires=120)
+def get_idnr_status_list_with_huey(idnr=None, status=None, start_date=None, end_date=None, show_xml=False):
+    return get_idnr_status_list(idnr, status, start_date, end_date, show_xml)
+
+
 def get_idnr_status_list(idnr=None, status=None, start_date=None, end_date=None, show_xml=False):
     xml = elster_xml_generator.generate_full_vast_list_xml(specific_idnr=idnr, specific_status=status,start_date=start_date, end_date=end_date)
     if show_xml:
@@ -40,4 +53,4 @@ def get_idnr_status_list(idnr=None, status=None, start_date=None, end_date=None,
 
 if __name__ == "__main__":
     os.chdir('../')  # Change the working directory to be able to find the eric binaries
-    get_idnr_status_list()
+    main()
