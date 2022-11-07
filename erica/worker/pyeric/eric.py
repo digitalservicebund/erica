@@ -8,7 +8,7 @@ from typing import ByteString
 
 from erica.config import get_settings, Settings
 from erica.worker.pyeric.eric_errors import check_result, check_handle, check_xml, EricWrongTaxNumberError
-from erica.worker.huey import huey, get_initialised_eric_wrapper, shutdown_eric_wrapper, eric_wrapper_init
+from erica.worker.huey import huey, get_initialised_eric_wrapper
 
 logger = logging.getLogger('eric')
 
