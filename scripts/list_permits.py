@@ -2,7 +2,6 @@ import os
 
 import click
 
-from erica import get_settings
 from erica.worker.jobs.list_permission_jobs import get_idnr_status_list_with_huey, get_idnr_status_list
 
 
@@ -13,13 +12,9 @@ from erica.worker.jobs.list_permission_jobs import get_idnr_status_list_with_hue
 @click.option('--end_date')
 @click.option('--show_xml')
 @click.option('--use_huey')
-def main(idnr=None, status=None, start_date=None, end_date=None, show_xml=False, use_huey=None):
-    if not use_huey:
-        use_huey = get_settings().run_with_huey
+def main(idnr=None, status=None, start_date=None, end_date=None, show_xml=False, use_huey=False):
     if use_huey:
-        result = get_idnr_status_list_with_huey(idnr, status, start_date, end_date, show_xml)
-
-        return result(blocking=True, timeout=10)
+        return get_idnr_status_list_with_huey(idnr, status, start_date, end_date, show_xml)
     return get_idnr_status_list(idnr, status, start_date, end_date, show_xml)
 
 
