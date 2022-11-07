@@ -12,14 +12,16 @@ def get_idnr_status_list_with_huey(idnr=None, status=None, start_date=None, end_
 
 def get_idnr_status_list(idnr=None, status=None, start_date=None, end_date=None, show_xml=False):
     xml = elster_xml_generator.generate_full_vast_list_xml(specific_idnr=idnr, specific_status=status,start_date=start_date, end_date=end_date)
+    printable_result = ""
     if show_xml:
-        print(xml)
-        print("---------------")
+        printable_result += f"{xml}\n---------------"
     permit_list = _get_eric_response_datenteil(xml)
     if permit_list:
-        print(elster_xml_generator._pretty(permit_list))
+        printable_result += f"\n{elster_xml_generator._pretty(permit_list)}"
     else:
-        print("No list returned")
+        printable_result += "No list returned"
+
+    return printable_result
 
 
 def _get_eric_response_datenteil(xml):
