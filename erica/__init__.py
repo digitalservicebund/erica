@@ -9,6 +9,10 @@ from erica.api.v2.api_v2 import api_router_02
 from erica.config import get_settings
 from erica.domain.sqlalchemy.database import engine_args
 
+# Import this here to make it available for the huey TaskRegistry https://huey.readthedocs.io/en/latest/imports.html#imports
+from scripts.list_permits import get_idnr_status_list_with_huey
+
+
 app = FastAPI(
     title="Erica Service",
     version="2.0.0",
