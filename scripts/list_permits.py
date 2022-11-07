@@ -19,8 +19,8 @@ def main(idnr=None, status=None, start_date=None, end_date=None, show_xml=False,
     if use_huey:
         result = get_idnr_status_list_with_huey(idnr, status, start_date, end_date, show_xml)
 
-        return result(blocking=True, timeout=10)
-    return get_idnr_status_list(idnr, status, start_date, end_date, show_xml)
+        print(result(blocking=True, timeout=10))
+    print(get_idnr_status_list(idnr, status, start_date, end_date, show_xml))
 
 
 if __name__ == "__main__":
