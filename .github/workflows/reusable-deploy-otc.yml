@@ -70,7 +70,7 @@ jobs:
       - name: Commit and push changes for infra repository
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: EndBug/add-and-commit@050a66787244b10a4874a2a5f682130263edc192 # == v9.0.0
+        uses: EndBug/add-and-commit@61a88be553afe4206585b31aa72387c64295d08b # == v9.1.1
         with:
           add: manifests/overlays/${{ inputs.environment }}/kustomization.yaml
           message: "Bump ${{ inputs.environment }} image to ${{ inputs.imageTag }}"
