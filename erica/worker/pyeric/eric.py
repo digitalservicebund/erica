@@ -71,7 +71,7 @@ def verify_using_stick():
             return False
 
 
-@huey.task(expires=480)
+@huey.task(expires=120)
 def _verify_using_stick_with_queue():
     return verify_using_stick()
 
