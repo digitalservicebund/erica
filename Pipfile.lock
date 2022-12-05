@@ -324,11 +324,11 @@
         },
         "opyoid": {
             "hashes": [
-                "sha256:1a6af051c7904ef4e8b7b1e6fc72747479c855ba97c60e26f4debef3c31aa7a6",
-                "sha256:524a2b05a2a57f8db58b3a2ec751e297a00e6d920d4b4b29ace4287eb4168bd0"
+                "sha256:49a47254bff7f0ca4a5bad6e83f8b04d94c7ccfd7390e9391ef756f272991cf4",
+                "sha256:d570999e449267238fa5136e15db774fbfabf0717f772ef17e610ffe01c5570b"
             ],
             "index": "pypi",
-            "version": "==1.6.0"
+            "version": "==1.7.0"
         },
         "orjson": {
             "hashes": [
