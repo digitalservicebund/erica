@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
+from erica import get_settings
 from erica.domain.model.erica_request import EricaRequest, Status
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.sqlalchemy.erica_request_schema import EricaRequestSchema
@@ -67,7 +68,7 @@ class EricaRequestRepository(
                        self.DatabaseEntity.status == Status.processing),
                    self.DatabaseEntity.updated_at < dt.datetime.now() - dt.timedelta(
                        minutes=ttl)).values(
-            status=Status.failed, error_code="999", error_message="Request could not be processed within 2 minutes.")
+            status=Status.failed, error_code="999", error_message=f"Request could not be processed within {get_settings().ttl_processing_request_entities_in_min} minutes.")
         updated = self.db_connection.execute(stmt)
         self.db_connection.commit()
         return updated.rowcount
