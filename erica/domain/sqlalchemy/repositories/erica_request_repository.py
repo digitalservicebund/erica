@@ -6,7 +6,6 @@ from pydantic import BaseModel
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from erica import get_settings
 from erica.domain.model.erica_request import EricaRequest, Status
 from erica.domain.repositories.erica_request_repository_interface import EricaRequestRepositoryInterface
 from erica.domain.sqlalchemy.erica_request_schema import EricaRequestSchema
@@ -63,6 +62,7 @@ class EricaRequestRepository(
         return deleted.rowcount
 
     def set_not_processed_entities_to_failed(self, ttl) -> int:
+        from erica import get_settings
         stmt = self.DatabaseEntity.__table__.update() \
             .where(or_(self.DatabaseEntity.status == Status.new, self.DatabaseEntity.status == Status.scheduled,
                        self.DatabaseEntity.status == Status.processing),
