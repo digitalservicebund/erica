@@ -424,7 +424,7 @@ class TestV2UnlockCodeRequest:
     def test_if_post_with_full_data_then_return_201_and_location_with_valid_uuid(self, full_unlock_code_request_data):
         response = requests.post(ERICA_TESTING_URL + self.endpoint,
                                  data=json.dumps(full_unlock_code_request_data, default=str))
-        assert response.status_code == 202
+        assert response.status_code == 201
         location = response.headers['Location'].split("/")
         assert "/" + location[0] + "/" + location[1] + "/" + location[2] == self.endpoint
         assert is_valid_uuid(location[3])
