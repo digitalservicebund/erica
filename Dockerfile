@@ -14,7 +14,7 @@ ENV ELSTER_DATENLIEFERANT=$elster_datenlieferant
 ENV ELSTER_HERSTELLER_ID=$elster_hersteller_id
 
 WORKDIR /app
-RUN echo "APT::Default-Release \"bullseye\";" >> /etc/apt/apt.conf.d/default-release && \
+RUN echo "Package: *\nPin: release n=bookworm\nPin-Priority: 50\n" >> /etc/apt/preferences && \
     echo "deb http://ftp.debian.org/debian bookworm main" >> /etc/apt/sources.list.d/bookworm.list && \
     apt-get update && \
     apt-get install --no-install-recommends -y -t bookworm pcsc-tools pcscd && \
