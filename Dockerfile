@@ -13,7 +13,7 @@ ARG elster_hersteller_id
 ENV ELSTER_DATENLIEFERANT=$elster_datenlieferant
 ENV ELSTER_HERSTELLER_ID=$elster_hersteller_id
 
-RUN groupadd -r erica-user && useradd -r  -u 1001 -g erica-user erica-user
+RUN groupadd -r -u 1001 erica-user && useradd -r -g erica-user erica-user
 WORKDIR /app
 RUN echo "Package: *\nPin: release n=bookworm\nPin-Priority: 50\n" >> /etc/apt/preferences && \
     echo "deb http://ftp.debian.org/debian bookworm main" >> /etc/apt/sources.list.d/bookworm.list && \
