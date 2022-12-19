@@ -14,11 +14,8 @@ ENV ELSTER_DATENLIEFERANT=$elster_datenlieferant
 ENV ELSTER_HERSTELLER_ID=$elster_hersteller_id
 
 WORKDIR /app
-RUN echo "Package: *\nPin: release n=bookworm\nPin-Priority: 50\n" >> /etc/apt/preferences && \
-    echo "deb http://ftp.debian.org/debian bookworm main" >> /etc/apt/sources.list.d/bookworm.list && \
-    apt-get update && \
-    apt-get install --no-install-recommends -y -t bookworm pcsc-tools pcscd && \
-    apt-get install --no-install-recommends -y procps unzip curl && \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y pcsc-tools pcscd procps unzip curl && \
     rm -rf /var/lib/apt/lists/* && \
     curl https://dbs-download.obs.otc.t-systems.com/rds/ca-bundle.pem -o /opt/rds-ca-bundle.pem
 
