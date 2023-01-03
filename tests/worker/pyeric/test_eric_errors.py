@@ -4,7 +4,7 @@ from erica.worker.pyeric.eric_errors import EricGlobalError, EricProcessNotSucce
     EricGlobalInitialisationError, EricTransferError, EricCryptError, EricIOError, EricPrintError, \
     EricNullReturnedError, EricAlreadyRequestedError, EricAntragNotFoundError, check_result, EricUnknownError, \
     check_xml, EricInvalidXmlReturnedError, EricAlreadyRevokedError, check_handle, EricWrongTaxNumberError, \
-    get_error_codes_from_server_err_msg
+    get_error_codes_from_server_err_msg, EricWrongAktenzeichenError
 from utils import read_text_from_sample
 
 _VALIDATION_ERROR_CODE = 610001002
@@ -148,6 +148,17 @@ class TestGenerateErrorResponse(unittest.TestCase):
 
         self.assertEqual(expected_response, actual_response)
 
+    def test_if_validation_error_with_correct_res_code_and_eric_response_invalid_aktenzeichen_then_set_correct_error_code_and_msg_in_response(self):
+        server_err_msg = "This is yet another message to youhuh"
+        expected_response = {"code": 14,
+                             "message": EricProcessNotSuccessful.get_eric_error_code_message(8)}
+        error = EricWrongAktenzeichenError()
+        error.server_err_msg = server_err_msg
+
+        actual_response = error.generate_error_response()
+
+        self.assertEqual(expected_response, actual_response)
+
 
 class TestCheckResCode(unittest.TestCase):
 
@@ -230,6 +241,11 @@ class TestCheckResCode(unittest.TestCase):
         eric_response = "SOME DUMMY TEXT: ungültige Steuernummer. MORE DUMMY TEXT".encode()
         server_response = b""
         self.assertRaises(EricWrongTaxNumberError, check_result, 610001002, eric_response, server_response)
+
+    def test_if_res_code_and_response_invalid_aktenzeichen_then_raise_invalid_tax_number_error(self):
+        eric_response = b'<?xml version="1.0" encoding="UTF-8"?>\r\n<EricBearbeiteVorgang xmlns="http://www.elster.de/EricXML/1.0/EricBearbeiteVorgang">\r\n\t<FehlerRegelpruefung>\r\n\t\t<Nutzdatenticket>1</Nutzdatenticket>\r\n\t\t<Feldidentifikator>/Vorsatz[1]/Aktenzeichen[1]</Feldidentifikator>\r\n\t\t<Mehrfachzeilenindex>1</Mehrfachzeilenindex>\r\n\t\t<LfdNrVordruck>1</LfdNrVordruck>\r\n\t\t<RegelName>formalePruefung</RegelName>\r\n\t\t<FachlicheFehlerId>ungueltigesEinheitswertAktenzeichen</FachlicheFehlerId>\r\n\t\t<Text>Feld \'$/Vorsatz[1]/Aktenzeichen[1]$\': Sie haben ein ung\xc3\xbcltiges Aktenzeichen angegeben.</Text>\r\n\t</FehlerRegelpruefung>\r\n</EricBearbeiteVorgang>'
+        server_response = b""
+        self.assertRaises(EricWrongAktenzeichenError, check_result, 610001002, eric_response, server_response)
 
 
 class TestCheckHandle(unittest.TestCase):

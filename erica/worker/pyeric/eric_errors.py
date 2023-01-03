@@ -14,6 +14,7 @@ _ERIC_CUSTOM_ERROR_CODES = {
     5: "ELSTER_REQUEST_ID_UNKNOWN",
     6: "INVALID_BUFA_NUMBER",
     7: "INVALID_TAX_NUMBER",
+    8: "INVALID_AKTENZEICHEN",
 }
 
 _ERIC_GLOBAL_VALIDATION_ERRORS = {
@@ -36,6 +37,10 @@ _ERIC_GLOBAL_INITIALISATION_ERRORS = {
 
 _ERIC_GLOBAL_TAX_NUMBER_INVALID_ERRORS = {
     610001034: "ERIC_GLOBAL_STEUERNUMMER_UNGUELTIG",
+}
+
+_ERIC_GLOBAL_AKTENZEICHEN_INVALID_ERRORS = {
+    610001527: "ERIC_GLOBAL_EWAZ_UNGUELTIG",
 }
 
 _ERIC_GLOBAL_ERRORS = {
@@ -102,7 +107,6 @@ _ERIC_GLOBAL_ERRORS = {
     610001519: "ERIC_GLOBAL_ZULASSUNGSNUMMER_ZU_LANG",
     610001525: "ERIC_GLOBAL_IDNUMMER_UNGUELTIG",
     610001526: "ERIC_GLOBAL_NULL_PARAMETER",
-    610001527: "ERIC_GLOBAL_EWAZ_UNGUELTIG",
     610001528: "ERIC_GLOBAL_EWAZ_LANDESKUERZEL_UNBEKANNT",
     610001851: "ERIC_GLOBAL_UPDATE_NECESSARY",
     610001860: "ERIC_GLOBAL_EINSTELLUNG_NAME_UNGUELTIG",
@@ -455,6 +459,19 @@ class EricWrongTaxNumberError(EricGlobalValidationError):
         return 'The tax number is invalid'
 
 
+class EricWrongAktenzeichenError(EricGlobalValidationError):
+    """Exception raised in case the entered aktenzeichen is invalid"""
+    ERROR_CODE = 14
+
+    # Overwrite initaliser to set custom res_code
+    def __init__(self, res_code=8, eric_response=None):
+        # This error always has the res_code 8
+        super().__init__(res_code, eric_response)
+
+    def __str__(self):
+        return 'The aktenzeichen is invalid'
+
+
 class EricInvalidXmlReturnedError(EricProcessNotSuccessful):
     """Exception raised in case an invalid xml is returned by the ERiC binaries.
     """
@@ -479,6 +496,8 @@ def check_result(rescode, eric_response=None, server_response=None, server_err_m
         raise EricGlobalInitialisationError(rescode)
     elif rescode in _ERIC_GLOBAL_TAX_NUMBER_INVALID_ERRORS:
         raise EricWrongTaxNumberError(rescode)
+    elif rescode in _ERIC_GLOBAL_AKTENZEICHEN_INVALID_ERRORS:
+        raise EricWrongAktenzeichenError(rescode)
     elif rescode in _ERIC_GLOBAL_ERRORS:
         raise EricGlobalError(rescode)
     elif rescode in _ERIC_TRANSFER_ERRORS:
@@ -498,6 +517,8 @@ def check_result(rescode, eric_response=None, server_response=None, server_err_m
 def _create_validation_error(rescode, eric_response):
     if eric_response and 'ungültige Steuernummer' in eric_response.decode():
         raise EricWrongTaxNumberError(eric_response=eric_response)
+    elif eric_response and 'ungueltigesEinheitswertAktenzeichen' in eric_response.decode():
+        raise EricWrongAktenzeichenError(eric_response=eric_response)
     else:
         raise EricGlobalValidationError(rescode, eric_response)
 
