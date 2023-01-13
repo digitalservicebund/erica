@@ -5,7 +5,7 @@ from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.worker.pyeric.pyeric_controller import PermitListingPyericProcessController
 
 
-@huey.task(expires=540)
+@huey.task(expires=240)
 def get_idnr_status_list_with_huey(idnr=None, status=None, start_date=None, end_date=None, show_xml=False):
     return get_idnr_status_list(idnr, status, start_date, end_date, show_xml)
 
