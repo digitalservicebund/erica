@@ -71,7 +71,7 @@ def verify_using_stick():
             return False
 
 
-@huey.task(expires=240)
+@huey.task(expires=get_settings().ttl_job_expires_in_sec)
 def _verify_using_stick_with_queue():
     return verify_using_stick()
 

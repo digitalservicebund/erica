@@ -1,3 +1,4 @@
+from erica import get_settings
 from erica.worker.elster_xml import elster_xml_generator
 from erica.worker.elster_xml.xml_parsing.erica_xml_parsing import remove_declaration_and_namespace
 from erica.worker.huey import huey
@@ -5,7 +6,7 @@ from erica.worker.pyeric.eric_errors import EricProcessNotSuccessful
 from erica.worker.pyeric.pyeric_controller import PermitListingPyericProcessController
 
 
-@huey.task(expires=240)
+@huey.task(expires=get_settings().ttl_job_expires_in_sec)
 def get_idnr_status_list_with_huey(idnr=None, status=None, start_date=None, end_date=None, show_xml=False):
     return get_idnr_status_list(idnr, status, start_date, end_date, show_xml)
 
