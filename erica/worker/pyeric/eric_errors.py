@@ -14,6 +14,7 @@ _ERIC_CUSTOM_ERROR_CODES = {
     5: "ELSTER_REQUEST_ID_UNKNOWN",
     6: "INVALID_BUFA_NUMBER",
     7: "INVALID_TAX_NUMBER",
+    8: "ALREADY_ACTIVATED_UNLOCK_CODE",
 }
 
 _ERIC_GLOBAL_VALIDATION_ERRORS = {
@@ -455,6 +456,17 @@ class EricWrongTaxNumberError(EricGlobalValidationError):
         return 'The tax number is invalid'
 
 
+class EricAlreadyActivatedError(EricTransferError):
+    """Exception raised in case the unlock code was already activated.
+    """
+    ERROR_CODE = 14
+
+    # Overwrite initaliser to set custom res_code
+    def __init__(self, eric_response=None, server_response=None, server_err_msg=None):
+        # This error always has the res_code 3
+        super().__init__(8, eric_response, server_response, server_err_msg)
+
+
 class EricInvalidXmlReturnedError(EricProcessNotSuccessful):
     """Exception raised in case an invalid xml is returned by the ERiC binaries.
     """
@@ -506,6 +518,9 @@ def _create_transfer_error(rescode, eric_response, server_response, server_err_m
     if rescode == 610101292 and server_err_msg and is_error_in_server_err_msg(server_err_msg.get('NDH_ERR_XML'),
                                                                               '371015213'):
         raise EricAlreadyRevokedError(eric_response, server_response, server_err_msg)
+    if rescode == 610101292 and server_err_msg and is_error_in_server_err_msg(server_err_msg.get('NDH_ERR_XML'),
+                                                                              '371015212'):
+        raise EricAlreadyActivatedError(eric_response, server_response, server_err_msg)
     elif server_response and rescode in _FSC_ALREADY_REQUESTED_ERRORS and \
             ("Es besteht bereits ein offener Antrag auf Erteilung einer Berechtigung zum Datenabruf"
              in server_response.decode() or
