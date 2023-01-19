@@ -463,7 +463,7 @@ class EricAlreadyActivatedError(EricTransferError):
 
     # Overwrite initaliser to set custom res_code
     def __init__(self, eric_response=None, server_response=None, server_err_msg=None):
-        # This error always has the res_code 3
+        # This error always has the res_code 8
         super().__init__(8, eric_response, server_response, server_err_msg)
 
 
