@@ -154,7 +154,6 @@ class TestGenerateErrorResponse(unittest.TestCase):
                              "message": EricProcessNotSuccessful.get_eric_error_code_message(8),
                              'server_err_msg': server_err_msg}
         error = EricAlreadyActivatedError()
-        error.server_response = b"Es besteht bereits ein offener Antrag auf Erteilung einer Berechtigung zum Datenabruf"
         error.server_err_msg = server_err_msg
 
         actual_response = error.generate_error_response()
