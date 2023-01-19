@@ -4,7 +4,7 @@ from erica.worker.pyeric.eric_errors import EricGlobalError, EricProcessNotSucce
     EricGlobalInitialisationError, EricTransferError, EricCryptError, EricIOError, EricPrintError, \
     EricNullReturnedError, EricAlreadyRequestedError, EricAntragNotFoundError, check_result, EricUnknownError, \
     check_xml, EricInvalidXmlReturnedError, EricAlreadyRevokedError, check_handle, EricWrongTaxNumberError, \
-    get_error_codes_from_server_err_msg
+    get_error_codes_from_server_err_msg, EricAlreadyActivatedError
 from utils import read_text_from_sample
 
 _VALIDATION_ERROR_CODE = 610001002
@@ -148,6 +148,18 @@ class TestGenerateErrorResponse(unittest.TestCase):
 
         self.assertEqual(expected_response, actual_response)
 
+    def test_if_transfer_error_with_correct_res_code_and_eric_response_already_activated_then_set_correct_error_code_and_msg_in_response(self):
+        server_err_msg = {'TH_RES_CODE': '0', 'TH_ERR_MSG': 'OK', 'NDH_ERR_XML': '<?xml version="1.0" encoding="UTF-8"?>\r\n<EricGetErrormessagesFromXMLAnswer xmlns="http://www.elster.de/EricXML/1.0/EricGetErrormessagesFromXMLAnswer">\r\n\t<Fehler>\r\n\t\t<Code>371015212</Code>\r\n\t\t<Meldung>Der Antrag auf Erteilung einer Berechtigung zum Datenabruf für diesen Dateninhaber ist bereits genehmigt worden.</Meldung>\r\n\t</Fehler>\r\n</EricGetErrormessagesFromXMLAnswer>'}
+        expected_response = {"code": 14,
+                             "message": EricProcessNotSuccessful.get_eric_error_code_message(8),
+                             'server_err_msg': server_err_msg}
+        error = EricAlreadyActivatedError()
+        error.server_err_msg = server_err_msg
+
+        actual_response = error.generate_error_response()
+
+        self.assertEqual(expected_response, actual_response)
+
 
 class TestCheckResCode(unittest.TestCase):
 
@@ -225,6 +237,12 @@ class TestCheckResCode(unittest.TestCase):
                           'TH_ERR_MSG': None,
                           'NDH_ERR_XML': '<?xml version="1.0" encoding="UTF-8"?><EricGetErrormessagesFromXMLAnswer xmlns="http://www.elster.de/EricXML/1.0/EricGetErrormessagesFromXMLAnswer">\t<Fehler>\t\t<Code>371015213</Code>\t\t<Meldung>Der Antrag auf Erteilung einer Berechtigung zum Datenabruf für diesen Dateninhaber bzw. der genehmigte Antrag auf Datenabruf (Berechtigung) ist bereits zurückgezogen worden.</Meldung>\t</Fehler>   <Fehler>\t\t<Code>371015212</Code>\t\t<Meldung>Der Antrag auf Erteilung einer Berechtigung zum Datenabruf für diesen Dateninhaber bzw. der genehmigte Antrag auf Datenabruf (Berechtigung) ist bereits zurückgezogen worden.</Meldung>\t</Fehler></EricGetErrormessagesFromXMLAnswer>'}
         self.assertRaises(EricAlreadyRevokedError, check_result, 610101292, eric_response, server_response, server_err_msg)
+
+    def test_if_res_code_and_response_request_already_activated_then_raise_already_activated_error(self):
+        eric_response = b""
+        server_response = b""
+        server_err_msg = {'TH_RES_CODE': '0', 'TH_ERR_MSG': 'OK', 'NDH_ERR_XML': '<?xml version="1.0" encoding="UTF-8"?>\r\n<EricGetErrormessagesFromXMLAnswer xmlns="http://www.elster.de/EricXML/1.0/EricGetErrormessagesFromXMLAnswer">\r\n\t<Fehler>\r\n\t\t<Code>371015212</Code>\r\n\t\t<Meldung>Der Antrag auf Erteilung einer Berechtigung zum Datenabruf für diesen Dateninhaber ist bereits genehmigt worden.</Meldung>\r\n\t</Fehler>\r\n</EricGetErrormessagesFromXMLAnswer>'}
+        self.assertRaises(EricAlreadyActivatedError, check_result, 610101292, eric_response, server_response, server_err_msg)
 
     def test_if_res_code_and_response_invalid_tax_number_then_raise_invalid_tax_number_error(self):
         eric_response = "SOME DUMMY TEXT: ungültige Steuernummer. MORE DUMMY TEXT".encode()
