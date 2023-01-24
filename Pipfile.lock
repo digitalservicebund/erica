@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1655cce4ee55d159ec3402616e97268a04e71e92e9d3432d331d3da6effb5359"
+            "sha256": "ba2a4c8c60ce1ecbb212a83960c13e6bc7a78af745a426238ac6c68bd7a9eed3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -74,11 +74,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:ca3ef7588daa664fe196d3234718db5f6b5dab961507500b4bb921e31133eea1",
-                "sha256:f2fe17ed6b8e163769a715f81cb6ce3d4628d172918de535256bdf34d29b704f"
+                "sha256:5fe6b8809292bb178a9378fea4f96bc969003d1048cf6de8ad3c5a73690fefa9",
+                "sha256:dd8a0868b287015bed086c97b866f9bb8ca57737d15972d3ac773559f4088db8"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.29.54"
+            "version": "==1.29.55"
         },
         "certifi": {
             "hashes": [
@@ -204,11 +204,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:263b718bb384422fe3d042ffc9a0c8dece5e034ab6586ff034f6b4b1667c3eee",
-                "sha256:915bf304180a0e7c5605ec81097b7d4cd8826ff87a02bb198e336fb9f3b5ff02"
+                "sha256:15d9271ee52b572a015ca2ae5c72e1ce4241dd8532a534ad4f7ec70c376a580f",
+                "sha256:f9773ea22290635b2f48b4275b2bf69a8fa721fda2e38228bed47139839dc877"
             ],
             "index": "pypi",
-            "version": "==0.88.0"
+            "version": "==0.89.1"
         },
         "fastapi-sqlalchemy": {
             "hashes": [
@@ -487,11 +487,11 @@
         },
         "prometheus-client": {
             "hashes": [
-                "sha256:be26aa452490cfcf6da953f9436e95a9f2b4d578ca80094b4458930e5f584ab1",
-                "sha256:db7c05cbd13a0f79975592d112320f2605a325969b270a94b71dcabc47b931d2"
+                "sha256:0836af6eb2c8f4fed712b2f279f6c0a8bbab29f9f4aa15276b91c7cb0d1616ab",
+                "sha256:a03e35b359f14dd1630898543e2120addfdeacd1a6069c1367ae90fd93ad3f48"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==0.15.0"
+            "version": "==0.16.0"
         },
         "prometheus-fastapi-instrumentator": {
             "hashes": [
@@ -811,7 +811,7 @@
                 "sha256:076907bf8fd355cde77728471316625a4d2f7e713c125f51953bb5b3eecf4f72",
                 "sha256:75edcdc2f7d85b137124a6c3c9fc3933cdeaa12ecb9a6a959f22797a0feca7e1"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "markers": "python_version >= '3.6'",
             "version": "==1.26.14"
         },
         "uvicorn": {
@@ -1387,7 +1387,7 @@
                 "sha256:076907bf8fd355cde77728471316625a4d2f7e713c125f51953bb5b3eecf4f72",
                 "sha256:75edcdc2f7d85b137124a6c3c9fc3933cdeaa12ecb9a6a959f22797a0feca7e1"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "markers": "python_version >= '3.6'",
             "version": "==1.26.14"
         },
         "xmldiff": {
