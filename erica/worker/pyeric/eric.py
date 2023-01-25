@@ -6,7 +6,6 @@ from ctypes import Structure, c_int, c_uint32, c_char_p, c_void_p, pointer, CDLL
 from dataclasses import dataclass
 from typing import ByteString
 
-from erica.api.dto.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeRequestPayloadDto
 from erica.config import get_settings, Settings
 from erica.domain.model.erica_request import RequestType
 from erica.job_service.job_service_factory import get_job_service
@@ -76,6 +75,8 @@ def verify_using_stick():
 
 @huey.task(expires=480)
 def _verify_using_stick_with_queue():
+    from erica.api.dto.freischaltcode import FreischaltCodeRequestDto
+    from erica.api.dto.freischaltcode import FreischaltCodeRequestPayloadDto
     request_data = FreischaltCodeRequestDto(payload=FreischaltCodeRequestPayloadDto(tax_id_numer="04531972802", date_of_birth="1957-07-14"), client_identifier="LoadTest")
     get_job_service(RequestType.freischalt_code_request).add_to_queue(
         request_data.payload,
