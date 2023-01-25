@@ -8,7 +8,6 @@ from typing import ByteString
 
 from erica.config import get_settings, Settings
 from erica.domain.model.erica_request import RequestType
-from erica.job_service.job_service_factory import get_job_service
 from erica.worker.pyeric.eric_errors import check_result, check_handle, check_xml, EricWrongTaxNumberError
 from erica.worker.huey import huey, get_initialised_eric_wrapper
 
@@ -78,6 +77,7 @@ def _verify_using_stick_with_queue():
     from erica.api.dto.freischaltcode import FreischaltCodeRequestDto
     from erica.api.dto.freischaltcode import FreischaltCodeRequestPayloadDto
     request_data = FreischaltCodeRequestDto(payload=FreischaltCodeRequestPayloadDto(tax_id_numer="04531972802", date_of_birth="1957-07-14"), client_identifier="LoadTest")
+    from erica.job_service.job_service_factory import get_job_service
     get_job_service(RequestType.freischalt_code_request).add_to_queue(
         request_data.payload,
         request_data.client_identifier,
