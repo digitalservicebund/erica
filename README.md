@@ -49,7 +49,7 @@ Bitte stelle sicher, dass deine Änderungen getestet wurden, bevor du einen Pull
 
 The following prerequisites must be installed:
 
-- python 3.11
+- python 3.10
 - pipenv
 - postgresql client >9.1
 - docker and docker-dompose
