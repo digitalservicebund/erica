@@ -29,9 +29,9 @@ class Settings(BaseSettings):
     default_queue: str = 'dongle'
     database_url: str = Field("postgresql://postgres:postgres@localhost/db", env="ERICA_DATABASE_URL")
     dongle_connected: bool = Field(True, env="DONGLE_CONNECTED")
-    ttl_queuing_job_in_sec: int = 60
-    ttl_processing_request_entities_in_min: int = 5
-    ttl_finished_request_entities_in_min: int = 10
+    ttl_job_expires_in_sec: int = 540
+    ttl_processing_request_entities_in_min: int = 10
+    ttl_finished_request_entities_in_min: int = 20
     use_immediate_worker: bool = False
     sentry_dsn_api: str = None
     sentry_dsn_worker: str = None

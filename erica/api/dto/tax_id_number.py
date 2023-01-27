@@ -12,7 +12,7 @@ class TaxIdNumber(str):
     def validate_tax_id_number(cls, tax_id_number: str) -> str:
         # must contain only digits
         if not tax_id_number.isdigit():
-            raise ValueError('idnr should only contain digits')
+            raise ValueError(f'idnr should only contain digits. Length: {len(tax_id_number)}')
         # must contain 11 digits
         if len(tax_id_number) != 11:
             raise ValueError('idnr should have exactly 11 digits')

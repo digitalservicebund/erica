@@ -68,7 +68,7 @@ class EricaRequestRepository(
                        self.DatabaseEntity.status == Status.processing),
                    self.DatabaseEntity.updated_at < dt.datetime.now() - dt.timedelta(
                        minutes=ttl)).values(
-            status=Status.failed, error_code="999", error_message=f"Request could not be processed within {get_settings().ttl_processing_request_entities_in_min} minutes.")
+            status=Status.failed, error_code="UnprocessedEricaRequest", error_message=f"Request could not be processed within {get_settings().ttl_processing_request_entities_in_min} minutes.")
         updated = self.db_connection.execute(stmt)
         self.db_connection.commit()
         return updated.rowcount
