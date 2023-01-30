@@ -667,7 +667,7 @@ class TestCreateTH(unittest.TestCase):
         self.mock_eric.EricMtCreateTH = self.mock_fun_create_th_successful
         self.eric_api_with_mocked_binaries.eric = self.mock_eric
         self.eric_api_with_mocked_binaries.create_buffer = MagicMock()
-        self.eric_api_with_mocked_binaries.close_buffer = MagicMock
+        self.eric_api_with_mocked_binaries.close_buffer = MagicMock()
         self.eric_api_with_mocked_binaries.read_buffer = MagicMock(return_value=b'')
         self.eric_api_with_mocked_binaries.eric_instance = c_int()
 
