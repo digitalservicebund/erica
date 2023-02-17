@@ -117,6 +117,22 @@ jobs:
           done
         shell: bash
 
+      - name: Install cosign
+        # Third-party action, pin to commit SHA!
+        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+        uses: sigstore/cosign-installer@7cc35d7fdbe70d4278a0c96779081e6fac665f88
+
+      - name: Sign the published Docker image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        # This step uses the identity token to provision an ephemeral certificate
+        # against the sigstore community Fulcio instance.
+        run: |
+          for IMAGE in $(docker image ls | grep erica_ | awk '{ print $1 }' | sort | uniq); do
+            cosign sign ${IMAGE}:${{ github.run_number }}
+          done
+        shell: bash
+
   deploy-staging-otc:
     needs: [build-staging]
 
