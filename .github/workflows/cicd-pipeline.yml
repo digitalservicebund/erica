@@ -131,7 +131,7 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: |
           for IMAGE in $(docker image ls | grep erica_ | awk '{ print $1 }' | sort | uniq); do
-            cosign sign ${IMAGE}:${{ github.run_number }}
+            cosign sign ${IMAGE}:${{ github.run_number }} --force
           done
         shell: bash
 
