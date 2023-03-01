@@ -74,11 +74,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:5f254f019e8641f8b2ba6dddc1f7541e8c6d25d976802392710b2fc4bac925b1",
-                "sha256:c7ded44062bed3b928944cfb09e1578ed3fed0e4c98de4f233f3c2056a8d491e"
+                "sha256:19d4cadc79f75b31ffa78b5e750833d53e0edfe414d308b6788382ad32d23e12",
+                "sha256:9a301cb4de8ec6efe4e4b6ebb29b4301decd5b00c1a7f9187652002efb520ad0"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.29.79"
+            "version": "==1.29.80"
         },
         "certifi": {
             "hashes": [
@@ -646,11 +646,11 @@
         },
         "python-json-logger": {
             "hashes": [
-                "sha256:3af8e5b907b4a5b53cae249205ee3a3d3472bd7ad9ddfaec136eec2f2faf4995",
-                "sha256:ed33182c2b438a366775c25c1219ebbd5bd7f71694c644d6b3b3861e19565ae3"
+                "sha256:23e7ec02d34237c5aa1e29a070193a4ea87583bb4e7f8fd06d3de8264c4b2e1c",
+                "sha256:f380b826a991ebbe3de4d897aeec42760035ac760345e57b812938dc8b35e2bd"
             ],
             "index": "pypi",
-            "version": "==2.0.6"
+            "version": "==2.0.7"
         },
         "python-stdnum": {
             "hashes": [
@@ -795,7 +795,7 @@
                 "sha256:076907bf8fd355cde77728471316625a4d2f7e713c125f51953bb5b3eecf4f72",
                 "sha256:75edcdc2f7d85b137124a6c3c9fc3933cdeaa12ecb9a6a959f22797a0feca7e1"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "markers": "python_version >= '3.6'",
             "version": "==1.26.14"
         },
         "uvicorn": {
@@ -1363,7 +1363,7 @@
                 "sha256:076907bf8fd355cde77728471316625a4d2f7e713c125f51953bb5b3eecf4f72",
                 "sha256:75edcdc2f7d85b137124a6c3c9fc3933cdeaa12ecb9a6a959f22797a0feca7e1"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "markers": "python_version >= '3.6'",
             "version": "==1.26.14"
         },
         "xmldiff": {
