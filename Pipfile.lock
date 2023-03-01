@@ -951,11 +951,11 @@
         },
         "fakeredis": {
             "hashes": [
-                "sha256:2d5487e765894714d08fca50351c3a224e705eb02c02b2d012c00ed98b979616",
-                "sha256:f1130bc2da77d5063c7aeee643b456d2bd486f3bd0236976646af1fb6b7e08fb"
+                "sha256:35962e0ded572302c4461ad1a40308259cc10b7c546b13228e6d7880bf7b74bb",
+                "sha256:3bcc2b5c10d5e03cc5b46697d77c651f48391b506ff931576d2869c7549e2e25"
             ],
             "index": "pypi",
-            "version": "==2.8.0"
+            "version": "==2.9.2"
         },
         "flake8": {
             "hashes": [
