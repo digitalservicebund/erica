@@ -263,7 +263,7 @@ class TestGetTaxOfficesRequestController(unittest.TestCase):
     def test_request_tax_offices_has_correct_length(self):
         result = GetTaxOfficesPyericController()._request_tax_offices('28')
 
-        self.assertEqual(79, len(result))
+        self.assertEqual(81, len(result))
 
     @pytest.mark.skipif(missing_pyeric_lib(), reason="skipped because of missing eric lib; see pyeric/README.md")
     def test_request_tax_offices_contains_schwb_hall(self):
