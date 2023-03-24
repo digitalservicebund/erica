@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "16583e062259fa3d077d29ab02136e5fd52a66095d69e11f4f36ffaba15a9d67"
+            "sha256": "aeaed674c946e53c4cad8c167d20ef480b17cb6c5f13fbc3ed48220c4c25c00b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -183,11 +183,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:15d9271ee52b572a015ca2ae5c72e1ce4241dd8532a534ad4f7ec70c376a580f",
-                "sha256:f9773ea22290635b2f48b4275b2bf69a8fa721fda2e38228bed47139839dc877"
+                "sha256:99d4fdb10e9dd9a24027ac1d0bd4b56702652056ca17a6c8721eec4ad2f14e18",
+                "sha256:daf73bbe844180200be7966f68e8ec9fd8be57079dff1bacb366db32729e6eb5"
             ],
             "index": "pypi",
-            "version": "==0.89.1"
+            "version": "==0.95.0"
         },
         "fastapi-sqlalchemy": {
             "hashes": [
@@ -756,11 +756,11 @@
         },
         "starlette": {
             "hashes": [
-                "sha256:b092cbc365bea34dd6840b42861bdabb2f507f8671e642e8272d2442e08ea4ff",
-                "sha256:b5eda991ad5f0ee5d8ce4c4540202a573bb6691ecd0c712262d0bc85cf8f2c50"
+                "sha256:41da799057ea8620e4667a3e69a5b1923ebd32b1819c8fa75634bbe8d8bea9bd",
+                "sha256:e87fce5d7cbdde34b76f0ac69013fd9d190d581d80681493016666e6f96c6d5e"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==0.22.0"
+            "version": "==0.26.1"
         },
         "typing-extensions": {
             "hashes": [
@@ -775,7 +775,7 @@
                 "sha256:8a388717b9476f934a21484e8c8e61875ab60644d29b9b39e11e4b9dc1c6b305",
                 "sha256:aa751d169e23c7479ce47a0cb0da579e3ede798f994f5816a74e4f4500dcea42"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
             "version": "==1.26.15"
         },
         "uvicorn": {
@@ -1322,7 +1322,7 @@
                 "sha256:8a388717b9476f934a21484e8c8e61875ab60644d29b9b39e11e4b9dc1c6b305",
                 "sha256:aa751d169e23c7479ce47a0cb0da579e3ede798f994f5816a74e4f4500dcea42"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
             "version": "==1.26.15"
         },
         "xmldiff": {
