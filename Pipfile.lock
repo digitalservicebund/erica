@@ -74,11 +74,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:ae906c1feb56063a38ffd2280232fa44d634057825470d3beed274925088cb42",
-                "sha256:b74283ff71eb4e57edfa5cf6dc36d959b1eec618a2b1e5e781643184857dd1c4"
+                "sha256:15c205e4578253da1e8cc247b9d4755042f5f873f68ac6e5fed48f4bd6f008c6",
+                "sha256:d1770b4fe5531870af7a81e9897b2092d2f89e4ba8cb7abbbaf3ab952f6b8a6f"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.29.98"
+            "version": "==1.29.99"
         },
         "certifi": {
             "hashes": [
@@ -1126,7 +1126,7 @@
                 "sha256:3264e481857752023eb968016d1b55cceedc0261133cf7a37c87623e465b0146",
                 "sha256:76d2aa1757a30bc71e0307dae18c374e336a69123e6b046e206a96611fa2a330"
             ],
-            "markers": "python_version >= '3.7'",
+            "markers": "python_full_version >= '3.7.0'",
             "version": "==1.29.4"
         },
         "pluggy": {
@@ -1187,11 +1187,11 @@
         },
         "pytest-xdist": {
             "hashes": [
-                "sha256:336098e3bbd8193276867cc87db8b22903c3927665dff9d1ac8684c02f597b68",
-                "sha256:fa10f95a2564cd91652f2d132725183c3b590d9fdcdec09d3677386ecf4c1ce9"
+                "sha256:1849bd98d8b242b948e472db7478e090bf3361912a8fed87992ed94085f54727",
+                "sha256:37290d161638a20b672401deef1cba812d110ac27e35d213f091d15b8beb40c9"
             ],
             "index": "pypi",
-            "version": "==3.2.0"
+            "version": "==3.2.1"
         },
         "python-dateutil": {
             "hashes": [
@@ -1222,7 +1222,7 @@
                 "sha256:b142312df7c2977241d951318b7ee923d6b7a4f75ba0f05b621ece1ed616faa3",
                 "sha256:b7022a140040f33cf863ab2657917ed05287a807b917950489b89b9f685d59bc"
             ],
-            "markers": "python_version >= '3.7'",
+            "markers": "python_full_version >= '3.7.0'",
             "version": "==1.4.4"
         },
         "setuptools": {
@@ -1230,7 +1230,7 @@
                 "sha256:2ee892cd5f29f3373097f5a814697e397cf3ce313616df0af11231e2ad118077",
                 "sha256:b78aaa36f6b90a074c1fa651168723acbf45d14cb1196b6f02c0fd07f17623b2"
             ],
-            "markers": "python_version >= '3.7'",
+            "markers": "python_full_version >= '3.7.0'",
             "version": "==67.6.0"
         },
         "six": {
