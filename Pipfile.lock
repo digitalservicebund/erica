@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "003e4aaef6a258f741c8fb08938be9d2138f96f8dad219a23e529a47253da979"
+            "sha256": "696ae2a0375fbd77615a6e2b7f5916e2e594c3890b7aef211281783daf84bd01"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -474,11 +474,11 @@
         },
         "prometheus-fastapi-instrumentator": {
             "hashes": [
-                "sha256:705d2e29ca11fba9110f425a283592b8f2067ed8144405aa71b5879f7271c2a1",
-                "sha256:cf0fb37d506f8a999a16a47e71f75b140f0673cb4ecbce634f7b41a8b4caf8f6"
+                "sha256:6f66a951a4801667f7311d161f3aebfe0cd202391d0f067fbbe169792e2d987b",
+                "sha256:f1ddd0b8ead75e71d055bdf4cb7e995ec6a6ca63543245e7bbc5ca9b14c45191"
             ],
             "index": "pypi",
-            "version": "==5.10.0"
+            "version": "==6.0.0"
         },
         "psycopg2-binary": {
             "hashes": [
