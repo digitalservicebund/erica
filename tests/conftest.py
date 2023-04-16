@@ -2,6 +2,8 @@ import os
 import unittest
 from decimal import Decimal
 
+from erica.worker.huey import init_db_session
+
 os.environ["ERICA_ENV"] = 'testing'
 
 import pytest
@@ -57,6 +59,9 @@ def fake_db_connection_in_settings(database_uri):
     original_db_url = get_settings().database_url
     get_settings().database_url = database_uri
 
+    # Starlette >0.24.0 only creates the middleware once before the first request to the api.
+    # Therefore, we need to create the middle ware manually here
+    init_db_session()
     with session_scope():
         yield database_uri
 
