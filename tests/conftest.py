@@ -2,6 +2,11 @@ import os
 import unittest
 from decimal import Decimal
 
+from pytest_postgresql import factories
+from sqlalchemy import create_engine
+
+from erica.domain.sqlalchemy.erica_request_schema import BaseDbSchema
+
 os.environ["ERICA_ENV"] = 'testing'
 
 import pytest
@@ -14,7 +19,6 @@ from erica.api.service.erica_request_service import EricaRequestServiceInterface
 from erica.config import get_settings
 from erica.worker.request_processing.erica_input.v1.erica_input import FormDataEst
 from erica.domain.sqlalchemy.database import get_engine, session_scope
-from domain.sqlalchemy.repositories.mock_repositories import MockSchema
 
 
 @pytest.fixture
@@ -63,14 +67,23 @@ def fake_db_connection_in_settings(database_uri):
     get_settings().database_url = original_db_url
 
 
-@pytest.fixture()
-def transactional_session_with_mock_schema(transacted_postgresql_db):
-    if not transacted_postgresql_db.has_table(MockSchema.__tablename__):
-        transacted_postgresql_db.create_table(MockSchema)
+postgresql_my_proc = factories.postgresql_proc(port=None)
+postgresql_my = factories.postgresql('postgresql_my_proc')
 
-    yield transacted_postgresql_db.session
 
-    transacted_postgresql_db.reset_db()
+@pytest.fixture(scope='function')
+def setup_database(postgresql_my, postgresql_my_proc):
+    pg_host = postgresql_my_proc.host
+    pg_port = postgresql_my_proc.port
+    pg_user = postgresql_my_proc.user
+    pg_db = postgresql_my_proc.dbname
+
+    engine = create_engine(f"postgresql+psycopg2://{pg_user}:@{pg_host}:{pg_port}/{pg_db}")
+    BaseDbSchema.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    yield session
+    session.close()
 
 
 @pytest.fixture()
