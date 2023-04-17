@@ -4,10 +4,8 @@ from threading import local
 
 import sentry_sdk
 
-from huey import RedisHuey
-
 from erica.config import get_settings
-
+from huey import RedisHuey
 
 huey = RedisHuey('erica-huey-queue', url=get_settings().queue_url, immediate=get_settings().use_immediate_worker)
 eric_wrapper = local()
@@ -17,6 +15,15 @@ eric_wrapper = local()
 def huey_init():
     init_sentry()
     eric_wrapper_init()
+    init_db_session()
+
+
+# Starlette >0.24.0 only creates the middleware once before the first request to the api.
+# Therefore, we need to create the middle ware manually for huey because no api is called
+def init_db_session():
+    from erica import app
+    if app.middleware_stack is None:
+        app.middleware_stack = app.build_middleware_stack()
 
 
 def init_sentry():
@@ -60,4 +67,3 @@ def finish_sentry_transaction(task, task_value, exc):
     if exc:
         task.sentry_txn.set_status("internal_error")
     task.sentry_txn.finish()
-

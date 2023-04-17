@@ -3,15 +3,16 @@ from uuid import UUID
 from fastapi import status, APIRouter
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
-from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
-    response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
-    response_model_post_to_queue
+
 from erica.api.dto.freischaltcode import FreischaltCodeRequestDto, FreischaltCodeActivateDto, \
     FreischaltCodeRevocateDto
 from erica.api.service.freischaltcode_service import FreischaltCodeService, FreischaltCodeServiceInterface
-from erica.job_service.job_service_factory import get_job_service
 from erica.api.service.service_injector import get_service
+from erica.api.v2.responses.model import response_model_get_unlock_code_request_from_queue, \
+    response_model_get_unlock_code_activation_from_queue, response_model_get_unlock_code_revocation_from_queue, \
+    response_model_post_to_queue
 from erica.domain.model.erica_request import RequestType
+from erica.job_service.job_service_factory import get_job_service
 
 router = APIRouter()
 
@@ -27,7 +28,7 @@ async def request_fsc(request_fsc_client_identifier: FreischaltCodeRequestDto, r
         request_fsc_client_identifier.payload, request_fsc_client_identifier.client_identifier,
         RequestType.freischalt_code_request)
     return RedirectResponse(
-        request.url_for("get_fsc_request_job", request_id=str(result.request_id)).removeprefix(str(request.base_url)),
+        str(request.url_for("get_fsc_request_job", request_id=str(result.request_id))).removeprefix(str(request.base_url)),
         status_code=201)
 
 
@@ -53,7 +54,7 @@ async def activate_fsc(activation_fsc_client_identifier: FreischaltCodeActivateD
         activation_fsc_client_identifier.payload, activation_fsc_client_identifier.client_identifier,
         RequestType.freischalt_code_activate)
     return RedirectResponse(
-        request.url_for("get_fsc_activation_job", request_id=str(result.request_id)).removeprefix(
+        str(request.url_for("get_fsc_activation_job", request_id=str(result.request_id))).removeprefix(
             str(request.base_url)),
         status_code=201)
 
@@ -80,7 +81,7 @@ async def revocate_fsc(revocation_fsc_client_identifier: FreischaltCodeRevocateD
         revocation_fsc_client_identifier.payload, revocation_fsc_client_identifier.client_identifier,
         RequestType.freischalt_code_revocate)
     return RedirectResponse(
-        request.url_for("get_fsc_revocation_job", request_id=str(result.request_id)).removeprefix(
+        str(request.url_for("get_fsc_revocation_job", request_id=str(result.request_id))).removeprefix(
             str(request.base_url)),
         status_code=201)
 

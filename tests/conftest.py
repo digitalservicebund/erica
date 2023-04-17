@@ -2,6 +2,13 @@ import os
 import unittest
 from decimal import Decimal
 
+from erica.worker.huey import init_db_session
+
+from pytest_postgresql import factories
+from sqlalchemy import create_engine
+
+from erica.domain.sqlalchemy.erica_request_schema import BaseDbSchema
+
 from pytest_postgresql import factories
 from sqlalchemy import create_engine
 
@@ -20,7 +27,9 @@ from erica.config import get_settings
 from erica.worker.request_processing.erica_input.v1.erica_input import FormDataEst
 from erica.domain.sqlalchemy.database import get_engine, session_scope
 
-
+# Starlette >0.24.0 only creates the middleware once before the first request to the api.
+# Therefore, we need to create the middle ware manually here
+init_db_session()
 @pytest.fixture
 def standard_est_input_data():
     return FormDataEst(
@@ -65,7 +74,6 @@ postgresql_my = factories.postgresql('postgresql_my_proc')
 def fake_db_connection_in_settings(database_uri):
     original_db_url = get_settings().database_url
     get_settings().database_url = database_uri
-
     with session_scope():
         yield database_uri
 
@@ -81,6 +89,9 @@ def database_uri(postgresql_my, postgresql_my_proc):
     database_uri = f"postgresql+psycopg2://{pg_user}:@{pg_host}:{pg_port}/{pg_db}"
 
     yield database_uri
+
+postgresql_my_proc = factories.postgresql_proc(port=None)
+postgresql_my = factories.postgresql('postgresql_my_proc')
 
 
 @pytest.fixture(scope='function')
