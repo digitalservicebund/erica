@@ -57,7 +57,14 @@ def standard_est_input_data():
 
 
 @pytest.fixture()
-def fake_db_connection_in_settings(database_uri):
+def fake_db_connection_in_settings(postgresql_my, postgresql_my_proc):
+    pg_host = postgresql_my_proc.host
+    pg_port = postgresql_my_proc.port
+    pg_user = postgresql_my_proc.user
+    pg_db = postgresql_my_proc.dbname
+
+    database_uri = f"postgresql+psycopg2://{pg_user}:@{pg_host}:{pg_port}/{pg_db}"
+
     original_db_url = get_settings().database_url
     get_settings().database_url = database_uri
 
