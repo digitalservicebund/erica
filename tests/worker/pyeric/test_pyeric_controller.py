@@ -3,6 +3,7 @@ from functools import reduce
 from unittest.mock import MagicMock, patch, call
 
 import pytest
+from worker.utils import missing_cert, missing_pyeric_lib, TEST_EST_VERANLAGUNGSJAHR
 
 from erica.config import get_settings
 from erica.worker.elster_xml.bufa_numbers import VALID_BUFA_NUMBERS
@@ -15,7 +16,6 @@ from erica.worker.pyeric.pyeric_controller import PyericProcessController, EstPy
     UnlockCodeRevocationPyericProcessController, BelegIdRequestPyericProcessController, DecryptBelegePyericController, \
     BelegRequestPyericProcessController, GetTaxOfficesPyericController, CheckTaxNumberPyericController, \
     GrundsteuerPyericProcessController
-from worker.utils import missing_cert, missing_pyeric_lib, TEST_EST_VERANLAGUNGSJAHR
 
 
 class TestPyericControllerInit(unittest.TestCase):
