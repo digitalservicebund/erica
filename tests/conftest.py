@@ -18,7 +18,9 @@ from erica.worker.request_processing.erica_input.v1.erica_input import FormDataE
 from erica.domain.sqlalchemy.database import get_engine, session_scope
 from domain.sqlalchemy.repositories.mock_repositories import MockSchema
 
-
+# Starlette >0.24.0 only creates the middleware once before the first request to the api.
+# Therefore, we need to create the middle ware manually here
+init_db_session()
 @pytest.fixture
 def standard_est_input_data():
     return FormDataEst(
@@ -58,10 +60,6 @@ def standard_est_input_data():
 def fake_db_connection_in_settings(database_uri):
     original_db_url = get_settings().database_url
     get_settings().database_url = database_uri
-
-    # Starlette >0.24.0 only creates the middleware once before the first request to the api.
-    # Therefore, we need to create the middle ware manually here
-    init_db_session()
     with session_scope():
         yield database_uri
 
