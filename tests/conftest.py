@@ -80,8 +80,7 @@ def setup_database(postgresql_my, postgresql_my_proc):
 
     engine = create_engine(f"postgresql+psycopg2://{pg_user}:@{pg_host}:{pg_port}/{pg_db}")
     BaseDbSchema.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session = sessionmaker(bind=engine)()
     yield session
     session.close()
 
