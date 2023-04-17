@@ -8,7 +8,7 @@ def test_integration_queue(c):
 
 @task
 def test(c):
-    c.run("pytest -n 3")
+    c.run("env ERICA_ENV=testing pytest -n 3")
 
 
 @task
