@@ -34,6 +34,7 @@ fastapi-sqlalchemy = "*"
 typing-extensions = "*"
 huey = "*"
 python-stdnum = "*"
+psycopg = "*"
 
 [dev-packages]
 pytest = "*"
@@ -43,7 +44,7 @@ invoke = "*"
 xmldiff = "*"
 requests = "*"
 pytest-frozen-uuids = "*"
-pytest-pgsql = "*"
+pytest-postgresql = "*"
 pytest-asyncio = "*"
 pytest-xdist = "*"
 
