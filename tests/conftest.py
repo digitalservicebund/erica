@@ -56,15 +56,13 @@ def standard_est_input_data():
     )
 
 
+postgresql_my_proc = factories.postgresql_proc(port=None)
+postgresql_my = factories.postgresql('postgresql_my_proc')
+
+
+
 @pytest.fixture()
-def fake_db_connection_in_settings(postgresql_my, postgresql_my_proc):
-    pg_host = postgresql_my_proc.host
-    pg_port = postgresql_my_proc.port
-    pg_user = postgresql_my_proc.user
-    pg_db = postgresql_my_proc.dbname
-
-    database_uri = f"postgresql+psycopg2://{pg_user}:@{pg_host}:{pg_port}/{pg_db}"
-
+def fake_db_connection_in_settings(database_uri):
     original_db_url = get_settings().database_url
     get_settings().database_url = database_uri
 
@@ -73,9 +71,16 @@ def fake_db_connection_in_settings(postgresql_my, postgresql_my_proc):
 
     get_settings().database_url = original_db_url
 
+@pytest.fixture(scope='function')
+def database_uri(postgresql_my, postgresql_my_proc):
+    pg_host = postgresql_my_proc.host
+    pg_port = postgresql_my_proc.port
+    pg_user = postgresql_my_proc.user
+    pg_db = postgresql_my_proc.dbname
 
-postgresql_my_proc = factories.postgresql_proc(port=None)
-postgresql_my = factories.postgresql('postgresql_my_proc')
+    database_uri = f"postgresql+psycopg2://{pg_user}:@{pg_host}:{pg_port}/{pg_db}"
+
+    yield database_uri
 
 
 @pytest.fixture(scope='function')
