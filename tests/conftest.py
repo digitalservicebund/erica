@@ -9,6 +9,11 @@ from sqlalchemy import create_engine
 
 from erica.domain.sqlalchemy.erica_request_schema import BaseDbSchema
 
+from pytest_postgresql import factories
+from sqlalchemy import create_engine
+
+from erica.domain.sqlalchemy.erica_request_schema import BaseDbSchema
+
 os.environ["ERICA_ENV"] = 'testing'
 
 import pytest
@@ -60,6 +65,11 @@ def standard_est_input_data():
     )
 
 
+postgresql_my_proc = factories.postgresql_proc(port=None)
+postgresql_my = factories.postgresql('postgresql_my_proc')
+
+
+
 @pytest.fixture()
 def fake_db_connection_in_settings(database_uri):
     original_db_url = get_settings().database_url
@@ -69,6 +79,16 @@ def fake_db_connection_in_settings(database_uri):
 
     get_settings().database_url = original_db_url
 
+@pytest.fixture(scope='function')
+def database_uri(postgresql_my, postgresql_my_proc):
+    pg_host = postgresql_my_proc.host
+    pg_port = postgresql_my_proc.port
+    pg_user = postgresql_my_proc.user
+    pg_db = postgresql_my_proc.dbname
+
+    database_uri = f"postgresql+psycopg2://{pg_user}:@{pg_host}:{pg_port}/{pg_db}"
+
+    yield database_uri
 
 postgresql_my_proc = factories.postgresql_proc(port=None)
 postgresql_my = factories.postgresql('postgresql_my_proc')
