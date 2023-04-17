@@ -49,7 +49,7 @@ try:
     )
 except Exception as e:
     # pass silently if the Sentry integration failed
-    logging.getLogger().warn(f"Sentry integration failed to load: {e}")
+    logging.getLogger().warning(f"Sentry integration failed to load: {e}")
     pass
 
 uvicorn.run("erica:app", host="0.0.0.0", port=8000, log_config=None)

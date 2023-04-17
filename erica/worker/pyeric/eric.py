@@ -127,6 +127,19 @@ class EricWrapper(object):
         check_result(res)
         logger.info(f"fun_shutdown res: {res}")
 
+    def get_version(self):
+        """Get the currently used library versions."""
+        fun_get_version = self.eric.EricMtVersion
+        fun_get_version.argtypes = [c_void_p, c_void_p]
+        fun_get_version.restype = c_int
+
+        eric_response_buffer = self.create_buffer()
+        res = fun_get_version(self.eric_instance, eric_response_buffer)
+        check_result(res)
+
+        eric_response = self.read_buffer(eric_response_buffer)
+        return eric_response
+
     def validate(self, xml, data_type_version):
         """Validate the given XML using the built-in plausibility checks."""
         return self.process(xml, data_type_version, EricWrapper.ERIC_VALIDIERE)

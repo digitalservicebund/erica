@@ -78,6 +78,8 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     steps:
       - uses: actions/checkout@v3
@@ -117,6 +119,20 @@ jobs:
           done
         shell: bash
 
+      - name: Install cosign
+        # Third-party action, pin to commit SHA!
+        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+        uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65
+
+      - name: Sign the published Docker image
+        # This step uses the identity token to provision an ephemeral certificate
+        # against the sigstore community Fulcio instance.
+        run: |
+          for IMAGE in $(docker image ls | grep erica_ | awk '{ print $1 }' | sort | uniq); do
+            cosign sign ${IMAGE}:${{ github.run_number }} --yes
+          done
+        shell: bash
+
   deploy-staging-otc:
     needs: [build-staging]
 
@@ -145,10 +161,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Report Deployment
-        uses: satak/webrequest-action@v1.2.3
+      - name: Track deploy
+        uses: digitalservicebund/github-actions/track-deployment@808a08421edc16be156787f56af63b846ea6f557
         with:
-          url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
-          method: POST
-          payload: '{"project": "Erica", "version_identifier": "${{ github.run_number }}", "environment": "staging", "link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
-          headers: '{"Authorization": "Token ${{ secrets.METRICS_WEBHOOK_TOKEN }}"}'
+          project: Erica
+          environment: staging
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
