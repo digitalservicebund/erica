@@ -26,11 +26,11 @@
         },
         "alembic": {
             "hashes": [
-                "sha256:32a69b13a613aeb7e8093f242da60eff9daed13c0df02fff279c1b06c32965d2",
-                "sha256:b2e0a6cfd3a8ce936a1168320bcbe94aefa3f4463cd773a968a55071beb3cd37"
+                "sha256:295b54bbb92c4008ab6a7dcd1e227e668416d6f84b98b3c4446a2bc6214a556b",
+                "sha256:43942c3d4bf2620c466b91c0f4fca136fe51ae972394a0cc8b90810d664e4f5c"
             ],
             "index": "pypi",
-            "version": "==1.10.3"
+            "version": "==1.10.4"
         },
         "anyio": {
             "hashes": [
