@@ -1,8 +1,8 @@
-import boto3
-from os import environ, remove, mkdir
-import zipfile
 import shutil
+import zipfile
+from os import environ, remove, mkdir
 
+import boto3
 import click as click
 
 BUCKET_NAME = environ.get("ERICA_BUCKET_NAME")
@@ -80,7 +80,7 @@ def download_file(bucket_name, object_name, file_name, s3client=None):
 
 
 @cli.command()
-@click.option('--bucket', help='Name of the bucket you want to list of which you want to list the files.')
+@click.option('--bucket_name', help='Name of the bucket you want to list of which you want to list the files.')
 def list_objects_in_bucket(bucket):
     if isinstance(bucket, str):
         bucket = get_connected_session().Bucket(bucket)
