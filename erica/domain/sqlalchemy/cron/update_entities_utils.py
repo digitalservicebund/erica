@@ -3,12 +3,12 @@ from datetime import datetime
 from logging.config import dictConfig
 
 import click
+from opyoid import Injector
 
 from erica.config import get_settings
-from erica.domain.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
-from opyoid import Injector
 from erica.domain.infrastructure_module import InfrastructureModule
 from erica.domain.sqlalchemy.database import session_scope
+from erica.domain.sqlalchemy.repositories.erica_request_repository import EricaRequestRepository
 
 
 @click.group()
@@ -62,5 +62,7 @@ dictConfig({
 })
 
 if __name__ == "__main__":
+    from erica.worker.huey import init_db_session
+    init_db_session()
     with session_scope():
         cli()
