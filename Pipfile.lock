@@ -489,11 +489,11 @@
         },
         "psycopg": {
             "hashes": [
-                "sha256:59b4a71536b146925513c0234dfd1dc42b81e65d56ce5335dff4813434dbc113",
-                "sha256:b1500c42063abaa01d30b056f0b300826b8dd8d586900586029a294ce74af327"
+                "sha256:ab400f207a8c120bafdd8077916d8f6c0106e809401378708485b016508c30c9",
+                "sha256:fbbac339274d8733ee70ba9822297af3e8871790a26e967b5ea53e30a4b74dcc"
             ],
             "index": "pypi",
-            "version": "==3.1.8"
+            "version": "==3.1.9"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -1043,7 +1043,7 @@
                 "sha256:0a16f897841741f8cd784f790e54d74e61456ba36be9cb9de731b49e2e7a45dc",
                 "sha256:5a60d641fa92c8bfcd383f6e52f7a0bf3f081da0467fc6e3e6a3f6b3e3e47a7b"
             ],
-            "markers": "python_full_version >= '3.7.0'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.5.1"
         },
         "packaging": {
@@ -1067,7 +1067,7 @@
                 "sha256:232bd999015b7fbdf19f90f3a9298cc742252d67650108123940bfc75c6f4d4e",
                 "sha256:31860afde6cb552e1830c927def3288350c8fbbe9aea8aed8150ed9d1aa0de81"
             ],
-            "markers": "python_full_version >= '3.7.0'",
+            "markers": "python_version >= '3.7'",
             "version": "==0.6.3"
         },
         "psutil": {
@@ -1167,7 +1167,7 @@
                 "sha256:23aaf86b85ca52ceb801d32703f12d77517b2556af839621c641fca11287952b",
                 "sha256:f104fa03692a2602fa0fec6c6a9e63b6c8a968de13e17c026957dd1f53d80990"
             ],
-            "markers": "python_full_version >= '3.7.0'",
+            "markers": "python_version >= '3.7'",
             "version": "==67.7.2"
         },
         "sortedcontainers": {
