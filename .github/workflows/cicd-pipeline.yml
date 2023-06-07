@@ -141,7 +141,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
+      id-token: writes
       packages: write
 
     steps:
