@@ -8,7 +8,7 @@ concurrency:
 
 env:
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-  GITHUB_REGISTRY: ghcr.io/erica
+  GITHUB_REGISTRY: ghcr.io
   ERICA_HOST: ${{ secrets.ERICA_HOST_STAGING }}
 
 jobs:
@@ -166,7 +166,7 @@ jobs:
       - name: Create SBOM
         uses: digitalservicebund/github-actions/create-sbom@40022b2843c5d9f9efba2c92d9421e19d3a1a3de
         with:
-          repository: ${{ env.GITHUB_REGISTRY }}
+          repository: ${{ env.GITHUB_REGISTRY }}/${{ github.repository }}
           image_tag: erica_main:latest
 
       - name: Login to container repository
