@@ -34,7 +34,7 @@ fastapi-sqlalchemy = "*"
 typing-extensions = "*"
 huey = "*"
 python-stdnum = "*"
-psycopg = "*"
+psycopg = {extras = ["binary", "pool"], version = "*"}
 
 [dev-packages]
 pytest = "*"
