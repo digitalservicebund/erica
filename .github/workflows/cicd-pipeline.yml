@@ -8,7 +8,7 @@ concurrency:
 
 env:
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-  GITHUB_REGISTRY: ghcr.io
+  GITHUB_REGISTRY: ghcr.io/erica
   ERICA_HOST: ${{ secrets.ERICA_HOST_STAGING }}
 
 jobs:
