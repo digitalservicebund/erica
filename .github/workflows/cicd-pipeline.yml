@@ -7,7 +7,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   GITHUB_REGISTRY: ghcr.io
   ERICA_HOST: ${{ secrets.ERICA_HOST_STAGING }}
 
@@ -74,67 +73,6 @@ jobs:
           path: erica-test-report.log
 
   build-staging:
-    needs: [test]
-
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Build docker images
-        env:
-          DOCKER_REGISTRY: ${{ env.DOCKER_REGISTRY }}
-          DOCKER_TAG: ${{ github.run_number }}
-          ERICA_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-          ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
-          ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-          ENDPOINT_URL: ${{ secrets.S3_ENDPOINT_URL }}
-          ELSTER_DATENLIEFERANT: ${{ secrets.ELSTER_DATENLIEFERANT }}
-          ELSTER_HERSTELLER_ID: ${{ secrets.ELSTER_HERSTELLER_ID }}
-        run: |
-          docker-compose -f docker-compose.ci.yml build
-          docker image ls
-        shell: bash
-
-      - name: Create SBOM
-        uses: digitalservicebund/github-actions/create-sbom@40022b2843c5d9f9efba2c92d9421e19d3a1a3de
-        with:
-          repository: ${{ env.DOCKER_REGISTRY }}
-          image_tag: erica_main:latest
-
-      - name: Login to container repository
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          registry: ${{ env.DOCKER_REGISTRY }}
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.REGISTRY_PWD }}
-
-      - name: Push images
-        run: |
-          for IMAGE in $(docker image ls | grep erica_ | awk '{ print $1 }' | sort | uniq); do
-            docker push ${IMAGE} --all-tags
-          done
-        shell: bash
-
-      - name: Install cosign
-        # Third-party action, pin to commit SHA!
-        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65
-
-      - name: Sign the published Docker image
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: |
-          for IMAGE in $(docker image ls | grep erica_ | awk '{ print $1 }' | sort | uniq); do
-            cosign sign ${IMAGE}:${{ github.run_number }} --yes
-          done
-        shell: bash
-
-  build-staging-github:
     needs: [test]
 
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

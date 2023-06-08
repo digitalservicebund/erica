@@ -64,8 +64,8 @@ jobs:
         shell: sh
         run: |
           cd manifests/overlays/${{ inputs.environment }}
-          kustomize edit set image scr.syseleven.de/steuerlotse-stack-main/erica_main:${{ inputs.imageTag }}
-          kustomize edit set image scr.syseleven.de/steuerlotse-stack-main/erica_cron:${{ inputs.imageTag }}
+          kustomize edit set image ghcr.io/digitalservicebund/erica/erica_main:${{ inputs.imageTag }}
+          kustomize edit set image ghcr.io/digitalservicebund/erica/erica_cron:${{ inputs.imageTag }}
 
       - name: Commit and push changes for infra repository
         # Third-party action, pin to commit SHA!
@@ -95,7 +95,7 @@ jobs:
       - name: Deploy to Erica VM
         run: |
           docker run \
-          -e DOCKER_REGISTRY='${{ secrets.DOCKER_REGISTRY }}' \
+          -e DOCKER_REGISTRY='ghcr.io/digitalservicebund/erica' \
           -e ERICA_SSH_KEY='${{ secrets.ERICA_SSH_KEY }}' \
           -e ERICA_HOST='${{ secrets.ERICA_HOST }}' \
           -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
