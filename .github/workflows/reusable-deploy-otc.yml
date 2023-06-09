@@ -35,6 +35,7 @@ on:
 
 env:
   NAMESPACE: erica-${{ inputs.environment }}
+  GITHUB_REGISTRY: ghcr.io/digitalservicebund/steuerlotse-infra
 
 jobs:
   deploy:
@@ -89,7 +90,7 @@ jobs:
           ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
 
       - name: Pull deploy image
-        run: docker pull ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment
+        run: docker pull ${{ env.GITHUB_REGISTRY }}/steuerlotse_deployment
         shell: bash
 
       - name: Deploy to Erica VM
@@ -98,14 +99,15 @@ jobs:
           -e DOCKER_REGISTRY='ghcr.io/digitalservicebund/erica' \
           -e ERICA_SSH_KEY='${{ secrets.ERICA_SSH_KEY }}' \
           -e ERICA_HOST='${{ secrets.ERICA_HOST }}' \
-          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
+          -e REGISTRY_USERNAME='${{ secrets.REGISTRY_USERNAME }}' \
+          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD_GITHUB }}' \
           -e CERT_PIN='${{ secrets.CERT_PIN }}' \
           -e QUEUE_URL='${{ secrets.QUEUE_URL }}' \
           -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL }}' \
           -e IMAGE_TAG='${{ inputs.imageTag }}' \
           -e ENABLED_VERSION='v2' \
-          ${{ secrets.DOCKER_REGISTRY }}/steuerlotse_deployment deploy-erica-to-vm
+          ${{ env.GITHUB_REGISTRY }}/steuerlotse_deployment deploy-erica-to-vm
         shell: bash
 
       - name: Logout of container registry
-        run: docker logout ${{ secrets.DOCKER_REGISTRY }}
+        run: docker logout ${{ env.GITHUB_REGISTRY }}
