@@ -147,7 +147,7 @@ jobs:
     secrets:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
-      REGISTRY_PWD: ${{ secrets.REGISTRY_PWD }}
+      REGISTRY_PWD: ${{ secrets.REGISTRY_PWD_GITHUB }}
       ERICA_SSH_KEY: ${{ secrets.CI_ERICA_SSH_KEY }}
       ERICA_HOST: ${{ secrets.ERICA_HOST_OTC_STAGING }}
       CERT_PIN: ${{ secrets.CERT_PIN_OTC_STAGING }}

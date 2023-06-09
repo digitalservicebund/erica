@@ -99,7 +99,7 @@ jobs:
           -e DOCKER_REGISTRY='ghcr.io/digitalservicebund/erica' \
           -e ERICA_SSH_KEY='${{ secrets.ERICA_SSH_KEY }}' \
           -e ERICA_HOST='${{ secrets.ERICA_HOST }}' \
-          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD_GITHUB }}' \
+          -e REGISTRY_PWD='${{ secrets.REGISTRY_PWD }}' \
           -e CERT_PIN='${{ secrets.CERT_PIN }}' \
           -e QUEUE_URL='${{ secrets.QUEUE_URL }}' \
           -e ERICA_DATABASE_URL='${{ secrets.ERICA_DATABASE_URL }}' \
