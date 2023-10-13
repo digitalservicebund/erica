@@ -1,4 +1,4 @@
-FROM python:3.11.6-slim-bullseye AS base
+FROM python:3.12.0-slim-bullseye AS base
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
