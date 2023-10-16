@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 erica = {path = ".", editable = true}
-click = "==8.1.6"
+click = "==8.1.7"
 fastapi = "~=0.100.1"
 freezegun = "*"
 pydantic = "~=1.10.12"
