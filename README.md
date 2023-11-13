@@ -1,7 +1,11 @@
 # Steuerlotse Erica service
+
+> **Important**
+**This project has been discontinued**
+
 🇬🇧
 Erica is a service to send tax declarations to ELSTER. 
-It is a wrapper around the functionality of EriC, ELSTER's own client to access their APIs.
+It is a wrapper around the functionality of ERiC, ELSTER's own client to access their APIs.
 It provides functionality to send tax declarations, as well as request, activate and revoke unlock codes.
 
 It was originally [developed as part of the Tech4Germany Fellowship 2020](https://github.com/tech4germany/steuerlotse). 
@@ -9,7 +13,7 @@ The fellowship is organized by [DigitalService GmbH des Bundes](https://digitals
 
 🇩🇪
 Erica ist ein Service, um Steuererklärungen an ELSTER zu senden.
-Es dient als Wrapper um die Funktionalität von EriC, ELSTERs eigener Client um die APIs zu verwenden.
+Es dient als Wrapper um die Funktionalität von ERiC, ELSTERs eigener Client um die APIs zu verwenden.
 Es stellt Funktionalität zum Absenden von Steuererklärungen sowie dem Beantragen, Freischalten und Stornieren von Freischaltcodes bereit.
 
 Ursprünglich wurde es [als Teil des Tech4Germany Fellowships 2020 entwickelt](https://github.com/tech4germany/steuerlotse), 
